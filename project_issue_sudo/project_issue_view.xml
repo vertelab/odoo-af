@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="project_issue_form_view">
+            <field name="name">Project Issue Tracker Form</field>
+            <field name="model">project.issue</field>
+            <field name="inherit_id" ref="project.project_issue_form_view"/>
+            <field name="arch" type="xml">
+
+                <field name="email_from">
+                    
+                            
+                            <label for="project_id"/>
+                            <div>
+                                <field name="sudo_ids" class="oe_inline" context="{'default_use_issues':1}"/>
+                                <button name="sudo_login" string="⇒ Login as" type="object" class="oe_link"
+                                        groups="base.group_user"/>
+                            </div>
+                
+            </field>
+            </field>
+        </record>
+
+     
+
+    </data>
+</openerp>
