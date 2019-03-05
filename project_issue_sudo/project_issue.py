@@ -27,21 +27,29 @@ _logger = logging.getLogger(__name__)
 
 
 class project_issue(models.Model):
-    _inherit = 'product.issue'
+    _inherit = 'project.issue'
 
-    sudo_ids = fields.Many2many(comodel_name='res.users',string='Login as')
+    # ~ sudo_id = fields.Many2one(comodel_name='res.users',string='Login as', domain=lambda u: [('partner_id.commercial_partner_id','=','commercial_partner_id'), ('groups_id','not in', u.env.ref('base.group_user'))])
+    sudo_id = fields.Many2one(comodel_name='res.users',string='Login as', domain=lambda u: [('groups_id','not in', u.env.ref('base.group_user').id)])
+    commercial_partner_id = fields.Many2one(comodel_name='res.partner',related='partner_id.commercial_partner_id')
     
     @api.multi
     def write(self, values):
         if 'partner_id' in values.keys():
             partner = self.env['res.partner'].browse(values['partner_id'])
-            users = self.env['res.users'].search([('partner_id.commercial_partner_id','=',partner.commercial_partner_id)]).filtered(lambda u: self.env.ref('base.group_user').id not in u.groups_id)
-            values['sudo_ids'] = [(6,0,users.mapped('id')]
+            # ~ users = self.env['res.users'].search([('partner_id.commercial_partner_id','=',partner.commercial_partner_id.id)]).filtered(lambda u: self.env.ref('base.group_user') not in u.groups_id)
+            # ~ values['sudo_ids'] = [(6,0,users.mapped('id'))]
         res = super(project_issue, self).write(values)
         return res
 
     @api.multi
     def sudo_login(self,):
-        raise Warning('Hello %s' % self.sudo_ids)
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_url',
+            'url': '/',
+            'target': 'new',
+        }
+        # ~ raise Warning('Hello %s' % self.sudo_id)
         
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
