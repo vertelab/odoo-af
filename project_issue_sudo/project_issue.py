@@ -29,10 +29,8 @@ _logger = logging.getLogger(__name__)
 class project_issue(models.Model):
     _inherit = 'project.issue'
 
-    # ~ sudo_id = fields.Many2one(comodel_name='res.users',string='Login as', domain=lambda u: [('partner_id.commercial_partner_id','=','commercial_partner_id'), ('groups_id','not in', u.env.ref('base.group_user'))])
-    sudo_id = fields.Many2one(comodel_name='res.users',string='Login as', domain=lambda u: [('groups_id','not in', u.env.ref('base.group_user').id)])
-    commercial_partner_id = fields.Many2one(comodel_name='res.partner',related='partner_id.commercial_partner_id')
-    
+    sudo_id = fields.Many2one(comodel_name='res.users', string='Login as')
+
     @api.multi
     def write(self, values):
         if 'partner_id' in values.keys():
@@ -51,5 +49,5 @@ class project_issue(models.Model):
             'target': 'new',
         }
         # ~ raise Warning('Hello %s' % self.sudo_id)
-        
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
