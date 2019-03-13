@@ -32,6 +32,6 @@
 'author': 'Vertel AB',
 'website': 'http://www.vertel.se',
 'depends': ['project',],
-'data': ['project_issue_view.xml',],
+'data': ['project_issue_view.xml', 'templates.xml'],
 'installable': True,
 }
