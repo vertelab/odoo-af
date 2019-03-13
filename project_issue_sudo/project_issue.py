@@ -39,16 +39,21 @@ class project_issue(models.Model):
     _inherit = 'project.issue'
 
     sudo_id = fields.Many2one(comodel_name='res.users', string='Login as')
-    hide_for_employee = fields.Boolean(default=True, compute='_hide_for_employee')
+    hide_for_employee = fields.Boolean(compute='_hide_for_employee')
 
     @api.one
     def _hide_for_employee(self):
-        employee = self.env['hr.employee'].search([('user_id.partner_id', '=', self.partner_id.id)])
-        self.hide_for_employee = True if employee else False
+        if not self.partner_id:
+            self.hide_for_employee = True
+        else:
+            employee = self.env['hr.employee'].search([('user_id.partner_id', '=', self.partner_id.id)])
+            self.hide_for_employee = True if employee else False
 
     @api.multi
     def sudo_login(self):
         self.ensure_one()
+        if not self.sudo_id:
+            raise Warning(_('Need a user for login'))
         self.sudo_id.sudo_pw = '%032x' % random.getrandbits(256)
         return {
             'type': 'ir.actions.act_url',
@@ -59,6 +64,8 @@ class project_issue(models.Model):
     @api.multi
     def sudo_login_url(self):
         self.ensure_one()
+        if not self.sudo_id:
+            raise Warning(_('Need a user for login'))
         self.sudo_id.sudo_pw = '%032x' % random.getrandbits(256)
         sudo_login_url = '%s/sudo_login_as_url?db=%s&login=%s&password=%s' %(
                 self.env['ir.config_parameter'].get_param('web.base.url'),

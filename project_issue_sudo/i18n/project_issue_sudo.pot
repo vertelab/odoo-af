@@ -67,6 +67,13 @@ msgid "Login link"
 msgstr "Login link"
 
 #. module: project_issue_sudo
+#: code:addons/project_issue_sudo/project_issue.py:56
+#: code:addons/project_issue_sudo/project_issue.py:68
+#, python-format
+msgid "Need a user for login"
+msgstr "Need a user for login"
+
+#. module: project_issue_sudo
 #: model:ir.model,name:project_issue_sudo.model_project_issue
 msgid "Project Issue"
 msgstr "Projektärenden"
