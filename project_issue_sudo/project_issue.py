@@ -32,22 +32,19 @@ _logger = logging.getLogger(__name__)
 class project_issue_sudo_login_url(models.TransientModel):
     _name = 'project.issue.sudo.login.url'
 
-    sudo_login_url = fields.Char(string='Sudo Login url', help='Copy the link above to an incognito tab or a new web browser to login.', readonly=True)
+    sudo_login_url = fields.Char(string='Sudo Login url', help='Copy the link above to an incognito window or a new web browser to login.', readonly=True)
 
 
 class project_issue(models.Model):
     _inherit = 'project.issue'
 
     sudo_id = fields.Many2one(comodel_name='res.users', string='Login as')
+    hide_for_employee = fields.Boolean(default=True, compute='_hide_for_employee')
 
-    @api.multi
-    def write(self, values):
-        if 'partner_id' in values.keys():
-            partner = self.env['res.partner'].browse(values['partner_id'])
-            # ~ users = self.env['res.users'].search([('partner_id.commercial_partner_id','=',partner.commercial_partner_id.id)]).filtered(lambda u: self.env.ref('base.group_user') not in u.groups_id)
-            # ~ values['sudo_ids'] = [(6,0,users.mapped('id'))]
-        res = super(project_issue, self).write(values)
-        return res
+    @api.one
+    def _hide_for_employee(self):
+        employee = self.env['hr.employee'].search([('user_id.partner_id', '=', self.partner_id.id)])
+        self.hide_for_employee = True if employee else False
 
     @api.multi
     def sudo_login(self):

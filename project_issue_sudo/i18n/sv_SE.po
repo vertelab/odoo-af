@@ -20,8 +20,8 @@ msgstr ""
 #. module: project_issue_sudo
 #: view:project.issue.sudo.login.url:project_issue_sudo.sudo_login_url_form
 #: help:project.issue.sudo.login.url,sudo_login_url:0
-msgid "Copy the link above to an incognito tab or a new web browser to login."
-msgstr "Kopiera länken ovan till en inkognito-flik eller en ny webbläsare för att logga in."
+msgid "Copy the link above to an incognito window or a new web browser to login."
+msgstr "Kopiera länken ovan till ett inkognito fönster eller en ny webbläsare för att logga in."
 
 #. module: project_issue_sudo
 #: field:project.issue.sudo.login.url,create_uid:0
