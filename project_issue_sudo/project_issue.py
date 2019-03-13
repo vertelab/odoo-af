@@ -32,7 +32,7 @@ _logger = logging.getLogger(__name__)
 class project_issue_sudo_login_url(models.TransientModel):
     _name = 'project.issue.sudo.login.url'
 
-    sudo_login_url = fields.Char(string='Sudo Log in url', help='Copy the link above to an incognito tab or a new web browser to log in', readonly=True)
+    sudo_login_url = fields.Char(string='Sudo Login url', help='Copy the link above to an incognito tab or a new web browser to login.', readonly=True)
 
 
 class project_issue(models.Model):
@@ -71,7 +71,7 @@ class project_issue(models.Model):
             )
         url_obj = self.env['project.issue.sudo.login.url'].create({'sudo_login_url': sudo_login_url})
         return {
-            'name': _('Sudo Log in URL'),
+            'name': _('Sudo Login URL'),
             'type': 'ir.actions.act_window',
             'view_type': 'form',
             'view_mode': 'form',
