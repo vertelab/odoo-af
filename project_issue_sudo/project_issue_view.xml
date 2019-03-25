@@ -23,7 +23,9 @@
             <field name="arch" type="xml">
                 <form>
                     <sheet>
-                        <field name="sudo_login_url" />
+                        <field name="sudo_login_url" id="sudo_login_url" />
+                        <a href="javascript:void(0);" class="fa fa-files-o fa-2x oe_list_button" title="Copy" onclick="var $copy_text = $(this).prev().text().trim(); var $temp = $('&lt;input&gt;'); $('body').append($temp); $temp.val($copy_text).select(); document.execCommand('copy'); $temp.remove();"/>
+                        <br/>
                         <strong>Copy the link above to an incognito window or a new web browser to login.</strong>
                     </sheet>
                 </form>
