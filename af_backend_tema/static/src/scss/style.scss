@@ -1,68 +1,77 @@
-
+// Font
+//------------------------
 
 @font-face {
-    font-family: OpenSans-Regular;
-    src: url(/af_backend_tema/static/src/font/OpenSans-Regular.ttf)
+  font-family: OpenSans-Regular;
+  src: url(/af_backend_tema/static/src/font/OpenSans-Regular.ttf);
 }
 
-
-// $gray-base:              #000;
-// $gray-darker:            lighten($gray-base, 13.5%);
-// $gray-dark:              #666;
-// $gray:                   #777;
-// $gray-light:             #AEA79F;
-// $gray-lighter: lighten($gray-base, 93.5%);
-
-
-// // Change colors here
-
-// // Odoo EE colors
-//$brand-primary: #875a7b;
-//$brand-secondary: #00A09D;
-//------------------------
-$brand-primary: #00005A;
-$brand-secondary: #92EB42;
-$brand-symbol: #7EC13D;
-$brand-green: #058470;
-$brand-pink: #D43372;
-$brand-grey-20: #EFEFEF;
-
-
 //------------------------
 
+// AF färger
+//------------------------
 
-// $brand-primary-dark: darken($brand-primary, 10%);
-// $brand-secondary-dark: darken($brand-secondary, 10%);
+$brand-primary: #00005a; // Färgytor, infografik, diagram, primär knapp, nyhetspuff, skjutreglage , grafik
+$brand-primary-20: #ccccde;
+$brand-secondary: #a1de54; // Viktiga ingångar, endast mot profilblå bakgrund
+$brand-symbol: #95c13e; // Grafik på vit/ljus bakgrund
+$brand-green-40: #d5e6b2;
+$brand-pink: #d43372; // Kampanjyta, grafiska element
+$brand-white: #ffffff; // Bakgrundsfärg
+$brand-black: #000000;
+$brand-gray-90: #333333;
+$brand-gray-70: #666666;
+$brand-gray-50: #999999;
+$brand-gray-30: #d1d1d1;
+$brand-grey-20: #efefef; // Hover på dropdown
+$brand-grey_10: #f5f5f5; // Bakgrundsfärg om inte vitt fungerar
+
+// Funktionsfärger
+
+$brand-blue: #1616b2; // Viktig information, länkar, länkikoner, primära knappars och e-tjänsteingångars hover
+$brand-blue-light: #f1f8fe; // Sekundära knappars och e-tjänsteingångars hover
+$brand-green: #058470; // Kryssruta, checkbox, radiobutton, OK, även komplementfärg
+$brand-green-10: #f4f8eb; // Positiv validering meddelande, bakgrundsplatta
+$brand-yellow: #fddc41; // Varningsmeddelande och status
+$brand-yellow-light: #fff8d9; // Varningsmeddelande
+$brand-red: #e21c50; // Endast felmeddelande
+$brand-red-light: #fdedf3; // Endast felmeddelande
+
+//------------------------
 
 body {
-    font-family: "OpenSans-Regular";
+  font-family: "OpenSans-Regular";
 }
 
 .o_loading {
-    background-color: $brand-primary;
+  background-color: $brand-primary;
 }
 
 .o_main_navbar {
-    background-color : $brand-primary;
+  background-color: $brand-primary;
 }
 
-.o_main_navbar > a:hover, .o_main_navbar > a:focus, .o_main_navbar > button:hover, .o_main_navbar > button:focus {
-    background-color: $brand-secondary;
-    color: $brand-green;
+.o_main_navbar > a:hover,
+.o_main_navbar > a:focus,
+.o_main_navbar > button:hover,
+.o_main_navbar > button:focus {
+  background-color: $brand-secondary;
+  color: $brand-green;
 }
 
-.o_main_navbar > ul > li > a:hover, .o_main_navbar > ul > li > label:hover {
-    background-color: $brand-secondary;
-    color: $brand-green;
+.o_main_navbar > ul > li > a:hover,
+.o_main_navbar > ul > li > label:hover {
+  background-color: $brand-secondary;
+  color: $brand-green;
 }
 
 .o_main_navbar .show .dropdown-toggle {
-    background-color: $brand-secondary;
-    color: $brand-green;
+  background-color: $brand-secondary;
+  color: $brand-green;
 }
 
 .o_mail_discuss_sidebar {
-    background-color: $brand-primary;
+  background-color: $brand-primary;
 }
 
 // // Fix color Add file button
@@ -73,28 +82,28 @@ body {
 // // Buttons
 
 .btn {
-    border-radius: 15px;
+  border-radius: 15px;
 }
 
 .btn-primary {
-    color: $brand-primary;
-    background-color: $brand-symbol;
-    border-color: $brand-symbol;
+  color: $brand-primary;
+  background-color: $brand-symbol;
+  border-color: $brand-symbol;
 }
 
 .btn-primary:hover {
-    color: $brand-primary;
-    background-color: $brand-secondary;
-    border-color: $brand-secondary;
+  color: $brand-primary;
+  background-color: $brand-secondary;
+  border-color: $brand-secondary;
 }
 
 .btn-secondary {
-    color: $brand-primary;
+  color: $brand-primary;
 }
 
 .btn-secondary:hover {
-    color: $brand-primary;
-    background-color: brand-grey-20;
+  color: $brand-primary;
+  background-color: brand-grey-20;
 }
 
 // .btn:active, .btn.active {
@@ -108,7 +117,6 @@ body {
 //     box-shadow: none;
 //     background-color: $brand-pink !important;
 // }
-
 
 // .btn-link {
 //     color: $brand-secondary;
@@ -146,7 +154,6 @@ body {
 // .o_button_icon {
 //     color: $brand-primary !important;
 // }
-
 
 // // Calendar
 
@@ -234,7 +241,6 @@ body {
 
 // }
 
-
 // .o_control_panel {
 //     background-color: #ffffff;
 // }
@@ -293,15 +299,15 @@ body {
 // .o_list_view.table thead, .o_list_view.table tfoot, .o_list_view.table td,.o_list_view.table th {
 //     border: none;
 // }
- 
+
 // .o_list_view.table thead {
 //     background-color: #e2e2e0;
 // }
- 
+
 // .o_list_view.table thead > tr > th.o_column_sortable:hover {
 //     background-color: #D6D6D3;
 // }
- 
+
 // .o_list_view.table tbody tr.o_group_header {
 //     background-color: #dfdfdf;
 //     background-image: none;
@@ -316,7 +322,6 @@ body {
 //     background-color: $brand-primary !important;
 //     color: #fff !important;
 // }
-
 
 // .ui-autocomplete .ui-menu-item.ui-state-focus {
 //     background-color: #dee2e6;
@@ -350,11 +355,11 @@ body {
 //             border: 1px solid #d9d7d7;
 //             box-shadow: 0 5px 20px -15px black;
 //         }
-//     } 
+//     }
 
 //     .o_form_statusbar {
 //         //margin: -16px;
-  
+
 //         .o_statusbar_status {
 //             > .o_arrow_button {
 //                 background: #ffffff;
@@ -369,7 +374,6 @@ body {
 // 	background: transparent url('/dashboard') no-repeat scroll center center / cover;
 
 // }
-
 
 // .fa-th-large::before {
 //     content: "\f00a";
