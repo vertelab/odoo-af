@@ -14,6 +14,10 @@
                       <div class="text-muted">
                           Common parameters for all AF rest api:s. 
                       </div>
+                      <label for="af_ipf_url" string="IPF url" class="col-3 col-lg-3 o_light_label"/>
+                      <field name="af_ipf_url" nolabel="1"/>
+                      <label for="af_ipf_port" string="IPF port" class="col-3 col-lg-3 o_light_label"/>
+                      <field name="af_ipf_port" nolabel="1"/>
                       <label for="af_client_id" string="Client ID" class="col-3 col-lg-3 o_light_label"/>
                       <field name="af_client_id" nolabel="1"/>
                       <label for="af_client_secret" string="Client Secret" class="col-3 col-lg-3 o_light_label"/>

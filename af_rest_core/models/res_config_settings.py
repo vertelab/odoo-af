@@ -22,9 +22,9 @@ class ResConfigSettings(models.TransientModel):
     def get_values(self):
         res = super().get_values()
 
-        af_env = os.environ['AFENVIRONMENT']
-        af_ipfport = os.environ['AFIPFPORT']
-        af_ipfurl = os.environ['AFIPFURL']
+        af_env = os.environ.get('AFENVIRONMENT')
+        af_ipfport = os.environ.get('AFIPFPORT')
+        af_ipfurl = os.environ.get('AFIPFURL')
 
         get_param = self.env['ir.config_parameter'].sudo().get_param
         
@@ -46,8 +46,8 @@ class ResConfigSettings(models.TransientModel):
         set_param('af_rest.client_id', self.af_client_id)
         set_param('af_rest.client_secret', self.af_client_secret)
         set_param('af_rest.af_environment', self.af_environment)
-        set_param('af_rest.ipf_port', self.af_environment)
-        set_param('af_rest.ipf_url', self.af_environment)
+        set_param('af_rest.ipf_port', self.af_ipf_port)
+        set_param('af_rest.ipf_url', self.af_ipf_url)
         set_param('af_rest.af_system_id', self.af_system_id)
 
 
