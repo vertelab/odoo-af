@@ -14,7 +14,7 @@
         # "stompest.async",
     ],
     "data": [
-        # "views/af_rest_appointment_views.xml",
+        "views/af_rest_appointment_views.xml",
     ],
     "application": True,
     "installable": True,

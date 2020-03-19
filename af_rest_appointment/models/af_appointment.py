@@ -76,7 +76,7 @@ class AfAppointment(models.Model):
             comps = comp, # &competence_id=ded72445-e5d3-4e21-a356-aad200dac83d
         )
         
-        # _logger.warn("DAER: get_url: %s" % get_url)
+        _logger.warn("DAER: get_url: %s" % get_url)
 
         # Generate headers for our get
         get_headers = {
@@ -85,7 +85,7 @@ class AfAppointment(models.Model):
             'AF-TrackingId': af_tracking_id,
         }
 
-        # _logger.warn("DAER: get_headers: %s" % get_url)
+        _logger.warn("DAER: get_headers: %s" % get_url)
 
         # Build or request using url and headers
         # Request(url, data=None, headers={}, origin_req_host=None, unverifiable=False, method=None)
