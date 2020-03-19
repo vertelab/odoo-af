@@ -93,12 +93,12 @@ class AfAppointment(models.Model):
 
         # TODO: re-add this code
         # open and read request
-        # res = request.urlopen(req).read()
-        # _logger.warn("DAER: res_json: %s" % res_json)
+        res_json = request.urlopen(req).read()
+        _logger.warn("DAER: res_json: %s" % res_json)
         
         # TODO: remove this code
         # simulate (short) response
-        res_json = '[{"schedule_day": "2020-03-17","competence": {"id": "ded72445-e5d3-4e21-a356-aad200dac83d","name": "Första planeringssamtal (BK1)"},"schedules": [{"end_time": "2020-03-17T09:30:00Z","estimated_service_level": 0.50124635478077317,"forecasted_agents": 297.259,"scheduled_agents": 149,"scheduled_heads": 149,"start_time": "2020-03-17T09:00:00Z"},{"end_time": "2020-03-17T10:00:00Z","estimated_service_level": 0.50124635478077317,"forecasted_agents": 297.259,"scheduled_agents": 149,"scheduled_heads": 149,"start_time": "2020-03-17T09:30:00Z"}]},{"schedule_day": "2020-03-18","competence": {"id": "ded72445-e5d3-4e21-a356-aad200dac83d","name": "Första planeringssamtal (BK1)"},"schedules": [{"end_time": "2020-03-18T09:30:00Z","estimated_service_level": 0.36668357497385418,"forecasted_agents": 297.259,"scheduled_agents": 109,"scheduled_heads": 109,"start_time": "2020-03-18T09:00:00Z"}]}]'
+        # res_json = '[{"schedule_day": "2020-03-17","competence": {"id": "ded72445-e5d3-4e21-a356-aad200dac83d","name": "Första planeringssamtal (BK1)"},"schedules": [{"end_time": "2020-03-17T09:30:00Z","estimated_service_level": 0.50124635478077317,"forecasted_agents": 297.259,"scheduled_agents": 149,"scheduled_heads": 149,"start_time": "2020-03-17T09:00:00Z"},{"end_time": "2020-03-17T10:00:00Z","estimated_service_level": 0.50124635478077317,"forecasted_agents": 297.259,"scheduled_agents": 149,"scheduled_heads": 149,"start_time": "2020-03-17T09:30:00Z"}]},{"schedule_day": "2020-03-18","competence": {"id": "ded72445-e5d3-4e21-a356-aad200dac83d","name": "Första planeringssamtal (BK1)"},"schedules": [{"end_time": "2020-03-18T09:30:00Z","estimated_service_level": 0.36668357497385418,"forecasted_agents": 297.259,"scheduled_agents": 109,"scheduled_heads": 109,"start_time": "2020-03-18T09:00:00Z"}]}]'
 
         # Convert json to python format: https://docs.python.org/3/library/json.html#json-to-py-table 
         res = json.loads(res_json)
