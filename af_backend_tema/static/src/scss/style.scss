@@ -56,22 +56,33 @@ body {
 .o_main_navbar > button:hover,
 .o_main_navbar > button:focus {
   background-color: $brand-secondary;
-  color: $brand-green;
+  color: $brand-primary;
 }
 
 .o_main_navbar > ul > li > a:hover,
-.o_main_navbar > ul > li > label:hover {
+.o_main_navbar > ul > li > label:hover,
+.o_main_navbar > a > [role="button"]:hover {
   background-color: $brand-secondary;
-  color: $brand-green;
+  color: $brand-primary;
 }
 
 .o_main_navbar .show .dropdown-toggle {
   background-color: $brand-secondary;
-  color: $brand-green;
+  color: $brand-primary;
 }
 
 .o_mail_discuss_sidebar {
   background-color: $brand-primary;
+}
+
+.o_notification_counter.badge.badge-pill {
+  background-color: $brand-secondary;
+  color: $brand-primary;
+}
+
+.o_main_navbar > ul > li > a:hover .o_notification_counter.badge.badge-pill {
+  background-color: $brand-primary;
+  color: $brand-secondary;
 }
 
 // // Fix color Add file button
@@ -105,6 +116,10 @@ body {
   color: $brand-primary;
   background-color: brand-grey-20;
 }
+
+// .fa.fa-filter.o_searchview_facet_label {
+//     background-color: $brand-primary;
+// }
 
 // .btn:active, .btn.active {
 //     -webkit-box-shadow: none;
