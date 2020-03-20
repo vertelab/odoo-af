@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+# https://www.tutorialspoint.com/makefile/index.htm
 
 import unicodedata
 from xlrd import open_workbook
@@ -28,7 +29,7 @@ class Iterator(object):
         return {self.header[n]: 
                  (u'%s' % r[n].value).encode('utf-8') for n in range(len(self.header))}
 
-wb = open_workbook(os.path.join(os.path.dirname(os.path.abspath(__file__)), u'TestData_Config.xlsx'))
+wb = open_workbook(os.path.join(os.path.dirname(os.path.abspath(__file__)), u'TestData_base.xlsx'))
 
 #import csv
 #with open('eggs.csv', 'w', newline='') as csvfile:
@@ -46,30 +47,29 @@ wb = open_workbook(os.path.join(os.path.dirname(os.path.abspath(__file__)), u'Te
 #    writer.writerow({'first_name': 'Lovely', 'last_name': 'Spam'})
 #    writer.writerow({'first_name': 'Wonderful', 'last_name': 'Spam'})
 
+print wb.sheet_names()
+tmpCounter = 0
 for sheet_name in wb.sheet_names():
-    sheet = wb.sheet_by_name(sheet_name)
-    names = sheet_name.split('.')
-    if len(names)>1:
-        print(sheet)
-    names2 = sheet_name.split('_')
-    if len(names2)>1:
-        print(names2)
-        print (Iterator(sheet).header)
-        with open('%s.csv' % sheet_name, 'w' ) as csvfile:
+    # ~ print(wb.sheet_by_name(sheet_name) )
+    object_sheet = wb.sheet_by_name(sheet_name)
+    # ~ myName = wb.sheet_by_name(sheet_name)
+    # ~ print("sheet_name = " + sheet_name)
+    myArr = sheet_name.split(".")
+    # ~ print( myArr[len(myArr)-1] )
+    if myArr[len(myArr)-1] == "csv":
+        tmpCounter = tmpCounter + 1
+        print("Creating file. " + str(tmpCounter) + ", " + sheet_name )        
+        with open( sheet_name, 'w' ) as csvfile:
+        # ~ with open('%s.csv' % sheet_name, 'w' ) as csvfile:
 #        csvfile = open('%s.csv' % sheet_name,'w',encoding='utf-8')
-            writer = csv.DictWriter(csvfile, fieldnames=Iterator(sheet).header)
+            # ~ print(sheet_name)
+            writer = csv.DictWriter(csvfile, fieldnames=Iterator(object_sheet).header)
+            # ~ print(writer)
 
             writer.writeheader()
-            for r in Iterator(sheet):
-                writer.writerow(r)
-                print(r)
-#~ print ws.cell(0,0),ws.ncols,ws.nrows,ws.cell(3,10).value
-
-#~ for r in range(ws.nrows):
-    #~ if r > 3:
-        #~ for c in ws.row(r):
-            #~ print c.value
-
+            for row in Iterator(object_sheet):
+                writer.writerow(row)
+print("Number of valid files = " + str(tmpCounter))        
 
 
 

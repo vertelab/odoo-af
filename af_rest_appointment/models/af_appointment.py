@@ -46,7 +46,6 @@ class AfAppointment(models.Model):
             raise Warning('Please setup AF integrations')
 
         # try:
-            #For future reference: use urllib2.quote() to translate the search term to url format.
 
         # Convert list of competences into a string to be used in url
         comp = ""
@@ -57,7 +56,6 @@ class AfAppointment(models.Model):
         # Generate a tracking-id
         tracking_number = datetime.now().strftime("%y%m%d%H%M%S")
         af_tracking_id = af_system_id.upper() + af_environment.upper() + tracking_number
-        # _logger.warn("DAER: af_tracking_id: %s" % af_tracking_id)
 
         # Define base url
         # https://ipfapi.arbetsformedlingen.se:443/appointments/v1/resource-planning/competencies/schedules?from_date=2020-03-17T00:00:00Z&client_id=XXXXXXXXX&client_secret=XXXXXXXXX&to_date=2020-03-25T00:00:00Z&competence_id=ded72445-e5d3-4e21-a356-aad200dac83d
@@ -75,8 +73,6 @@ class AfAppointment(models.Model):
             comps = comp, # &competence_id=ded72445-e5d3-4e21-a356-aad200dac83d
         )
         
-        _logger.warn("DAER: get_url: %s" % get_url)
-
         # Generate headers for our get
         get_headers = {
             'AF-Environment': af_environment,
@@ -84,45 +80,46 @@ class AfAppointment(models.Model):
             'AF-TrackingId': af_tracking_id,
         }
 
-        _logger.warn("DAER: get_headers: %s" % get_url)
-
         # Build or request using url and headers
         # Request(url, data=None, headers={}, origin_req_host=None, unverifiable=False, method=None)
         req = request.Request(url=get_url, headers=get_headers)
 
-        # TODO: re-add this code
+        # TODO: remove this code to test with simulated response
         # open and read request
-        res_json = request.urlopen(req).read()
-        _logger.warn("DAER: res_json: %s" % res_json)
+        # res_json = request.urlopen(req).read()
         
-        # TODO: remove this code
+        # TODO: add this code to test with simulated response
         # simulate (short) response
-        # res_json = '[{"schedule_day": "2020-03-17","competence": {"id": "ded72445-e5d3-4e21-a356-aad200dac83d","name": "Första planeringssamtal (BK1)"},"schedules": [{"end_time": "2020-03-17T09:30:00Z","estimated_service_level": 0.50124635478077317,"forecasted_agents": 297.259,"scheduled_agents": 149,"scheduled_heads": 149,"start_time": "2020-03-17T09:00:00Z"},{"end_time": "2020-03-17T10:00:00Z","estimated_service_level": 0.50124635478077317,"forecasted_agents": 297.259,"scheduled_agents": 149,"scheduled_heads": 149,"start_time": "2020-03-17T09:30:00Z"}]},{"schedule_day": "2020-03-18","competence": {"id": "ded72445-e5d3-4e21-a356-aad200dac83d","name": "Första planeringssamtal (BK1)"},"schedules": [{"end_time": "2020-03-18T09:30:00Z","estimated_service_level": 0.36668357497385418,"forecasted_agents": 297.259,"scheduled_agents": 109,"scheduled_heads": 109,"start_time": "2020-03-18T09:00:00Z"}]}]'
+        res_json = '[{"schedule_day": "2020-03-17","competence": {"id": "ded72445-e5d3-4e21-a356-aad200dac83d","name": "Första planeringssamtal (BK1)"},"schedules": [{"end_time": "2020-03-17T09:30:00Z","estimated_service_level": 0.50124635478077317,"forecasted_agents": 297.259,"scheduled_agents": 149,"scheduled_heads": 149,"start_time": "2020-03-17T09:00:00Z"},{"end_time": "2020-03-17T10:00:00Z","estimated_service_level": 0.50124635478077317,"forecasted_agents": 297.259,"scheduled_agents": 149,"scheduled_heads": 149,"start_time": "2020-03-17T09:30:00Z"}]},{"schedule_day": "2020-03-18","competence": {"id": "ded72445-e5d3-4e21-a356-aad200dac83d","name": "Första planeringssamtal (BK1)"},"schedules": [{"end_time": "2020-03-18T09:30:00Z","estimated_service_level": 0.36668357497385418,"forecasted_agents": 297.259,"scheduled_agents": 109,"scheduled_heads": 109,"start_time": "2020-03-18T09:00:00Z"}]}]'
 
         # Convert json to python format: https://docs.python.org/3/library/json.html#json-to-py-table 
         res = json.loads(res_json)
         
-        # _logger.warn("DAER: res: %s" % res)
-
         # Create calendar.event from res
         # res: list of dicts with list of schedules
-        # schedules: list of dicts of "events"
+        # schedules: list of dicts of slots
         for comp_day in res:
             competence_name = comp_day.get('competence').get('name')
-            # _logger.warn("DAER: comp_day: %s" % comp_day)
             for schedule in comp_day.get('schedules'):
-                # TODO: check if calendar.event already exists 
+
+                start_time = datetime.strptime(schedule.get('start_time'), "%Y-%m-%dT%H:%M:%SZ")
+                stop_time = datetime.strptime(schedule.get('end_time'), "%Y-%m-%dT%H:%M:%SZ")
+                # TODO: rewrite to use calendar.slot instead
+                # TODO: check if calendar.slot already exists 
                 
+                # slots can exist every half hour from 09:00 to 16:00
+                # slot = self.env['calendar.slot'].search([('competence','=',???), ('start','=',start_time)])
+
+
                 vals = {
                     'name': competence_name,
-                    'start': datetime.strptime(schedule.get('start_time'), "%Y-%m-%dT%H:%M:%SZ"),
-                    'stop': datetime.strptime(schedule.get('end_time'), "%Y-%m-%dT%H:%M:%SZ"),
-                    # '????': schedule.get('scheduled_agents'), # number of agents supposed to be available for this
-                    # '????': schedule.get('forecasted_agents'), # May be implemented at a later date.
+                    'start': start_time,
+                    'stop': stop_time,
+                    # 'scheduled_agents': schedule.get('scheduled_agents'), # number of agents supposed to be available for this
+                    # 'forecasted_agents': schedule.get('forecasted_agents'), # May be implemented at a later date.
                     # TODO: add more data...
                 }
-                # _logger.warn("DAER: vals: %s" % vals)
-                # Create calendar.event
+                # Create calendar.event TODO: change to slot
                 self.env['calendar.event'].create(vals)
 
         
