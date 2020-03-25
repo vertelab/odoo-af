@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2018 Modoolar <info@modoolar.com>
+  License LGPLv3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.en.html).
+-->
+<odoo>
+    <record id="view_encrypted_vault_form" model="ir.ui.view">
+        <field name="name">encrypted.vault.form</field>
+        <field name="model">encrypted.vault</field>
+        <field name="arch" type="xml">
+            <form>
+                <header/>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="random_password_button" type="object" class="oe_stat_button" icon="fa-key"
+                        confirm="Creating new password will replace previous one. Are you sure?">
+                            Generate pass
+                        </button>
+                        <button name="%(action_vault_history)d" type="action" class="oe_stat_button"
+                                icon="fa-history" group="group_encrypted_vault_user">
+                            <field string="History" name="history_count" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <label for="name" class="oe_edit_only"/>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group name="main">
+                        <group name="left">
+                            <field name="username" copyable="1"/>
+                            <field name="password" password="1" copyable="1"/>
+                            <field name="uri" widget="url" copyable="1"/>
+                        </group>
+                        <group name="right"></group>
+                        <label for="notes" class="oe_edit_only"/>
+                        <field name="notes" copyable="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Custom fields" name="custom_fields">
+                            <field name="custom_field_ids" mode="kanban" context="{'default_vault_id': id,}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_encrypted_vault_tree" model="ir.ui.view">
+        <field name="name">encrypted.vault.tree</field>
+        <field name="model">encrypted.vault</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="username" widget="copyable"/>
+                <field name="password" widget="copyable" password="1"/>
+                <field name="uri" widget="url"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_encrypted_vault_search" model="ir.ui.view">
+        <field name="name">encrypted.vault.search</field>
+        <field name="model">encrypted.vault</field>
+        <field name="arch" type="xml">
+            <search string="Vaults Lists">
+                <field name="name" string="Search for" filter_domain="['|',('name', 'ilike', self),'|',('username', 'ilike', self),'|',('project_id', 'ilike', self),('uri', 'ilike', self),]"/>
+            </search>
+        </field>
+    </record>
+</odoo>

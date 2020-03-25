@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2018 Modoolar <info@modoolar.com>
+  License LGPLv3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.en.html).
+-->
+<odoo>
+    <record id="view_encrypted_vault_history_form" model="ir.ui.view">
+        <field name="name">encrypted.vault.history.form</field>
+        <field name="model">encrypted.vault.history</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="vault_id" invisible="1"/>
+                        <field name="username" copyable="1"/>
+                        <field name="password" password="1" copyable="1"/>
+                        <field name="uri" widget="url" copyable="1"/>
+                    </group>
+                    <group>
+                        <field name="user_id"/>
+                        <field name="create_date"/>
+                        <field name="uri" widget="url" copyable="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_encrypted_vault_history_tree" model="ir.ui.view">
+        <field name="name">encrypted.vault.history.tree</field>
+        <field name="model">encrypted.vault.history</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="vault_id" invisible="1"/>
+                <field name="username" widget="copyable"/>
+                <field name="password" password="1" widget="copyable"/>
+                <field name="uri" widget="url"/>
+                <field name="user_id"/>
+                <field name="create_date"/>
+                <button name="restore" class="btn btn-block btn-default" type="object" string="Restore"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="action_vault_history" model="ir.actions.act_window">
+        <field name="name">Vault History</field>
+        <field name="res_model">encrypted.vault.history</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_encrypted_vault_history_tree"/>
+        <field name="domain">[('vault_id', '=', active_id)]</field>
+        <field name="target">new</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                There are no history records for this vault.
+            </p>
+        </field>
+    </record>
+</odoo>

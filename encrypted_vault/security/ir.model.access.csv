@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_encrypted_vault_user,encrypted.vault,model_encrypted_vault,encrypted_vault.group_encrypted_vault_user,1,1,1,0
+access_encrypted_vault_manager,encrypted.vault,model_encrypted_vault,encrypted_vault.group_encrypted_vault_manager,1,1,1,1
+
+access_encrypted_vault_custom_field_user,encrypted.vault.custom.field,model_encrypted_vault_custom_field,encrypted_vault.group_encrypted_vault_user,1,1,1,1
+access_encrypted_vault_custom_field_manager,encrypted.vault.custom.field,model_encrypted_vault_custom_field,encrypted_vault.group_encrypted_vault_manager,1,1,1,1
+
+access_encrypted_vault_history_user,encrypted.vault.history,model_encrypted_vault_history,encrypted_vault.group_encrypted_vault_user,1,0,0,0
+access_encrypted_vault_history_manager,encrypted.vault.history,model_encrypted_vault_history,encrypted_vault.group_encrypted_vault_manager,1,0,0,0

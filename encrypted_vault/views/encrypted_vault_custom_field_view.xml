@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2018 Modoolar <info@modoolar.com>
+  License LGPLv3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.en.html).
+-->
+<odoo>
+
+    <record id="view_encrypted_vault_custom_field_form" model="ir.ui.view">
+        <field name="name">encrypted.vault.custom.field.form</field>
+        <field name="model">encrypted.vault.custom.field</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="type"/>
+                    </group>
+                    <group>
+                        <field name="text"
+                               copyable="1"
+                               attrs="{
+                                    'invisible':[('type','!=','text')],
+                                    'required':[('type','=','text')]}"/>
+                        <field name="hidden" password="True"
+                               copyable="1"
+                               attrs="{
+                                    'invisible':[('type','!=','hidden')],
+                                    'required':[('type','=','hidden')]}"/>
+                        <field name="boolean"
+                               copyable="1"
+                               attrs="{
+                                    'invisible':[('type','!=','boolean')],
+                                    'required':[('type','=','boolean')]}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_encrypted_vault_custom_field_kanban" model="ir.ui.view">
+        <field name="name">encrypted.vault.custom.field.kanban</field>
+        <field name="model">encrypted.vault.custom.field</field>
+        <field name="type">kanban</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="type"/>
+                <field name="text"/>
+                <field name="hidden"/>
+                <field name="boolean"/>
+                <field name="vault_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_content oe_kanban_global_click">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </strong>
+                                    <br/>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <t t-if="record.type.raw_value == 'text'">
+                                    <field name="text"/>
+                                    <input data-copy-id="field-val" type="hidden"
+                                           t-att-value="record.text.raw_value"/>
+                                </t>
+                                <t t-if="record.type.raw_value == 'boolean'">
+                                    <field name="boolean" widget="boolean"/>
+                                </t>
+                                <t t-if="record.type.raw_value == 'hidden'">
+                                    <span>Hidden content</span>
+                                    <input data-copy-id="field-val" type="hidden"
+                                           t-att-value="record.hidden.raw_value"/>
+                                </t>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left"/>
+                                <div class="oe_kanban_bottom_right">
+                                    <a class="btn btn-default" data-copy="field-val" href="#"
+                                     t-if="['hidden','text'].includes(record.type.raw_value)">
+                                        <i class="fa fa-copy" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+</odoo>
