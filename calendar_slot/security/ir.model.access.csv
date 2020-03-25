@@ -1,7 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_calendar_slot_all_user,calendar.slot_all_user,model_calendar_slot,base.group_portal,1,0,0,0
-access_calendar_slot_all_employee,calendar.slot_all_employee,model_calendar_slot,base.group_user,1,0,0,0
-access_calendar_slot_partner_manager,calendar.slot.partner.manager,model_calendar_slot,base.group_partner_manager,1,1,1,1
-access_competence_all_user,calendar.competence_all_user,model_calendar_slot_competence,base.group_portal,1,0,0,0
-access_competence_all_employee,calendar.competence_all_employee,model_calendar_slot_competence,base.group_user,1,0,0,0
-access_competence_partner_manager,calendar.competence.partner.manager,model_calendar_slot_competence,base.group_partner_manager,1,1,1,1
