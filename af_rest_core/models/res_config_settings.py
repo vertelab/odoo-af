@@ -17,7 +17,14 @@ class ResConfigSettings(models.TransientModel):
     af_system_id = fields.Char(string='AF-SystemId',help="If you need help you shouldn't be changing this")
     # tracking_id is a unique id for each transaction. Not a good parameter to set.
     # af_tracking_id = fields.Char(string='AF-TrackingId',help="If you need help you shouldn't be changing this")
-        
+    
+
+    # TODO: add a table mapping T1 to URL + port
+    # 172.16.36.22 ipfapi.arbetsformedlingen.se #U1
+    # 164.135.40.182 ipfapi.arbetsformedlingen.se #I1
+    # 164.135.78.35 ipfapi.arbetsformedlingen.se #T1
+    # 164.135.93.48 ipfapi.arbetsformedlingen.se #T2
+    
     @api.model
     def get_values(self):
         res = super().get_values()
