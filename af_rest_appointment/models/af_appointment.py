@@ -99,37 +99,39 @@ class AfAppointment(models.Model):
         # Convert json to python format: https://docs.python.org/3/library/json.html#json-to-py-table 
         res = json.loads(res_json)
         
-        # Create calendar.event from res
+        # Create calendar.schedule from res
         # res: list of dicts with list of schedules
         # schedules: list of dicts of schedules
         for comp_day in res:
             # assumes that there's only ever one competence
             competence_name = comp_day.get('competence').get('name')
+            competence_id = self.env['calendar.schedule.competence'].search([('ipf_id','=',comp_day.get('competence').get('id'))]).id
             for schedule in comp_day.get('schedules'):
                 start_time = datetime.strptime(schedule.get('start_time'), "%Y-%m-%dT%H:%M:%SZ")
                 stop_time = datetime.strptime(schedule.get('end_time'), "%Y-%m-%dT%H:%M:%SZ")
-                # TODO: rewrite to use calendar.schedule instead
-                # TODO: check if calendar.schedule already exists 
-                
+
                 # schedules can exist every half hour from 09:00 to 16:00
-                # schedule = self.env['calendar.schedule'].search([('competence','=',???), ('start','=',start_time)])
-                if schedule:
-                    # TODO: update schedule with new values
-                    pass
+                # check if calendar.schedule already exists 
+                schedule_id = self.env['calendar.schedule'].search([('competence','=',competence_id), ('start','=',start_time)])
+                if schedule_id:
+                    # Update existing schedule only two values can change 
+                    vals = {
+                        'scheduled_agents': schedule.get('scheduled_agents'), # number of agents supposed to be available for this
+                        'forecasted_agents': schedule.get('forecasted_agents'), # May be implemented at a later date.
+                    }
+                    schedule_id.update(vals)
                 else:
+                    # create new schedule
                     vals = {
                         'name': competence_name,
                         'start': start_time,
                         'stop': stop_time,
-                        # 'scheduled_agents': schedule.get('scheduled_agents'), # number of agents supposed to be available for this
-                        # 'forecasted_agents': schedule.get('forecasted_agents'), # May be implemented at a later date.
-                        # 'competence': competences,
-                        # TODO: add more data...
+                        'duration': 30.0,
+                        'scheduled_agents': schedule.get('scheduled_agents'), # number of agents supposed to be available for this
+                        'forecasted_agents': schedule.get('forecasted_agents'), # May be implemented at a later date.
+                        'competence': competence_id,
                     }
-                    # Create calendar.event TODO: change to schedule
-                    self.env['calendar.event'].create(vals)
-                    # self.env['calendar.schedule'].create(vals)
-
+                    self.env['calendar.schedule'].create(vals)
         
         # except:
         #     _logger.error('Appointment url error.')

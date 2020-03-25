@@ -7,7 +7,7 @@
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
-    "depends": ["af_rest_core", "calendar_slot", ],
+    "depends": ["af_rest_core", "calendar_schedule", ],
     "external_dependencies": [
         # "service_identity",
         # "stompest",
