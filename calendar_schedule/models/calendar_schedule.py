@@ -31,6 +31,7 @@ class CalendarSchedule(models.Model):
     name = fields.Char(string='Schedule name', required=True)
     start = fields.Datetime(string='Start', required=True, help="Start date of a schedule")
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of a schedule")
+    duration = fields.Float('Duration')
     scheduled_agents = fields.Integer(string='Scheduled agents', help="Number of scheduled agents")
     forecasted_agents = fields.Integer(string='Forecasted agents', help="Number of forecasted agents")
     competence = fields.Many2one(string='Competence', comodel_name='calendar.schedule.competence', help="Related competence")

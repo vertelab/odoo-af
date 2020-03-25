@@ -16,6 +16,7 @@
     "data": [
         "views/calendar_schedule_view.xml",
         "security/ir.model.access.csv",
+        "data/calendar.schedule.competence.csv",
     ],
     "application": True,
     "installable": True,
