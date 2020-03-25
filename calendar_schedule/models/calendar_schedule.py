@@ -24,20 +24,20 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-class CalendarSlot(models.Model):
-    _name = 'calendar.slot'
-    _description = "Slot"
+class CalendarSchedule(models.Model):
+    _name = 'calendar.schedule'
+    _description = "Schedule"
 
-    name = fields.Char(string='Slot name', required=True)
-    start = fields.Datetime(string='Start', required=True, help="Start date of a slot")
-    stop = fields.Datetime(string='Stop', required=True, help="Stop date of a slot")
+    name = fields.Char(string='Schedule name', required=True)
+    start = fields.Datetime(string='Start', required=True, help="Start date of a schedule")
+    stop = fields.Datetime(string='Stop', required=True, help="Stop date of a schedule")
     scheduled_agents = fields.Integer(string='Scheduled agents', help="Number of scheduled agents")
     forecasted_agents = fields.Integer(string='Forecasted agents', help="Number of forecasted agents")
-    competence = fields.Many2one(string='Competence', comodel_name='calendar.slot.competence', help="Related competence")
+    competence = fields.Many2one(string='Competence', comodel_name='calendar.schedule.competence', help="Related competence")
 
-class CalendarSlotCompetence(models.Model):
+class CalendarScheduleCompetence(models.Model):
     # TODO: This class should be merged with a generic "competence"-class if we use it in more areas of odoo.
-    _name = 'calendar.slot.competence'
+    _name = 'calendar.schedule.competence'
     _description = "Competence"
 
     name = fields.Char('Competence name', required=True)
