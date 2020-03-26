@@ -13,7 +13,7 @@
             <calendar string="Schedules" date_start="start" date_stop="stop" date_delay="duration"
                 color="competence">
                 <field name="name"/>
-                <field name="competence"/>
+                <!-- <field name="competence"/> -->
                 <!-- <field name="is_highlighted" invisible="1"/> -->
             </calendar>
         </field>
@@ -55,7 +55,7 @@
     <record id="action_schedule" model="ir.actions.act_window">
         <field name="name">Schedules</field>
         <field name="res_model">calendar.schedule</field>
-        <field name="view_mode">calendar,tree,form</field>
+        <field name="view_mode">calendar,tree,form,pivot,kanban</field>
         <field name="view_id" ref="view_calendar_schedule_calendar"/>
         <!-- <field name="search_view_id" ref="view_calendar_event_search"/> -->
         <!-- <field name="help" type="html">

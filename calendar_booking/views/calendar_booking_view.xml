@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_calendar_booking_calendar" model="ir.ui.view">
+        <field name="name">calendar.booking.calendar</field>
+        <field name="model">calendar.booking</field>
+        <field name="priority" eval="2"/>
+        <field name="arch" type="xml">
+            <!-- <calendar string="Bookings" date_start="start" date_stop="stop" date_delay="duration" all_day="allday"
+                readonly_form_view_id="%(calendar.view_calendar_event_form_popup)s"
+                event_open_popup="true"
+                event_limit="3"
+                color="partner_id"> -->
+            <calendar string="Bookings" date_start="start" date_stop="stop" date_delay="duration"
+                <field name="name"/>
+                <!-- <field name="is_highlighted" invisible="1"/> -->
+            </calendar>
+        </field>
+    </record>
+
+    <record id="action_view_calendar_booking_calendar" model="ir.actions.act_window.view">
+        <field name="act_window_id" ref="action_booking"/>
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">calendar</field>
+        <field name="view_id" ref="view_calendar_booking_calendar"/>
+    </record>
+
+    <!-- <record id="action_view_calendar_booking_tree" model="ir.actions.act_window.view">
+        <field name="act_window_id" ref="action_calendar_event"/>
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_calendar_event_tree"/>
+    </record>
+
+    <record id="action_view_calendar_booking_form" model="ir.actions.act_window.view">
+        <field name="act_window_id" ref="action_calendar_event"/>
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_calendar_event_form"/>
+    </record> -->
+
+    <record id="action_booking" model="ir.actions.act_window">
+        <field name="name">Bookings</field>
+        <field name="res_model">calendar.booking</field>
+        <field name="view_mode">calendar,tree,form,pivot,kanban</field>
+        <field name="view_id" ref="view_calendar_booking_calendar"/>
+        <!-- <field name="search_view_id" ref="view_calendar_event_search"/> -->
+        <!-- <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            booking a new meeting
+          </p><p>
+            The calendar is shared between employees and fully integrated with
+            other applications such as the employee leaves or the business
+            opportunities.
+          </p>
+        </field> -->
+    </record>
+
+    <menuitem action="action_booking" id="menu_action_booking" parent="calendar.mail_menu_calendar" sequence="10" />
+</odoo>
+
+
