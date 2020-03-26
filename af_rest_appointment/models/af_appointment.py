@@ -111,25 +111,27 @@ class AfAppointment(models.Model):
         appointments = res.get.("appointments")
         # loop over list
         for appointment in appointments:
-            pass
-            # appointment.get('appointment_channel')
-            # appointment.get('appointment_date')
-            # appointment.get('appointment_end_time')
-            # appointment.get('appointment_start_time')
-            # appointment.get('appointment_length')
-            # appointment.get('appointment_title')
-            # appointment.get('appointment_type')
-            # appointment.get('customer_id')
-            # appointment.get('customer_name')
-            # appointment.get('employee_name')
-            # appointment.get('employee_phone')
-            # appointment.get('employee_signature')
-            # appointment.get('id')
-            # appointment.get('office_address')
-            # appointment.get('location_code')
-            # appointment.get('office_code')
-            # appointment.get('office_name')
-            # appointment.get('status')
+            app_id = appointment.get('id')
+            app = self.env['calendar.appointment'].search([('id', '=', app_id)])
+            if app:
+            else:
+            appointment.get('appointment_channel')
+            appointment.get('appointment_date')
+            appointment.get('appointment_end_time')
+            appointment.get('appointment_start_time')
+            appointment.get('appointment_length')
+            appointment.get('appointment_title')
+            appointment.get('appointment_type')
+            appointment.get('customer_id')
+            appointment.get('customer_name')
+            appointment.get('employee_name')
+            appointment.get('employee_phone')
+            appointment.get('employee_signature')
+            appointment.get('office_address')
+            appointment.get('location_code')
+            appointment.get('office_code')
+            appointment.get('office_name')
+            appointment.get('status')
 
     # /resource-planning/competencies/schedules
     def get_schedules(self, from_datetime, to_datetime, competences):

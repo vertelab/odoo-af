@@ -25,8 +25,8 @@ import logging
 _logger = logging.getLogger(__name__)
 
 class CalendarSchedule(models.Model):
-    _name = 'calendar.booking'
-    _description = "Booking"
+    _name = 'calendar.appointment'
+    _description = "Appointment"
 
     name = fields.Char(string='Schedule name', required=True)
     start = fields.Datetime(string='Start', required=True, help="Start date of a schedule")

@@ -1,7 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_calendar_booking_all_user,calendar.booking_all_user,model_calendar_booking,base.group_portal,1,0,0,0
-access_calendar_booking_all_employee,calendar.booking_all_employee,model_calendar_booking,base.group_user,1,0,0,0
-access_calendar_booking_partner_manager,calendar.booking.partner.manager,model_calendar_booking,base.group_partner_manager,1,1,1,1
-access_competence_all_user,calendar.competence_all_user,model_calendar_booking_competence,base.group_portal,1,0,0,0
-access_competence_all_employee,calendar.competence_all_employee,model_calendar_booking_competence,base.group_user,1,0,0,0
-access_competence_partner_manager,calendar.competence.partner.manager,model_calendar_booking_competence,base.group_partner_manager,1,1,1,1
