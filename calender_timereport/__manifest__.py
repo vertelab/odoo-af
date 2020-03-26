@@ -7,7 +7,7 @@
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
-    "depends": ["calendar", "project"],
+    "depends": ["calendar", "hr_timesheet_sheet",'project'],
     "external_dependencies": [
     ],
     "data": [

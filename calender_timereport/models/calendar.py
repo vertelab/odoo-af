@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Odoo, Open Source Management Solution, third party addon
-#    Copyright (C) 2004-2015 Vertel AB (<http://vertel.se>).
+#    Copyright (C) 2004-2020 Vertel AB (<http://vertel.se>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -20,6 +20,7 @@
 ##############################################################################
 
 from odoo import models, fields, api, _
+from odoo.tools import UserError
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -32,29 +33,30 @@ class CalendarEvent(models.Model):
 
     @api.one
     def create_timereport(self):
-        for partner in self.partner.ids:
+        # ~ if not self.project_id:
+                # ~ raise UserError(_('You have to at least add a Project'))
+        for partner in self.partner_ids:
+            
             user = self.env['res.users'].search([('partner_id','=',partner.id)])
-        
             if user:
-                employee = self.env['hr.employeee'].search([('user_id','=',user.id)])
-
-
+                employee = self.env['hr.employee'].search([('user_id','=',user.id)])
             if employee:
                 sheet = self.env['hr_timesheet.sheet'].search([('employee_id','=', employee.id),
-                ('date_start', '>=', self.start_date), ('date_stop', '<=', self.start_date)])
+                                                            ('date_start', '<=', self.start_datetime.date()), 
+                                                            ('date_end', '>=', self.start_datetime.date())])
                 if not sheet:
-                    raise Warning('No sheets available')
-
-
+                    #TODO: this defaults to current week/month, this only works if there is a time_sheet for other weeks 
+                    sheet = self.env['hr_timesheet.sheet'].create({'employee_id':employee.id}) 
                 timereport = self.env['account.analytic.line'].create({
-                    'date': self.start_date,
+                    'date': self.start_datetime.date(),
                     'name': self.name,
                     'partner_id': partner.id,
                     'project_id': self.project_id.id if self.project_id else None,
-                    'task_id': self.task_id.id if self.task_id else None.
+                    'task_id': self.task_id.id if self.task_id else None,
                     'unit_amount': self.duration,
                     'sheet_id': sheet.id,
                     'employee_id': employee.id,
+                    'account_id': self.project_id.analytic_account_id.id,
                 })
         
 
