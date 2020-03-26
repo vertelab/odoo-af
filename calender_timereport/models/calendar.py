@@ -33,6 +33,28 @@ class CalendarEvent(models.Model):
     @api.one
     def create_timereport(self):
         for partner in self.partner.ids:
-            self.env['account.analytic.line'].create({})
+            user = self.env['res.users'].search([('partner_id','=',partner.id)])
+        
+            if user:
+                employee = self.env['hr.employeee'].search([('user_id','=',user.id)])
+
+
+            if employee:
+                sheet = self.env['hr_timesheet.sheet'].search([('employee_id','=', employee.id),
+                ('date_start', '>=', self.start_date), ('date_stop', '<=', self.start_date)])
+                if not sheet:
+                    raise Warning('No sheets available')
+
+
+                timereport = self.env['account.analytic.line'].create({
+                    'date': self.start_date,
+                    'name': self.name,
+                    'partner_id': partner.id,
+                    'project_id': self.project_id.id if self.project_id else None,
+                    'task_id': self.task_id.id if self.task_id else None.
+                    'unit_amount': self.duration,
+                    'sheet_id': sheet.id,
+                    'employee_id': employee.id,
+                })
         
 
