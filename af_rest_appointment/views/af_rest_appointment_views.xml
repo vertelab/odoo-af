@@ -20,7 +20,7 @@ user_id = 'eridd'
 start = datetime.datetime.today()
 stop = start + datetime.timedelta(days=7)
 
-env['af.appointment'].get_appointments(user = user_id, from_date = start, to_date = stop)
-#env['af.appointment'].get_appointments(pnr = '123456789012', from_date = start, to_date = stop)</field>
+env['af.appointment'].get_appointments(from_date = start, to_date = stop, user = user_id)
+#env['af.appointment'].get_appointments(from_date = start, to_date = stop, pnr = '123456789012')</field>
     </record>
 </odoo>

@@ -59,7 +59,7 @@ class AfAppointment(models.Model):
         return get_headers
 
     # /appointments
-    def get_appointments(self, user, pnr, from_date, to_date, appointment_types, status_list):
+    def get_appointments(self, from_date, to_date, user = '', pnr = '', appointment_types = [], status_list = []):
         client_id = self.env['ir.config_parameter'].sudo().get_param('af_rest.client_id')
         client_secret = self.env['ir.config_parameter'].sudo().get_param('af_rest.client_secret')
         af_environment = self.env['ir.config_parameter'].sudo().get_param('af_rest.af_environment')
@@ -74,8 +74,8 @@ class AfAppointment(models.Model):
         af_tracking_id = self._generate_tracking_id(af_system_id, af_environment)
 
         # Define base url
-        # ex: https://ipfapi.arbetsformedlingen.se:443/appointments/v1/resource-planning/competencies/schedules?from_date=2020-03-17T00:00:00Z&client_id=XXXXXXXXX&client_secret=XXXXXXXXX&to_date=2020-03-25T00:00:00Z&competence_id=ded72445-e5d3-4e21-a356-aad200dac83d
-        base_url = "{url}:{port}/{path}?client_id={client}&client_secret={secret}&from_date={from_date_str}&to_date={to_date_str}{user_str}{pnr_str}&appointment_types={appointment_types_str}&status_list={status_list_str}"
+        # ex: https://ipfapi.arbetsformedlingen.se:443/appointments/v1/appointments?client_id=da03472cd17e4ce4bb2d017156db7156&client_secret=B4BC32F21a314Cb9B48877989Cc1e3b8&from_date=2010-10-01&pnr=199601265516
+        base_url = "{url}:{port}/{path}?client_id={client}&client_secret={secret}&from_date={from_date_str}&to_date={to_date_str}{user_str}{pnr_str}{appointment_types_str}{status_list_str}"
 
         # Insert values into base_url
         get_url = base_url.format(
@@ -89,10 +89,10 @@ class AfAppointment(models.Model):
             # user_id = user.id, # 'eridd' # TODO: enable this
             user_str = ("&user_id=%s" % user) if user else '', # 'eridd'
             pnr_str = ("&pnr=%s" % pnr) if pnr else '', # '16280810XXXX'
-            appointment_types_str = appointment_types, # TODO: implement better, expected: comma seperated list.
-            status_list_str = status_list, # TODO: implement better, expected: comma seperated list.
+            appointment_types_str = ("&appointment_types=%s" % appointment_types) if appointment_types else '', # TODO: implement better, expected: comma seperated list.
+            status_list_str = ("&status_list=%s" %status_list) if status_list else '', # TODO: implement better, expected: comma seperated list.
         )
-        
+
         # Generate headers for our get
         get_headers = self._generate_headers(af_environment, af_system_id, af_tracking_id)
 
@@ -108,9 +108,13 @@ class AfAppointment(models.Model):
         res = json.loads(res_json)
 
         # get list of appointments
-        appointments = res.get.("appointments")
+        appointments = res.get("appointments")
+
+        _logger.warn("DAER: apps: %s" % appointments)
+
         # loop over list
         for appointment in appointments:
+            _logger.warn("DAER: app: %s" % appointment)
             app_id = appointment.get('id')
             date = appointment.get('appointment_date') # "2019-10-02"
             stop = appointment.get('appointment_end_time') # "12:30:00"
@@ -122,19 +126,22 @@ class AfAppointment(models.Model):
             # These are not needed since the ids are the same as obj.id (maybe?)
             # partner = self.env['res.partner'].browse(appointment.get('customer_id'))
             # user = self.env['res.user'].browse(appointment.get('employee_signature'))
-
+            _logger.warn("DAER: before browse. app_id: %s" % app_id)
             # check if appointment exists
-            app = self.env['calendar.appointment'].browse(app_id)
+            app = self.env['calendar.appointment'].search([('ipf_id', '=', app_id)])
+            _logger.warn("DAER: after browse")
             if app:
+                _logger.warn("DAER: app exists! app_id: %s app.channel: %s app: %s" % (app.id, app.channel, app))
                 # update existing appointment
                 pass
             else:
+                _logger.warn("DAER: app does not exist!")
                 # create new appointment
                 vals = {
-                    'id': app_id,
+                    'ipf_id': app_id,
                     'name': appointment.get('appointment_title'),
-                    'user_id': appointment.get('employee_signature'),
-                    'partner_id': appointment.get('customer_id'),
+                    #'user_id': appointment.get('employee_signature'), # disabled because of testing TODO: re-add
+                    #'partner_id': appointment.get('customer_id'), # disabled because of testing TODO: re-add
                     'start': start_datetime,
                     'stop': stop_datetime,
                     'duration': appointment.get('appointment_length'),
@@ -142,11 +149,9 @@ class AfAppointment(models.Model):
                     'status': appointment.get('status'),
                     'location_code': appointment.get('location_code'),
                     'office_code': appointment.get('office_code'),
+                    'channel': appointment.get('appointment_channel'),
                 }
-
-                appointment.get('appointment_channel')
-                appointment.get('appointment_end_time')
-                appointment.get('appointment_start_time')
+                self.env['calendar.appointment'].create(vals)
 
             # Unused values from appointment:
             # appointment.get('customer_name')
