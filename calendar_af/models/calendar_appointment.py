@@ -34,3 +34,7 @@ class CalendarSchedule(models.Model):
     duration = fields.Float('Duration')
     user_id = fields.Many2one(string='Case worker', comodel_name='res.user', help="Booked case worker")
     partner_id = fields.Many2one(string='Case worker', comodel_name='res.partner', help="Booked customer")
+    app_type = fields.Char(string='Type')
+    status = fields.Char(string='Status')
+    location_code = fields.Char(string='Location')
+    office_code = fields.Char(string='Office')

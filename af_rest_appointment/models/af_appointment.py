@@ -112,26 +112,49 @@ class AfAppointment(models.Model):
         # loop over list
         for appointment in appointments:
             app_id = appointment.get('id')
-            app = self.env['calendar.appointment'].search([('id', '=', app_id)])
+            date = appointment.get('appointment_date') # "2019-10-02"
+            stop = appointment.get('appointment_end_time') # "12:30:00"
+            start = appointment.get('appointment_start_time') # "12:00:00"
+
+            stop_datetime = datetime.strptime((date + "T" + stop), "%Y-%m-%dT%H:%M:%S")
+            start_datetime = datetime.strptime((date + "T" + start), "%Y-%m-%dT%H:%M:%S")
+
+            # These are not needed since the ids are the same as obj.id (maybe?)
+            # partner = self.env['res.partner'].browse(appointment.get('customer_id'))
+            # user = self.env['res.user'].browse(appointment.get('employee_signature'))
+
+            # check if appointment exists
+            app = self.env['calendar.appointment'].browse(app_id)
             if app:
+                # update existing appointment
+                pass
             else:
-            appointment.get('appointment_channel')
-            appointment.get('appointment_date')
-            appointment.get('appointment_end_time')
-            appointment.get('appointment_start_time')
-            appointment.get('appointment_length')
-            appointment.get('appointment_title')
-            appointment.get('appointment_type')
-            appointment.get('customer_id')
-            appointment.get('customer_name')
-            appointment.get('employee_name')
-            appointment.get('employee_phone')
-            appointment.get('employee_signature')
-            appointment.get('office_address')
-            appointment.get('location_code')
-            appointment.get('office_code')
-            appointment.get('office_name')
-            appointment.get('status')
+                # create new appointment
+                vals = {
+                    'id': app_id,
+                    'name': appointment.get('appointment_title'),
+                    'user_id': appointment.get('employee_signature'),
+                    'partner_id': appointment.get('customer_id'),
+                    'start': start_datetime,
+                    'stop': stop_datetime,
+                    'duration': appointment.get('appointment_length'),
+                    'app_type': appointment.get('appointment_type'),
+                    'status': appointment.get('status'),
+                    'location_code': appointment.get('location_code'),
+                    'office_code': appointment.get('office_code'),
+                }
+
+                appointment.get('appointment_channel')
+                appointment.get('appointment_end_time')
+                appointment.get('appointment_start_time')
+
+            # Unused values from appointment:
+            # appointment.get('customer_name')
+            # appointment.get('employee_name')
+            # appointment.get('employee_phone')
+            # appointment.get('office_address')
+            # appointment.get('office_name')
+
 
     # /resource-planning/competencies/schedules
     def get_schedules(self, from_datetime, to_datetime, competences):
