@@ -69,6 +69,98 @@ class AfAppointment(models.Model):
         }
         return get_headers
 
+    # /bookable-occasions
+    def get_occasions(self, from_date, to_date, appointment_channel, appointment_type, max_depth = False, appointment_length = False, location_code = False, profession_id = False, employee_user_id = False):
+        client_id = self.env['ir.config_parameter'].sudo().get_param('af_rest.client_id')
+        client_secret = self.env['ir.config_parameter'].sudo().get_param('af_rest.client_secret')
+        af_environment = self.env['ir.config_parameter'].sudo().get_param('af_rest.af_environment')
+        af_port = self.env['ir.config_parameter'].sudo().get_param('af_rest.ipf_port')
+        af_url = self.env['ir.config_parameter'].sudo().get_param('af_rest.ipf_url')
+        af_system_id = self.env['ir.config_parameter'].sudo().get_param('af_rest.af_system_id')
+
+        if not (af_url or af_port or client_id or client_secret or af_environment or af_system_id):
+            raise Warning('Please setup AF integrations')
+
+        # Generate a tracking-id
+        af_tracking_id = self._generate_tracking_id(af_system_id, af_environment)
+
+        # Define base url
+        # ex: https://ipfapi.arbetsformedlingen.se:443/appointments/v1/bookable-occasions?appointment_type=1&appointment_channel=SPD&from_date=2020-03-20&to_date=2020-03-21&client_id=da03472cd17e4ce4bb2d017156db7156&client_secret=B4BC32F21a314Cb9B48877989Cc1e3b8
+        base_url = "{url}:{port}/{path}?client_id={client}&client_secret={secret}&from_date={from_date_str}&to_date={to_date_str}&appointment_channel={appointment_channel_str}&appointment_type={appointment_type_str}{max_depth_str}{appointment_length_str}{location_code_str}{profession_id_str}"
+
+        # Insert values into base_url
+        get_url = base_url.format(
+            url = af_url, # https://ipfapi.arbetsformedlingen.se
+            port = af_port, # 443
+            path = "appointments/v1/bookable-occasions", # TODO: remove hardcoding?
+            client = client_id, # check in anypoint for example
+            secret = client_secret, # check in anypoint for example
+            from_date_str = from_date.strftime("%Y-%m-%d"), # 2020-03-17
+            to_date_str = to_date.strftime("%Y-%m-%d"), # 2020-03-25
+            appointment_channel_str = appointment_channel, # 'SPD'
+            appointment_type_str = appointment_type, # '1'
+            max_depth_str = ("&max_depth=%s" % max_depth) if max_depth else '',
+            appointment_length_str = ("&appointment_length=%s" % appointment_length) if appointment_length else '',
+            location_code_str = ("&location_code=%s" % location_code) if location_code else '',
+            profession_id_str = ("&profession_id=%s" % profession_id) if profession_id else '',
+        )
+
+        # appointment_type - möjliga värden:
+        # 21-25 PDM - kundtjänst
+        #   21 - första
+        #   22 - uppföljande
+        #   23 - fördjupat
+        #   24 - "krom"
+        #   25 - uppföljande "krom"
+        # 31-33 Lokalkontor
+        #   31 - första
+        #   32 - uppföljande
+        #   33 - fördjupat
+
+        # Generate headers for our get
+        get_headers = self._generate_headers(af_environment, af_system_id, af_tracking_id)
+
+        # Build our request using url and headers
+        # Request(url, data=None, headers={}, origin_req_host=None, unverifiable=False, method=None)
+        req = request.Request(url=get_url, headers=get_headers)
+
+        ctx = self._generate_ctx(True) # TODO: change to False
+
+        # send GET and read result
+        res_json = request.urlopen(req, context=ctx).read()
+        # Convert json to python format: https://docs.python.org/3/library/json.html#json-to-py-table 
+        res = json.loads(res_json)
+
+        # get list of occasions from res
+        occasions = res.get('bookable_occasions')
+
+        # loop over list
+        for occasion in occasions:
+            date = occasion.get('occasion_date')
+            stop = occasion.get('occasion_end_time')
+            start = occasion.get('occasion_start_time')
+
+            stop_datetime = datetime.strptime((date + "T" + stop), "%Y-%m-%dT%H:%M")
+            start_datetime = datetime.strptime((date + "T" + start), "%Y-%m-%dT%H:%M")
+
+            occ_id = occasion.get('id')
+            occ = self.env['calendar.occasion'].search([('ipf_id', '=', occ_id)])
+            if occ:
+                # Update existing 'occ'
+                pass
+            else:
+                vals = {
+                    'ipf_id': occ_id,
+                    'name': occ_id,
+                    'stop': stop_datetime,
+                    'start': start_datetime,
+                    'duration': (stop_datetime - start_datetime).seconds//60 # get length in minutes
+                    # TODO: implement these
+                    # '': occasion.get('appointment_channel'),
+                    # '': occasion.get('occasion_status_id'),
+                }
+                self.env['calendar.occasion'].create(vals)
+
     # /appointments
     def get_appointments(self, from_date, to_date, user = '', pnr = '', appointment_types = [], status_list = []):
         client_id = self.env['ir.config_parameter'].sudo().get_param('af_rest.client_id')
@@ -95,8 +187,8 @@ class AfAppointment(models.Model):
             path = "appointments/v1/appointments", # TODO: remove hardcoding?
             client = client_id, # check in anypoint for example
             secret = client_secret, # check in anypoint for example
-            from_date_str = from_date.strftime("%Y-%m-%d"), # 2020-03-17T00:00:00Z
-            to_date_str = to_date.strftime("%Y-%m-%d"), # 2020-03-25T00:00:00Z
+            from_date_str = from_date.strftime("%Y-%m-%d"), # 2020-03-17
+            to_date_str = to_date.strftime("%Y-%m-%d"), # 2020-03-25
             user_str = ("&user_id=%s" % user) if user else '', # 'eridd'
             pnr_str = ("&pnr=%s" % pnr) if pnr else '', # '16280810XXXX'
             appointment_types_str = ("&appointment_types=%s" % appointment_types) if appointment_types else '', # TODO: implement better, expected: comma seperated list.
@@ -120,11 +212,8 @@ class AfAppointment(models.Model):
         # get list of appointments
         appointments = res.get("appointments")
 
-        _logger.warn("DAER: apps: %s" % appointments)
-
         # loop over list
         for appointment in appointments:
-            _logger.warn("DAER: app: %s" % appointment)
             app_id = appointment.get('id')
             date = appointment.get('appointment_date') # "2019-10-02"
             stop = appointment.get('appointment_end_time') # "12:30:00"
@@ -136,10 +225,8 @@ class AfAppointment(models.Model):
             partner = self.env['res.partner'].search(['customer_nr', '=', (appointment.get('customer_id'))]) # TODO: change to customer_id?
             user = self.env['res.users'].search([('af_signature', '=', appointment.get('employee_signature'))])
             
-            _logger.warn("DAER: before browse. app_id: %s" % app_id)
             # check if appointment exists
             app = self.env['calendar.appointment'].search([('ipf_id', '=', app_id)])
-            _logger.warn("DAER: after browse")
             if app:
                 _logger.warn("DAER: app exists! app_id: %s app.channel: %s app: %s" % (app.id, app.channel, app))
                 # update existing appointment

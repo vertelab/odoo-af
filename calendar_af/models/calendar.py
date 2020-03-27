@@ -49,7 +49,7 @@ class CalendarAppointment(models.Model):
     _name = 'calendar.appointment'
     _description = "Appointment"
 
-    ipf_id = fields.Char(string='Appointment name', index=True, required=True)
+    ipf_id = fields.Char(string='Appointment id', index=True, required=True)
     name = fields.Char(string='Appointment name', required=True)
     start = fields.Datetime(string='Start', required=True, help="Start date of an appointment")
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an appointment")
@@ -66,6 +66,7 @@ class CalendarOccasion(models.Model):
     _name = 'calendar.occasion'
     _description = "Occasion"
 
+    ipf_id = fields.Char(string='Occasion id', index=True, required=True)
     name = fields.Char(string='Occasion name', required=True)
     start = fields.Datetime(string='Start', required=True, help="Start date of an occasion")
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an occasion")
