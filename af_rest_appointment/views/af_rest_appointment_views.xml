@@ -15,12 +15,11 @@ env['af.appointment'].get_schedules(start, stop, competences)</field>
         <field name="name">AF REST Appointments</field>
         <field name="model_id" ref="base.model_ir_actions_server"/>
         <field name="state">code</field>
-        <field name="code">#user_id = env['res.user'].search([('id', '=', 'eridd')])
-user_id = 'eridd'
+        <field name="code">#user_id = env['res.users'].search([('af_signature', '=', 'eridd')])
 start = datetime.datetime.today()
 stop = start + datetime.timedelta(days=7)
 
-env['af.appointment'].get_appointments(from_date = start, to_date = stop, user = user_id)
-#env['af.appointment'].get_appointments(from_date = start, to_date = stop, pnr = '123456789012')</field>
+#env['af.appointment'].get_appointments(from_date = start, to_date = stop, user = user_id)
+env['af.appointment'].get_appointments(from_date = start, to_date = stop, pnr = '123456789012')</field>
     </record>
 </odoo>

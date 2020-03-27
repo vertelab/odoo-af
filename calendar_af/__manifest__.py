@@ -16,6 +16,7 @@
     "data": [
         "views/calendar_schedule_view.xml",
         "views/calendar_appointment_view.xml",
+        "views/calendar_occasion_view.xml",
         "security/ir.model.access.csv",
         "data/calendar.schedule.competence.csv",
     ],

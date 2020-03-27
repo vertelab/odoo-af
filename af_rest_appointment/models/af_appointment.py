@@ -32,6 +32,17 @@ import ssl
 
 _logger = logging.getLogger(__name__)
 
+# Temporary inherit to get new field TODO: Remove
+# class ResPartner(models.Model):
+#     _inherit = "res.partner"
+
+#     af_customer_id = fields.Char(string='Customer id')
+
+# Temporary inherit to get new field TODO: Remove
+class ResUser(models.Model):
+    _inherit = "res.users"
+    
+    af_signature = fields.Char(string='Signature')
 
 class AfAppointment(models.Model):
     _name = "af.appointment"
@@ -86,7 +97,6 @@ class AfAppointment(models.Model):
             secret = client_secret, # check in anypoint for example
             from_date_str = from_date.strftime("%Y-%m-%d"), # 2020-03-17T00:00:00Z
             to_date_str = to_date.strftime("%Y-%m-%d"), # 2020-03-25T00:00:00Z
-            # user_id = user.id, # 'eridd' # TODO: enable this
             user_str = ("&user_id=%s" % user) if user else '', # 'eridd'
             pnr_str = ("&pnr=%s" % pnr) if pnr else '', # '16280810XXXX'
             appointment_types_str = ("&appointment_types=%s" % appointment_types) if appointment_types else '', # TODO: implement better, expected: comma seperated list.
@@ -123,9 +133,9 @@ class AfAppointment(models.Model):
             stop_datetime = datetime.strptime((date + "T" + stop), "%Y-%m-%dT%H:%M:%S")
             start_datetime = datetime.strptime((date + "T" + start), "%Y-%m-%dT%H:%M:%S")
 
-            # These are not needed since the ids are the same as obj.id (maybe?)
-            # partner = self.env['res.partner'].browse(appointment.get('customer_id'))
-            # user = self.env['res.user'].browse(appointment.get('employee_signature'))
+            partner = self.env['res.partner'].search(['customer_nr', '=', (appointment.get('customer_id'))]) # TODO: change to customer_id?
+            user = self.env['res.users'].search([('af_signature', '=', appointment.get('employee_signature'))])
+            
             _logger.warn("DAER: before browse. app_id: %s" % app_id)
             # check if appointment exists
             app = self.env['calendar.appointment'].search([('ipf_id', '=', app_id)])
@@ -140,8 +150,8 @@ class AfAppointment(models.Model):
                 vals = {
                     'ipf_id': app_id,
                     'name': appointment.get('appointment_title'),
-                    #'user_id': appointment.get('employee_signature'), # disabled because of testing TODO: re-add
-                    #'partner_id': appointment.get('customer_id'), # disabled because of testing TODO: re-add
+                    # 'user_id': user.id, # disabled because of testing TODO: re-add
+                    # 'partner_id': partner.id, # disabled because of testing TODO: re-add
                     'start': start_datetime,
                     'stop': stop_datetime,
                     'duration': appointment.get('appointment_length'),
@@ -159,7 +169,6 @@ class AfAppointment(models.Model):
             # appointment.get('employee_phone')
             # appointment.get('office_address')
             # appointment.get('office_name')
-
 
     # /resource-planning/competencies/schedules
     def get_schedules(self, from_datetime, to_datetime, competences):
