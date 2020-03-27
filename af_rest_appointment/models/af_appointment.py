@@ -157,6 +157,7 @@ class AfAppointment(models.Model):
                     'name': occ_id,
                     'stop': stop_datetime,
                     'start': start_datetime,
+                    'duration': (stop_datetime - start_datetime).seconds//60 # get length in minutes
                     # TODO: implement these
                     # '': occasion.get('appointment_channel'),
                     # '': occasion.get('occasion_status_id'),
