@@ -10,10 +10,18 @@
                 event_open_popup="true"
                 event_limit="3"
                 color="partner_id"> -->
+                
             <calendar string="Appointments" date_start="start" date_stop="stop" date_delay="duration">
                 <field name="name"/>
                 <!-- <field name="is_highlighted" invisible="1"/> -->
             </calendar>
+            <!-- <tree string="Appointments" >
+                    <field name="ipf_id"/>
+                    <field name="name"/>
+                    <field name="start"/>
+                    <field name="stop"/>
+                </tree> -->
+                 <!-- Error: Kalendervyn har inte definierat 'Startdatum' attributet -->
         </field>
     </record>
 
@@ -41,19 +49,19 @@
         <field name="view_id" ref="view_calendar_appointment_calendar"/>
     </record>
 
-    <!-- <record id="action_view_calendar_appointment_tree" model="ir.actions.act_window.view">
-        <field name="act_window_id" ref="action_calendar_event"/>
+     <record id="action_view_calendar_appointment_tree" model="ir.actions.act_window.view">
+        <field name="act_window_id" ref="action_appointment"/>
         <field name="sequence" eval="2"/>
         <field name="view_mode">tree</field>
-        <field name="view_id" ref="view_calendar_event_tree"/>
+        <field name="view_id" ref="view_calendar_appointment_calendar"/>
     </record>
 
-    <record id="action_view_calendar_appointment_form" model="ir.actions.act_window.view">
+    <!-- <record id="action_view_calendar_appointment_form" model="ir.actions.act_window.view">
         <field name="act_window_id" ref="action_calendar_event"/>
         <field name="sequence" eval="3"/>
         <field name="view_mode">form</field>
         <field name="view_id" ref="view_calendar_event_form"/>
-    </record> -->
+    </record>  -->
 
     <menuitem action="action_appointment" id="menu_action_appointment" parent="calendar.mail_menu_calendar" sequence="10" />
 </odoo>

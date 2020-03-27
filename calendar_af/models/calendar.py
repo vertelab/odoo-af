@@ -59,7 +59,8 @@ class CalendarAppointment(models.Model):
     app_type = fields.Char(string='Type')
     status = fields.Char(string='Status')
     location_code = fields.Char(string='Location')
-    office_code = fields.Char(string='Office')
+    office = fields.Many2many('res.partner', string="Office")
+    office_code = fields.Char(string='Office code', related="office.office_code")
     channel =  fields.Char(string='Channel')
 
 class CalendarOccasion(models.Model):
