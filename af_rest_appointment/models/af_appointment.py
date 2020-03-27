@@ -136,7 +136,6 @@ class AfAppointment(models.Model):
 
         # loop over list
         for occasion in occasions:
-            _logger.warn("DAER: occasion: %s" % occasion)
             date = occasion.get('occasion_date')
             stop = occasion.get('occasion_end_time')
             start = occasion.get('occasion_start_time')
@@ -147,11 +146,9 @@ class AfAppointment(models.Model):
             occ_id = occasion.get('id')
             occ = self.env['calendar.occasion'].search([('ipf_id', '=', occ_id)])
             if occ:
-                _logger.warn("DAER: update")
                 # Update existing 'occ'
                 pass
             else:
-                _logger.warn("DAER: create")
                 vals = {
                     'ipf_id': occ_id,
                     'name': occ_id,
