@@ -71,3 +71,4 @@ class CalendarOccasion(models.Model):
     start = fields.Datetime(string='Start', required=True, help="Start date of an occasion")
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an occasion")
     duration = fields.Float('Duration')
+    appointment_id = fields.Many2one('calendar.appointment', string="Appointment")

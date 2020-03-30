@@ -16,8 +16,70 @@
             </calendar>
         </field>
     </record>
+    <record id="view_calendar_occasion_tree" model="ir.ui.view">
+        <field name="name">calendar.occasion.tree</field>
+        <field name="model">calendar.occasion</field>
+        <field name="priority" eval="2"/>
+        <field name="arch" type="xml">
+            <tree string="Appointments" >
+                <field name="name"/>
+                <field name="start"/>
+                <field name="stop"/>
+                <field name="appointment_id"/>
+            </tree> 
+        </field>
+    </record>
+        <record id="view_calendar_occasion_form" model="ir.ui.view">
+        <field name="name">calendar.occasion.form</field>
+        <field name="model">calendar.occasion</field>
+        <field name="priority" eval="2"/>
+        <field name="arch" type="xml">
+              <form>
+                <sheet>
+                    <div class="oe_title">
+                       
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="start" />
+                            <field name="stop" />
+                            <field name="duration" />
+                        </group>
+                        <group>
+                            <field name="appointment_id" />
+                        </group>
+                    </group>
 
-    <record id="action_occasion" model="ir.actions.act_window">
+
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+        <record id="view_calendar_occasion_pivot" model="ir.ui.view">
+        <field name="name">calendar.occasion.pivot</field>
+        <field name="model">calendar.occasion</field>
+        <field name="priority" eval="2"/>
+        <field name="arch" type="xml">
+            <pivot string="Appointment">
+                <field name="start" type="col" interval="day" />
+                <field name="appointment_id" type="row"/>
+            </pivot>
+        </field>
+    </record>
+      <!-- <record id="view_calendar_occasion_kanban" model="ir.ui.view">
+        <field name="name">calendar.occasion.kanban</field>
+        <field name="model">calendar.occasion</field>
+        <field name="priority" eval="2"/>
+        <field name="arch" type="xml">
+            
+        </field>
+    </record> -->
+
+    <record id="action_calendar_occasion" model="ir.actions.act_window">
         <field name="name">Occasions</field>
         <field name="res_model">calendar.occasion</field>
         <field name="view_mode">calendar,tree,form,pivot,kanban</field>
@@ -35,27 +97,39 @@
     </record>
 
     <record id="action_view_calendar_occasion_calendar" model="ir.actions.act_window.view">
-        <field name="act_window_id" ref="action_occasion"/>
+        <field name="act_window_id" ref="action_calendar_occasion"/>
         <field name="sequence" eval="1"/>
         <field name="view_mode">calendar</field>
         <field name="view_id" ref="view_calendar_occasion_calendar"/>
     </record>
 
-    <!-- <record id="action_view_calendar_occasion_tree" model="ir.actions.act_window.view">
-        <field name="act_window_id" ref="action_calendar_event"/>
+    <record id="action_view_calendar_occasion_tree" model="ir.actions.act_window.view">
+        <field name="act_window_id" ref="action_calendar_occasion"/>
         <field name="sequence" eval="2"/>
         <field name="view_mode">tree</field>
-        <field name="view_id" ref="view_calendar_event_tree"/>
+        <field name="view_id" ref="view_calendar_occasion_tree"/>
     </record>
 
     <record id="action_view_calendar_occasion_form" model="ir.actions.act_window.view">
-        <field name="act_window_id" ref="action_calendar_event"/>
+        <field name="act_window_id" ref="action_calendar_occasion"/>
         <field name="sequence" eval="3"/>
         <field name="view_mode">form</field>
-        <field name="view_id" ref="view_calendar_event_form"/>
+        <field name="view_id" ref="view_calendar_occasion_form"/>
+    </record>
+     <record id="action_view_calendar_occasion_pivot" model="ir.actions.act_window.view">
+        <field name="act_window_id" ref="action_calendar_occasion"/>
+        <field name="sequence" eval="4"/>
+        <field name="view_mode">pivot</field>
+        <field name="view_id" ref="view_calendar_occasion_pivot"/>
+    </record>
+     <!-- <record id="action_view_calendar_occasion_kanban" model="ir.actions.act_window.view">
+        <field name="act_window_id" ref="action_calendar_occasion"/>
+        <field name="sequence" eval="5"/>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_calendar_occasion_kanban"/>
     </record> -->
 
-    <menuitem action="action_occasion" id="menu_action_occasion" parent="calendar.mail_menu_calendar" sequence="10" />
+    <menuitem action="action_calendar_occasion" id="menu_action_occasion" parent="calendar.mail_menu_calendar" sequence="10" />
 </odoo>
 
 
