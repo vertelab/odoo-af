@@ -49,17 +49,17 @@ class CalendarAppointment(models.Model):
     _name = 'calendar.appointment'
     _description = "Appointment"
 
-    ipf_id = fields.Char(string='Appointment name', index=True, required=True)
+    ipf_id = fields.Char(string='IPF id', index=True, required=True)
     name = fields.Char(string='Appointment name', required=True)
     start = fields.Datetime(string='Start', required=True, help="Start date of an appointment")
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an appointment")
     duration = fields.Float('Duration')
-    user_id = fields.Many2one(string='Case worker', comodel_name='res.user', help="Booked case worker")
+    user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker") #handläggare?
     partner_id = fields.Many2one(string='Customer', comodel_name='res.partner', help="Booked customer")
     app_type = fields.Char(string='Type')
     status = fields.Char(string='Status')
     location_code = fields.Char(string='Location')
-    office = fields.Many2many('res.partner', string="Office")
+    office = fields.Many2one('res.partner', string="Office")
     office_code = fields.Char(string='Office code', related="office.office_code")
     channel =  fields.Char(string='Channel')
 
