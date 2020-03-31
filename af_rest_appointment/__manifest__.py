@@ -7,12 +7,8 @@
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
-    "depends": ["af_rest_core", "calendar_schedule", ],
-    "external_dependencies": [
-        # "service_identity",
-        # "stompest",
-        # "stompest.async",
-    ],
+    "depends": ["af_rest_core", "calendar_af", "partner_employee360", ],
+    "external_dependencies": [],
     "data": [
         "views/af_rest_appointment_views.xml",
     ],

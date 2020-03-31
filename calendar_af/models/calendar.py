@@ -44,3 +44,30 @@ class CalendarScheduleCompetence(models.Model):
     name = fields.Char('Competence name', required=True)
     # AF specific attribute
     ipf_id = fields.Char('IPF Id', required=True, help="The IPF competence id, if this is wrong the integration won't work")
+
+class CalendarAppointment(models.Model):
+    _name = 'calendar.appointment'
+    _description = "Appointment"
+
+    ipf_id = fields.Char(string='Appointment id', index=True, required=True)
+    name = fields.Char(string='Appointment name', required=True)
+    start = fields.Datetime(string='Start', required=True, help="Start date of an appointment")
+    stop = fields.Datetime(string='Stop', required=True, help="Stop date of an appointment")
+    duration = fields.Float('Duration')
+    user_id = fields.Many2one(string='Case worker', comodel_name='res.user', help="Booked case worker")
+    partner_id = fields.Many2one(string='Customer', comodel_name='res.partner', help="Booked customer")
+    app_type = fields.Char(string='Type')
+    status = fields.Char(string='Status')
+    location_code = fields.Char(string='Location')
+    office_code = fields.Char(string='Office')
+    channel =  fields.Char(string='Channel')
+
+class CalendarOccasion(models.Model):
+    _name = 'calendar.occasion'
+    _description = "Occasion"
+
+    ipf_id = fields.Char(string='Occasion id', index=True, required=True)
+    name = fields.Char(string='Occasion name', required=True)
+    start = fields.Datetime(string='Start', required=True, help="Start date of an occasion")
+    stop = fields.Datetime(string='Stop', required=True, help="Stop date of an occasion")
+    duration = fields.Float('Duration')
