@@ -107,6 +107,7 @@
                             <field name="user_id" />
                             <field name="partner_id" />
                             <field name="competence_id" />
+                            <field name="occasion_ids" />
                             <field name="status" />
                             <field name="location_code" />
                             <field name="office" options="{'no_create_edit': True}" domain="[('type', '=', 'af office')]"/>

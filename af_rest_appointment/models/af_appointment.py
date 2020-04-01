@@ -21,6 +21,7 @@
 
 from odoo import models, fields, api, _
 from datetime import datetime
+import pytz
 from urllib import request
 from urllib.error import URLError, HTTPError
 import json
@@ -31,6 +32,8 @@ from odoo.exceptions import Warning
 import ssl
 
 _logger = logging.getLogger(__name__)
+
+LOCAL_TZ = 'Europe/Stockholm'
 
 class AfAppointment(models.Model):
     _name = "af.appointment"
@@ -109,11 +112,8 @@ class AfAppointment(models.Model):
         # get list of appointments
         appointments = res.get("appointments")
 
-        _logger.warn("DAER: apps: %s" % appointments)
-
         # loop over list
         for appointment in appointments:
-            _logger.warn("DAER: app: %s" % appointment)
             app_id = appointment.get('id')
             date = appointment.get('appointment_date') # "2019-10-02"
             stop = appointment.get('appointment_end_time') # "12:30:00"
@@ -125,16 +125,13 @@ class AfAppointment(models.Model):
             partner = self.env['res.partner'].search(['customer_nr', '=', (appointment.get('customer_id'))]) # TODO: change to customer_id?
             user = self.env['res.users'].search([('signature', '=', appointment.get('employee_signature'))])
             
-            _logger.warn("DAER: before browse. app_id: %s" % app_id)
             # check if appointment exists
             app = self.env['calendar.appointment'].search([('ipf_id', '=', app_id)])
-            _logger.warn("DAER: after browse")
             if app:
                 _logger.warn("DAER: app exists! app_id: %s app.channel: %s app: %s" % (app.id, app.channel, app))
-                # update existing appointment
+                # TODO: update existing appointment
                 pass
             else:
-                _logger.warn("DAER: app does not exist!")
                 # create new appointment
                 vals = {
                     'ipf_id': app_id,
@@ -220,9 +217,14 @@ class AfAppointment(models.Model):
                 start_time = datetime.strptime(schedule.get('start_time'), "%Y-%m-%dT%H:%M:%SZ")
                 stop_time = datetime.strptime(schedule.get('end_time'), "%Y-%m-%dT%H:%M:%SZ")
 
+                # Integration gives us times in local (Europe/Stockholm) tz
+                # Convert to UTC
+                start_time_utc = pytz.timezone(LOCAL_TZ).localize(start_time).astimezone(pytz.utc)
+                stop_time_utc = pytz.timezone(LOCAL_TZ).localize(stop_time).astimezone(pytz.utc)
+
                 # schedules can exist every half hour from 09:00 to 16:00
                 # check if calendar.schedule already exists 
-                schedule_id = self.env['calendar.schedule'].search([('competence','=',competence.id), ('start','=',start_time)])
+                schedule_id = self.env['calendar.schedule'].search([('competence','=',competence.id), ('start','=',start_time_utc)])
                 if schedule_id:
                     # Update existing schedule only two values can change 
                     vals = {
@@ -230,12 +232,13 @@ class AfAppointment(models.Model):
                         'forecasted_agents': schedule.get('forecasted_agents'), # May be implemented at a later date.
                     }
                     schedule_id.update(vals)
+                    
                 else:
                     # create new schedule
                     vals = {
                         'name': competence_name,
-                        'start': start_time,
-                        'stop': stop_time,
+                        'start': start_time_utc,
+                        'stop': stop_time_utc,
                         'duration': 30.0,
                         'scheduled_agents': int(schedule.get('scheduled_agents')), # number of agents supposed to be available for this. Can sometimes be float.
                         'forecasted_agents': int(schedule.get('forecasted_agents')), # May be implemented at a later date. Can sometimes be float.

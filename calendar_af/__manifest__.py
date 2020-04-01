@@ -14,6 +14,7 @@
         # "stompest.async",
     ],
     "data": [
+        "views/calendar_af_views.xml",
         "views/calendar_schedule_view.xml",
         "views/calendar_appointment_view.xml",
         "views/calendar_occasion_view.xml",
