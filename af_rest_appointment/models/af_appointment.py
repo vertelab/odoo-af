@@ -32,20 +32,9 @@ import ssl
 
 _logger = logging.getLogger(__name__)
 
-# Temporary inherit to get new field TODO: Remove
-# class ResPartner(models.Model):
-#     _inherit = "res.partner"
-
-#     af_customer_id = fields.Char(string='Customer id')
-
-# Temporary inherit to get new field TODO: Remove
-class ResUser(models.Model):
-    _inherit = "res.users"
-    
-    af_signature = fields.Char(string='Signature')
-
 class AfAppointment(models.Model):
     _name = "af.appointment"
+    _description = "Integration helper class"
 
     def _generate_tracking_id(self, af_system_id, af_environment):
         tracking_number = datetime.now().strftime("%y%m%d%H%M%S")
@@ -58,7 +47,7 @@ class AfAppointment(models.Model):
             ctx.check_hostname = False
             ctx.verify_mode = ssl.CERT_NONE
         else:
-            pass # TODO: mTSL here?
+            pass # TODO: implement mTSL here?
         return ctx
 
     def _generate_headers(self, af_environment, af_system_id, af_tracking_id):
@@ -134,7 +123,7 @@ class AfAppointment(models.Model):
             start_datetime = datetime.strptime((date + "T" + start), "%Y-%m-%dT%H:%M:%S")
 
             partner = self.env['res.partner'].search(['customer_nr', '=', (appointment.get('customer_id'))]) # TODO: change to customer_id?
-            user = self.env['res.users'].search([('af_signature', '=', appointment.get('employee_signature'))])
+            user = self.env['res.users'].search([('signature', '=', appointment.get('employee_signature'))])
             
             _logger.warn("DAER: before browse. app_id: %s" % app_id)
             # check if appointment exists
@@ -226,14 +215,14 @@ class AfAppointment(models.Model):
         for comp_day in res:
             # assumes that there's only ever one competence
             competence_name = comp_day.get('competence').get('name')
-            competence_id = self.env['calendar.schedule.competence'].search([('ipf_id','=',comp_day.get('competence').get('id'))]).id
+            competence = self.env['calendar.schedule.competence'].search([('ipf_id','=',comp_day.get('competence').get('id'))])
             for schedule in comp_day.get('schedules'):
                 start_time = datetime.strptime(schedule.get('start_time'), "%Y-%m-%dT%H:%M:%SZ")
                 stop_time = datetime.strptime(schedule.get('end_time'), "%Y-%m-%dT%H:%M:%SZ")
 
                 # schedules can exist every half hour from 09:00 to 16:00
                 # check if calendar.schedule already exists 
-                schedule_id = self.env['calendar.schedule'].search([('competence','=',competence_id), ('start','=',start_time)])
+                schedule_id = self.env['calendar.schedule'].search([('competence','=',competence.id), ('start','=',start_time)])
                 if schedule_id:
                     # Update existing schedule only two values can change 
                     vals = {
@@ -250,6 +239,7 @@ class AfAppointment(models.Model):
                         'duration': 30.0,
                         'scheduled_agents': int(schedule.get('scheduled_agents')), # number of agents supposed to be available for this. Can sometimes be float.
                         'forecasted_agents': int(schedule.get('forecasted_agents')), # May be implemented at a later date. Can sometimes be float.
-                        'competence': competence_id,
+                        'competence': competence.id,
+                        'channel': competence.channel,
                     }
                     self.env['calendar.schedule'].create(vals)

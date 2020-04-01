@@ -1,4 +1,4 @@
-id,name,ipf_id
-calendar_schedule.competence_BK1,"Första planeringssamtal (BK1)",ded72445-e5d3-4e21-a356-aad200dac83d
-calendar_schedule.competence_BK2,"Uppföljande planeringssamtal (BK2)",f203b91b-bdbe-46e8-b6ae-aad200df9884
-calendar_schedule.competence_BK3,"Fördjupat planeringssamtal (BK3)",93557f15-d25a-4f40-8a6b-aad200e1d2a0
+id,name,ipf_id,channel
+calendar_schedule.competence_BK1,"Första planeringssamtal (BK1)",ded72445-e5d3-4e21-a356-aad200dac83d,SPD
+calendar_schedule.competence_BK2,"Uppföljande planeringssamtal (BK2)",f203b91b-bdbe-46e8-b6ae-aad200df9884,SPD
+calendar_schedule.competence_BK3,"Fördjupat planeringssamtal (BK3)",93557f15-d25a-4f40-8a6b-aad200e1d2a0,SPD
