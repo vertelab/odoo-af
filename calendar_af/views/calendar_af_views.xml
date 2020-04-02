@@ -12,14 +12,16 @@ schedules = env['calendar.schedule'].search([('start', '>', start),('stop', '&lt
 schedules.create_occasions()</field>
     </record>
 
-    <record id="af_get_bookable_occasion" model="ir.actions.server">
+    <record id="af_get_bookable_occasions" model="ir.actions.server">
         <field name="name">AF Get Bookable Occasion</field>
         <field name="model_id" ref="base.model_ir_actions_server"/>
         <field name="state">code</field>
         <field name="code">competence = env['calendar.schedule.competence'].search([('ipf_id', '=', 'ded72445-e5d3-4e21-a356-aad200dac83d')])
 start = datetime.datetime.strptime(("2020-04-02T09:00:00"), "%Y-%m-%dT%H:%M:%S")
 stop = datetime.datetime.strptime(("2020-04-02T10:30:00"), "%Y-%m-%dT%H:%M:%S")
-occasions = env['calendar.occasion'].get_bookable_occasion(start, stop, competence.id, 'SPD', 5)
+occasions = env['calendar.occasion'].get_bookable_occasions(start, stop, competence.id, 'SPD', 5)
 reservation = env['calendar.occasion'].reserve_occasion(occasions[0])</field>
     </record>
+
+    <menuitem name="Administration" id="menu_admin" parent="calendar.mail_menu_calendar" sequence="20" />
 </odoo>

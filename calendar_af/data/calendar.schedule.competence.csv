@@ -1,4 +1,9 @@
-id,name,ipf_id,channel
-calendar_schedule.competence_BK1,"Första planeringssamtal (BK1)",ded72445-e5d3-4e21-a356-aad200dac83d,SPD
-calendar_schedule.competence_BK2,"Uppföljande planeringssamtal (BK2)",f203b91b-bdbe-46e8-b6ae-aad200df9884,SPD
-calendar_schedule.competence_BK3,"Fördjupat planeringssamtal (BK3)",93557f15-d25a-4f40-8a6b-aad200e1d2a0,SPD
+id,ipf_num,name,additional_booking,channel,ipf_id
+calendar_schedule.competence_21,21,"Första planeringssamtal (BK1)",True,SPD,ded72445-e5d3-4e21-a356-aad200dac83d
+calendar_schedule.competence_22,22,"Uppföljande planeringssamtal (BK2)",False,SPD,f203b91b-bdbe-46e8-b6ae-aad200df9884
+calendar_schedule.competence_23,23,"Fördjupat planeringssamtal (BK3)",False,SPD,93557f15-d25a-4f40-8a6b-aad200e1d2a0
+calendar_schedule.competence_24,24,"Första planeringssamtal KROM (BK4)",True,SPD,162b978b-f167-4837-a3d7-ab6700de6aff
+calendar_schedule.competence_25,25,"Uppföljande planeringssamtal KROM (BK5)",False,SPD,a919ed37-5094-4124-bf7b-ab6700df390a
+calendar_schedule.competence_31,31,"Första planeringssamtal",False,Local,"n/a"
+calendar_schedule.competence_32,32,"Uppföljande planeringssamtal",False,Local,"n/a"
+calendar_schedule.competence_33,33,"Fördjupat planeringssamtal",False,Local,"n/a"

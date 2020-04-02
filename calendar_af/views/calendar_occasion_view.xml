@@ -52,7 +52,7 @@
                             <field name="appointment_id" />
                             <field name="competence_id" />
                             <field name="channel" />
-                            <field name="over_booking" />
+                            <field name="additional_booking" />
                         </group>
                     </group>
 

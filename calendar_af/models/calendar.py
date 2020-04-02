@@ -21,13 +21,20 @@
 
 from odoo import models, fields, api, _
 from datetime import datetime, timedelta
+import pytz
+import copy
 import logging
 
 _logger = logging.getLogger(__name__)
 
 # TODO: decide if we are dependent on this variable or the imported schedule duration.
-# Base duration given by TeleOpti. This is the duration of the calendar.schedule slots in minutes.
-BASE_DURATION = 30.0 
+# LOCAL_TZ: Local timezone 
+LOCAL_TZ = 'Europe/Stockholm'
+# BASE_DURATION: Base duration given by TeleOpti. This is the duration of the calendar.schedule slots in minutes.
+BASE_DURATION = 30.0
+# BASE_DAY_START, BASE_DAY_STOP: The hours between which we normally accept appointments
+BASE_DAY_START = pytz.timezone(LOCAL_TZ).localize(datetime.now().replace(hour=9, minute=0, second=0, microsecond=0)).astimezone(pytz.utc)
+BASE_DAY_STOP = pytz.timezone(LOCAL_TZ).localize(datetime.now().replace(hour=16, minute=0, second=0, microsecond=0)).astimezone(pytz.utc)
 
 class CalendarSchedule(models.Model):
     _name = 'calendar.schedule'
@@ -56,8 +63,9 @@ class CalendarSchedule(models.Model):
             for occasion in range(schedule.scheduled_agents):
                 self.env['calendar.occasion'].create(vals)
 
-class CalendarScheduleCompetence(models.Model):
+class CalendarCompetence(models.Model):
     # TODO: This class should be merged with a generic "competence"-class if we use it in more areas of odoo.
+    # NOTE: this is referenced as type, competence, ??? inside AFs organisation.
     _name = 'calendar.schedule.competence'
     _description = "Competence"
 
@@ -65,6 +73,16 @@ class CalendarScheduleCompetence(models.Model):
     # AF specific attribute
     ipf_id = fields.Char('IPF Id', required=True, help="The IPF competence id, if this is wrong the integration won't work")
     channel = fields.Char(string='Channel')
+    ipf_num = fields.Integer(string='IPF Number')
+    additional_booking = fields.Boolean(string='Over booking')
+
+class CalendarMappedDates(models.Model):
+    _name = 'calendar.mapped_dates'
+    _description = "Mapped dates"
+
+    name = fields.Char(string="Name")
+    from_date = fields.Date(string='From Date', required=True)
+    to_date = fields.Date(string='To Date', required=True)
 
 class CalendarAppointment(models.Model):
     _name = 'calendar.appointment'
@@ -83,7 +101,7 @@ class CalendarAppointment(models.Model):
     occasion_ids = fields.One2many(comodel_name='calendar.occasion', inverse_name='appointment_id', string="Occasion")
     competence_id = fields.Many2one(string='Type / Competence', related='occasion_ids.competence_id')
     channel =  fields.Char(string='Channel', related='occasion_ids.channel')
-    over_booking = fields.Boolean(String='Over booking', related='occasion_ids.over_booking')
+    additional_booking = fields.Boolean(String='Over booking', related='occasion_ids.additional_booking')
 
 class CalendarOccasion(models.Model):
     _name = 'calendar.occasion'
@@ -96,7 +114,7 @@ class CalendarOccasion(models.Model):
     appointment_id = fields.Many2one(comodel_name='calendar.appointment', string="Appointment")
     competence_id = fields.Many2one(comodel_name='calendar.schedule.competence', string='Type / Competence')
     channel = fields.Char(string='Channel')
-    over_booking = fields.Boolean(String='Over booking')
+    additional_booking = fields.Boolean(String='Over booking')
 
     def _force_create_occasion(self, duration, start, competence, channel):
         vals = {
@@ -107,18 +125,75 @@ class CalendarOccasion(models.Model):
             'appointment_id': False,
             'competence_id': competence,
             'channel': channel,
-            'over_booking': True,
+            'additional_booking': True,
         }
         res = self.env[calendar.occasion].create(vals)
         return res
 
+    def _get_min_occasions(self, competence, date_start=None, date_stop=None):
+        """Returns the timeslot (as a start date, DateTime) with the least 
+        amount of occurances for a specific timeframe"""
+        date_start = date_start or BASE_DAY_START
+        date_stop= date_stop or BASE_DAY_STOP
+        go = True
+        loop_date = date_start
+        occ_time = {}
+        while go:
+            occ_time[loop_date.strftime("%Y-%m-%dT%H:%M:%S")] = self.env['calendar.occasion'].search_count([('start', '=', loop_date),('competence_id', '=', competence)])
+            loop_date = loop_date + timedelta(minutes=BASE_DURATION)
+            if loop_date >= date_stop:
+                go = False
+        occ_time_min_key = min(occ_time, key=occ_time.get)
+        res = datetime.strptime(occ_time_min_key, "%Y-%m-%dT%H:%M:%S")
+        return res
+
+    def _check_date_mapping(self, date):
+        """Checks if a date has a mapped date, and returns the mapped date 
+        if it exists """
+        mapped_date = self.env['calendar.mapped_dates'].search([('from_date', '=', date)])
+        if mapped_date:
+            res = mapped_date.to_date 
+        else:
+            res = date
+        return res
+
+    def _get_additional_booking(self, date, duration, competence):
+        # Replace date with mapped date if we have one
+        date = self._check_date_mapping(date)
+        date_list = date.strftime("%Y-%-m-%-d").split("-")
+        # Copy to make sure we dont overwrite BASE_DAY_START or BASE_DAY_STOP
+        day_start = copy.copy(BASE_DAY_START)
+        day_stop = copy.copy(BASE_DAY_STOP)
+        # Ugly, ugly code..
+        day_start.replace(year=int(date_list[0]), month=int(date_list[1]), day=int(date_list[2]))
+        day_stop.replace(year=int(date_list[0]), month=int(date_list[1]), day=int(date_list[2]))
+        # Find when to create new occasion
+        start_date = self._get_min_occasions(competence, day_start, day_stop)
+        # Calculate how many occasions we need
+        no_occasions = int(duration / BASE_DURATION)
+        # Create new occasions.
+        res = []
+        for i in range(no_occasions):
+            vals = {
+                'name': '%sm @ %s' % (duration, start_date),
+                'start': start_date,
+                'stop': start_date + timedelta(minutes=BASE_DURATION),
+                'duration': BASE_DURATION,
+                'appointment_id': False,
+                'competence_id': competence,
+                'additional_booking': True,
+            }
+            res.append(self.env['calendar.occasion'].create(vals))
+            start_date = start_date + timedelta(minutes=BASE_DURATION)
+        return res
+
     # TODO: add duration as argument
-    def get_bookable_occasion(self, start, stop, competence, channel, max_depth = 1):
+    def get_bookable_occasions(self, start, stop, competence, channel, max_depth = 1):
         # Calculate number of occasions needed to match booking duration
         no_occasions = int((stop - start) / timedelta(minutes=BASE_DURATION))
 
         # TODO: decide on method #1 or #2. #2 seems less expensive.  
-        # # START METHOD #1 (probably contains bugs)
+        # # START METHOD #1 (probably contains bugs, but intended algo should be clear)
         # occ_lists = {}
         # # repeat search per depth
         # for i in range(max_depth):
@@ -142,7 +217,7 @@ class CalendarOccasion(models.Model):
         # find 'no_occasions' number of free occasions for each timeslot
         for i in range(no_occasions):
             iteration_start = start + timedelta(minutes=BASE_DURATION) * i
-            occasion_ids = self.env['calendar.occasion'].search([('start', '=', iteration_start), ('competence_id', '=', competence), ('channel', '=', channel), ('appointment_id', '=', False)], limit=max_depth)
+            occasion_ids = self.env['calendar.occasion'].search([('start', '=', iteration_start), ('competence_id', '=', competence.id), ('channel', '=', channel), ('appointment_id', '=', False)], limit=max_depth)
             # save one result from each timeslot in a seperate list 
             for j in range(len(occasion_ids)):
                 occ_lists[j] += occasion_ids[j]
@@ -154,14 +229,14 @@ class CalendarOccasion(models.Model):
                 del occ_lists[i]
             else:
                 i += 1
+
+        res = occ_lists
         # END METHOD #2
+        # if competence allows additional bookings and  we didn't find any 
+        # free occasions, create new ones:
+        if competence.additional_booking and not res:
+            res = self._get_additional_booking(start, stop, competence, channel)
 
-        # Do we need to make sure that we always deliver bookable occasions here?
-
-        _logger.warn("DAER: get_bookable_occasion return: %s" % occ_lists)
-        return occ_lists 
-
-        res = self.env['calendar.occasion']
         return res
 
     def reserve_occasion(self, occasion_ids):
@@ -186,10 +261,11 @@ class CalendarOccasion(models.Model):
                 'status': 'Reserved',
                 'location_code': False,
                 'office': False,
-                'occasion_ids': occasion_ids,
+                'occasion_ids': occasion_ids, # I dont think this does anything?
             }
             appointment = self.env['calendar.appointment'].create(vals)
 
+            # relation needs to be set from calendar.occasion 
             for occasion_id in occasion_ids:
                 occasion_id.appointment_id = appointment.id
 
@@ -198,9 +274,8 @@ class CalendarOccasion(models.Model):
             # TODO: implement error codes..
             res = '200'
 
-        _logger.warn("DAER: reserve_occasion return: %s" % res)
         return res
-    
+
     def confirm_appointment(self):
         res = self.env['calendar.appointment']
         return res

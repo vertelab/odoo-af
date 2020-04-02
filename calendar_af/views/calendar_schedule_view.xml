@@ -108,18 +108,6 @@
         </field>
     </record> 
 
-
-    <record id="view_calendar_schedule_competence_tree" model="ir.ui.view">
-        <field name="name">calendar.schedule.competence.tree</field>
-        <field name="model">calendar.schedule.competence</field>
-        <field name="arch" type="xml">
-            <tree string="Competence" editable="bottom">
-                <field name="name"/>
-                <field name="ipf_id"/>
-            </tree>
-        </field>
-    </record>
-
     <record id="action_calendar_schedule" model="ir.actions.act_window">
         <field name="name">Schedules</field>
         <field name="res_model">calendar.schedule</field>
@@ -171,16 +159,6 @@
         <field name="view_id" ref="view_calendar_schedule_kanban"/>
     </record> 
 
- 
-
-    <record id="action_competence" model="ir.actions.act_window">
-        <field name="name">Competences</field>
-        <field name="res_model">calendar.schedule.competence</field>
-        <field name="view_type">form</field>
-        <field name="view_id" ref="view_calendar_schedule_competence_tree"/>
-    </record>
-
-    <menuitem action="action_competence" id="menu_action_competence" parent="calendar.mail_menu_calendar" sequence="20" />
     <menuitem action="action_calendar_schedule" id="menu_action_schedule" parent="calendar.mail_menu_calendar" sequence="10" />
 </odoo>
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_calendar_schedule_competence_tree" model="ir.ui.view">
+        <field name="name">calendar.schedule.competence.tree</field>
+        <field name="model">calendar.schedule.competence</field>
+        <field name="arch" type="xml">
+            <tree string="Competence" editable="bottom">
+                <field name="ipf_num"/>
+                <field name="name"/>
+                <field name="channel"/>
+                <field name="additional_booking"/>
+                <field name="ipf_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_competence" model="ir.actions.act_window">
+        <field name="name">Competences</field>
+        <field name="res_model">calendar.schedule.competence</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="view_calendar_schedule_competence_tree"/>
+    </record>
+
+    <menuitem action="action_competence" id="menu_action_competence" parent="menu_admin" sequence="10" />
+</odoo>
