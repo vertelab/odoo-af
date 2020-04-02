@@ -19,7 +19,7 @@ schedules.create_occasions()</field>
         <field name="code">competence = env['calendar.schedule.competence'].search([('ipf_id', '=', 'ded72445-e5d3-4e21-a356-aad200dac83d')])
 start = datetime.datetime.strptime(("2020-04-02T09:00:00"), "%Y-%m-%dT%H:%M:%S")
 stop = datetime.datetime.strptime(("2020-04-02T10:30:00"), "%Y-%m-%dT%H:%M:%S")
-occasions = env['calendar.occasion'].get_bookable_occasions(start, stop, competence.id, 'SPD', 5)
+occasions = env['calendar.occasion'].get_bookable_occasions(start, stop, competence, 'SPD', 5)
 reservation = env['calendar.occasion'].reserve_occasion(occasions[0])</field>
     </record>
 

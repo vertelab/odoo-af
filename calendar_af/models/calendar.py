@@ -192,23 +192,6 @@ class CalendarOccasion(models.Model):
         # Calculate number of occasions needed to match booking duration
         no_occasions = int((stop - start) / timedelta(minutes=BASE_DURATION))
 
-        # TODO: decide on method #1 or #2. #2 seems less expensive.  
-        # # START METHOD #1 (probably contains bugs, but intended algo should be clear)
-        # occ_lists = {}
-        # # repeat search per depth
-        # for i in range(max_depth):
-        #     iteration_start = start
-        #     occasion_ids = []
-        #     # find a free occasion for each timeslot
-        #     for j in range(no_occasions):
-        #         iteration_start = iteration_start + timedelta(minutes=BASE_DURATION) * j
-        #         occasion_ids += self.env['calendar.occasion'].search([('start', '=', iteration_start), ('competence_id', '=', competence), ('channel', '=', channel), ('appointment_id', '=', False)], limit=1)
-
-        #     # Creates a dict of lists of occasions to match the appointment duration
-        #     occ_lists[i] = occasion_ids
-        # # END METHOD #1
-
-        # START METHOD #2
         occ_lists = []
         # not sure if this is needed...
         for i in range(max_depth):
@@ -231,7 +214,6 @@ class CalendarOccasion(models.Model):
                 i += 1
 
         res = occ_lists
-        # END METHOD #2
         # if competence allows additional bookings and  we didn't find any 
         # free occasions, create new ones:
         if competence.additional_booking and not res:
@@ -272,7 +254,7 @@ class CalendarOccasion(models.Model):
             res = appointment
         else:
             # TODO: implement error codes..
-            res = '200'
+            res = '200' # 400, 403, 404, 500
 
         return res
 
