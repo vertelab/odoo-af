@@ -1,5 +1,15 @@
 <?xml version="1.0"?>
 <odoo>
+    <record id="af_rest_occasions" model="ir.actions.server">
+        <field name="name">AF REST Occasions</field>
+        <field name="model_id" ref="base.model_ir_actions_server"/>
+        <field name="state">code</field>
+        <field name="code">start = datetime.datetime.today()
+stop = start + datetime.timedelta(days=1)
+
+env['af.appointment'].get_occasions(from_date = start, to_date = stop, appointment_channel = "SPD", appointment_type = "24", max_depth = "1")</field>
+    </record>
+
     <record id="af_rest_schedule" model="ir.actions.server">
         <field name="name">AF REST Schedules</field>
         <field name="model_id" ref="base.model_ir_actions_server"/>
