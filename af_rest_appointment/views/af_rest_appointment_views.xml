@@ -16,9 +16,10 @@ env['af.appointment'].get_occasions(from_date = start, to_date = stop, appointme
         <field name="state">code</field>
         <field name="code">start = datetime.datetime.now()
 stop = start + datetime.timedelta(days=7)
-competences = env['calendar.schedule.competence'].search([('ipf_id','in',['ded72445-e5d3-4e21-a356-aad200dac83d', 'f203b91b-bdbe-46e8-b6ae-aad200df9884', '93557f15-d25a-4f40-8a6b-aad200e1d2a0'])])
+type_ids = env['calendar.appointment.type'].search([('ipf_id','in',['ded72445-e5d3-4e21-a356-aad200dac83d', 'f203b91b-bdbe-46e8-b6ae-aad200df9884', '93557f15-d25a-4f40-8a6b-aad200e1d2a0'])])
 
-env['af.appointment'].get_schedules(start, stop, competences)</field>
+schedule_ids = env['af.appointment'].get_schedules(start, stop, type_ids)
+schedule_ids.create_occasions()</field>
     </record>
 
     <record id="af_rest_appointments" model="ir.actions.server">

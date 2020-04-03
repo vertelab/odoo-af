@@ -2,7 +2,7 @@
 
 {
     "name": "Calendar AF",
-    "version": "12.0.1.0.0",
+    "version": "12.0.1.0.1",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
@@ -14,11 +14,14 @@
         # "stompest.async",
     ],
     "data": [
+        "views/calendar_af_views.xml",
         "views/calendar_schedule_view.xml",
         "views/calendar_appointment_view.xml",
         "views/calendar_occasion_view.xml",
+        "views/calendar_appointment_type_view.xml",
+        "views/calendar_mapped_dates_view.xml",
         "security/ir.model.access.csv",
-        "data/calendar.schedule.competence.csv",
+        "data/calendar.appointment.type.csv",
     ],
     "application": True,
     "installable": True,

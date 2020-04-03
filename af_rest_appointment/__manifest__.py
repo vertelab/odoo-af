@@ -11,6 +11,7 @@
     "external_dependencies": [],
     "data": [
         "views/af_rest_appointment_views.xml",
+        "security/ir.model.access.csv",
     ],
     "application": True,
     "installable": True,
