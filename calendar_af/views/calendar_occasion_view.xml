@@ -50,7 +50,7 @@
                         </group>
                         <group>
                             <field name="appointment_id" />
-                            <field name="competence_id" />
+                            <field name="type_id" />
                             <field name="channel" />
                             <field name="additional_booking" />
                         </group>

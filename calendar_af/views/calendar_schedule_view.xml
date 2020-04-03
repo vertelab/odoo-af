@@ -11,9 +11,9 @@
                 event_limit="3"
                 color="partner_id"> -->
             <calendar string="Schedules" date_start="start" date_stop="stop" date_delay="duration"
-                color="competence">
+                color="type_id">
                 <field name="name"/>
-                <!-- <field name="competence"/> -->
+                <!-- <field name="type_id"/> -->
                 <!-- <field name="is_highlighted" invisible="1"/> -->
             </calendar>
         </field>
@@ -30,7 +30,7 @@
                     <field name="stop"/>
                     <field name="scheduled_agents"/>
                     <field name="forecasted_agents"/>
-                    <field name="competence"/>
+                    <field name="type_id"/>
                 </tree> 
         </field>
     </record>
@@ -56,7 +56,7 @@
                         <group>
                             <field name="scheduled_agents" />
                             <field name="forecasted_agents" />
-                            <field name="competence" />
+                            <field name="type_id" />
                                                     
                         </group>
                     </group>
@@ -84,7 +84,7 @@
                 <field name="name"/>
                 <field name="start"/>
                 <field name="stop"/>
-                <field name="competence" />
+                <field name="type_id" />
 
                 <templates>
                     <t t-name="kanban-box">
@@ -97,7 +97,7 @@
                                     <ul>
                                         <li> Start: <field name="start"/> </li>
                                         <li> Stop: <field name="stop"/> </li> 
-                                         <li> Competence: <field name="competence"/> </li>
+                                         <li> Meeting type: <field name="type_id"/> </li>
                                     </ul>
                                 </div>
                             </div>

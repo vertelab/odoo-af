@@ -211,8 +211,8 @@ class AfAppointment(models.Model):
         # schedules: list of dicts of schedules
         for comp_day in res:
             # assumes that there's only ever one competence
-            competence_name = comp_day.get('competence').get('name')
-            competence = self.env['calendar.schedule.competence'].search([('ipf_id','=',comp_day.get('competence').get('id'))])
+            type_name = comp_day.get('competence').get('name')
+            type_id = self.env['calendar.appointment.type'].search([('ipf_id','=',comp_day.get('type').get('id'))])
             for schedule in comp_day.get('schedules'):
                 start_time = datetime.strptime(schedule.get('start_time'), "%Y-%m-%dT%H:%M:%SZ")
                 stop_time = datetime.strptime(schedule.get('end_time'), "%Y-%m-%dT%H:%M:%SZ")
@@ -224,7 +224,7 @@ class AfAppointment(models.Model):
 
                 # schedules can exist every half hour from 09:00 to 16:00
                 # check if calendar.schedule already exists 
-                schedule_id = self.env['calendar.schedule'].search([('competence','=',competence.id), ('start','=',start_time_utc)])
+                schedule_id = self.env['calendar.schedule'].search([('type','=',type_id.id), ('start','=',start_time_utc)])
                 if schedule_id:
                     # Update existing schedule only two values can change 
                     vals = {
@@ -242,7 +242,7 @@ class AfAppointment(models.Model):
                         'duration': 30.0,
                         'scheduled_agents': int(schedule.get('scheduled_agents')), # number of agents supposed to be available for this. Can sometimes be float.
                         'forecasted_agents': int(schedule.get('forecasted_agents')), # May be implemented at a later date. Can sometimes be float.
-                        'competence': competence.id,
+                        'type_id': competence.id,
                         'channel': competence.channel,
                     }
                     self.env['calendar.schedule'].create(vals)

@@ -4,7 +4,7 @@
         <field name="name">calendar.mapped_dates.tree</field>
         <field name="model">calendar.mapped_dates</field>
         <field name="arch" type="xml">
-            <tree string="Competence" editable="bottom">
+            <tree string="Meeting type" editable="bottom">
                 <field name="name"/>
                 <field name="from_date"/>
                 <field name="to_date"/>
