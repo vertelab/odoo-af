@@ -52,16 +52,22 @@ class CalendarSchedule(models.Model):
     @api.multi
     def create_occasions(self):
         for schedule in self:
-            vals = {
-                'name': '%sm @ %s' % (schedule.duration, schedule.start.strftime("%Y-%m-%dT%H:%M:%S")),
-                'duration': schedule.duration,
-                'start': schedule.start,
-                'stop': schedule.stop,
-                'type_id': schedule.type_id.id,
-                'channel': schedule.channel,
-            }
-            for occasion in range(schedule.scheduled_agents):
-                self.env['calendar.occasion'].create(vals)
+            no_occasions = self.env['calendar.occasion'].search_count([('start', '=', schedule.start), ('type_id', '=', schedule.type_id.id), ('additional_booking', '=', False)])
+            if (schedule.scheduled_agents - no_occasions) > 0:
+                vals = {
+                    'name': '%sm @ %s' % (schedule.duration, schedule.start.strftime("%Y-%m-%dT%H:%M:%S")),
+                    'duration': schedule.duration,
+                    'start': schedule.start,
+                    'stop': schedule.stop,
+                    'type_id': schedule.type_id.id,
+                    'channel': schedule.channel,
+                    'additional_booking': False,
+                }
+                for occasion in range(schedule.scheduled_agents - no_occasions):
+                    self.env['calendar.occasion'].create(vals)
+
+            elif (schedule.scheduled_agents - no_occasions) < 0:
+                pass
 
 class CalendarAppointmentType(models.Model):
     _name = 'calendar.appointment.type'
@@ -170,7 +176,7 @@ class CalendarOccasion(models.Model):
         # Calculate how many occasions we need
         no_occasions = int(duration / BASE_DURATION)
         # Create new occasions.
-        res = []
+        res = self.env['calendar.occasion']
         for i in range(no_occasions):
             vals = {
                 'name': '%sm @ %s' % (duration, start_date),
@@ -181,7 +187,7 @@ class CalendarOccasion(models.Model):
                 'type_id': type_id,
                 'additional_booking': True,
             }
-            res.append(self.env['calendar.occasion'].create(vals))
+            res |= self.env['calendar.occasion'].create(vals)
             start_date = start_date + timedelta(minutes=BASE_DURATION)
         return res
 
@@ -189,12 +195,11 @@ class CalendarOccasion(models.Model):
     def get_bookable_occasions(self, start, stop, type_id, channel, max_depth = 1):
         # Calculate number of occasions needed to match booking duration
         no_occasions = int((stop - start) / timedelta(minutes=BASE_DURATION))
-
         # TODO: Return max_depth occasions per slot
         # TODO: Sort return by last date first, add for-loop on date first.
 
         occ_lists = []
-        # not sure if this is needed...
+        # declare lists...
         for i in range(max_depth):
             occ_lists.append([])
 
@@ -228,6 +233,7 @@ class CalendarOccasion(models.Model):
         duration = stop.minute - start.minute 
 
         # TODO: Reserve-booking = TRANSIENT MODEL?, reservations are kept for 5 minutes
+        # 5 minutes should be a changeable parameter = not transient model..?
 
         # check that occasions are unreserved
         free = True

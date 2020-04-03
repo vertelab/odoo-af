@@ -102,7 +102,7 @@ class AfAppointment(models.Model):
         # Request(url, data=None, headers={}, origin_req_host=None, unverifiable=False, method=None)
         req = request.Request(url=get_url, headers=get_headers)
 
-        ctx = self._generate_ctx(True) # TODO: change to False
+        ctx = self._generate_ctx(is_remote=True) # TODO: change to False
 
         # send GET and read result
         res_json = request.urlopen(req, context=ctx).read()
@@ -122,7 +122,7 @@ class AfAppointment(models.Model):
             stop_datetime = datetime.strptime((date + "T" + stop), "%Y-%m-%dT%H:%M:%S")
             start_datetime = datetime.strptime((date + "T" + start), "%Y-%m-%dT%H:%M:%S")
 
-            partner = self.env['res.partner'].search(['customer_nr', '=', (appointment.get('customer_id'))]) # TODO: change to customer_id?
+            partner = self.env['res.partner'].search(['customer_id', '=', (appointment.get('customer_id'))]) # TODO: change to customer_id?
             user = self.env['res.users'].search([('signature', '=', appointment.get('employee_signature'))])
             
             # check if appointment exists
@@ -157,7 +157,8 @@ class AfAppointment(models.Model):
             # appointment.get('office_name')
 
     # /resource-planning/competencies/schedules
-    def get_schedules(self, from_datetime, to_datetime, competences):
+    def get_schedules(self, from_datetime, to_datetime, type_ids):
+        """fetches schedules from Teleopti via IPF and creates calendar.schedule in odoo"""
         client_id = self.env['ir.config_parameter'].sudo().get_param('af_rest.client_id')
         client_secret = self.env['ir.config_parameter'].sudo().get_param('af_rest.client_secret')
         af_environment = self.env['ir.config_parameter'].sudo().get_param('af_rest.af_environment')
@@ -168,10 +169,12 @@ class AfAppointment(models.Model):
         if not (af_url or af_port or client_id or client_secret or af_environment or af_system_id):
             raise Warning('Please setup AF integrations')
 
-        # Convert list of competences into a string to be used in url
-        comp = ""
-        for competence in competences:
-            comp += "&competence_id=" + competence.ipf_id
+        res = self.env['calendar.schedule']
+
+        # Convert list of types into a string to be used in url
+        type_str = ""
+        for type_id in type_ids:
+            type_str += "&competence_id=" + type_id.ipf_id
 
         # Generate a tracking-id
         af_tracking_id = self._generate_tracking_id(af_system_id, af_environment)
@@ -189,7 +192,7 @@ class AfAppointment(models.Model):
             secret = client_secret, # check in anypoint for example
             from_date = from_datetime.strftime("%Y-%m-%dT%H:%M:%SZ"), # 2020-03-17T00:00:00Z
             to_date = to_datetime.strftime("%Y-%m-%dT%H:%M:%SZ"), # 2020-03-25T00:00:00Z
-            comps = comp, # &competence_id=ded72445-e5d3-4e21-a356-aad200dac83d
+            comps = type_str, # &competence_id=ded72445-e5d3-4e21-a356-aad200dac83d
         )
 
         # Generate headers for our get
@@ -199,20 +202,20 @@ class AfAppointment(models.Model):
         # Request(url, data=None, headers={}, origin_req_host=None, unverifiable=False, method=None)
         req = request.Request(url=get_url, headers=get_headers)
 
-        ctx= ctx = self._generate_ctx(True) # TODO: change to False
+        ctx = ctx = self._generate_ctx(is_remote=True) # TODO: change to False
 
         # send GET and read result
-        res_json = request.urlopen(req, context=ctx).read()
+        req_res_json = request.urlopen(req, context=ctx).read()
         # Convert json to python format: https://docs.python.org/3/library/json.html#json-to-py-table 
-        res = json.loads(res_json)
+        req_res = json.loads(req_res_json)
 
-        # Create calendar.schedule from res
-        # res: list of dicts with list of schedules
+        # Create calendar.schedule from req_res
+        # req_res: list of dicts with list of schedules
         # schedules: list of dicts of schedules
-        for comp_day in res:
+        for comp_day in req_res:
             # assumes that there's only ever one competence
             type_name = comp_day.get('competence').get('name')
-            type_id = self.env['calendar.appointment.type'].search([('ipf_id','=',comp_day.get('type').get('id'))])
+            type_id = self.env['calendar.appointment.type'].search([('ipf_id','=',comp_day.get('competence').get('id'))])
             for schedule in comp_day.get('schedules'):
                 start_time = datetime.strptime(schedule.get('start_time'), "%Y-%m-%dT%H:%M:%SZ")
                 stop_time = datetime.strptime(schedule.get('end_time'), "%Y-%m-%dT%H:%M:%SZ")
@@ -224,7 +227,7 @@ class AfAppointment(models.Model):
 
                 # schedules can exist every half hour from 09:00 to 16:00
                 # check if calendar.schedule already exists 
-                schedule_id = self.env['calendar.schedule'].search([('type','=',type_id.id), ('start','=',start_time_utc)])
+                schedule_id = self.env['calendar.schedule'].search([('type_id','=',type_id.id), ('start','=',start_time_utc)])
                 if schedule_id:
                     # Update existing schedule only two values can change 
                     vals = {
@@ -232,17 +235,19 @@ class AfAppointment(models.Model):
                         'forecasted_agents': schedule.get('forecasted_agents'), # May be implemented at a later date.
                     }
                     schedule_id.update(vals)
-                    
+                    res |= schedule_id
                 else:
                     # create new schedule
                     vals = {
-                        'name': competence_name,
+                        'name': type_name,
                         'start': start_time_utc,
                         'stop': stop_time_utc,
                         'duration': 30.0,
                         'scheduled_agents': int(schedule.get('scheduled_agents')), # number of agents supposed to be available for this. Can sometimes be float.
                         'forecasted_agents': int(schedule.get('forecasted_agents')), # May be implemented at a later date. Can sometimes be float.
-                        'type_id': competence.id,
-                        'channel': competence.channel,
+                        'type_id': type_id.id,
+                        'channel': type_id.channel,
                     }
-                    self.env['calendar.schedule'].create(vals)
+                    res |= self.env['calendar.schedule'].create(vals)
+
+        return res

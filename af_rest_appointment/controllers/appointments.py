@@ -22,12 +22,15 @@
 
 from odoo import http
 from odoo.http import request
+from werkzeug import exceptions
+
 import datetime
 import json
 
 import logging
 _logger = logging.getLogger(__name__)
 
+# exception.BadRequest() 400
 
 class AfAppointments(http.Controller):
 
@@ -40,8 +43,10 @@ class AfAppointments(http.Controller):
 
     @http.route('/appointments/competences/', auth='user', website=False, type='http')
     def competences(self):
+        """ Get a complete list of all meeting types in the system.
+        !!! Odoo is not master for this data. This method should not be relied 
+        upon !!!"""
         # NOTE: GET
-        # NOTE: odoo is not master for this data. This method should not be relied upon
         res_dict = []
         type_ids = request.env['calendar.appointment.type'].search([])
         for type_id in type_ids:
@@ -66,10 +71,17 @@ class AfAppointments(http.Controller):
         return json
 
     @http.route('/appointments/bookable-occasions/reservation', auth='user', website=False)
-    def bookable_occasions_reservation(self, **post):
+    def bookable_occasions_reservation(self, ocassion, **post):
         # TODO: POST + DELETE
-        json = ''
         if post:
-            return json
+            if ocassions:
+                ocassion_ids = self.env['calendar.occasion'].browse(ocassions)
+                appointment_id = self.env[calendar.occasion].reserve_occasion(ocassion_ids)
+                if appointment_id:
+                    return 201
+                else:
+                    return '???'
+            else:
+                return 201
         else:
-            return json
+            return exception.BadRequest()
