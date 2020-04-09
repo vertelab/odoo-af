@@ -13,9 +13,12 @@ AFC-119
     'website': 'http://www.vertel.se',
     'depends': ['base'],
     'demo': [
-			'data/base.partner.demo.se.xml',
+			'data/base_partner_demo_se.xml',
             'data/res.country.state.se.csv',
-			'res_company_data.se.xml'
+			'data/res_company_data_se.xml',
+			'data/res_company_data_se.xml',
+			'data/res_partner_image_demo.se.xml',
+			'data/res_users_demo_se.xml'			
         ],
     'application': False,
     'installable': True,
