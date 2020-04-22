@@ -19,16 +19,55 @@
 #
 ##############################################################################
 {
-    'name': 'AF Fake Data Parser',
+    'name': 'AF Demodata for base',
     'version': '12.0.1.0',
     'license': 'AGPL-3',
+    'description': """
+CSV File Creator -- dokumentation
+2020-03-20
+**/usr/share/odoo-af/hr_afdemo/data**
+
+## Länk till dokumentation:
+https://www.tutorialspoint.com/makefile/makefile_quick_guide.htm
+https://makefiletutorial.com
+
+
+## Förutsättningar
+Namet på filen ska vara TestData_hr.xlsx, TestData_[modulnamn].xlsx ,och flikarna ska heta saker i stil med något.bra.namn.csv
+Koden skapar csv-filer baserat på namnen av flikarna.
+En flik kan heta nåt annat och kommer då inte med som en fil.
+
+
+## Logga in i Terminalen och knappa in...
+
+## SCRIPT MED FÖRKLARING:
+$ make
+-- skapar alla .csv-filer baserade på vad flikarna heter.
+
+$ make clean
+-- tar bort alla .csv och .tmp filerna.
+
+$ touch TestData_Config.xlsx
+-- ändrar "senast ändrad" datum i filen så koden kan köras igen.
+
+$ sudo chmod 774 -R data
+-- om det spökar... om koden inte fungerar fast den borde.
+
+
+## FELHANTERING, KÄNDA
+- TestData_hr.xlsx = måste heta så. Ändra namnet i koden!
+- TestData_[modulnamn].xlsx = måste heta så. Ändra namnet i koden!
+- Toma flikar. En flik som heter något.bra.namn.csv får inte vara helt tom.
+
+""",
     'author': ' Vertel AB',
     'website': 'http://vertel.se',
     'category': 'Extra Tools',
-    'depends': [],
+    'depends': ['base'],
     'external_dependencies': {
         'python': ['xlrd'],
     },
+    'demo': ['data/res.users.csv', 'data/res.partner.csv'],
     'installable': 'True',
     'application': 'False',
 }
