@@ -11,7 +11,7 @@
         "contacts", 
         "hr", 
         "calendar", 
-        "partner_employee360", 
+        "partner_view_360", 
         "partner_kpi_data", 
         "res_drivers_license", 
 		"res_sni", 
@@ -20,25 +20,30 @@
 		"partner_daily_notes", 
 		"partner_desired_jobs",
         "partner_fax",
+        "partner_firstname",
         ],
     
     "data": [
+        "data/country_state/res.country.state.csv",
         #"data/res.partner.csv", --> Daniels fil
-        #"data/af_office/res.partner.csv", --> Funkar
-		#"data/organisationer/res.partner.csv", --> Funkar
-		#"data/arbetsg/res.partner.csv", --> Funkar inte
-		#"data/arbetsg_2adr/res.partner.csv", --> Funkar inte
-		#"data/arbetsg_utl_adr/res.partner.csv", --> mapp finns inte
-		#"data/arbetsg_cct/res.partner.csv", --> Funkar inte
-		#"data/user_cct/res.partern.csv", --> Funkar
-		#"data/arbetsg/res.partner.kpi.csv",
-		#"data/arbetsg_sni1/res_sni.csv",
+        "data/af_office/res.partner.csv", 
+		"data/organisationer/res.partner.csv",
+		"data/arbetsg_organisation/res.partner.csv",
+        "data/arbetsg/res.partner.csv", 
+		"data/arbetsg_2adr/res.partner.csv", 
+		#"data/arbetsg_utl_adr/res.partner.csv", #--> mapp finns inte
+		"data/arbetsg_cct/res.partner.csv",
+		#"data/user_cct/res.partner.csv", #--> fungerar inte 
+		"data/arbetsg/res.partner.kpi.csv",
+		"data/arbetsg_sni1/res.sni.csv",
 		#"data/arbetsg_sni2/res_sni.csv",
-		#"data/arbetsg/desired_jobs.csv",
-		#"data/arbetsg/daily_notes.csv",
-		#"data/arbetsg_lst_cnt/daily_notes.csv",
-		#"data/arbetsg_hr_imp1/hr_employee.csv",
-		#"data/arbetsg/res_users.csv",
+        "data/arbetsg/res.ssyk.csv",
+		"data/arbetsg/res.partner.jobs.csv", 
+		"data/arbetsg/res.partner.note.type.csv",
+        "data/arbetsg/res.partner.notes.csv",
+		"data/arbetsg_lst_cnt/res.partner.notes.csv",
+		#"data/arbetsg/res.users.csv", #--> kräver user_cct/res.partner.csv 
+        #"data/arbetsg_hr_imp1/hr.employee.csv", #--> kräver arbetsg/res.users.csv
 		#"data/arbetsg_hr_imp2/hr_employee.csv",
     ],
     "application": False,
