@@ -26,6 +26,7 @@ PO translation:\n
         "contacts", 
         "hr", 
         "calendar",
+        "project",
         ],
     
     "data": [
@@ -36,7 +37,9 @@ PO translation:\n
         "data/hr.department.csv",
 		"data/res.partner.csv",
 		"data/hr.employee.csv",
-        "data/calendar.event.csv", 
+        "data/calendar.event.csv",
+        "data/project.project.csv",
+        "data/project.task.csv",
 
     ],
     "application": False,
