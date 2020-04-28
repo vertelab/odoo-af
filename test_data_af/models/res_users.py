@@ -28,10 +28,11 @@ import os
 import tempfile
 
 class ResUsers(models.Model):
+    _inherit = "res.users"
+    def create_users(self):
+        ReadCSV("/usr/share/odoo-af/test_data_af/data/arbetsg/res.users.csv")
 
-    f = ReadCSV(self, "/usr/share/odoo-af/test_data_af/data/arbetsg/res.users.csv")
-
-    def create_users(self, row):
+    def create_user(self, row):
         self.env['res.users'].create(row)
 
     #create a record using data from csv
@@ -67,7 +68,7 @@ class ReadCSV(object):
     def parse(self):
         a = CSVIterator(self.data,len(self.data),['id', 'name', 'password'])
         while a.hasNext():
-            ResUsers.create_users(self, a.getRow())
+            ResUsers.create_user(self, a.getRow())
             a.next()
 
 
