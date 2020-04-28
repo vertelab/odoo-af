@@ -7,14 +7,16 @@
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
-    "depends": ["calendar", ],
+    "depends": ["calendar", "partner_view_360"],
     "external_dependencies": [
         # "service_identity",
         # "stompest",
         # "stompest.async",
     ],
     "data": [
-        "views/calendar_af_views.xml",
+        "views/res_partner_view.xml",
+        "views/res_users_view.xml",
+        "views/calendar_af_view.xml",
         "views/calendar_schedule_view.xml",
         "views/calendar_appointment_view.xml",
         "views/calendar_occasion_view.xml",

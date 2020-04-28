@@ -126,9 +126,6 @@
         </field>
     </record> 
 
-
-    
-
     <record id="action_appointment" model="ir.actions.act_window">
         <field name="name">Appointments</field>
         <field name="res_model">calendar.appointment</field>

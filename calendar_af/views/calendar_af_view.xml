@@ -23,5 +23,7 @@ occasions = env['calendar.occasion'].get_bookable_occasions(start, stop, compete
 reservation = env['calendar.occasion'].reserve_occasion(occasions[0])</field>
     </record>
 
+    <!-- TODO: add cron job to delete historic, unused occasions, etc. -->
+
     <menuitem name="Administration" id="menu_admin" parent="calendar.mail_menu_calendar" sequence="20" />
 </odoo>
