@@ -53,7 +53,7 @@ class CalendarSchedule(models.Model):
     scheduled_agents = fields.Integer(string='Scheduled agents', help="Number of scheduled agents")
     forecasted_agents = fields.Integer(string='Forecasted agents', help="Number of forecasted agents")
     type_id = fields.Many2one(string='Meeting type', comodel_name='calendar.appointment.type', help="Related meeting type")
-    channel = fields.Char(string='Channel')
+    channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
 
     @api.multi
     def create_occasions(self):
@@ -68,6 +68,7 @@ class CalendarSchedule(models.Model):
                     'type_id': schedule.type_id.id,
                     'channel': schedule.channel,
                     'additional_booking': False,
+                    'state': 'ok',
                 }
                 for occasion in range(schedule.scheduled_agents - no_occasions):
                     self.env['calendar.occasion'].create(vals)
@@ -80,15 +81,20 @@ class CalendarAppointmentType(models.Model):
     _description = "Meeting type"
 
     name = fields.Char('Name', required=True)
-    # AF specific attribute
     ipf_id = fields.Char('IPF Id', required=True, help="The IPF type id, if this is wrong the integration won't work")
     # mötestyps_id
-    channel = fields.Char(string='Channel')
+    channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
     ipf_num = fields.Integer(string='IPF Number')
     additional_booking = fields.Boolean(string='Over booking')
     # ärendetyp ace
     # könamn ace
     # standardtid, möte.
+
+class CalendarChannel(models.Model):
+    _name = 'calendar.channel'
+    _description = "Channel"
+
+    name = fields.Char('Name', required=True)
 
 class CalendarMappedDates(models.Model):
     _name = 'calendar.mapped_dates'
@@ -116,7 +122,7 @@ class CalendarAppointment(models.Model):
     # type_id = fields.Many2one(string='Type', related='occasion_ids.type_id')
     type_id = fields.Many2one(string='Type', required=True, comodel_name='calendar.appointment.type')
     # channel =  fields.Char(string='Channel', related='occasion_ids.channel')
-    channel =  fields.Char(string='Channel', required=True)
+    channel =  fields.Many2one(string='Channel', required=True, comodel_name='calendar.channel')
     additional_booking = fields.Boolean(String='Over booking', related='occasion_ids.additional_booking')
     reserved = fields.Datetime(string='Reserved', help="Occasions was reserved at this date and time")
 
@@ -129,6 +135,8 @@ class CalendarAppointment(models.Model):
 
         return res
 
+    # TODO: consider using _force_create_occasion instead (/in addition?) in create and update?
+
     @api.model
     def create(self, values):
         res = False
@@ -138,13 +146,27 @@ class CalendarAppointment(models.Model):
         type_id = self.env['calendar.appointment.type'].browse(values.get('type_id'))
 
         occasions = self.env['calendar.occasion'].get_bookable_occasions(start, stop, duration, type_id, values.get('channel'))
-        # _logger.warn("DAER occasions: %s" % occasions)
-        # _logger.warn("DAER occasions[0]: %s" % occasions[0])
         if occasions:
             values['occasion_ids'] =  [(6,0, [occasion.id for occasion in occasions[0]])]
             values['start'] = occasions[0][0].start
             values['stop'] = occasions[0][len(occasions[0]) - 1].stop
             res = super(CalendarAppointment, self).create(values)
+        return res
+
+    @api.model
+    def update(self, values):
+        res = False
+        start = datetime.strptime(values.get('start'), "%Y-%m-%d %H:%M:%S")
+        stop = datetime.strptime(values.get('stop'), "%Y-%m-%d %H:%M:%S")
+        duration = values.get('duration') * 60 # convert from hours to minutes
+        type_id = self.env['calendar.appointment.type'].browse(values.get('type_id'))
+
+        occasions = self.env['calendar.occasion'].get_bookable_occasions(start, stop, duration, type_id, values.get('channel'))
+        if occasions:
+            values['occasion_ids'] =  [(6,0, [occasion.id for occasion in occasions[0]])]
+            values['start'] = occasions[0][0].start
+            values['stop'] = occasions[0][len(occasions[0]) - 1].stop
+            res = super(CalendarAppointment, self).write(values)
         return res
 
 class CalendarOccasion(models.Model):
@@ -157,11 +179,18 @@ class CalendarOccasion(models.Model):
     duration = fields.Float('Duration')
     appointment_id = fields.Many2one(comodel_name='calendar.appointment', string="Appointment")
     type_id = fields.Many2one(comodel_name='calendar.appointment.type', string='Type')
-    channel = fields.Char(string='Channel')
+    channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
     additional_booking = fields.Boolean(String='Over booking')
     user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
+    state = fields.Selection(selection=[('request', 'Awaiting acceptance'),
+                                        ('ok', 'Ready to book'),
+                                        ('fail', 'Denied')],
+                                        string='Occasion state', 
+                                        default='request', 
+                                        help="Status of the meeting")
 
-    def _force_create_occasion(self, duration, start, type_id, channel):
+    def _force_create_occasion(self, duration, start, type_id, channel, state):
+        """In case we need to force through a new occasion for some reason"""
         vals = {
             'name': '%sm @ %s' % (duration, start),
             'start': start,
@@ -171,6 +200,7 @@ class CalendarOccasion(models.Model):
             'type_id': type_id,
             'channel': channel,
             'additional_booking': True,
+            'state': state,
         }
         res = self.env['calendar.occasion'].create(vals)
         return res
@@ -228,6 +258,7 @@ class CalendarOccasion(models.Model):
                 'type_id': type_id.id,
                 'channel': channel,
                 'additional_booking': True,
+                'state': 'ok',
             }
             res |= self.env['calendar.occasion'].create(vals)
             start_date = start_date + timedelta(minutes=BASE_DURATION)
@@ -253,29 +284,18 @@ class CalendarOccasion(models.Model):
                 for j in range(len(occasion_ids)):
                     occ_lists[j] += occasion_ids[j]
 
-        # Remove partial matches, these are unusable
-
-        # i = 0
-        # while i < len(occ_lists):
-        #     if len(occ_lists[i]) != no_occasions:
-        #         # del occ_lists[i]
-        #         occ_lists[i] = self._get_additional_booking(start, duration, type_id, channel)
-        #     else:
-        #         i += 1
-
         # if type allows additional bookings and  we didn't find any 
         # free occasions, create new ones:
         for day in range(date_delta.days or 1):
             if len(occ_lists[day]) != no_occasions:
-                day_start = start + timedelta(days=(date_delta.days - day))
-                occ_lists[day] = self._get_additional_booking(day_start, duration, type_id, channel)
+                if type_id.additional_booking:
+                    day_start = start + timedelta(days=(date_delta.days - day))
+                    occ_lists[day] = self._get_additional_booking(day_start, duration, type_id, channel)
+                # TODO: else: remove partial matches, these are unusable
+                # del occ_lists[i]
+                # del will cause problems with the for loop..
 
         res = occ_lists
-        # if type allows additional bookings and  we didn't find any 
-        # free occasions, create new ones:
-        # if type_id.additional_booking and not res:
-            # res = self._get_additional_booking(start, stop, type_id, channel)
-            # res = self._get_additional_booking(start, duration, type_id, channel)
 
         return res
 
