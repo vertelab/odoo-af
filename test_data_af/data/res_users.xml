@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <odoo>
-<function name="create_users" model="res.users"/>
+<function name="test" model="res.users"/>
 
 
 </odoo>
