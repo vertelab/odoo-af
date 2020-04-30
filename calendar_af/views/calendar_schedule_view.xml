@@ -31,10 +31,11 @@
                     <field name="scheduled_agents"/>
                     <field name="forecasted_agents"/>
                     <field name="type_id"/>
-                </tree> 
+                </tree>
         </field>
     </record>
-     <record id="view_calendar_schedule_form" model="ir.ui.view">
+    
+    <record id="view_calendar_schedule_form" model="ir.ui.view">
         <field name="name">calendar.schedule.form</field>
         <field name="model">calendar.schedule</field>
         <field name="priority" eval="2"/>
@@ -64,7 +65,8 @@
             </form>
         </field>
     </record>
-     <record id="view_calendar_schedule_pivot" model="ir.ui.view">
+
+    <record id="view_calendar_schedule_pivot" model="ir.ui.view">
         <field name="name">calendar.schedule.pivot</field>
         <field name="model">calendar.schedule</field>
         <field name="priority" eval="2"/>
@@ -75,6 +77,7 @@
             </pivot>
         </field>
     </record>
+
     <record id="view_calendar_schedule_kanban" model="ir.ui.view">
         <field name="name">calendar.schedule.kanban</field>
         <field name="model">calendar.schedule</field>
@@ -104,9 +107,9 @@
                         </div>
                     </t>
                 </templates>
-            </kanban>   
+            </kanban>
         </field>
-    </record> 
+    </record>
 
     <record id="action_calendar_schedule" model="ir.actions.act_window">
         <field name="name">Schedules</field>
@@ -144,22 +147,23 @@
         <field name="sequence" eval="3"/>
         <field name="view_mode">form</field>
         <field name="view_id" ref="view_calendar_schedule_form"/>
-    </record> 
+    </record>
 
     <record id="action_view_calendar_schedule_form" model="ir.actions.act_window.view">
         <field name="act_window_id" ref="action_calendar_schedule"/>
         <field name="sequence" eval="4"/>
         <field name="view_mode">pivot</field>
         <field name="view_id" ref="view_calendar_schedule_pivot"/>
-    </record> 
+    </record>
+
     <record id="action_view_calendar_schedule_form" model="ir.actions.act_window.view">
         <field name="act_window_id" ref="action_calendar_schedule"/>
         <field name="sequence" eval="5"/>
         <field name="view_mode">kanban</field>
         <field name="view_id" ref="view_calendar_schedule_kanban"/>
-    </record> 
+    </record>
 
-    <menuitem action="action_calendar_schedule" id="menu_action_schedule" parent="calendar.mail_menu_calendar" sequence="10" />
+    <menuitem action="action_calendar_schedule" id="menu_action_schedule" parent="menu_pdm" sequence="10" />
 </odoo>
 
 

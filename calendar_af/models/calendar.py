@@ -57,6 +57,7 @@ class CalendarSchedule(models.Model):
 
     @api.multi
     def create_occasions(self):
+        """Creates a number of occasions from schedules, depending on number of scheduled agents"""
         for schedule in self:
             no_occasions = self.env['calendar.occasion'].search_count([('start', '=', schedule.start), ('type_id', '=', schedule.type_id.id), ('additional_booking', '=', False)])
             if (schedule.scheduled_agents - no_occasions) > 0:
@@ -74,6 +75,7 @@ class CalendarSchedule(models.Model):
                     self.env['calendar.occasion'].create(vals)
 
             elif (schedule.scheduled_agents - no_occasions) < 0:
+                # TODO: handle this case better
                 pass
 
 class CalendarAppointmentType(models.Model):
@@ -89,6 +91,7 @@ class CalendarAppointmentType(models.Model):
     # ärendetyp ace
     # könamn ace
     # standardtid, möte.
+    # add competence
 
 class CalendarChannel(models.Model):
     _name = 'calendar.channel'
@@ -114,7 +117,12 @@ class CalendarAppointment(models.Model):
     duration = fields.Float('Duration')
     user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
     partner_id = fields.Many2one(string='Customer', comodel_name='res.partner', help="Booked customer")
-    status = fields.Char(string='Status')
+    state = fields.Selection(selection=[('free', 'Free'),
+                                        ('reserved', 'Reserved'),
+                                        ('confirmed', 'Confirmed')],
+                                        string='State', 
+                                        default='free', 
+                                        help="Status of the meeting")
     location_code = fields.Char(string='Location')
     office = fields.Many2one('res.partner', string="Office")
     office_code = fields.Char(string='Office code', related="office.office_code")
@@ -127,8 +135,9 @@ class CalendarAppointment(models.Model):
     reserved = fields.Datetime(string='Reserved', help="Occasions was reserved at this date and time")
 
     def confirm_appointment(self):
-        if self.status == 'reserved':
-            self.status = 'confirmed'
+        """Confirm reserved booking"""
+        if self.state == 'reserved':
+            self.state = 'confirmed'
             res = True
         else: 
             res = False
@@ -148,6 +157,7 @@ class CalendarAppointment(models.Model):
         occasions = self.env['calendar.occasion'].get_bookable_occasions(start, stop, duration, type_id, values.get('channel'))
         if occasions:
             values['occasion_ids'] =  [(6,0, [occasion.id for occasion in occasions[0]])]
+            # TODO: query user before moving appointment?
             values['start'] = occasions[0][0].start
             values['stop'] = occasions[0][len(occasions[0]) - 1].stop
             res = super(CalendarAppointment, self).create(values)
@@ -164,6 +174,7 @@ class CalendarAppointment(models.Model):
         occasions = self.env['calendar.occasion'].get_bookable_occasions(start, stop, duration, type_id, values.get('channel'))
         if occasions:
             values['occasion_ids'] =  [(6,0, [occasion.id for occasion in occasions[0]])]
+            # TODO: query user before moving appointment?
             values['start'] = occasions[0][0].start
             values['stop'] = occasions[0][len(occasions[0]) - 1].stop
             res = super(CalendarAppointment, self).write(values)
@@ -189,6 +200,7 @@ class CalendarOccasion(models.Model):
                                         default='request', 
                                         help="Status of the meeting")
 
+    @api.model
     def _force_create_occasion(self, duration, start, type_id, channel, state):
         """In case we need to force through a new occasion for some reason"""
         vals = {
@@ -205,6 +217,7 @@ class CalendarOccasion(models.Model):
         res = self.env['calendar.occasion'].create(vals)
         return res
 
+    @api.model
     def _get_min_occasions(self, type_id, date_start=None, date_stop=None):
         """Returns the timeslot (as a start date, DateTime) with the least 
         amount of occurances for a specific timeframe"""
@@ -222,6 +235,7 @@ class CalendarOccasion(models.Model):
         res = datetime.strptime(occ_time_min_key, "%Y-%m-%dT%H:%M:%S")
         return res
 
+    @api.model
     def _check_date_mapping(self, date):
         """Checks if a date has a mapped date, and returns the mapped date 
         if it exists """
@@ -232,7 +246,9 @@ class CalendarOccasion(models.Model):
             res = date
         return res
 
+    @api.model
     def _get_additional_booking(self, date, duration, type_id, channel):
+        """"Creates extra, additional, occasions"""
         # Replace date with mapped date if we have one
         date = self._check_date_mapping(date)
         date_list = date.strftime("%Y-%-m-%-d").split("-")
@@ -264,7 +280,32 @@ class CalendarOccasion(models.Model):
             start_date = start_date + timedelta(minutes=BASE_DURATION)
         return res
 
+    @api.multi
+    def approve_occasion(self):
+        """Approve suggested occasion"""
+        if self.state == 'request':
+            self.state = 'ok'
+            ret = True
+        else:
+            ret = False
+        
+        return ret
+
+    @api.multi
+    def deny_occasion(self):
+        """Deny suggested occasion"""
+        if self.state == 'request':
+            self.state = 'fail'
+            ret = True
+        else:
+            ret = False
+        
+        return ret
+
+    @api.model
     def get_bookable_occasions(self, start, stop, duration, type_id, channel, max_depth = 1):
+        """Returns a list of occasions matching the defined parameters of the appointment. Creates additional 
+        occasions if allowed."""
         # Calculate number of occasions needed to match booking duration
         no_occasions = int(duration / BASE_DURATION)
         date_delta = (stop - start)
@@ -299,7 +340,9 @@ class CalendarOccasion(models.Model):
 
         return res
 
+    @api.model
     def reserve_occasion(self, occasion_ids):
+        """Reserves an occasion."""
         start = occasion_ids[0].start
         stop = occasion_ids[len(occasion_ids)-1].stop
         duration = stop.minute - start.minute 
@@ -307,7 +350,7 @@ class CalendarOccasion(models.Model):
         # check that occasions are free and unreserved
         free = True
         for occasion_id in occasion_ids:
-            if (occasion_id.appointment_id and occasion_id.appointment_id.status != 'reserved') or (occasion_id.appointment_id and occasion_id.appointment_id.status == 'reserved' and occasion_id.reserved > datetime.now() - timedelta(seconds=RESERVED_TIMEOUT)):
+            if (occasion_id.appointment_id and occasion_id.appointment_id.state != 'reserved') or (occasion_id.appointment_id and occasion_id.appointment_id.state == 'reserved' and occasion_id.reserved > datetime.now() - timedelta(seconds=RESERVED_TIMEOUT)):
                 free = False
 
         if free:
@@ -318,7 +361,7 @@ class CalendarOccasion(models.Model):
                 'duration': duration,
                 'user_id': False,
                 'partner_id': False,
-                'status': 'reserved',
+                'state': 'reserved',
                 'location_code': False,
                 'office': False,
                 'occasion_ids': occasion_ids, # I dont think this does anything?

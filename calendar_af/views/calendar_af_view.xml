@@ -31,5 +31,7 @@ reservation = env['calendar.occasion'].reserve_occasion(occasions[0])</field>
 unused_occasions.unlink()</field>
     </record>
 
+    <menuitem name="PDM" id="menu_pdm" parent="calendar.mail_menu_calendar" sequence="10" />
+    <menuitem name="Local" id="menu_local" parent="calendar.mail_menu_calendar" sequence="11" />
     <menuitem name="Administration" id="menu_admin" parent="calendar.mail_menu_calendar" sequence="20" />
 </odoo>
