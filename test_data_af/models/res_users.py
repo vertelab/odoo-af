@@ -29,70 +29,96 @@ import tempfile
 
 class ResUsers(models.Model):
     _inherit = "res.users"
-#    def create_users(self):
-#        ReadCSV("/usr/share/odoo-af/test_data_af/data/arbetsg/res.users.csv")
+    def create_users(self):
+
+        # #pass
+        # for n in range(10):
+        #     # partnervals = {
+        #     #     'external_id': 'part_test',
+        #     #     'name': 'testpartner'
+        #     # }
+        #     # self.env['res.partner'].create(partnervals)
+        #     partner_id = self.env.ref("__export__.res_partner_10_574a5d29").id
+        #     val = {
+        #         'external_id': 'asdf',
+        #         'name': 'testB%s'%n,
+        #         'login': 'testB%s'%n,
+        #         'password': 'asf',
+        #         'partner_id': partner_id
+        #     }
+        #     self.env['res.users'].create(val)
+        a = ReadCSV("/usr/share/odoo-af/test_data_af/data/arbetsg/res.users.csv")
+        self.create_user(a.parse())
+    
     @api.model
     def test(self):
         raise Warning("test")
 
-#    def create_user(self, row):
-#        self.env['res.users'].create(row)
+    @api.model
+    def create_user(self, rows):
+        for row in rows:
+            partner_id = self.env.ref("test_data_af.%s" % row['partner_id']).id
+            row.update({'partner_id' :  partner_id}) 
+            _logger.info("%s" % row['partner_id'])       
+            _logger.info("creating row %s" % row)
+            self.env['res.users'].create(row)
+
 
     #create a record using data from csv
 
-#class ReadCSV(object):
-#    def __init__(self, path):
-#        _logger.error('Parser %s' % path)
-#       
-#        try:
-#            rows = []
-#            f = open(path)
-#            fp = tempfile.TemporaryFile()
-#            fp.write(f)
-#            fp.seek(0)
-#            reader = csv.DictReader(fp,delimiter=",")
-#            for row in reader:
-#                rows.append(row)
-#            fp.close()
-#            self.data = rows
-#        except IOError as e:
-#            _logger.error(u'Could not read CSV file')
-#            raise ValueError(e)
-#        _logger.error('%s' % self.data[0].keys())
-#        if not self.data[0].keys() == ['id', 'name', 'password']:
-#            _logger.error(u'Row 0 was looking for "id", "name", "password"')
-#            raise ValueError("File doesn't match the expected format")
-#        self.nrows = len(self.data)
-#        self.header = []
-#        self.statements = []
+class ReadCSV(object):
+    def __init__(self, path):
+        #_logger.error('Parser %s' % path)
+       
+        try:
+            rows = []
+            f = open(path)
+            f.seek(0)
+            reader = csv.DictReader(f,delimiter=",")
+            for row in reader:
+                rows.append(row)
+            f.close()
+            self.data = rows
+            #_logger.info(self.data)
+        except IOError as e:
+            _logger.error(u'Could not read CSV file')
+            raise ValueError(e)
+        #_logger.error('%s' % list(self.data[0].keys()))
+        if not list(self.data[0].keys()) == ['external_id', 'login', 'password', 'partner_id']:
+            _logger.error(u'Row 0 was looking for "id", "login", "password", "partner_id"')
+            raise ValueError("Wrong format, expected format: ['external_id', 'login', 'password', 'partner_id'], seems like we're getting: %s" % list(self.data[0].keys()))
+        #self.nrows = len(self.data)
+        #self.header = []
+        #self.statements = []
 
         
 
-#    def parse(self):
-#        a = CSVIterator(self.data,len(self.data),['id', 'name', 'password'])
-#        _logger.warn("blablabla: %s" % a)
-#        while a.hasNext():
-#            ResUsers.create_user(self, a.getRow())
-#            a.next()
+    def parse(self):
+        a = CSVIterator(self.data,len(self.data),['external_id', 'login', 'password', 'partner_id'])
+        rows = []
+        while a.hasNext():
+            _logger.info("appending row %s" % a.getRow())
+            rows.append(a.getRow())
+            a.next()
+        return rows
 
 
-#class CSVIterator(object):
-#    def __init__(self, data, nrows, header, header_row=1):
-#        _logger.warn("blablabla: %s" % data)
-#        self.nrows = nrows
-#        self.row = 0
-#        self.data = data
-#        self.rows = nrows - 2
-#        self.header = header
-#        _logger.warn("blablabla: %s" % self.data)
+class CSVIterator(object):
+    def __init__(self, data, nrows, header, header_row=1):
+        self.nrows = nrows
+        self.row = 0
+        self.data = data
+        self.rows = nrows - 2
+        self.header = header
 
-#    def next(self):
-#        if self.hasNext():
-#            self.row += 1
+    def next(self):
+        if self.hasNext():
+            self.row += 1
 
-#    def hasNext(self):
-#        return self.row >= self.nrows -1
-#    def getRow(self):
-#        r = self.data[(self.row)]
-#        return {self.header[n]: r[n].value for n in range(len(self.header))}
+    def hasNext(self):
+        return self.row <= self.nrows -1
+
+    def getRow(self):
+        r = list(self.data[(self.row)].values())      
+        return {self.header[n]: r[n] for n in range(len(self.header))}
     

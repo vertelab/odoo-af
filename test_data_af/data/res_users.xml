@@ -1,6 +1,24 @@
 <?xml version="1.0"?>
 <odoo>
-<function name="test" model="res.users"/>
+
+<function name="create_users" model="res.users">
+
+</function>
+
+<!-- <function model="crm.team" name="message_unsubscribe"
+            eval="[ref('sales_team.team_sales_department', False),ref('sales_team.salesteam_website_sales', False)], [ref('base.partner_root')]"/>
+
+<function model="ir.model.fields" name="formbuilder_whitelist">
+        <value>crm.lead</value>
+        <value eval="['reveal_ip']"/>
+    </function> -->
+
+     <!-- <function model="hr.leave.allocation" name="action_approve">
+        <value model="hr.leave.allocation" search="[
+            ('state', '=', 'confirm'),
+            ('id', 'in', [ref('hr_holidays.hr_holidays_employee1_allocation_cl')])
+        ]"/>
+    </function> -->
 
 
 </odoo>

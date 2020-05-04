@@ -24,26 +24,26 @@
         ],
     
     "data": [
-        #"data/country_state/res.country.state.csv",
+        "data/country_state/res.country.state.csv",
         #"data/res.partner.csv", --> Daniels fil
-        #"data/af_office/res.partner.csv", 
-		#"data/organisationer/res.partner.csv",
-		#"data/arbetsg_organisation/res.partner.csv",
-        #"data/arbetsg/res.partner.csv", 
-		#"data/arbetsg_2adr/res.partner.csv", 
+        "data/af_office/res.partner.csv", 
+		"data/organisationer/res.partner.csv",
+		"data/arbetsg_organisation/res.partner.csv",
+        "data/arbetsg/res.partner.csv", 
+		"data/arbetsg_2adr/res.partner.csv", 
 		#"data/arbetsg_utl_adr/res.partner.csv", #--> mapp finns inte
-		#"data/arbetsg_cct/res.partner.csv",
-		#"data/user_cct/res.partner.csv", #--> fungerar inte med mer än ~10st av någon anledning
-		#"data/arbetsg/res.partner.kpi.csv",
-		#"data/arbetsg_sni1/res.sni.csv",
+		"data/arbetsg_cct/res.partner.csv",
+		"data/user_cct/res.partner.csv", #--> fungerar inte med mer än ~10st av någon anledning
+		"data/arbetsg/res.partner.kpi.csv",
+		"data/arbetsg_sni1/res.sni.csv",
 		#"data/arbetsg_sni2/res_sni.csv",
-        #"data/arbetsg/res.ssyk.csv",
-		#"data/arbetsg/res.partner.jobs.csv", 
-		#"data/arbetsg/res.partner.note.type.csv",
-        #"data/arbetsg/res.partner.notes.csv",
-		#"data/arbetsg_lst_cnt/res.partner.notes.csv",
-		"data/res_users.xml", #--> går inte att skapa users automatiskt
-        #"data/arbetsg_hr_imp1/hr.employee.csv", 
+        "data/arbetsg/res.ssyk.csv",
+		"data/arbetsg/res.partner.jobs.csv", 
+		"data/arbetsg/res.partner.note.type.csv",
+        "data/arbetsg/res.partner.notes.csv",
+		"data/arbetsg_lst_cnt/res.partner.notes.csv",
+		#"data/res.users.xml", #--> går inte att skapa users automatiskt
+        "data/arbetsg_hr_imp1/hr.employee.csv", 
 		#"data/arbetsg_hr_imp2/hr_employee.csv",
     ],
     "application": False,
