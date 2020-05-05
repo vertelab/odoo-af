@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <odoo>
-
+<data>
 <function name="create_users" model="res.users">
-
+<value>res.users</value>
 </function>
-
+</data>
 <!-- <function model="crm.team" name="message_unsubscribe"
             eval="[ref('sales_team.team_sales_department', False),ref('sales_team.salesteam_website_sales', False)], [ref('base.partner_root')]"/>
 

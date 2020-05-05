@@ -42,7 +42,7 @@
 		"data/arbetsg/res.partner.note.type.csv",
         "data/arbetsg/res.partner.notes.csv",
 		"data/arbetsg_lst_cnt/res.partner.notes.csv",
-		#"data/res.users.xml", #--> går inte att skapa users automatiskt
+		"data/res_users.xml", 
         "data/arbetsg_hr_imp1/hr.employee.csv", 
 		#"data/arbetsg_hr_imp2/hr_employee.csv",
     ],
