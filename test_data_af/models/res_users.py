@@ -29,31 +29,11 @@ import tempfile
 
 class ResUsers(models.Model):
     _inherit = "res.users"
+    @api.model
     def create_users(self):
-
-        # #pass
-        # for n in range(10):
-        #     # partnervals = {
-        #     #     'external_id': 'part_test',
-        #     #     'name': 'testpartner'
-        #     # }
-        #     # self.env['res.partner'].create(partnervals)
-        #     partner_id = self.env.ref("__export__.res_partner_10_574a5d29").id
-        #     val = {
-        #         'external_id': 'asdf',
-        #         'name': 'testB%s'%n,
-        #         'login': 'testB%s'%n,
-        #         'password': 'asf',
-        #         'partner_id': partner_id
-        #     }
-        #     self.env['res.users'].create(val)
         a = ReadCSV("/usr/share/odoo-af/test_data_af/data/arbetsg/res.users.csv")
         self.create_user(a.parse())
     
-    @api.model
-    def test(self):
-        raise Warning("test")
-
     @api.model
     def create_user(self, rows):
         for row in rows:
@@ -67,9 +47,7 @@ class ResUsers(models.Model):
     #create a record using data from csv
 
 class ReadCSV(object):
-    def __init__(self, path):
-        #_logger.error('Parser %s' % path)
-       
+    def __init__(self, path):     
         try:
             rows = []
             f = open(path)
@@ -79,19 +57,12 @@ class ReadCSV(object):
                 rows.append(row)
             f.close()
             self.data = rows
-            #_logger.info(self.data)
         except IOError as e:
             _logger.error(u'Could not read CSV file')
             raise ValueError(e)
-        #_logger.error('%s' % list(self.data[0].keys()))
         if not list(self.data[0].keys()) == ['external_id', 'login', 'password', 'partner_id']:
             _logger.error(u'Row 0 was looking for "id", "login", "password", "partner_id"')
             raise ValueError("Wrong format, expected format: ['external_id', 'login', 'password', 'partner_id'], seems like we're getting: %s" % list(self.data[0].keys()))
-        #self.nrows = len(self.data)
-        #self.header = []
-        #self.statements = []
-
-        
 
     def parse(self):
         a = CSVIterator(self.data,len(self.data),['external_id', 'login', 'password', 'partner_id'])
