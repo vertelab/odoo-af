@@ -130,7 +130,7 @@ class CalendarAppointment(models.Model):
     # type_id = fields.Many2one(string='Type', related='occasion_ids.type_id')
     type_id = fields.Many2one(string='Type', required=True, comodel_name='calendar.appointment.type')
     # channel =  fields.Char(string='Channel', related='occasion_ids.channel')
-    channel =  fields.Many2one(string='Channel', required=True, comodel_name='calendar.channel')
+    channel =  fields.Many2one(string='Channel', required=True, comodel_name='calendar.channel', related='type_id.channel')
     additional_booking = fields.Boolean(String='Over booking', related='occasion_ids.additional_booking')
     reserved = fields.Datetime(string='Reserved', help="Occasions was reserved at this date and time")
 
@@ -190,7 +190,7 @@ class CalendarOccasion(models.Model):
     duration = fields.Float('Duration')
     appointment_id = fields.Many2one(comodel_name='calendar.appointment', string="Appointment")
     type_id = fields.Many2one(comodel_name='calendar.appointment.type', string='Type')
-    channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
+    channel = fields.Many2one(string='Channel', comodel_name='calendar.channel', related='type_id.channel')
     additional_booking = fields.Boolean(String='Over booking')
     user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
     state = fields.Selection(selection=[('request', 'Awaiting acceptance'),
@@ -221,8 +221,8 @@ class CalendarOccasion(models.Model):
     def _get_min_occasions(self, type_id, date_start=None, date_stop=None):
         """Returns the timeslot (as a start date, DateTime) with the least 
         amount of occurances for a specific timeframe"""
-        date_start = date_start or BASE_DAY_START
-        date_stop= date_stop or BASE_DAY_STOP
+        date_start = date_start or copy.copy(BASE_DAY_START)
+        date_stop= date_stop or copy.copy(BASE_DAY_STOP)
         go = True
         loop_date = date_start
         occ_time = {}
@@ -288,7 +288,7 @@ class CalendarOccasion(models.Model):
             ret = True
         else:
             ret = False
-        
+
         return ret
 
     @api.multi
@@ -299,7 +299,7 @@ class CalendarOccasion(models.Model):
             ret = True
         else:
             ret = False
-        
+
         return ret
 
     @api.model
@@ -325,7 +325,7 @@ class CalendarOccasion(models.Model):
                 for j in range(len(occasion_ids)):
                     occ_lists[j] += occasion_ids[j]
 
-        # if type allows additional bookings and  we didn't find any 
+        # if type allows additional bookings and  we didn't find any
         # free occasions, create new ones:
         for day in range(date_delta.days or 1):
             if len(occ_lists[day]) != no_occasions:
