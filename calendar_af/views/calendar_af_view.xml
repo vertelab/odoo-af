@@ -23,5 +23,15 @@ occasions = env['calendar.occasion'].get_bookable_occasions(start, stop, compete
 reservation = env['calendar.occasion'].reserve_occasion(occasions[0])</field>
     </record>
 
+    <record id="af_calendar_cleanup" model="ir.actions.server">
+        <field name="name">AF Calendar Cleanup</field>
+        <field name="model_id" ref="base.model_ir_actions_server"/>
+        <field name="state">code</field>
+        <field name="code">unused_occasions = env['calendar.occasion'].search([('appointment_id','=',''), ('start','&lt;', datetime.datetime.now() - datetime.timedelta(days=14))])
+unused_occasions.unlink()</field>
+    </record>
+
+    <menuitem name="PDM" id="menu_pdm" parent="calendar.mail_menu_calendar" sequence="10" />
+    <menuitem name="Local" id="menu_local" parent="calendar.mail_menu_calendar" sequence="11" />
     <menuitem name="Administration" id="menu_admin" parent="calendar.mail_menu_calendar" sequence="20" />
 </odoo>

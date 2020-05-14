@@ -1,10 +1,10 @@
-"id","name","partner_id/id","password"
-"user_barma","Maria Bartholdson","part_cct_priv_barma","BAL"
-"user_bergr","Görel Bergqvist","part_cct_priv_bergr","BER"
-"user_berro","Rose-Marie Bergnéhr","part_cct_priv_berro","MOR"
-"user_cartm","Thomas Carlén","part_cct_priv_cartm","CARTM"
-"user_egbro","Rose- Marie Egberth","part_cct_priv_egbro","BGE"
-"user_ekmar","Marianne Ek","part_cct_priv_ekmar","FILIP"
-"user_heibi","Birgitta Heijer","part_cct_priv_heibi","RHB"
-"user_holsv","Siv Holmgren","part_cct_priv_holsv","VIS"
-"user_jonev","Eva Johnsson","part_cct_priv_jonev","MIRA"
+external_id,login,password,partner_id
+user_barma,barma,BAL,part_cct_priv_barma
+user_bergr,bergr,BER,part_cct_priv_bergr
+user_berro,berro,MOR,part_cct_priv_berro
+user_cartm,cartm,CARTM,part_cct_priv_cartm
+user_egbro,egbro,BGE,part_cct_priv_egbro
+user_ekmar,ekmar,FILIP,part_cct_priv_ekmar
+user_heibi,heibi,RHB,part_cct_priv_heibi
+user_holsv,holsv,VIS,part_cct_priv_holsv
+user_jonev,jonev,MIRA,part_cct_priv_jonev
