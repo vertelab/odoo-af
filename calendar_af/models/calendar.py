@@ -85,6 +85,7 @@ class CalendarAppointmentType(models.Model):
     name = fields.Char('Name', required=True)
     ipf_id = fields.Char('IPF Id', required=True, help="The IPF type id, if this is wrong the integration won't work")
     # mötestyps_id
+    # channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
     ipf_num = fields.Integer(string='IPF Number')
     additional_booking = fields.Boolean(string='Over booking')
