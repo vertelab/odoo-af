@@ -338,7 +338,7 @@ class AfAppointment(models.Model):
                         'scheduled_agents': int(schedule.get('scheduled_agents')), # number of agents supposed to be available for this. Can sometimes be float.
                         'forecasted_agents': int(schedule.get('forecasted_agents')), # May be implemented at a later date. Can sometimes be float.
                         'type_id': type_id.id,
-                        'channel': type_id.channel,
+                        'channel': type_id.channel.id,
                     }
                     res |= self.env['calendar.schedule'].create(vals)
 
