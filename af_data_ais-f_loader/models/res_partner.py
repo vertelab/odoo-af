@@ -41,25 +41,47 @@ import tempfile
 class ResUsers(models.Model):
     _inherit = "res.partner"
     @api.model
-    def create_partners(self):
-        reader = ReadCSV("usr/share/odoo-af/af_data_ais-f_loader/data/arbetsgivare_test.csv")
-        self.create_partner_from_row(reader.parse())
+    def create_employers(self):
+        headers_header = ['arbetsgivare.csv', 'Notering', 'Odoo', 'Odoo2']
+        header_reader = ReadCSV("usr/share/odoo-af/af_data_ais-f_loader/data/arbetsgivare_mapping.csv", headers_header)
+        header_rows = header_reader.parse_header()
+        old_header = []
+        field_map = {}
+        for row in header_rows:
+            if row['Odoo'] != '' and "!" not in row['Odoo']:
+                field_map.update({row['Odoo']: row['arbetsgivare.csv']})
+            if row['Odoo2'] != '' and "!" not in row['Odoo2']:
+                field_map.update({row['Odoo']: row['arbetsgivare.csv']})
+            old_header.append(row['arbetsgivare.csv'])
+        _logger.info("header: %s" % field_map.keys())
+        _logger.info("old_header: %s" % old_header)
+        reader = ReadCSV("usr/share/odoo-af/af_data_ais-f_loader/data/arbetsgivare_test.csv", old_header)
+        self.create_partner_from_row(reader.parse(field_map))
     
     @api.model
     def create_partner_from_row(self, rows):
         for row in rows:
-            #partner_id = self.env['res.partner'].search([('id', '=', "af_data_ais-f_loader.%s" % row['id'])])
-            #partner_id = self.env.ref(row['external_id'])
-            #row.update({'parent_id' :  parent_id}) 
-            #_logger.info("%s" % row['partner_id'])
             _logger.info("creating row %s" % row)
-            #if not partner_id:
-            #    self.env['res.partner'].create(row)
-            #else:
-            #    self.env['res.partner'].update(row)
-            partner = self.env['res.partner'].create(row)
             
-            xmlid = "foo.bar"
+            for key in row.keys:
+                if row[key] == '(null)':
+                    row.pop(key, None)
+
+            if 'parent_id' in row:
+                
+                parent_id = row.pop('parent_id', None)
+                parent_xmlid_name = "%s" % parent_id
+                parent_xmlid = xmlid_module + "." + parent_xmlid_name
+                parent_id = self.env['ir.model.data'].xmlid_to_res_id(parent_xmlid) #få ut id:t från en min partner för att sätta den som parent till en annan
+
+
+            partner_id = row.pop('external_id', None)
+            xmlid_module="__ais_import__"
+            xmlid_name="part_cfar_%s" % partner_id
+
+            partner = self.env['res.partner'].create(row)
+
+            xmlid = xmlid_module + "." + xmlid_name
             self.env['ir.model.data'].create({
                 'name': xmlid.split('.')[1],
                 'module': xmlid.split('.')[0],
@@ -68,10 +90,12 @@ class ResUsers(models.Model):
             })
 
 
+            
     #create a record using data from csv
 
 class ReadCSV(object):
-    def __init__(self, path):     
+    def __init__(self, path, header): 
+        self.header = header    
         try:
             rows = []
             f = open(path)
@@ -84,33 +108,45 @@ class ReadCSV(object):
         except IOError as e:
             _logger.error(u'Could not read CSV file')
             raise ValueError(e)
-        
-        header = ['KUNDNR', 'AG_NAMN']
-        for i in range(len(header)):
-            if not header[i] in self.data[0].keys(): 
-                _logger.error(u'Row 0 could not find "%s"' % header[i])
-                raise ValueError("Missing column '%s', columns found: %s" % (header[i], list(self.data[0].keys())))
+        for i in range(len(self.header)):
+            if not self.header[i] in self.data[0].keys(): 
+                _logger.error(u'Row 0 could not find "%s"' % self.header[i])
+                raise ValueError("Missing column '%s', columns found: %s" % (self.header[i], list(self.data[0].keys())))
 
-    def parse(self):
-        header = ['external_id', 'name']
-        old_header = ['KUNDNR', 'AG_NAMN']
-        csvIter = CSVIterator(self.data,len(self.data), header, old_header)
+    def parse(self, field_map):
+        csvIter = CSVIterator(self.data,len(self.data), list(field_map.keys()), field_map)
         pairs = []
         while csvIter.hasNext():
             _logger.info("appending row %s" % csvIter.getRow())
             pairs.append(csvIter.getRow())
             csvIter.next()
         return pairs
+    
+    def parse_header(self):
+        field_map = {
+            self.header[0] : self.header[0],
+            self.header[1] : self.header[1],
+            self.header[2] : self.header[2],
+            self.header[3] : self.header[3]
+        }
+        csvIter = CSVIterator(self.data,len(self.data), self.header, field_map)
+        pairs = []
+        while csvIter.hasNext():
+            _logger.info("appending header row %s" % csvIter.getRow())
+            pairs.append(csvIter.getRow())
+            csvIter.next()
+        return pairs
+
 
 
 class CSVIterator(object):
-    def __init__(self, data, nrows, header, old_header):
+    def __init__(self, data, nrows, header, field_map):
         self.nrows = nrows
         self.row = 0
         self.data = data
         self.rows = nrows - 2
         self.header = header
-        self.old_header = old_header
+        self.field_map = field_map
 
     def next(self):
         if self.hasNext():
@@ -120,22 +156,12 @@ class CSVIterator(object):
         return self.row <= self.nrows -1
 
     def getRow(self):
-        field_map = {
-            self.header[0]: self.old_header[0],
-            self.header[1]: self.old_header[1],
-        } #not a for loop because fields don't map 1:1
         r = {}
         for i in range(len(self.header)):
-            if self.header[i] in field_map:
-                if i == 0: #this should be the index of 'external_id'
-                    r.update({self.header[i] : 'part_org_%s' % self.data[self.row][field_map[self.header[i]]]})
-                else:
-                    r.update({self.header[i] : self.data[self.row][field_map[self.header[i]]]})
-                #TODO: explain this mess
-                #
-            else:
-                r.update({self.header[i]: 'something'})
-        
+            if self.header[i] in self.field_map:
+                _logger.info("Updating row %s : %s" % (self.header[i], self.data[self.row][self.field_map[self.header[i]]]))
+                r.update({self.header[i] : self.data[self.row][self.field_map[self.header[i]]]})
+
         return r
 
      
