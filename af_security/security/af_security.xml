@@ -1,6 +1,15 @@
 <?xml version="1.0"?>
 <odoo>
 
+    <!-- Employers Officer -->
+
+    <!--    Handläggare Arbetsgivare Låg	    Handläggare Arbetsgivare Mellan	    Handläggare Arbetsgivare Hög
+        Kan söka på egna kontoret	        Kan söka hela landet	            Söka i hela landet
+        Läsa och skriva daganteckingar		                                    Ta bort daganteckningar
+        Läsa kundkortet	                    Registrera, förändra kundkort	    Arkivera kundkort
+        Kan boka in möten som kommer via lokalkontor		
+        Kan läsa ärenden	                Kan uppdatera ärenden	
+        Se min egna kalender	            Se kalender på  mitt kontor	        Se allas kalender -->
     <record model="ir.module.category" id="module_category_af_employers">
         <field name="name">Employers Officer</field>
         <field name="description">Allows you to handle employers.</field>
@@ -29,7 +38,7 @@
     </record>
 
     <record id="af_rule_employers_low" model="ir.rule">
-        <field name="name">Employers Own Office</field>
+        <field name="name">res.partner - Employers Officer Low</field>
         <field ref="base.model_res_partner" name="model_id"/>
         <field name="domain_force">[
 ('is_employer', '=', True),
@@ -42,13 +51,36 @@
         <field name="perm_create" eval="False"/>
         <field name="perm_unlink" eval="False"/>
     </record>
-    <!-- TODO: Disable base.res_partner_rule_private_employee (has noupdate = True) -->
-    <!--    Handläggare Arbetsgivare Låg	    Handläggare Arbetsgivare Mellan	    Handläggare Arbetsgivare Hög
-            Kan söka på egna kontoret	        Kan söka hela landet	            Söka i hela landet
-            Läsa och skriva daganteckingar		                                    Ta bort daganteckningar
-            Läsa kundkortet	                    Registrera, förändra kundkort	    Arkivera kundkort
-            Kan boka in möten som kommer via lokalkontor		
-            Kan läsa ärenden	                Kan uppdatera ärenden	
-            Se min egna kalender	            Se kalender på  mitt kontor	        Se allas kalender -->
+
+    <record id="af_rule_employers_medium" model="ir.rule">
+        <field name="name">res.partner - Employers Officer Medium</field>
+        <field ref="base.model_res_partner" name="model_id"/>
+        <field name="domain_force">[('is_employer', '=', True)]</field>
+        <field name="groups" eval="[(4, ref('af_security.group_af_employers_medium'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="af_rule_employers_low" model="ir.rule">
+        <field name="name">res.partner.notes - Employers Officer Low</field>
+        <field ref="partner_daily_notes.model_res_partner_notes" name="model_id"/>
+        <field name="domain_force">[
+('partner_id.is_employer', '=', True),
+'|',
+    ('partner_id.office','=', user.office.id),
+    ('partner_id.office','in', user.office_ids._ids)]</field>
+        <field name="groups" eval="[(4, ref('af_security.group_af_employers_low'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+
+    <!-- TODO: Flytta regler och access rights till deras respektive moduler -->
+
+    <function model="res.partner" name="af_security_install_rules"/>
 
 </odoo>

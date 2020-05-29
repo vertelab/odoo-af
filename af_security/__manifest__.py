@@ -7,7 +7,7 @@
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
-    "depends": ["contacts", "partner_view_360" ],
+    "depends": ["contacts", "partner_view_360", "partner_daily_notes" ],
     "external_dependencies": [],
     "data": [
         "security/af_security.xml",
