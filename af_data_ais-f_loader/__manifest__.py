@@ -31,7 +31,8 @@ Loads database dumps from AIS-F into odoo
         ],
     
     "data": [
-        "data/res_partner.xml"
+        "data/res.country.state.csv",
+        "data/res_partner.xml",
     ],
     "application": False,
     "installable": True,
