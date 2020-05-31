@@ -70,12 +70,12 @@ body {
 .o_main_navbar > ul > li > a:hover,
 .o_main_navbar > ul > li > label:hover,
 .o_main_navbar > a > [role="button"]:hover {
-  background-color: $brand-secondary;
+  background-color: $brand-blue-hover;
   color: $brand-primary;
 }
 
 .o_main_navbar .show .dropdown-toggle {
-  background-color: $brand-secondary;
+  background-color: $brand-blue-hover;
   color: $brand-primary;
 }
 
@@ -84,13 +84,25 @@ body {
 }
 
 .o_notification_counter.badge.badge-pill {
-  background-color: $brand-secondary;
+  background-color: $brand-blue-hover; 
   color: $brand-primary;
+  border: 1.4px solid $brand-primary;
 }
 
+// .o_main_navbar > ul > li > a > i.fa.fa-comments:hover {
+//   background-color: $brand-red;
+//   color: $brand-red;
+// }
+
 .o_main_navbar > ul > li > a:hover .o_notification_counter.badge.badge-pill {
-  background-color: $brand-primary;
-  color: $brand-secondary;
+  background-color: $brand-blue-hover;
+  color: $brand-primary;
+  border: 1.3px solid $brand-primary;
+}
+
+.o_main_navbar > a.o_menu_brand:hover {
+  background-color: $brand-blue-hover;
+  color: $brand-primary;
 }
 
 // // Fix color Add file button
@@ -129,6 +141,46 @@ body {
   background-color: $brand-blue-hover;
   border-color: $brand-primary;
   border-width: 1.5px;
+}
+
+.o_main > main > button > i.o_button_icon {
+  color: $brand-primary;
+}
+
+.o_main > main > div > ol > li > a {
+  color: $brand-blue;
+}
+
+.o_main >  main > div > ol > li.breadcrumb-item{
+  color: $brand-gray-90;
+}
+
+.o_form_label {
+  color: $brand-gray-70;
+}
+
+.o_group > table > tbody > tr > td > div.o_horizontal_separator {
+  color: $brand-gray-90;
+}
+
+.o_group > table > tbody > tr > td > span.o_field_char.o_field_widget {
+  color: $brand-black;
+}
+
+.o_group > table > tbody > tr > td > div > span {
+  color: $brand-black;
+}
+
+.o_group > table > tbody > tr > td > span {
+  color: $brand-black;
+}
+
+.o_group > table > tbody > tr > td > a.o_form_uri.o_field_widget {
+  color: $blue;
+}
+
+.o_notebook > div > div > page > table > tbody > tr > td > a.o_form_uri.o_field_widget {
+  color: $blue;
 }
 
 // .fa.fa-filter.o_searchview_facet_label {
