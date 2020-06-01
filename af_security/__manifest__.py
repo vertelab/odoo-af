@@ -12,6 +12,7 @@
     "data": [
         "security/af_security.xml",
         "security/ir.model.access.csv",
+        "data/data.xml",
     ],
     "application": True,
     "installable": True,
