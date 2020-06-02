@@ -1,5 +1,6 @@
 "organisationer.csv","Notering","Trans","Odoo","Odoo2"
 "KUNDNR",,"external_id,part_org_","external_id","customer_id"
+"KUNDNR",,,"customer_id",
 "ORGNR",,,"company_registry",
 "ORGNAMN",,,"name",
 "ORGTYP","om U (utländsk) skippa","skip_if_u,skip","skip",

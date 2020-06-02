@@ -28,34 +28,34 @@ import os
 import tempfile
 
 # TODO:
-# gör så att det går att läsa in fler filer
-# ändra värdet på t.ex. externt_id på en plats där det kan göras beroende på vilken fil som läses in
-# external_id = row['external_id]
-# row.update('external_id' : 'part_org_%s' % external_id)
-# 
-#
-#
-#
-#
+# koppla samman visitation address med parent_id
+# fixa expected singleton error
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    states = {}
     xmlid_module="__ais_import__"
 
     @api.model
+    def create_contact_persons(self):     
+        headers_header = ['kontaktperson.csv', 'Notering',  'Trans', 'Odoo']
+        #path = os.path.join(config.options.get('data_dir'), 'AIS-F/kontaktperson.csv')
+        header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/kontaktperson_mapping.csv"
+        path = "usr/share/odoo-af/af_data_ais-f_loader/data/kontaktperson_test.csv" #testing purposes only
+        self.create_partners(headers_header, path, header_path)
+
+    @api.model
     def create_employers(self):     
-        headers_header = ['arbetsgivare.csv', 'Notering',  'Trans', 'Odoo', 'Odoo2']
-        #path = os.path.join(config.options.get('data_dir'), 'mydir')
+        headers_header = ['arbetsgivare.csv', 'Notering',  'Trans', 'Odoo']
+        #path = os.path.join(config.options.get('data_dir'), 'AIS-F/arbetsgivare.csv')
         header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/arbetsgivare_mapping.csv"
         path = "usr/share/odoo-af/af_data_ais-f_loader/data/arbetsgivare_test.csv" #testing purposes only
         self.create_partners(headers_header, path, header_path)
 
     @api.model
     def create_organisations(self):     
-        headers_header = ['organisationer.csv', 'Notering', 'Trans', 'Odoo', 'Odoo2']
-        #path = os.path.join(config.options.get('data_dir'), 'mydir')
+        headers_header = ['organisationer.csv', 'Notering', 'Trans', 'Odoo']
+        #path = os.path.join(config.options.get('data_dir'), 'AIS-F/organisationer.csv')
         header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/organisationer_mapping.csv"
         path = "usr/share/odoo-af/af_data_ais-f_loader/data/organisationer_test.csv" #testing purposes only 
         self.create_partners(headers_header, path, header_path)
@@ -72,8 +72,8 @@ class ResPartner(models.Model):
             #_logger.info("header_rows row processing: %s" % row)
             if row['Odoo'] != '' and "!" not in row['Odoo']:
                 field_map.update({row['Odoo']: row[headers_header[0]]})
-            if row['Odoo2'] != '' and "!" not in row['Odoo2']:
-                field_map.update({row['Odoo2']: row[headers_header[0]]}) 
+            # if row['Odoo2'] != '' and "!" not in row['Odoo2']:
+            #     field_map.update({row['Odoo2']: row[headers_header[0]]}) 
             if row['Trans'] != '':
                 key = row['Trans'].split(",")[0]
                 value = row['Trans'].split(",")[1]
@@ -82,15 +82,18 @@ class ResPartner(models.Model):
         _logger.info("header: %s" % field_map.keys())
         _logger.info("old_header: %s" % old_header)
         reader = ReadCSV(path, old_header) 
-        self.create_partner_from_row(reader.parse(field_map), transformations)
+        self.create_partner_from_rows(reader.parse(field_map), transformations)
     
     @api.model
-    def create_partner_from_row(self, rows, transformations):
-       
+    def create_partner_from_rows(self, rows, transformations):
+        ids = []
         for row in rows:
             create = True
             external_xmlid = ""
             keys_to_delete = []
+            keys_to_update = []
+            visitation_address = {}
+            visitation_address_transformations = {}
 
             for key in row.keys():
                 if row[key] == '(null)' or row[key] == '':
@@ -99,23 +102,6 @@ class ResPartner(models.Model):
                 row.pop(keys_to_delete[i], None)
             
             keys_to_delete = [] 
-            if 'name' not in row:
-                row.update({'name' : row['customer_id']})
-
-            if 'country_id' not in row or row['country_id'] == 'SE' or row['country_id'].lower() == 'sverige':
-                country_id = self.env['ir.model.data'].xmlid_to_res_id('base.se')
-                row.update({'country_id' : country_id})
-            else: 
-                _logger.info("Skipping partner, wrong country %s" % row['country_id'])
-                create = False
-
-            if 'state_id' in row:
-                if row['state_id'] != '0':
-                    state_xmlid = "base.state_se_%s" % row['state_id']
-                    state_id = self.env['ir.model.data'].xmlid_to_res_id(state_xmlid)
-                    row.update({'state_id' : state_id})
-                else:
-                    row.pop('state_id', None)
 
             for key in row.keys():
                 if key in transformations:
@@ -137,47 +123,123 @@ class ResPartner(models.Model):
                     if key == 'parent_id': 
                         parent_xmlid_name = "%s%s" % (transform, row[key])
                         parent_xmlid = "%s.%s" % (self.xmlid_module, parent_xmlid_name)
-                        _logger.info("parent xmlid: %s" % parent_xmlid)
+                        #_logger.info("parent xmlid: %s" % parent_xmlid)
                         parent_id = self.env['ir.model.data'].xmlid_to_res_id(parent_xmlid)
-                        _logger.info("parent res_id: %s" % parent_id)
-                        row.update({key: parent_id})   
-                    # elif key == 'postal_address_id':
-                    #     xmlid_name = "%s%s" % (transform, row['external_id'])
-                    #     postal_address_xmlid = "%s.%s" % (self.xmlid_module,xmlid_name)
-                    #     xmlid_name = "%s%s" % (transform, row['postal_address_state_id'])
-                    #     postal_address_state_id_xmlid = "%s.%s" % (self.xmlid_module, xmlid_name)
-                    #     row.update({'postal_address_state_id': postal_address_state_id_xmlid})
-                    #     postal_address = {
-                    #         'street': row.pop('postal_address_street', None),
-                    #         'zip': row.pop('postal_address_zip', None),
-                    #         'city': row.pop('postal_address_city', None),
-                    #         'state_id' : row.pop('postal_address_state_id', None)
-                    #     }
-                    #     postal_address_partner = self.env['res.partner'].create(postal_address)
-                    #     self.env['ir.model.data'].create({
-                    #         'name': postal_address_xmlid.split('.')[1],
-                    #         'module': postal_address_xmlid.split('.')[0],
-                    #         'model': postal_address_partner._name,
-                    #         'res_id': postal_address_partner.id
-                    #         }) #creates an external id in the system for the partner.
+                        #_logger.info("parent res_id: %s" % parent_id)
+                        if not parent_id:
+                            _logger.error("Could not find parent id %s, not adding to %s" % (row[key], row['external_id']))
+                        else:
+                            row.update({key: parent_id})
+                    elif key == 'visitation_address_id':
+                        if create:
+                            visitation_address = {
+                                'external_id': row['external_id'],
+                                'name' : "%s, %s" % (row[key] ,row['external_id']),
+                                'street' : row[key], #visitation_address_id contains street field for visitation address
+                                'type' : 'visitation address'
+                                }
+                            visitation_address_transformations = {'external_id' : transformations[key]} #external id for visitation address = transformation for visitation_address_id + external id of current row 
+
+                            if 'street' not in row and 'state_id' not in row and 'city' not in row and 'zip' not in row:
+                                keys_to_update.append({'street' : row[key]})
+
+                            if 'visitation_address_state_id' in row:
+                                visitation_address.update({'state_id' : row['visitation_address_state_id']})
+                                keys_to_delete.append('visitation_address_state_id')
+                                if 'visitation_address_state_id' in transformations:
+                                    visitation_address_transformations.update({'state_id' : transformations['visitation_address_state_id']})
+                                if ('street' not in row and 'state_id' not in row) or ('street' in row and row['street'] == row[key] and 'state_id' not in row):
+                                    keys_to_update.append({'state_id' : row['visitation_address_state_id']})
+                            if "visitation_address_city" in row:
+                                visitation_address.update({'city' : row['visitation_address_city']})
+                                keys_to_delete.append('visitation_address_city')
+                                if 'visitation_address_city' in transformations:
+                                    visitation_address_transformations.update({'city' : transformations['visitation_address_city']})
+                                if ('street' not in row and 'city' not in row) or ('street' in row and row['street'] == row[key] and 'city' not in row): #
+                                    keys_to_update.append({'city' : row['visitation_address_city']})
+
+                            if 'visitation_address_zip' in row:
+                                visitation_address.update({'zip' : row['visitation_address_zip']})
+                                keys_to_delete.append('visitation_address_zip')
+                                if 'visitation_address_zip' in transformations:
+                                    visitation_address_transformations.update({'zip' : transformations['visitation_address_zip']})
+                                if 'street' not in row and 'zip' not in row or ('street' in row and row['street'] == row[key] and 'zip' not in row) : 
+                                    keys_to_update.append({'zip' : row['visitation_address_zip']})
+
+                            if 'visitation_address_country_id' in row:
+                                visitation_address.update({'country_id' : row['visitation_address_country_id']})
+                                keys_to_delete.append('visitation_address_country_id')
+                            #_logger.info("visitation address dict: %s" % visitation_address)
+                            keys_to_delete.append(key)
+                            #for visitation_address_id in self.create_partner_from_rows([visitation_address], visitation_address_transformations):
+                            #   row.update({key : visitation_address_id}) 
+
                     elif key == 'external_id':
+                        if transform == "part_org_" or transform == "part_emplr_" or transform == "part_cct_":
+                            keys_to_update.append({'is_employer' : True})
                         xmlid_name = "%s%s" % (transform, row[key])
                         external_xmlid = "%s.%s" % (self.xmlid_module, xmlid_name)
                         keys_to_delete.append(key)
+
+            for i in range(len(keys_to_update)):
+                row.update(keys_to_update[i])
+            
+            if ('name' not in row and 'lastname' not in row and 'firstname' not in row and 'type' not in row) or ('name' not in row and 'lastname' not in row and 'firstname' not in row and row['type'] == 'contact'):
+                
+                row.update({'name' : row['external_id']})
+
+            if 'country_id' not in row or row['country_id'] == 'SE' or row['country_id'].lower() == 'sverige':
+                country_id = self.env['ir.model.data'].xmlid_to_res_id('base.se')
+                row.update({'country_id' : country_id})
+            else: 
+                _logger.info("Skipping partner, wrong country %s" % row['country_id'])
+                create = False
+
+            if 'state_id' in row:
+                if row['state_id'] != '0':
+                    state_xmlid = "base.state_se_%s" % row['state_id']
+                    state_id = self.env['ir.model.data'].xmlid_to_res_id(state_xmlid)
+                    if state_id != False:
+                        row.update({'state_id' : state_id})
+                    else:
+                        _logger.error("state_id base.state_se_%s not found, leaving state id for %s empty" %(row['state_id'],row['external_id']))
+                        row.pop('state_id', None)
+                else:
+                    _logger.warning("state_id is 0 for %s empty" % row['external_id'])
+                    row.pop('state_id', None)
             
             keys_to_delete = keys_to_delete + ['skip', 'skip2']
+            id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
+            if id_check != False:
+                create = False
+                _logger.info("external id already in database, skipping")
             if create:
                 for i in range(len(keys_to_delete)):
                     row.pop(keys_to_delete[i], None)
                 _logger.info("creating row %s" % row)
-
+                _logger.info("creating external id: %s" % external_xmlid)                    
+                
                 partner = self.env['res.partner'].create(row)
+
+                #_logger.info("visitation address dict before create: %s" % visitation_address)
+                if visitation_address != {}:
+                    #_logger.info("CREATING VISITATION ADDRESS")
+                    visitation_address.update({'parent_id' : partner.id})
+                    self.create_partner_from_rows([visitation_address], visitation_address_transformations)
+                #self.env['res.partner'].update() #add visitation_address id to partner
                 self.env['ir.model.data'].create({
                                 'name': external_xmlid.split('.')[1],
                                 'module': external_xmlid.split('.')[0],
                                 'model': partner._name,
                                 'res_id': partner.id
                                 }) #creates an external id in the system for the partner.
+                
+                ids.append(partner.id)
+            else:
+                _logger.info("Did not create row %s" % row)
+
+        return ids
+         
 
 
 class ReadCSV(object):

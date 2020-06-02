@@ -1,9 +1,11 @@
 <?xml version="1.0"?>
 <odoo>
     <data>
-    <function name="create_organisations" model="res.partner">
+        <function name="create_organisations" model="res.partner">
         </function>
         <function name="create_employers" model="res.partner">
+        </function>
+        <function name="create_contact_persons" model="res.partner">
         </function>
     </data>
 </odoo>
