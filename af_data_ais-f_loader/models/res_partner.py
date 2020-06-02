@@ -177,6 +177,8 @@ class ResPartner(models.Model):
                     elif key == 'external_id':
                         if transform == "part_org_" or transform == "part_emplr_" or transform == "part_cct_":
                             keys_to_update.append({'is_employer' : True})
+                            if transform == "part_org_" or transform == "part_emplr_":
+                                keys_to_update.append({'is_company' : True})
                         xmlid_name = "%s%s" % (transform, row[key])
                         external_xmlid = "%s.%s" % (self.xmlid_module, xmlid_name)
                         keys_to_delete.append(key)
