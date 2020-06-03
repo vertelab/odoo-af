@@ -144,7 +144,7 @@ class ResPartner(models.Model):
                                 keys_to_update.append({'street' : row[key]})
 
                             if 'visitation_address_state_id' in row:
-                                visitation_address.update({'state_id' : row['visitation_address_state_id']})
+                                #visitation_address.update({'state_id' : row['visitation_address_state_id']})
                                 keys_to_delete.append('visitation_address_state_id')
                                 if 'visitation_address_state_id' in transformations:
                                     visitation_address_transformations.update({'state_id' : transformations['visitation_address_state_id']})

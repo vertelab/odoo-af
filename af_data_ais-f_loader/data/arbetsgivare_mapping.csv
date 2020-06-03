@@ -21,7 +21,7 @@
 "SNIKOD_1","skippa",,
 "KOMMUN_KOD","behöver transformation, behöver inläsning av states state_id/id",,"visitation_address_state_id"
 "ANTAL_ANSTALLDA","antal anställda",,
-"INTERNET_AG",,,
+"INTERNET_AG","om j → skippa","skip_if_j,skip3","!skip3"
 "SENASTE_KONTAKTDATUM",,,
 "SENASTE_KONTAKT_KONTOR",,,
 "SENASTE_KONTAKT_SIGN",,,
