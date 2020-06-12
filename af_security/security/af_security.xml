@@ -104,9 +104,7 @@
         <field ref="base.model_res_partner" name="model_id"/>
         <field name="domain_force">[
 ('is_employer', '=', True),
-'|',
-    ('office','=', user.office.id),
-    ('office','in', user.office_ids._ids)]</field>
+    ('office','=', user.office.id)]</field>
         <field name="groups" eval="[(4, ref('af_security.group_af_employers_low'))]"/>
         <field name="perm_read" eval="True"/>
         <field name="perm_write" eval="False"/>
@@ -119,9 +117,7 @@
         <field ref="partner_daily_notes.model_res_partner_notes" name="model_id"/>
         <field name="domain_force">[
 ('partner_id.is_employer', '=', True),
-'|',
-    ('partner_id.office','=', user.office.id),
-    ('partner_id.office','in', user.office_ids._ids)]</field>
+    ('partner_id.office','=', user.office.id)]</field>
         <field name="groups" eval="[(4, ref('af_security.group_af_employers_low'))]"/>
         <field name="perm_read" eval="True"/>
         <field name="perm_write" eval="False"/>
