@@ -346,13 +346,13 @@ body {
 //     border-bottom: 2px solid $brand-primary;
 // }
 
-// .o_input {
-//     border: 1px solid #ccc;
-//     border-top-style: none;
-//     border-right-style: none;
-//     border-left-style: none;
-//     color: $gray;
-// }
+.o_input {
+    border: 1px solid $brand-gray-70;
+    // border-top-style: none;
+    // border-right-style: none;
+    // border-left-style: none;
+    // color: $gray;§§§
+}
 
 // .o_field_widget {
 //     &.o_field_many2one .o_external_button {
