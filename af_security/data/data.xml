@@ -1,0 +1,9 @@
+<odoo>
+<!-- Add groups to menu options -->
+    <record id="partner_view_360.res_partner_employers_menu" model="ir.ui.menu">
+        <field name="groups_id" eval="[(4, ref('af_security.group_af_employers_low'))]"/>
+    </record>
+    <record id="partner_view_360.res_partner_jobseekers_menu" model="ir.ui.menu">
+        <field name="groups_id" eval="[(4, ref('af_security.group_af_jobseekers_low'))]"/>
+    </record>
+</odoo>
