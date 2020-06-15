@@ -86,32 +86,40 @@
             <form>
                 <sheet>
                     <div class="oe_title">
+                        <div class="oe_edit_only">
+                            <label for="name" string="Meeting subject" />
+                        </div>
                         <h1>
-                            <field name="name" />
+                            <field name="name" placeholder="e.g. Business Lunch" />
                         </h1>
+                        <label for="partner_id" string="Attendees" class="oe_edit_only"/>
+                        <h2>
+                            <field name="partner_id" widget="many2manyattendee" placeholder="Select attendees..." class="oe_inline"/>
+                        </h2>
+                        <label for="user_id" string="Case worker" class="oe_edit_only"/>
+                        <h2>
+                            <field name="user_id" widget="many2manyattendee" placeholder="Select case worker..." class="oe_inline"/>
+                        </h2>
                     </div>
-                    <group>
-                        <group>
-                            <field name="start" />
-                            <field name="stop" />
-                            <field name="duration" />
-                        </group>
-                        <group>
-                            <field name="user_id" />
-                            <field name="partner_id" />
-                            <field name="type_id" />
-                            <field name="occasion_ids" />
-                            <field name="state" />
-                            <field name="location_code" />
-                            <field name="office" options="{'no_create_edit': True}" domain="[('type', '=', 'af office')]"/>
-                            <field name="office_code" />
-                            <field name="channel" />
-                        </group>
-                    </group>
+                    <notebook>
+                        <page name="page_details" string="Meeting Details">
+                            <group>
+                                <group>
+                                    <field name="start" />
+                                    <field name="duration" />
+                                </group>
+                                <group>
+                                    <field name="type_id" />
+                                    <field name="office" options="{'no_create_edit': True}" domain="[('type', '=', 'af office')]"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="page_alternatives" string="Alternatives"></page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
-    </record> 
+    </record>
 
     <record id="action_appointment" model="ir.actions.act_window">
         <field name="name">Appointments</field>

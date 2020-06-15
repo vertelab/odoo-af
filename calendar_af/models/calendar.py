@@ -85,8 +85,8 @@ class CalendarAppointmentType(models.Model):
     name = fields.Char('Name', required=True)
     ipf_id = fields.Char('IPF Id', required=True, help="The IPF type id, if this is wrong the integration won't work")
     # mötestyps_id
-    # channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
+    duration = fields.Integer(string='Duration')
     ipf_num = fields.Integer(string='IPF Number')
     additional_booking = fields.Boolean(string='Over booking')
     # ärendetyp ace
@@ -116,11 +116,12 @@ class CalendarAppointment(models.Model):
     start = fields.Datetime(string='Start', required=True, help="Start date of an appointment")
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an appointment")
     duration = fields.Float('Duration')
-    user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
-    partner_id = fields.Many2one(string='Customer', comodel_name='res.partner', help="Booked customer")
+    user_id = fields.Many2many(string='Case worker', comodel_name='res.users', help="Booked case worker")
+    partner_id = fields.Many2many(string='Customer', comodel_name='res.partner', help="Booked customer")
     state = fields.Selection(selection=[('free', 'Free'),
                                         ('reserved', 'Reserved'),
-                                        ('confirmed', 'Confirmed')],
+                                        ('confirmed', 'Confirmed'),
+                                        ('canceled', 'Canceled')],
                                         string='State', 
                                         default='free', 
                                         help="Status of the meeting")
@@ -128,12 +129,15 @@ class CalendarAppointment(models.Model):
     office = fields.Many2one('res.partner', string="Office")
     office_code = fields.Char(string='Office code', related="office.office_code")
     occasion_ids = fields.One2many(comodel_name='calendar.occasion', inverse_name='appointment_id', string="Occasion")
-    # type_id = fields.Many2one(string='Type', related='occasion_ids.type_id')
     type_id = fields.Many2one(string='Type', required=True, comodel_name='calendar.appointment.type')
-    # channel =  fields.Char(string='Channel', related='occasion_ids.channel')
     channel =  fields.Many2one(string='Channel', required=True, comodel_name='calendar.channel', related='type_id.channel')
     additional_booking = fields.Boolean(String='Over booking', related='occasion_ids.additional_booking')
     reserved = fields.Datetime(string='Reserved', help="Occasions was reserved at this date and time")
+
+    def cancel(self, cancel_reason):
+        """Cancels a planned meeting"""
+        if self.state == 'confirmed':
+            self.state = 'canceled'
 
     def confirm_appointment(self):
         """Confirm reserved booking"""
@@ -283,7 +287,7 @@ class CalendarOccasion(models.Model):
 
     @api.multi
     def approve_occasion(self):
-        """Approve suggested occasion"""
+        """User approves suggested occasion"""
         if self.state == 'request':
             self.state = 'ok'
             ret = True
@@ -294,7 +298,7 @@ class CalendarOccasion(models.Model):
 
     @api.multi
     def deny_occasion(self):
-        """Deny suggested occasion"""
+        """User denies suggested occasion"""
         if self.state == 'request':
             self.state = 'fail'
             ret = True
@@ -328,6 +332,7 @@ class CalendarOccasion(models.Model):
 
         # if type allows additional bookings and  we didn't find any
         # free occasions, create new ones:
+        # TODO: do not create extra occasions unless completely empty?
         for day in range(date_delta.days or 1):
             if len(occ_lists[day]) != no_occasions:
                 if type_id.additional_booking:
@@ -370,13 +375,14 @@ class CalendarOccasion(models.Model):
             }
             appointment = self.env['calendar.appointment'].create(vals)
 
-            # relation needs to be set from calendar.occasion 
+            # relation needs to be set from calendar.occasion?
             for occasion_id in occasion_ids:
                 occasion_id.appointment_id = appointment.id
 
             res = appointment
         else:
-            # TODO: implement error codes..
+            # TODO: implement proper error codes..
             res = '200' # 400, 403, 404, 500
+            # Response.status = '200'
 
         return res
