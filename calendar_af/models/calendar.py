@@ -185,6 +185,10 @@ class CalendarAppointment(models.Model):
             res = super(CalendarAppointment, self).write(values)
         return res
 
+    @api.model
+    def delete(self):
+        self.unlink()
+
 class CalendarOccasion(models.Model):
     _name = 'calendar.occasion'
     _description = "Occasion"
