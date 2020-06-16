@@ -23,9 +23,12 @@ from odoo import models, fields, api, _
 import logging
 _logger = logging.getLogger(__name__)
 
+from odoo.tools import config
+
 import csv
 import os
 import tempfile
+
 
 # TODO:
 # koppla samman visitation address med parent_id
@@ -39,25 +42,25 @@ class ResPartner(models.Model):
     @api.model
     def create_contact_persons(self):     
         headers_header = ['kontaktperson.csv', 'Notering',  'Trans', 'Odoo']
-        #path = os.path.join(config.options.get('data_dir'), 'AIS-F/kontaktperson.csv')
+        #path = "usr/share/odoo-af/af_data_ais-f_loader/data/kontaktperson_test.csv" #testing purposes only
+        path = os.path.join(config.options.get('data_dir'), 'AIS-F/kontaktperson.csv')
         header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/kontaktperson_mapping.csv"
-        path = "usr/share/odoo-af/af_data_ais-f_loader/data/kontaktperson_test.csv" #testing purposes only
         self.create_partners(headers_header, path, header_path)
 
     @api.model
     def create_employers(self):     
         headers_header = ['arbetsgivare.csv', 'Notering',  'Trans', 'Odoo']
-        #path = os.path.join(config.options.get('data_dir'), 'AIS-F/arbetsgivare.csv')
+        #path = "usr/share/odoo-af/af_data_ais-f_loader/data/arbetsgivare_test.csv" #testing purposes only
+        path = os.path.join(config.options.get('data_dir'), 'AIS-F/arbetsgivare.csv')
         header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/arbetsgivare_mapping.csv"
-        path = "usr/share/odoo-af/af_data_ais-f_loader/data/arbetsgivare_test.csv" #testing purposes only
         self.create_partners(headers_header, path, header_path)
 
     @api.model
     def create_organisations(self):     
         headers_header = ['organisationer.csv', 'Notering', 'Trans', 'Odoo']
-        #path = os.path.join(config.options.get('data_dir'), 'AIS-F/organisationer.csv')
+        #path = "usr/share/odoo-af/af_data_ais-f_loader/data/organisationer_test.csv" #testing purposes only 
+        path = os.path.join(config.options.get('data_dir'), 'AIS-F/organisationer.csv')
         header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/organisationer_mapping.csv"
-        path = "usr/share/odoo-af/af_data_ais-f_loader/data/organisationer_test.csv" #testing purposes only 
         self.create_partners(headers_header, path, header_path)
 
     @api.model
@@ -257,7 +260,7 @@ class ReadCSV(object):
             f.close()
             self.data = rows
         except IOError as e:
-            _logger.error(u'Could not read CSV file')
+            _logger.error(u'Could not read CSV file at path %s' % path)
             raise ValueError(e)
         for i in range(len(self.header)):
             if not self.header[i] in self.data[0].keys(): 
