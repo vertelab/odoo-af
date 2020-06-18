@@ -20,7 +20,8 @@
 ##############################################################################
 
 from odoo import models, fields, api, _
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
+from odoo.exceptions import Warning
 import pytz
 import copy
 import logging
@@ -108,6 +109,44 @@ class CalendarMappedDates(models.Model):
     from_date = fields.Date(string='From Date', required=True)
     to_date = fields.Date(string='To Date', required=True)
 
+class CalendarAppointmentSuggestion(models.Model):
+    _name = 'calendar.appointment.suggestion'
+    _description = "Bookable Occasion"
+
+    appointment_id = fields.Many2one(comodel_name='calendar.appointment', ondelete='cascade')
+    start = fields.Datetime()
+    stop = fields.Datetime()
+    occasion_ids = fields.Many2many(comodel_name='calendar.occasion', string="Occasions")
+
+    @api.multi
+    def select_suggestion(self):
+        # Kontrollera att occasion_ids fortfarande är lediga
+        # Skriv data till appointment_id
+        if self.appointment_id.state == 'reserved':
+            raise Warning("This appointment is already booked.")
+        occasions = self.env['calendar.occasion']
+        for occasion in self.occasion_ids:
+            # Ensure that occasions are still free
+            if not occasion.appointment_id:
+                occasions |= occasion
+            else:
+                free_occasion = occasion.search(
+                    [
+                        ('start', '=', self.start),
+                        ('type_id', '=', self.type_id.id),
+                        #('channel', '=', self.channel.id),
+                        ('appointment_id', '=', False)
+                    ], limit=1)
+                if not free_occasion:
+                    raise Warning(_("You are screwed."))
+                occasions |= free_occasion
+        occasions.write({'appointment_id': self.appointment_id.id})
+        self.appointment_id.write({
+            'state': 'reserved',
+            'start': self.start,
+            'stop': self.stop,
+        })
+
 class CalendarAppointment(models.Model):
     _name = 'calendar.appointment'
     _description = "Appointment"
@@ -133,6 +172,50 @@ class CalendarAppointment(models.Model):
     channel =  fields.Many2one(string='Channel', required=True, comodel_name='calendar.channel', related='type_id.channel')
     additional_booking = fields.Boolean(String='Over booking', related='occasion_ids.additional_booking')
     reserved = fields.Datetime(string='Reserved', help="Occasions was reserved at this date and time")
+    description = fields.Text(string='Description')
+    suggestion_ids = fields.One2many(comodel_name='calendar.appointment.suggestion', inverse_name='appointment_id', string='Suggested Dates')
+    """ suggestion_id = fields.Many2one(comodel_name='calendar.appointment.suggestion', string='Suggested Dates') """
+
+
+    @api.onchange('duration', 'type_id', 'channel')
+    def compute_suggestion_ids(self):
+        if self.suggestion_ids:
+            self.suggestion_ids.unlink()
+        if not all((self.duration, self.type_id, self.channel)):
+            return
+        start = self.start_meeting_search()
+        stop = self.stop_meeting_search(start)
+        suggestion_ids = []
+        occasions = self.env['calendar.occasion'].get_bookable_occasions(start, stop, self.duration * 60, self.type_id, max_depth = 1)
+        _logger.warn(occasions)
+        for day in occasions:
+            for day_occasions in day:
+                for occasion in day_occasions:
+                    suggestion_ids.append((0, 0, {
+                        # Fyll i occasions-data på förslagen
+                        'start': occasion[0].start,
+                        'stop': occasion[-1].stop,
+                        'occasion_ids': [(6, 0, occasion._ids)],
+                    }))
+        self.suggestion_ids = suggestion_ids
+    
+    @api.onchange('duration', 'start')
+    def onchange_duration_start(self):
+        if self.start and self.duration:
+            self.stop = self.start + timedelta(minutes=int(self.duration * 60)) 
+    """ @api.onchange('suggestion_id')
+    def onchange_suggestion_id(self):
+        _logger.warn(self.suggestion_id.read()) """
+
+    def start_meeting_search(self):
+        start = datetime.now() + timedelta(days=int(self.env['ir.config_parameter'].sudo().get_param('af_calendar.start_meeting_search', default='3')))
+        start.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute, second=0, microsecond=0)
+        return start
+
+    def stop_meeting_search(self, start_meeting_search):
+        stop = start_meeting_search + timedelta(days=int(self.env['ir.config_parameter'].sudo().get_param('af_calendar.stop_meeting_search', default='15')))
+        stop.replace(hour=BASE_DAY_STOP.hour, minute=BASE_DAY_STOP.minute, second=0, microsecond=0)
+        return stop
 
     def cancel(self, cancel_reason):
         """Cancels a planned meeting"""
@@ -151,22 +234,23 @@ class CalendarAppointment(models.Model):
 
     # TODO: consider using _force_create_occasion instead (/in addition?) in create and update?
 
-    @api.model
-    def create(self, values):
-        res = False
-        start = datetime.strptime(values.get('start'), "%Y-%m-%d %H:%M:%S")
-        stop = datetime.strptime(values.get('stop'), "%Y-%m-%d %H:%M:%S")
-        duration = values.get('duration') * 60 # convert from hours to minutes
-        type_id = self.env['calendar.appointment.type'].browse(values.get('type_id'))
-
-        occasions = self.env['calendar.occasion'].get_bookable_occasions(start, stop, duration, type_id, values.get('channel'))
-        if occasions:
-            values['occasion_ids'] =  [(6,0, [occasion.id for occasion in occasions[0]])]
-            # TODO: query user before moving appointment?
-            values['start'] = occasions[0][0].start
-            values['stop'] = occasions[0][len(occasions[0]) - 1].stop
-            res = super(CalendarAppointment, self).create(values)
-        return res
+    # @api.model
+    # def create(self, values):
+    #     res = False
+    #     start = datetime.strptime(values.get('start'), "%Y-%m-%d %H:%M:%S")
+    #     stop = datetime.strptime(values.get('stop'), "%Y-%m-%d %H:%M:%S")
+    #     duration = values.get('duration') * 60 # convert from hours to minutes
+    #     type_id = self.env['calendar.appointment.type'].browse(values.get('type_id'))
+    #     occasions = values.get('occasion_ids')
+    #     if not occasions:
+    #         occasions = self.env['calendar.occasion'].get_bookable_occasions(start, stop, duration, type_id, values.get('channel'))
+    #     if occasions:
+    #         values['occasion_ids'] =  [(6,0, [occasion.id for occasion in occasions[0]])]
+    #     # TODO: query user before moving appointment?
+    #     values['start'] = occasions[0][0].start
+    #     values['stop'] = occasions[0][len(occasions[0]) - 1].stop
+    #     res = super(CalendarAppointment, self).create(values)
+    #     return res
 
     @api.model
     def update(self, values):
@@ -186,8 +270,15 @@ class CalendarAppointment(models.Model):
         return res
 
     @api.model
-    def delete(self):
-        self.unlink()
+    def delete_reservation(self, occasions):
+        """Deletes a reservation
+        :param occasions: a recordset of odoo occasions linked to a reservation"""
+        reservation = self.env['calendar.appointment'].sudo().search([('occasion_ids', 'in', occasions._ids), ('state', '=', 'reserved')])
+        if reservation:
+            reservation.unlink()
+            return True
+        else:
+            return False
 
 class CalendarOccasion(models.Model):
     _name = 'calendar.occasion'
@@ -256,7 +347,7 @@ class CalendarOccasion(models.Model):
         return res
 
     @api.model
-    def _get_additional_booking(self, date, duration, type_id, channel):
+    def _get_additional_booking(self, date, duration, type_id):
         """"Creates extra, additional, occasions"""
         # Replace date with mapped date if we have one
         date = self._check_date_mapping(date)
@@ -273,6 +364,7 @@ class CalendarOccasion(models.Model):
         no_occasions = int(duration / BASE_DURATION)
         # Create new occasions.
         res = self.env['calendar.occasion']
+        _logger.warn('%s %s %s' % (date, duration, no_occasions))
         for i in range(no_occasions):
             vals = {
                 'name': '%sm @ %s' % (duration, start_date),
@@ -281,10 +373,11 @@ class CalendarOccasion(models.Model):
                 'duration': BASE_DURATION,
                 'appointment_id': False,
                 'type_id': type_id.id,
-                'channel': channel,
+                'channel': type_id.channel.id,
                 'additional_booking': True,
                 'state': 'ok',
             }
+            _logger.warn(vals)
             res |= self.env['calendar.occasion'].create(vals)
             start_date = start_date + timedelta(minutes=BASE_DURATION)
         return res
@@ -312,43 +405,101 @@ class CalendarOccasion(models.Model):
         return ret
 
     @api.model
-    def get_bookable_occasions(self, start, stop, duration, type_id, channel, max_depth = 1):
+    def get_bookable_occasions(self, start, stop, duration, type_id, max_depth = 1):
         """Returns a list of occasions matching the defined parameters of the appointment. Creates additional 
-        occasions if allowed."""
+        occasions if allowed.
+        :param start: Start search as this time.
+        :param stop: Stop search as this time.
+        :param duration: Meeting length.
+        :param type_id: Meeting type.
+        :param max_depth: Number of bookable occasions per time slot.
+        """
         # Calculate number of occasions needed to match booking duration
         no_occasions = int(duration / BASE_DURATION)
         date_delta = (stop - start)
+        td_base_duration = timedelta(minutes=BASE_DURATION)
+        
+        def get_occasions(start_dt):
+            _logger.warn(start_dt)
+            return self.env['calendar.occasion'].search(
+                [
+                    ('start', '=', start_dt),
+                    ('type_id', '=', type_id.id),
+                    #('channel', '=', channel),
+                    ('appointment_id', '=', False)
+                ], limit=max_depth)
+        #[[[], []], dag[tidsslot[ocassions]]]
 
         occ_lists = []
-        # declare lists...
-        for i in range(max_depth):
+        # declare lists for each day
+        for i in range(date_delta.days + 1):
             occ_lists.append([])
 
+        
         # find occasions for each day, starting with last day
-        for day in range(date_delta.days or 1):
-            # find 'no_occasions' number of free occasions for each timeslot
-            for i in range(no_occasions):
+        # TODO: Go backwards
+        for day in range(date_delta.days + 1):
+            occasions = []
+            # find 'max_depth' number of free occasions for each timeslot
+            if day == 0:
+                start_dt = copy.copy(start)
+                last_slot = copy.copy(start)
+                last_slot.replace(hour=BASE_DAY_STOP.hour, minute=BASE_DAY_STOP.minute)
+                if last_slot > stop:
+                    last_slot = copy.copy(stop)
+                last_slot -= timedelta(minutes=duration)
+            else:
+                # This will break given certain times and timezones. Should work for us.
+                start_dt = start_dt + timedelta(days=1)
+                start_dt.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute)
+            _logger.warn('%s - %s' % (start_dt, last_slot))
+            while start_dt <= last_slot:
+                if not occasions:
+                    for i in range(no_occasions):
+                        dt_start = start_dt + td_base_duration * i
+                        occasions.append(get_occasions(dt_start))
+                else:
+                    occasions.remove(0)
+                    occasions.append(get_occasions(start_dt + td_base_duration * no_occasions))
+                available_depth = min([len(o) for o in occasions] or [0])
+                slot = []
+                for i in range(available_depth):
+                    slot_occasion = self.env['calendar.occasion']
+                    for occ in occasions:
+                        slot_occasion |= occ[i]
+                    slot.append(slot_occasion)
+                if slot:
+                    occ_lists[day].append(slot)
+                start_dt += td_base_duration
+
+                """ 
                 iteration_start = start + timedelta(minutes=BASE_DURATION) * i
-                occasion_ids = self.env['calendar.occasion'].search([('start', '=', iteration_start + timedelta(days=(date_delta.days - day))), ('type_id', '=', type_id.id), ('channel', '=', channel), ('appointment_id', '=', False)], limit=max_depth)
+                occasion_ids = self.env['calendar.occasion'].search(
+                    [
+                        ('start', '=', iteration_start + timedelta(days=(date_delta.days - day))),
+                        ('type_id', '=', type_id.id),
+                        ('channel', '=', channel),
+                        ('appointment_id', '=', False)
+                    ], limit=max_depth)
                 # save one result from each timeslot in a seperate list 
                 for j in range(len(occasion_ids)):
-                    occ_lists[j] += occasion_ids[j]
+                    occ_lists[j] += occasion_ids[j] """
 
         # if type allows additional bookings and  we didn't find any
         # free occasions, create new ones:
         # TODO: do not create extra occasions unless completely empty?
-        for day in range(date_delta.days or 1):
+        if all( not l for l in occ_lists):
+            occ_lists[-1].append(self._get_additional_booking(start_dt, duration, type_id))
+        """ for day in range(date_delta.days or 1):
             if len(occ_lists[day]) != no_occasions:
                 if type_id.additional_booking:
                     day_start = start + timedelta(days=(date_delta.days - day))
-                    occ_lists[day] = self._get_additional_booking(day_start, duration, type_id, channel)
+                    occ_lists[day] = self._get_additional_booking(day_start, duration, type_id) """
                 # TODO: else: remove partial matches, these are unusable
                 # del occ_lists[i]
                 # del will cause problems with the for loop..
 
-        res = occ_lists
-
-        return res
+        return occ_lists
 
     @api.model
     def reserve_occasion(self, occasion_ids):
@@ -356,11 +507,12 @@ class CalendarOccasion(models.Model):
         start = occasion_ids[0].start
         stop = occasion_ids[len(occasion_ids)-1].stop
         duration = stop.minute - start.minute 
+        type_id = self.env.ref('calendar_meeting_type.type_00').id
 
         # check that occasions are free and unreserved
         free = True
         for occasion_id in occasion_ids:
-            if (occasion_id.appointment_id and occasion_id.appointment_id.state != 'reserved') or (occasion_id.appointment_id and occasion_id.appointment_id.state == 'reserved' and occasion_id.reserved > datetime.now() - timedelta(seconds=RESERVED_TIMEOUT)):
+            if (occasion_id.appointment_id and occasion_id.appointment_id.state != 'reserved') or (occasion_id.appointment_id and occasion_id.appointment_id.state == 'reserved' and occasion_id.appointment_id.reserved > datetime.now() - timedelta(seconds=RESERVED_TIMEOUT)):
                 free = False
 
         if free:
@@ -369,6 +521,7 @@ class CalendarOccasion(models.Model):
                 'start': start,
                 'stop': stop,
                 'duration': duration,
+                'type_id': type_id,
                 'user_id': False,
                 'partner_id': False,
                 'state': 'reserved',
@@ -385,8 +538,6 @@ class CalendarOccasion(models.Model):
 
             res = appointment
         else:
-            # TODO: implement proper error codes..
-            res = '200' # 400, 403, 404, 500
-            # Response.status = '200'
+            res = False
 
         return res
