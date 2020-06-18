@@ -1,0 +1,31 @@
+organisationer.csv,Notering,Trans,Odoo
+KUNDNR,,"external_id,part_org_",external_id
+KUNDNR,,,customer_id
+ORGNR,,,company_registry
+ORGNAMN,,,name
+ORGTYP,om U (utländsk) skippa,"skip_if_u,skip",skip
+SKAPAD_AV,,,
+MDM_ID,,,
+REGDATUM,,,customer_since
+TMSTAMP,,,
+ARKIVERAD,,,
+VC_ORGNAMN_SOK,,,
+UTDELNINGSADRESS,id = part_emplr_adr_ + external_id,"visitation_address_id,part_org_adr_",visitation_address_id
+UTDELNINGSADRESS_POSTORT,,,visitation_address_zip
+UTDELNINGSADRESS_POSTNR,,,visitation_address_city
+UTDELNINGSADRESS_KOMMUNKOD,"behöver transformation, behöver inläsning av states state_id/id",,visitation_address_state_id
+UTDELNINGSADRESS_LANDKOD,"behöver transformation, country_id/id",,visitation_address_country_id
+BESOKSADRESS,,,street
+BESOKSADRESS_POSTORT,,,city
+BESOKSADRESS_POSTNR,,,zip
+BESOKSADRESS_KOMMUNKKOD,behöver transformation och lista på kommuner inläst,,state_id
+BESOKSADRESS_LANDKOD,skippa nu postal adress country_id/id,,country_id
+SKAPAD_AV_PERSONA,,,
+SKAPAD_AV_ENHET,,,
+RADERAD,om J skippa,,
+AKTIV,,,
+SENAST_SYNKAD,,,
+EXISTERAR,,,
+MOMS,momsregistrering,,
+FSKATT,fskatt registrering,,
+ARBETSGIVARE,är arbetsgivare,,
