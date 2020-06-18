@@ -280,7 +280,6 @@ class CalendarAppointment(models.Model):
         else:
             return False
 
-
 class CalendarOccasion(models.Model):
     _name = 'calendar.occasion'
     _description = "Occasion"
