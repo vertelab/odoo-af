@@ -269,6 +269,18 @@ class CalendarAppointment(models.Model):
             res = super(CalendarAppointment, self).write(values)
         return res
 
+    @api.model
+    def delete_reservation(self, occasions):
+        """Deletes a reservation
+        :param occasions: a recordset of odoo occasions linked to a reservation"""
+        reservation = self.env['calendar.appointment'].sudo().search([('occasion_ids', 'in', occasions._ids), ('state', '=', 'reserved')])
+        if reservation:
+            reservation.unlink()
+            return True
+        else:
+            return False
+
+
 class CalendarOccasion(models.Model):
     _name = 'calendar.occasion'
     _description = "Occasion"
@@ -496,11 +508,12 @@ class CalendarOccasion(models.Model):
         start = occasion_ids[0].start
         stop = occasion_ids[len(occasion_ids)-1].stop
         duration = stop.minute - start.minute 
+        type_id = self.env.ref('calendar_meeting_type.type_00').id
 
         # check that occasions are free and unreserved
         free = True
         for occasion_id in occasion_ids:
-            if (occasion_id.appointment_id and occasion_id.appointment_id.state != 'reserved') or (occasion_id.appointment_id and occasion_id.appointment_id.state == 'reserved' and occasion_id.reserved > datetime.now() - timedelta(seconds=RESERVED_TIMEOUT)):
+            if (occasion_id.appointment_id and occasion_id.appointment_id.state != 'reserved') or (occasion_id.appointment_id and occasion_id.appointment_id.state == 'reserved' and occasion_id.appointment_id.reserved > datetime.now() - timedelta(seconds=RESERVED_TIMEOUT)):
                 free = False
 
         if free:
@@ -509,6 +522,7 @@ class CalendarOccasion(models.Model):
                 'start': start,
                 'stop': stop,
                 'duration': duration,
+                'type_id': type_id,
                 'user_id': False,
                 'partner_id': False,
                 'state': 'reserved',
@@ -525,8 +539,6 @@ class CalendarOccasion(models.Model):
 
             res = appointment
         else:
-            # TODO: implement proper error codes..
-            res = '200' # 400, 403, 404, 500
-            # Response.status = '200'
+            res = False
 
         return res
