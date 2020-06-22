@@ -4,7 +4,8 @@
     <data>
 		<template id="assets_backend" name="AF Backend Tema" inherit_id="web.assets_backend">
 			<xpath expr=".">
-                		<link rel="stylesheet" href="/af_backend_tema/static/src/scss/style.scss"/>
+						<link rel="stylesheet" href="/af_backend_tema/static/src/scss/style.scss"/>
+						<script type="text/javascript" src="https://www.bugherd.com/sidebarv2.js?apikey=sv2fspmos67qch8mqqarow" async="true"></script>
 			</xpath>
 		</template>
     </data>
