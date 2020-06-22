@@ -168,4 +168,72 @@
         <field name="perm_unlink" eval="True"/>
     </record>
 
+    <!-- AF rules for Jobseekers Officer Low -->
+
+    <!-- Jobseekers -->
+    <record id="af_rule_jobseeker_low" model="ir.rule">
+        <field name="name">res.partner - Jobseekers Officer Low</field>
+        <field ref="base.model_res_partner" name="model_id"/>
+        <field name="domain_force">[
+('is_jobseeker', '=', True),
+    ('office','=', user.office.id)]</field>
+        <field name="groups" eval="[(4, ref('af_security.group_af_jobseekers_low'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+    <!-- Daily notes -->
+    <record id="af_rule_notes_jobseekers_low" model="ir.rule">
+        <field name="name">res.partner.notes - Jobseekers Officer Low</field>
+        <field ref="partner_daily_notes.model_res_partner_notes" name="model_id"/>
+        <field name="domain_force">[
+('partner_id.is_jobseeker', '=', True),
+    ('partner_id.office','=', user.office.id)]</field>
+        <field name="groups" eval="[(4, ref('af_security.group_af_jobseekers_low'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- AF rules for Jobseekers Officer Medium -->
+
+    <!-- Jobseekers -->
+    <record id="af_rule_jobseekers_medium" model="ir.rule">
+        <field name="name">res.partner - Jobseekers Officer Medium</field>
+        <field ref="base.model_res_partner" name="model_id"/>
+        <field name="domain_force">[('is_jobseeker', '=', True)]</field>
+        <field name="groups" eval="[(4, ref('af_security.group_af_jobseekers_medium'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+    <!-- Daily notes -->
+    <record id="af_rule_notes_jobseekers_medium" model="ir.rule">
+        <field name="name">res.partner.notes - Jobseekers Officer Medium</field>
+        <field ref="partner_daily_notes.model_res_partner_notes" name="model_id"/>
+        <field name="domain_force">[('partner_id.is_jobseeker', '=', True)]</field>
+        <field name="groups" eval="[(4, ref('af_security.group_af_jobseekers_medium'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- AF rules for Jobseekers Officer High -->
+
+    <!-- Daily notes -->
+    <record id="af_rule_notes_jobseekers_high" model="ir.rule">
+        <field name="name">res.partner.notes - Jobseekers Officer High</field>
+        <field ref="partner_daily_notes.model_res_partner_notes" name="model_id"/>
+        <field name="domain_force">[('partner_id.is_jobseeker', '=', True)]</field>
+        <field name="groups" eval="[(4, ref('af_security.group_af_jobseekers_high'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
 </odoo>
