@@ -40,6 +40,14 @@ class ResPartner(models.Model):
     xmlid_module="__ais_import__"
 
     @api.model
+    def create_jobseekers(self):     
+        headers_header = ['ARBETSSOKANDE.csv', 'Notering',  'Trans', 'Odoo']
+        path = os.path.join(config.options.get('data_dir'), 'AIS-F/ARBETSSOKANDE.csv')
+        path = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/arbetssokande_test.csv" #testing purposes only
+        header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/arbetssokande_mapping.csv"
+        self.create_partners(headers_header, path, header_path)    
+
+    @api.model
     def create_contact_persons(self):     
         headers_header = ['kontaktperson.csv', 'Notering',  'Trans', 'Odoo']
         #path = "usr/share/odoo-af/af_data_ais-f_loader/data/kontaktperson_test.csv" #testing purposes only
@@ -182,6 +190,8 @@ class ResPartner(models.Model):
                             keys_to_update.append({'is_employer' : True})
                             if transform == "part_org_" or transform == "part_emplr_":
                                 keys_to_update.append({'is_company' : True})
+                        elif transform == "part_jbsk_":
+                            keys_to_update.append({'is_jobseeker' : True})
                         xmlid_name = "%s%s" % (transform, row[key])
                         external_xmlid = "%s.%s" % (self.xmlid_module, xmlid_name)
                         keys_to_delete.append(key)
