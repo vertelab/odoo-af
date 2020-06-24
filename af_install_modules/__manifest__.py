@@ -11,7 +11,7 @@
 		"contacts", 
 		"hr", 
 		"calendar", 
-		"partner_employee360", 
+		"partner_view_360", 
 		"af_backend_tema", 
 		"partner_kpi_data", 
 		"res_drivers_license",
