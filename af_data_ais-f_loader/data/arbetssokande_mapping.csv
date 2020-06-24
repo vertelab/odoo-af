@@ -1,5 +1,5 @@
 "ARBETSSOKANDE.csv","Notering","Trans","Odoo"
-"SOKANDE_ID",,"external_id,part_jbsk_","external_id"
+"SOKANDE_ID",,"external_id,part_jbskr_","external_id"
 "SOKANDE_ID",,,"customer_id"
 "PERSONNR",,,"company_registry"
 "TMSTAMP",,,
@@ -13,7 +13,7 @@
 "ANSV_SIGN",,,
 "INFO_AIS_TILL_SOK",,,
 "PRESENTATIONSFORM",,,
-"INFO_TILL_AG",,"if_j_true,share_info_with_employers","!share_info_with_employers"
+"INFO_TILL_AG",,,"share_info_with_employers"
 "AKTUELL_SEDAN",,,
 "AKTUELL_SEDAN_OLD",,,
 "HPL_DATUM",,,
@@ -22,15 +22,15 @@
 "FODELSELAND_KOD",,,
 "FODELSELAND",,,
 "TEL_BOSTAD",,,"phone"
-"HEMKOMMUN_KOD",,,"!state_id"
+"HEMKOMMUN_KOD",,,"state_id"
 "TEL_ARBETET",,,"work_phone"
 "TEL_MOBIL",,,"mobile"
 "MEDD_ERS_AVAN_AVAKT",,,
-"SKAT",,,"!jobseeker_category"
+"SKAT",,,"jobseeker_category"
 "SKAT_SEDAN",,,
 "MATCHNINGSBAR",,,
-"AVAKT_DATUM",,,"!deactualization_date"
-"AVAKT_ORSAK",,,"!deatctualization_reason"
+"AVAKT_DATUM",,,"deactualization_date"
+"AVAKT_ORSAK",,,"deatctualization_reason"
 "FRITEXT_UAT",,,
 "SENASTE_KONTAKTTYP",,,
 "SENASTE_KONTAKTDATUM",,,

@@ -42,32 +42,32 @@ class ResPartner(models.Model):
     @api.model
     def create_jobseekers(self):     
         headers_header = ['ARBETSSOKANDE.csv', 'Notering',  'Trans', 'Odoo']
-        path = os.path.join(config.options.get('data_dir'), 'AIS-F/ARBETSSOKANDE.csv')
-        path = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/arbetssokande_test.csv" #testing purposes only
+        path = os.path.join(config.options.get('data_dir'), 'AIS-F/arbetssokande.csv')
+        path = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/arbetssokande.csv" #testing purposes only
         header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/arbetssokande_mapping.csv"
         self.create_partners(headers_header, path, header_path)    
 
     @api.model
     def create_contact_persons(self):     
         headers_header = ['kontaktperson.csv', 'Notering',  'Trans', 'Odoo']
-        #path = "usr/share/odoo-af/af_data_ais-f_loader/data/kontaktperson_test.csv" #testing purposes only
         path = os.path.join(config.options.get('data_dir'), 'AIS-F/kontaktperson.csv')
+        path = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/kontaktperson.csv" #testing purposes only
         header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/kontaktperson_mapping.csv"
         self.create_partners(headers_header, path, header_path)
 
     @api.model
     def create_employers(self):     
         headers_header = ['arbetsgivare.csv', 'Notering',  'Trans', 'Odoo']
-        #path = "usr/share/odoo-af/af_data_ais-f_loader/data/arbetsgivare_test.csv" #testing purposes only
         path = os.path.join(config.options.get('data_dir'), 'AIS-F/arbetsgivare.csv')
+        path = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/arbetsgivare.csv" #testing purposes only
         header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/arbetsgivare_mapping.csv"
         self.create_partners(headers_header, path, header_path)
 
     @api.model
     def create_organisations(self):     
         headers_header = ['organisationer.csv', 'Notering', 'Trans', 'Odoo']
-        #path = "usr/share/odoo-af/af_data_ais-f_loader/data/organisationer_test.csv" #testing purposes only 
         path = os.path.join(config.options.get('data_dir'), 'AIS-F/organisationer.csv')
+        path = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/organisationer.csv" #testing purposes only
         header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/organisationer_mapping.csv"
         self.create_partners(headers_header, path, header_path)
 
@@ -113,6 +113,13 @@ class ResPartner(models.Model):
                 row.pop(keys_to_delete[i], None)
             
             keys_to_delete = [] 
+
+            for key in row.keys():
+                if key not in transformations and isinstance(row[key], str):
+                    if row[key].lower() == "j":
+                        keys_to_update.append({key: "True"})
+                    elif row[key].lower() == "n":
+                        keys_to_update.append({key: "False"})
 
             for key in row.keys():
                 if key in transformations:
@@ -190,14 +197,17 @@ class ResPartner(models.Model):
                             keys_to_update.append({'is_employer' : True})
                             if transform == "part_org_" or transform == "part_emplr_":
                                 keys_to_update.append({'is_company' : True})
-                        elif transform == "part_jbsk_":
+                        elif transform == "part_jbskr_":
+                            _logger.info("is jobseeker should be set to true")
                             keys_to_update.append({'is_jobseeker' : True})
                         xmlid_name = "%s%s" % (transform, row[key])
+                        #_logger.info("spliting external xmlid %s" % external_xmlid)
                         external_xmlid = "%s.%s" % (self.xmlid_module, xmlid_name)
                         keys_to_delete.append(key)
 
             for i in range(len(keys_to_update)):
                 row.update(keys_to_update[i])
+                _logger.info("row updated with %s, now %s" % (keys_to_update[i], row) )
             
             if ('name' not in row and 'lastname' not in row and 'firstname' not in row and 'type' not in row) or ('name' not in row and 'lastname' not in row and 'firstname' not in row and row['type'] == 'contact'):
                 
