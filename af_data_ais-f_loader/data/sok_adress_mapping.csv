@@ -1,0 +1,12 @@
+"sok_adress.csv","Notering","Trans","Odoo"
+"ID",,,
+"TMSTAMP",,,
+"SOKANDE_ID",,"external_id, part_jbskr_","external_id"
+"ADRESS_TYP",,"skip,skip","skip"
+"GATUADRESS1",,,"street2"
+"GATUADRESS2",,,"street"
+"CO_ADRESS",,,
+"POSTNR",,,"zip"
+"POSTORT",,,"city"
+"LANDSADRESS",,,
+"LAND_KOD",,,"country_id"

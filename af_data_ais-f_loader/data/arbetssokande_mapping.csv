@@ -1,4 +1,4 @@
-"ARBETSSOKANDE.csv","Notering","Trans","Odoo"
+"arbetssokande.csv","Notering","Trans","Odoo"
 "SOKANDE_ID",,"external_id,part_jbskr_","external_id"
 "SOKANDE_ID",,,"customer_id"
 "PERSONNR",,,"company_registry"
@@ -41,8 +41,8 @@
 "FAST_TILLAGGSKOD_KONTOR",,,
 "TILLF_TILLAGGSKOD_KONTOR",,,
 "ONSKAT_YRKE_SSYK",,,
-"UTBILDNING_SUN_KOD",,,"!sun_id"
-"UTBILDNINGSNIVA",,,"!education_level"
+"UTBILDNING_SUN_KOD",,,"sun_id"
+"UTBILDNINGSNIVA",,,"education_level"
 "TILLGANG_BIL",,,"!access_to_car"
 "VARAKTIGHET_1",,,
 "VARAKTIGHET_2",,,

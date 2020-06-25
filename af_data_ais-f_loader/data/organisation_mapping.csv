@@ -3,7 +3,7 @@ KUNDNR,,"external_id,part_org_",external_id
 KUNDNR,,,customer_id
 ORGNR,,,company_registry
 ORGNAMN,,,name
-ORGTYP,om U (utländsk) skippa,"skip_if_u,skip",skip
+ORGTYP,om U (utländsk) skippa,"skip,skip_if_u",skip
 SKAPAD_AV,,,
 MDM_ID,,,
 REGDATUM,,,customer_since
