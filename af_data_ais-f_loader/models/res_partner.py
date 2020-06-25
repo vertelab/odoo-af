@@ -65,10 +65,10 @@ class ResPartner(models.Model):
 
     @api.model
     def create_organisations(self):     
-        headers_header = ['organisationer.csv', 'Notering', 'Trans', 'Odoo']
-        path = os.path.join(config.options.get('data_dir'), 'AIS-F/organisationer.csv')
-        path = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/organisationer.csv" #testing purposes only
-        header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/organisationer_mapping.csv"
+        headers_header = ['organisation.csv', 'Notering', 'Trans', 'Odoo']
+        path = os.path.join(config.options.get('data_dir'), 'AIS-F/organisation.csv')
+        path = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/organisation.csv" #testing purposes only
+        header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/organisation_mapping.csv"
         self.create_partners(headers_header, path, header_path)
 
     @api.model
@@ -90,8 +90,8 @@ class ResPartner(models.Model):
                 value = row['Trans'].split(",")[1]
                 transformations.update({key: value})
             old_header.append(row[headers_header[0]]) #AIS-F fields
-        _logger.info("header: %s" % field_map.keys())
-        _logger.info("old_header: %s" % old_header)
+        #_logger.info("header: %s" % field_map.keys())
+        #_logger.info("old_header: %s" % old_header)
         reader = ReadCSV(path, old_header) 
         self.create_partner_from_rows(reader.parse(field_map), transformations)
     
@@ -126,17 +126,17 @@ class ResPartner(models.Model):
                     transform = transformations[key]
                     if transform == 'skip':
                         create = False
-                        _logger.info("Skipping partner, contains skipping flag %s" % row[transformations[key]])
+                        #_logger.info("Skipping partner, contains skipping flag %s" % row[transformations[key]])
                         break
                     elif transform == 'skip_if_u':
                         if row[key].lower() == 'u':
                             create = False
-                            _logger.info("Skipping partner, contains U in ORGTYP %s" % row[transformations[key]])
+                            #_logger.info("Skipping partner, contains U in ORGTYP %s" % row[transformations[key]])
                             break
                     elif transform == 'skip_if_j':
                         if row[key].lower() == 'j':
                             create = False
-                            _logger.info("Skipping partner, contains J in RADERAD %s" % row[transformations[key]])
+                            #_logger.info("Skipping partner, contains J in RADERAD %s" % row[transformations[key]])
                             break
                     if key == 'parent_id': 
                         parent_xmlid_name = "%s%s" % (transform, row[key])
@@ -198,7 +198,7 @@ class ResPartner(models.Model):
                             if transform == "part_org_" or transform == "part_emplr_":
                                 keys_to_update.append({'is_company' : True})
                         elif transform == "part_jbskr_":
-                            _logger.info("is jobseeker should be set to true")
+                            #_logger.info("is jobseeker should be set to true")
                             keys_to_update.append({'is_jobseeker' : True})
                         xmlid_name = "%s%s" % (transform, row[key])
                         #_logger.info("spliting external xmlid %s" % external_xmlid)
@@ -207,7 +207,7 @@ class ResPartner(models.Model):
 
             for i in range(len(keys_to_update)):
                 row.update(keys_to_update[i])
-                _logger.info("row updated with %s, now %s" % (keys_to_update[i], row) )
+                #_logger.info("row updated with %s, now %s" % (keys_to_update[i], row) )
             
             if ('name' not in row and 'lastname' not in row and 'firstname' not in row and 'type' not in row) or ('name' not in row and 'lastname' not in row and 'firstname' not in row and row['type'] == 'contact'):
                 
@@ -217,7 +217,7 @@ class ResPartner(models.Model):
                 country_id = self.env['ir.model.data'].xmlid_to_res_id('base.se')
                 row.update({'country_id' : country_id})
             else: 
-                _logger.info("Skipping partner, wrong country %s" % row['country_id'])
+                _logger.warning("Skipping partner, wrong country %s" % row['country_id'])
                 create = False
 
             if 'state_id' in row:
@@ -227,22 +227,22 @@ class ResPartner(models.Model):
                     if state_id != False:
                         row.update({'state_id' : state_id})
                     else:
-                        _logger.error("state_id base.state_se_%s not found, leaving state id for %s empty" %(row['state_id'],row['external_id']))
+                        _logger.warning("state_id base.state_se_%s not found, leaving state id for %s empty" %(row['state_id'],row['external_id']))
                         row.pop('state_id', None)
                 else:
-                    _logger.warning("state_id is 0 for %s empty" % row['external_id'])
+                    _logger.warning("state_id is 0 for %s, leaving empty" % row['external_id'])
                     row.pop('state_id', None)
             
             keys_to_delete = keys_to_delete + ['skip', 'skip2']
             id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
             if id_check != False:
                 create = False
-                _logger.info("external id already in database, skipping")
+                _logger.warning("external id already in database, skipping")
             if create:
                 for i in range(len(keys_to_delete)):
                     row.pop(keys_to_delete[i], None)
-                _logger.info("creating row %s" % row)
-                _logger.info("creating external id: %s" % external_xmlid)                    
+                #_logger.info("creating row %s" % row)
+                #_logger.info("creating external id: %s" % external_xmlid)                    
                 
                 partner = self.env['res.partner'].create(row)
 
@@ -261,7 +261,7 @@ class ResPartner(models.Model):
                 
                 ids.append(partner.id)
             else:
-                _logger.info("Did not create row %s" % row)
+                _logger.waring("Did not create row %s" % row)
 
         return ids
          
@@ -291,7 +291,7 @@ class ReadCSV(object):
         csvIter = CSVIterator(self.data,len(self.data), list(field_map.keys()), field_map)
         pairs = []
         while csvIter.hasNext():
-            _logger.info("appending row %s" % csvIter.getRow())
+            #_logger.info("appending row %s" % csvIter.getRow())
             pairs.append(csvIter.getRow())
             csvIter.next()
         return pairs
