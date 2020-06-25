@@ -261,7 +261,7 @@ class ResPartner(models.Model):
                 
                 ids.append(partner.id)
             else:
-                _logger.waring("Did not create row %s" % row)
+                _logger.warning("Did not create row %s" % row)
 
         return ids
          
