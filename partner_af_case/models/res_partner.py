@@ -28,12 +28,19 @@ class ResPartnerCase(models.Model):
     _name = 'res.partner.case'
 
     name = fields.Char(string="Title") 
+    case_id = fields.Char(string="Case ID")
     partner_id = fields.Many2one(comodel_name="res.partner", string="Job seeker")
 
     administrative_officer = fields.Many2one('res.users', string='Administrative officer', default=lambda self: self.env.user)
     case_description = fields.Text(string="Case description")
-    # case_date = fields.Datetime(string="Refers to date") 
-    # case_type = fields.Many2one(comodel_name="res.partner.case.type") 
+    case_type = fields.Many2one(comodel_name="res.partner.case.type")
+    created_date = fields.Datetime(string="Creation date") 
+    changed_date = fields.Datetime(string="Date changed") 
+    due_date = fields.Datetime(string="Due date") 
+    closed_date = fields.Datetime(string="Date closed") 
+
+ 
+    
     # case_number = fields.Char(string="AIS number")
 
     # office = fields.Many2one('res.partner', string="Office")
@@ -67,10 +74,10 @@ class ResPartner(models.Model):
             action['context'] = {'default_partner_id': self.id}
         return action
 
-# class ResPartnerCaseType(models.Model):
-#     _name="res.partner.case.type"
+class ResPartnerCaseType(models.Model):
+    _name="res.partner.case.type"
 
-#     case_id = fields.One2many(comodel_name="res.partner.case", inverse_name="case_type")
+    case_id = fields.One2many(comodel_name="res.partner.case", inverse_name="case_type")
 
-#     name = fields.Char(string="Name")
-#     description = fields.Char(string="Description")
+    name = fields.Char(string="Name")
+    description = fields.Char(string="Description")
