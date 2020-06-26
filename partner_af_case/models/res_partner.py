@@ -37,11 +37,8 @@ class ResPartnerCase(models.Model):
     created_date = fields.Datetime(string="Creation date") 
     changed_date = fields.Datetime(string="Date changed") 
     due_date = fields.Datetime(string="Due date") 
-    closed_date = fields.Datetime(string="Date closed") 
-
- 
-    
-    # case_number = fields.Char(string="AIS number")
+    closed_date = fields.Datetime(string="Date closed")
+    case_url = fields.Char(string="URL", default="https://aobp.arbetsformedlingen.se:8443/prweb/PRAuth/HLPortal")
 
     # office = fields.Many2one('res.partner', string="Office")
     # customer_id = fields.Char(string="Customer number", related="partner_id.customer_id") 
