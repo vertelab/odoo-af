@@ -4,7 +4,7 @@
     <data>
 		<template id="assets_backend" name="AF Backend Tema" inherit_id="web.assets_backend">
 			<xpath expr=".">
-                		<link rel="stylesheet" href="/af_backend_tema/static/src/scss/style.scss"/>
+						<link rel="stylesheet" href="/af_backend_tema/static/src/scss/style.scss"/>
 			</xpath>
 		</template>
     </data>
