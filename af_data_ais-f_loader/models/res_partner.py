@@ -31,8 +31,8 @@ import tempfile
 
 
 # TODO:
-# koppla samman visitation address med parent_id
-# fixa expected singleton error
+# mappa rader till deras id
+# 
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
