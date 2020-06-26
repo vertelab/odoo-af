@@ -25,11 +25,12 @@
                       <field name="case_ids" mode="tree" nolabel="1">
                         <tree editable="bottom" string="Case" default_order="case_date">
                            <field name="name" />    
-                            <field name="case"/>
-                            <field name="case_date" widget="date"/> 
+                            <field name="case_description"/>
+                            <field name="administrative_officer"/>
+                            <!-- <field name="case_date" widget="date"/> 
                             <field name="case_type" options="{'no_create_edit': True}"/>
                             <field name="case_number" groups="base.group_no_one"/>
-                            <field name="office" options="{'no_create_edit': True}" domain="[('type', '=', 'af office')]"/>
+                            <field name="office" options="{'no_create_edit': True}" domain="[('type', '=', 'af office')]"/> -->
                         </tree>
                       </field>
                     </group>
@@ -62,11 +63,12 @@
                       <field name="case_ids" mode="tree" nolabel="1">
                         <tree editable="bottom" string="Case" default_order="case_date">
                            <field name="name" />    
-                            <field name="case"/>
-                            <field name="case_date" widget="date"/> 
+                            <field name="case_description"/>
+                            <field name="administrative_officer"/>
+                            <!-- <field name="case_date" widget="date"/> 
                             <field name="case_type" options="{'no_create_edit': True}"/>
                             <field name="case_number" groups="base.group_no_one"/>
-                            <field name="office" options="{'no_create_edit': True}" domain="[('type', '=', 'af office')]"/>
+                            <field name="office" options="{'no_create_edit': True}" domain="[('type', '=', 'af office')]"/> -->
                         </tree>
                       </field>
                     </group>
@@ -100,11 +102,12 @@
                       <field name="case_ids" mode="tree" nolabel="1">
                         <tree editable="bottom" string="Case" default_order="case_date">
                            <field name="name" />    
-                            <field name="case"/>
-                            <field name="case_date" widget="date"/> 
+                            <field name="case_description"/>
+                            <field name="administrative_officer"/>
+                            <!-- <field name="case_date" widget="date"/> 
                             <field name="case_type" options="{'no_create_edit': True}"/>
                             <field name="case_number" groups="base.group_no_one"/>
-                            <field name="office" options="{'no_create_edit': True}" domain="[('type', '=', 'af office')]"/>
+                            <field name="office" options="{'no_create_edit': True}" domain="[('type', '=', 'af office')]"/> -->
                         </tree>
                       </field>
                     </group>

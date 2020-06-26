@@ -24,11 +24,12 @@
                 <tree editable="bottom" string="Case" default_order="case_date">
                     <field name="partner_id"/>
                     <field name="name" />    
-                    <field name="case"/>
-                    <field name="case_date" widget="date"/> 
+                    <field name="case_description"/>
+                    <field name="administrative_officer"/>
+                    <!-- <field name="case_date" widget="date"/> 
                     <field name="case_type" options="{'no_create_edit': True}"/>
                     <field name="case_number" groups="base.group_no_one"/>
-                    <field name="office" options="{'no_create_edit': True}" domain="[('type', '=', 'af office')]"/>
+                    <field name="office" options="{'no_create_edit': True}" domain="[('type', '=', 'af office')]"/> -->
                 </tree>
             </field>
         </record>
@@ -39,16 +40,17 @@
             <field name="arch" type="xml">
                 <tree editable="bottom" string="Case" default_order="case_date">
                     <field name="name"/>    
-                    <field name="case"/>
-                    <field name="case_date" widget="date"/> 
+                    <field name="case_description"/>
+                    <field name="administrative_officer"/>
+                    <!-- <field name="case_date" widget="date"/> 
                     <field name="case_type" options="{'no_create_edit': True}"/>
                     <field name="case_number" groups="base.group_no_one"/>
-                    <field name="office" options="{'no_create_edit': True}" domain="[('type', '=', 'af office')]"/>
+                    <field name="office" options="{'no_create_edit': True}" domain="[('type', '=', 'af office')]"/> -->
                 </tree>
             </field>
         </record>
 
-          <record id="view_partner_case_type_tree" model="ir.ui.view">
+          <!-- <record id="view_partner_case_type_tree" model="ir.ui.view">
             <field name="name">res.partner.case.type.view.tree</field>
             <field name="model">res.partner.case.type</field>
             <field name="arch" type="xml">
@@ -57,7 +59,7 @@
                     <field name="description"/>
                 </tree>
             </field>
-        </record>
+        </record> -->
         <!-- <record id="res_view_partner_case_filter" model="ir.ui.view">
             <field name="name">res.partner_case.select</field>
             <field name="model">res.partner.case</field>
@@ -79,7 +81,7 @@
             <field name="context">{}</field>
             <!-- <field name="search_view_id" ref="res_view_partner_case_filter" /> -->
         </record> 
-
+<!-- 
         <record id="action_partner_case_type_tree" model="ir.actions.act_window">
             <field name="name">Case Types Action</field>
             <field name="type">ir.actions.act_window</field>
@@ -88,8 +90,8 @@
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="partner_af_case.view_partner_case_type_tree" />
             <field name="context">{}</field>
-            <!-- <field name="search_view_id" ref="res_view_partner_case_filter" /> -->
-        </record> 
+             <field name="search_view_id" ref="res_view_partner_case_filter" /> 
+        </record>  -->
 
 
         
