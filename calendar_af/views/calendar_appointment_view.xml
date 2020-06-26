@@ -102,7 +102,7 @@
                             </group>
                             <group>
                                 <field string="Attendees" name="partner_id" widget="many2manyattendee" placeholder="Select attendees..." class="oe_edit_only" />
-                                <field string="Case worker" name="user_id" widget="many2manyattendee" placeholder="Select case worker..." class="oe_inline oe_edit_only" invisible="1" />
+                                <field string="Case worker" name="user_id" widget="many2manyattendee" placeholder="Select case worker..." class="oe_edit_only" invisible="1" />
                             </group>
                         </group>
                     <!-- </div> -->
