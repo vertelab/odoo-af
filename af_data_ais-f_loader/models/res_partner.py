@@ -45,15 +45,11 @@ class ResPartner(models.Model):
         path = os.path.join(config.options.get('data_dir'), 'AIS-F/arbetssokande.csv')
         path = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/arbetssokande.csv" #testing purposes only
         header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/arbetssokande_mapping.csv"
-        self.create_partners(headers_header, path, header_path)
-
-    @api.model
-    def add_addresses_to_jobseekers(self):
-        headers_header = ['sok_adress.csv', 'Notering',  'Trans', 'Odoo']
-        path = os.path.join(config.options.get('data_dir'), 'AIS-F/sok_adress.csv')
-        path = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/sok_adress.csv" #testing purposes only
-        header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/sok_adress_mapping.csv"
-        self.update_partners(headers_header, path, header_path)
+        headers_header2 = ['sok_adress.csv', 'Notering',  'Trans', 'Odoo']
+        path2 = os.path.join(config.options.get('data_dir'), 'AIS-F/sok_adress.csv')
+        path2 = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/sok_adress.csv" #testing purposes only
+        header_path2 = "usr/share/odoo-af/af_data_ais-f_loader/data/sok_adress_mapping.csv"
+        self.create_partners_multifile([headers_header,headers_header2], [path,path2], [header_path,header_path2])
 
     @api.model
     def create_contact_persons(self):     
@@ -81,7 +77,6 @@ class ResPartner(models.Model):
 
     @api.model
     def create_partners(self, headers_header, path, header_path):
-
         header_reader = ReadCSV(header_path, headers_header)
         header_rows = header_reader.parse_header()
         old_header = []
@@ -104,8 +99,11 @@ class ResPartner(models.Model):
         self.create_partner_from_rows(reader.parse(field_map), transformations)
 
     @api.model
-    def update_partners(self, headers_header, path, header_path):
-
+    def create_partners_multifile(self, headers_header, path, header_path):
+        #check that all are the same lenght
+        #read both files
+        #append all rows from both files into a dict {'dict': rows, 'dictadd':rows2}
+        #rows2
         header_reader = ReadCSV(header_path, headers_header)
         header_rows = header_reader.parse_header()
         old_header = []
@@ -125,93 +123,113 @@ class ResPartner(models.Model):
         #_logger.info("header: %s" % field_map.keys())
         #_logger.info("old_header: %s" % old_header)
         reader = ReadCSV(path, old_header) 
-        self.update_partner_from_rows(reader.parse(field_map), transformations)
+        self.create_partner_from_rows(reader.parse(field_map), transformations)
+
+    # @api.model
+    # def update_partners(self, headers_header, path, header_path):
+
+    #     header_reader = ReadCSV(header_path, headers_header)
+    #     header_rows = header_reader.parse_header()
+    #     old_header = []
+    #     field_map = {}
+    #     transformations = {}
+    #     for row in header_rows:
+    #         #_logger.info("header_rows row processing: %s" % row)
+    #         if row['Odoo'] != '' and "!" not in row['Odoo']:
+    #             field_map.update({row['Odoo']: row[headers_header[0]]})
+    #         # if row['Odoo2'] != '' and "!" not in row['Odoo2']:
+    #         #     field_map.update({row['Odoo2']: row[headers_header[0]]}) 
+    #         if row['Trans'] != '':
+    #             key = row['Trans'].split(",")[0]
+    #             value = row['Trans'].split(",")[1]
+    #             transformations.update({key: value})
+    #         old_header.append(row[headers_header[0]]) #AIS-F fields
+    #     #_logger.info("header: %s" % field_map.keys())
+    #     #_logger.info("old_header: %s" % old_header)
+    #     reader = ReadCSV(path, old_header) 
+    #     self.update_partner_from_rows(reader.parse(field_map), transformations)
 
 
-    @api.model
-    def update_partner_from_rows(self, rows, transformations):
-        ids = []
-        for row in rows:
-            create = True
-            external_xmlid = ""
-            keys_to_delete = []
-            keys_to_update = []
-            #visitation_address = {}
-            #visitation_address_transformations = {}
+    # @api.model
+    # def update_partner_from_rows(self, rows, transformations):
+    #     ids = []
+    #     for row in rows:
+    #         create = True
+    #         external_xmlid = ""
+    #         keys_to_delete = []
+    #         keys_to_update = []
+    #         #visitation_address = {}
+    #         #visitation_address_transformations = {}
 
-            for key in row.keys():
-                if row[key] == '(null)' or row[key] == '':
-                    keys_to_delete.append(key)
-            for i in range(len(keys_to_delete)):
-                row.pop(keys_to_delete[i], None)
+    #         for key in row.keys():
+    #             if row[key] == '(null)' or row[key] == '':
+    #                 keys_to_delete.append(key)
+    #         for i in range(len(keys_to_delete)):
+    #             row.pop(keys_to_delete[i], None)
             
-            keys_to_delete = [] 
+    #         keys_to_delete = [] 
 
-            for key in row.keys():
-                if key not in transformations and isinstance(row[key], str):
-                    if row[key].lower() == "j":
-                        keys_to_update.append({key: "True"})
-                    elif row[key].lower() == "n":
-                        keys_to_update.append({key: "False"})
+    #         for key in row.keys():
+    #             if key not in transformations and isinstance(row[key], str):
+    #                 if row[key].lower() == "j":
+    #                     keys_to_update.append({key: "True"})
+    #                 elif row[key].lower() == "n":
+    #                     keys_to_update.append({key: "False"})
 
-            for key in row.keys():
-                if key in transformations:
-                    transform = transformations[key]
-                    if transform == 'skip':
-                        create = False
-                        #_logger.info("Skipping partner, contains skipping flag %s" % row[transformations[key]])
-                        break                    
-                    elif key == 'external_id':
-                        xmlid_name = "%s%s" % (transform, row[key])
-                        #_logger.info("spliting external xmlid %s" % external_xmlid)
-                        external_xmlid = "%s.%s" % (self.xmlid_module, xmlid_name)
-                        keys_to_delete.append(key)
+    #         for key in row.keys():
+    #             if key in transformations:
+    #                 transform = transformations[key]
+    #                 if transform == 'skip':
+    #                     create = False
+    #                     #_logger.info("Skipping partner, contains skipping flag %s" % row[transformations[key]])
+    #                     break                    
+    #                 elif key == 'external_id':
+    #                     xmlid_name = "%s%s" % (transform, row[key])
+    #                     #_logger.info("spliting external xmlid %s" % external_xmlid)
+    #                     external_xmlid = "%s.%s" % (self.xmlid_module, xmlid_name)
+    #                     keys_to_delete.append(key)
 
-            for i in range(len(keys_to_update)):
-                row.update(keys_to_update[i])
-                #_logger.info("row updated with %s, now %s" % (keys_to_update[i], row) )
+    #         for i in range(len(keys_to_update)):
+    #             row.update(keys_to_update[i])
+    #             #_logger.info("row updated with %s, now %s" % (keys_to_update[i], row) )
             
-            if 'country_id' not in row or row['country_id'] == 'SE' or row['country_id'].lower() == 'sverige':
-                country_id = self.env['ir.model.data'].xmlid_to_res_id('base.se')
-                row.update({'country_id' : country_id})
-            else: 
-                _logger.warning("Skipping partner, wrong country %s" % row['country_id'])
-                create = False
+    #         if 'country_id' not in row or row['country_id'] == 'SE' or row['country_id'].lower() == 'sverige':
+    #             country_id = self.env['ir.model.data'].xmlid_to_res_id('base.se')
+    #             row.update({'country_id' : country_id})
+    #         else: 
+    #             _logger.warning("Skipping partner, wrong country %s" % row['country_id'])
+    #             create = False
 
-            for key in row.keys:
-                if "skip" in key:
-                    keys_to_delete.append(key)
-            id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
-            if id_check == False:
-                create = False
-                _logger.warning("external id not in database, skipping")
-            if create:
-                for i in range(len(keys_to_delete)):
-                    row.pop(keys_to_delete[i], None)
-                #_logger.info("creating row %s" % row)
-                #_logger.info("creating external id: %s" % external_xmlid)                    
+    #         for key in row.keys:
+    #             if "skip" in key:
+    #                 keys_to_delete.append(key)
+    #         id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
+    #         if id_check == False:
+    #             create = False
+    #             _logger.warning("external id not in database, skipping")
+    #         if create:
+    #             for i in range(len(keys_to_delete)):
+    #                 row.pop(keys_to_delete[i], None)
+    #             #_logger.info("creating row %s" % row)
+    #             #_logger.info("creating external id: %s" % external_xmlid)                    
                 
-                #update res.partner with row from xmlid_to_res_id(external_xmlid)
+    #             #update res.partner with row from xmlid_to_res_id(external_xmlid)
 
-            else:
-                _logger.warning("Did not update row %s" % row)
+    #         else:
+    #             _logger.warning("Did not update row %s" % row)
 
-        return ids
+    #     return ids
         
-         
+    
     @api.model
-    def create_partner_from_rows(self, rows, transformations):
-        ids = []
-        for row in rows:
-            create = True
-            external_xmlid = ""
-            keys_to_delete = []
-            keys_to_update = []
-            visitation_address = {}
-            visitation_address_transformations = {}
-
-            for key in row.keys():
-                if row[key] == '(null)' or row[key] == '':
+    def transform(self, row, transformations):
+        external_xmlid = ""
+        keys_to_delete = []
+        keys_to_update = []
+        visitation_address = {}
+        visitation_address_transformations = {}
+        for key in row.keys(): 
+            if row[key] == '(null)' or row[key] == '':
                     keys_to_delete.append(key)
             for i in range(len(keys_to_delete)):
                 row.pop(keys_to_delete[i], None)
@@ -365,18 +383,45 @@ class ResPartner(models.Model):
             for key in row.keys():
                 if "skip" in key:
                     keys_to_delete.append(key)
+            for i in range(len(keys_to_delete)):
+                    row.pop(keys_to_delete[i], None)
+            return {'row': row, 'external_xmlid': external_xmlid, 'visitation_address': visitation_address, 'visitation_address_transformations': visitation_address_transformations}
+
+    @api.model
+    def create_partner_from_rows(self, rows, transformations):
+        #multifile = False
+        #if rows contains 'dict' 
+        #for i in range len(rows)
+        #rows1 = rows['dict']
+        #rows2 = rows['dictadd']
+        #rows = rows1
+        #multifile = True
+        
+        ids = []
+        for row in rows:
+            #if multirow
+            #rows2['external_id']
+            transformed_row_and_id = transform(row, transformations)
+            external_xmlid = transformed_row_and_id['external_xmlid']
+            transformed_row = transformed_row_and_id['row']
+            visitation_address = transformed_row_and_id['visitation_address']
+            visitation_address_transformations = transformed_row_and_id['visitation_address_transformations']
+            create = True
+            external_xmlid = ""
+           
+
+            
         
             id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
             if id_check != False:
                 create = False
                 _logger.warning("external id already in database, skipping")
             if create:
-                for i in range(len(keys_to_delete)):
-                    row.pop(keys_to_delete[i], None)
+                
                 #_logger.info("creating row %s" % row)
                 #_logger.info("creating external id: %s" % external_xmlid)                    
                 
-                partner = self.env['res.partner'].create(row)
+                partner = self.env['res.partner'].create(transformed_row)
 
                 #_logger.info("visitation address dict before create: %s" % visitation_address)
                 if visitation_address != {}:
