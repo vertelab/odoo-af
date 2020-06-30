@@ -355,7 +355,7 @@ class ResPartner(models.Model):
                     education_level_xmlid = "res_sun.education_level_%s" % row['education_level']
                     education_level = self.env['ir.model.data'].xmlid_to_res_id(education_level_xmlid)
                     if education_level != False:
-                        _logger.info('found education level %s' %education_level_xmlid)
+                        #_logger.info('found education level %s' %education_level_xmlid)
                         row.update({'education_level' : education_level})
                     else:
                         _logger.warning("education_level %s not found, leaving education_level for %s empty" %(education_level_xmlid,row['external_id']))
