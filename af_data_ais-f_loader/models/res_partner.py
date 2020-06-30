@@ -248,7 +248,8 @@ class ResPartner(models.Model):
                         #_logger.info("parent xmlid: %s" % parent_xmlid)
                         parent_id = self.env['ir.model.data'].xmlid_to_res_id(parent_xmlid)
                         #_logger.info("parent res_id: %s" % parent_id)
-                        if not parent_id:
+                        if parent_id == False:
+                            keys_to_delete.append(key)
                             _logger.error("Could not find parent id %s, not adding to %s" % (row[key], row['external_id']))
                         else:
                             row.update({key: parent_id})
@@ -349,18 +350,19 @@ class ResPartner(models.Model):
                     _logger.warning("sun_id is 0 for %s, leaving empty" % row['external_id'])
                     row.pop('sun_id', None)
                 
-            if 'eduacation_level' in row:
-                if row['eduacation_level'] != '0':
-                    education_level_xmlid = "res_sun.education_level_%s" % row['eduacation_level']
-                    eduacation_level = self.env['ir.model.data'].xmlid_to_res_id(education_level_xmlid)
-                    if eduacation_level != False:
-                        row.update({'eduacation_level' : eduacation_level})
+            if 'education_level' in row:
+                if row['education_level'] != '0':
+                    education_level_xmlid = "res_sun.education_level_%s" % row['education_level']
+                    education_level = self.env['ir.model.data'].xmlid_to_res_id(education_level_xmlid)
+                    if education_level != False:
+                        _logger.info('found education level %s' %education_level_xmlid)
+                        row.update({'education_level' : education_level})
                     else:
-                        _logger.warning("eduacation_level sun_%s not found, leaving eduacation_level for %s empty" %(row['eduacation_level'],row['external_id']))
-                        row.pop('eduacation_level', None)
+                        _logger.warning("education_level %s not found, leaving education_level for %s empty" %(education_level_xmlid,row['external_id']))
+                        row.pop('education_level', None)
                 else:
-                    _logger.warning("eduacation_level is 0 for %s, leaving empty" % row['external_id'])
-                    row.pop('eduacation_level', None)
+                    _logger.warning("education_level is 0 for %s, leaving empty" % row['external_id'])
+                    row.pop('education_level', None)
             
             for key in row.keys():
                 if "skip" in key:
