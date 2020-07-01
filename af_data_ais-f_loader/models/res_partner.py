@@ -326,7 +326,10 @@ class ResPartner(models.Model):
 
             if 'state_id' in row:
                 if row['state_id'] != '0':
-                    state_xmlid = "base.state_se_%s" % row['state_id']
+                    if len(row['state_id']) == 3:
+                        state_xmlid = "base.state_se_0%s" % row['state_id']
+                    else:
+                        state_xmlid = "base.state_se_%s" % row['state_id']
                     state_id = self.env['ir.model.data'].xmlid_to_res_id(state_xmlid)
                     if state_id != False:
                         row.update({'state_id' : state_id})
