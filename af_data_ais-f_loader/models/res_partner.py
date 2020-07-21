@@ -328,10 +328,12 @@ class ReadCSV(object):
         except IOError as e:
             _logger.error(u'Could not read CSV file at path %s' % path)
             raise ValueError(e)
+        
+        row = next(self.data)
         for i in range(len(self.header)):
-            if not self.header[i] in next(self.data).keys(): 
+            if not self.header[i] in row.keys(): 
                 _logger.error(u'Row 0 could not find "%s"' % self.header[i])
-                raise ValueError("Missing column '%s', columns found: %s" % (self.header[i], list(self.data[0].keys())))
+                raise ValueError("Missing column '%s', columns found: %s" % (self.header[i], list(row.keys())))
         
     
     def get_data(self):
