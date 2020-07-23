@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_af_emp_low_res_partner,res.partner - Employers Officer Low,base.model_res_partner,group_af_employers_low,1,0,0,0
+access_af_emp_medium_res_partner,res.partner - Employers Officer Medium,base.model_res_partner,group_af_employers_medium,1,1,1,0
+access_af_seekers_low_res_partner,res.partner - Jobseekers Officer Low,base.model_res_partner,group_af_jobseekers_low,1,0,0,0
+access_af_seekers_medium_res_partner,res.partner - Jobseekers Officer Medium,base.model_res_partner,group_af_jobseekers_medium,1,1,1,0
+access_af_emp_low_res_partner_notes,res.partner.notes - Employers Officer Low,partner_daily_notes.model_res_partner_notes,group_af_employers_low,1,0,1,0
+access_af_emp_high_res_partner_notes,res.partner.notes - Employers Officer High,partner_daily_notes.model_res_partner_notes,group_af_employers_high,1,0,1,1
+access_af_seekers_low_res_partner_notes,res.partner.notes - Jobseekers Officer Low,partner_daily_notes.model_res_partner_notes,group_af_jobseekers_low,1,0,1,0
+access_af_seekers_high_res_partner_notes,res.partner.notes - Jobseekers Officer High,partner_daily_notes.model_res_partner_notes,group_af_jobseekers_high,1,0,1,1
+access_af_temporary_res_partner,res.partner - Temporary,base.model_res_partner,group_af_temp,1,1,0,0

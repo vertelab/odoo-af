@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_calendar_appointment_form" model="ir.ui.view">
+        <field name="name">calendar.appointment.form</field>
+        <field name="model">calendar.appointment</field>
+        <field name="priority" eval="2"/>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <div class="oe_edit_only">
+                            <label for="name" string="Meeting subject" />
+                        </div>
+                        <h1>
+                            <field name="name" placeholder="e.g. Business Lunch" />
+                        </h1>
+                        <label for="partner_id" string="Attendees" class="oe_edit_only"/>
+                        <h2>
+                            <field name="partner_id" widget="many2manyattendee" placeholder="Select attendees..." class="oe_inline"/>
+                        </h2>
+                        <label for="user_id" string="Case worker" class="oe_edit_only"/>
+                        <h2>
+                            <field name="user_id" widget="many2manyattendee" placeholder="Select case worker..." class="oe_inline"/>
+                        </h2>
+                    </div>
+                    <notebook>
+                        <page name="page_details" string="Meeting Details">
+                            <group>
+                                <group>
+                                    <field name="desired_date"/>
+                                    <field name="duration" />
+                                </group>
+                                <group>
+                                    <field name="type_id" />
+                                    <field name="office" options="{'no_create_edit': True}" domain="[('type', '=', 'af office')]"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="page_alternative" string="Alternative"></page>
+                    </notebook>
+                    <label for="description" string="Description" class="oe_edit_only"/>
+                        <field name="description"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- <record id="send_sms_view_form" model="ir.ui.view">
+        <field name="name">sms_send_sms.form</field>
+        <field name="model">sms.send_sms</field>
+        <field name="arch" type="xml">
+            <form string="Send an SMS">
+                <sheet>
+                    <group>
+                        <div colspan="2" class="oe_form_box_info bg-info oe_text_center"
+                                invisible="not context.get('active_domain')">
+                            <p>
+                                <strong>
+                                    A sms will be sent to all the records matching your current search filter, not only the ids selected in the list view.
+                                </strong>
+                            </p>
+                        </div>
+                        <field name="recipients"/>
+                        <field name="message" widget="sms_widget"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <group>
+                        <span>
+                            <button string="Send" type="object" class="oe_highlight" name="action_send_sms"/>
+                            <button string="Cancel" class="oe_link" special="cancel" />
+                        </span>
+                    </group>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="send_sms_form_action" model="ir.actions.act_window">
+        <field name="name">Send SMS</field>
+        <field name="res_model">sms.send_sms</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Add action entry in the Action Menu for Partners -->
+    <act_window id="send_sms_action"
+        name="Send SMS"
+        src_model="res.partner"
+        res_model="sms.send_sms"
+        view_type="form"
+        view_mode="form"
+        key2="client_action_multi"
+        target="new"/> -->
+
+</odoo>

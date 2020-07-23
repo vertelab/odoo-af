@@ -7,6 +7,7 @@
             <tree string="Meeting types" editable="bottom">
                 <field name="ipf_num"/>
                 <field name="name"/>
+                <field name="duration"/>
                 <field name="channel"/>
                 <field name="additional_booking"/>
                 <field name="ipf_id"/>

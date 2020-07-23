@@ -34,7 +34,7 @@
 		#"data/arbetsg_utl_adr/res.partner.csv", #--> mapp finns inte
 		"data/arbetsg_cct/res.partner.csv",
 		"data/user_cct/res.partner.csv", #--> fungerar inte med mer än ~10st av någon anledning
-		"data/arbetsg/res.partner.kpi.csv",
+		#"data/arbetsg/res.partner.kpi.csv", #läsning av data till KPI modulen är trasig
 		"data/arbetsg_sni1/res.sni.csv",
 		#"data/arbetsg_sni2/res_sni.csv",
         "data/arbetsg/res.ssyk.csv",

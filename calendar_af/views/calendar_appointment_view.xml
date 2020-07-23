@@ -86,32 +86,58 @@
             <form>
                 <sheet>
                     <div class="oe_title">
-                        <h1>
-                            <field name="name" />
-                        </h1>
+                        <div class="oe_edit_only">
+                            <label for="type_id" string="Meeting type" />
+                        </div>
+                        <field name="type_id" />
+                        <div class="oe_edit_only">
+                            <label for="name" string="Meeting subject (efter val av möteskategori)" />
+                        </div>
+                            <field name="name" placeholder="e.g. Business Lunch" />
+                        <label for="partner_id" string="Attendees" class="oe_edit_only"/>
+                        <h2>
+                            <field name="partner_id" widget="many2manyattendee" placeholder="Select attendees..." class="oe_inline"/>
+                        </h2>
+                        <label for="user_id" string="Case worker" class="oe_edit_only" invisible="1"/>
+                        <h2>
+                            <field name="user_id" widget="many2manyattendee" placeholder="Select case worker..." class="oe_inline" invisible="1"/>
+                        </h2>
                     </div>
-                    <group>
-                        <group>
-                            <field name="start" />
-                            <field name="stop" />
-                            <field name="duration" />
-                        </group>
-                        <group>
-                            <field name="user_id" />
-                            <field name="partner_id" />
-                            <field name="type_id" />
-                            <field name="occasion_ids" />
-                            <field name="state" />
-                            <field name="location_code" />
-                            <field name="office" options="{'no_create_edit': True}" domain="[('type', '=', 'af office')]"/>
-                            <field name="office_code" />
-                            <field name="channel" />
-                        </group>
-                    </group>
+                    <notebook>
+                        <page name="page_details" string="Meeting Details">
+                            <group>
+                                <group>
+                                    <field name="office" options="{'no_create_edit': True}" domain="[('type', '=', 'af office')]"/>
+                                    <field name="start" />
+                                    <field name="stop" invisible="1"/>
+                                    <field name="duration" />
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                    <label for="description" string="Description" class="oe_edit_only"/>
+                    <field name="description"/>
+                    <label for="suggestion_ids"/>
+                    <!-- <field name="suggestion_id" domain="[('id', 'in', suggestion_ids)]" options="{'no_create': True, 'no_create_edit':True}"/> -->
+
+                        <span aria-atomic="true" class="btn-group oe-right oe_button_box">
+                            <button name="compute_suggestion_ids" type="object" string="Update"/>
+                            <button aria-label="Previous" class="fa fa-chevron-left btn btn-secondary o_pager_previous" accesskey="b" tabindex="-1" title="Previous" type="button"></button>
+                            <button aria-label="Next" class="fa fa-chevron-right btn btn-secondary o_pager_next" accesskey="f" tabindex="-1" title="Next" type="button"></button>
+                        </span>
+
+                    <field name="suggestion_ids">
+                        <tree string="Bookable Occasions">
+                            <field name="start"/>
+                            <field name="stop"/>
+                            <field name="occasion_ids" invisible="1"/>
+                            <button name="select_suggestion" type="object" string="Select"/>
+                        </tree>
+                    </field>
                 </sheet>
             </form>
         </field>
-    </record> 
+    </record>
 
     <record id="action_appointment" model="ir.actions.act_window">
         <field name="name">Appointments</field>
