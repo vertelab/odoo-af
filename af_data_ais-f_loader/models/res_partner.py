@@ -108,7 +108,7 @@ class ResPartner(models.Model):
             self.create_partner_from_rows(r, transformations)
             iterations += 1
             if iterations > 1000:
-                self.env.cr.commit
+                self.env.cr.commit()
                 _logger.info("commit")
                 iterations = 0
         reader.close()
