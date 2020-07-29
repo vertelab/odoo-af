@@ -1,2 +1,2 @@
-"ID","KUNDNR","TYP","EFTERNAMN","EPOST","FORNAMN","TELNR","BESKRIVNING","BEFATTNING","MOBILNR"
-"1","123456789",""A"",""Efternamn"","epost@epost.se","Förnamn","08-123 45 67","Beskrivning","Befattning","070-123 45 67"
+ID,KUNDNR,TYP,EFTERNAMN,EPOST,FORNAMN,TELNR,BESKRIVNING,BEFATTNING,MOBILNR
+1,123456789,"""A"",""Efternamn"",""epost@epost.se",Förnamn,08-123 45 67,Beskrivning,Befattning,070-123 45 67,,
