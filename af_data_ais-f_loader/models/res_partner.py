@@ -88,15 +88,18 @@ class ResPartner(models.Model):
             # if row['Odoo2'] != '' and "!" not in row['Odoo2']:
             #     field_map.update({row['Odoo2']: row[headers_header[0]]}) 
             if row['Trans'] != '':
-                _logger.info("transformations %s"%row['Trans'])
+               #_logger.info("transformations %s"%row['Trans'])
                 key = row['Trans'].split(",")[0]
                 value = row['Trans'].split(",")[1]
                 transformations.update({key: value})
             old_header.append(row[headers_header[0]]) #AIS-F fields
         #_logger.info("old_header: %s" % old_header)
-        reader = ReadCSV(path, old_header) 
+        reader = ReadCSV(path, old_header)
         iterations = 0
+        #_logger.info("get_data: %s" % next(reader.get_data()))
+        #reader.seek_zero()
         for row in reader.get_data():
+            _logger.info("row: %s" % row)
             r = {}
             header = list(field_map.keys())
             #_logger.info("header: %s" % header)
@@ -293,7 +296,7 @@ class ResPartner(models.Model):
         if create:
             for i in range(len(keys_to_delete)):
                 row.pop(keys_to_delete[i], None)
-            #_logger.info("creating row %s" % row)
+            _logger.info("creating row %s" % row)
             #_logger.info("creating external id: %s" % external_xmlid)                    
             
             partner = self.env['res.partner'].create(row)
