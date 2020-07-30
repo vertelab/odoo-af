@@ -333,6 +333,8 @@ class ReadCSV(object):
             raise ValueError(e)
         
         row = next(self.data)
+        self.f.seek(0)
+        next(self.data)
         for i in range(len(self.header)):
             if not self.header[i] in row.keys(): 
                 _logger.error(u'Row 0 could not find "%s"' % self.header[i])
