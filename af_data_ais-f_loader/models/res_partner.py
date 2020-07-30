@@ -110,7 +110,7 @@ class ResPartner(models.Model):
             #_logger.info("creating row %s" %r)
             self.create_partner_from_rows(r, transformations)
             iterations += 1
-            if iterations > 1000:
+            if iterations > 500:
                 self.env.cr.commit()
                 _logger.info("commit")
                 iterations = 0
