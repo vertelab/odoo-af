@@ -99,7 +99,7 @@ class ResPartner(models.Model):
         #_logger.info("get_data: %s" % next(reader.get_data()))
         #reader.seek_zero()
         for row in reader.get_data():
-            _logger.info("row: %s" % row)
+            #_logger.info("row: %s" % row)
             r = {}
             header = list(field_map.keys())
             #_logger.info("header: %s" % header)
@@ -296,7 +296,7 @@ class ResPartner(models.Model):
         if create:
             for i in range(len(keys_to_delete)):
                 row.pop(keys_to_delete[i], None)
-            _logger.info("creating row %s" % row)
+            #_logger.info("creating row %s" % row)
             #_logger.info("creating external id: %s" % external_xmlid)                    
             
             partner = self.env['res.partner'].create(row)
