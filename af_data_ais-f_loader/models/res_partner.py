@@ -175,7 +175,7 @@ class ResPartner(models.Model):
                     if create:
                         visitation_address = {
                             'external_id': row['external_id'],
-                            'name' : "%s, %s" % (row[key] ,row['external_id']),
+                            'name' : "",
                             'street' : row[key], #visitation_address_id contains street field for visitation address
                             'type' : 'visitation address'
                             }
@@ -231,8 +231,7 @@ class ResPartner(models.Model):
             row.update(keys_to_update[i])
             #_logger.info("row updated with %s, now %s" % (keys_to_update[i], row) )
         
-        if ('name' not in row and 'lastname' not in row and 'firstname' not in row and 'type' not in row) or ('name' not in row and 'lastname' not in row and 'firstname' not in row and row['type'] == 'contact'):
-            
+        if not ('type' in row and row['type'] != 'contact') or ('name' not in row and 'lastname' not in row and 'firstname' not in row and 'type' not in row) or ('name' not in row and 'lastname' not in row and 'firstname' not in row and row['type'] == 'contact'):
             row.update({'name' : row['external_id']})
 
         if 'country_id' not in row or row['country_id'] == 'SE' or row['country_id'].lower() == 'sverige':
