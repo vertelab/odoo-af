@@ -112,7 +112,7 @@ class ResPartner(models.Model):
                     #_logger.info("header %s: %s" % (i, row[field_map[header[i]]]))
                     r.update({header[i] : row[field_map[header[i]]]})
             #_logger.info("creating row %s" %r)
-            self.create_partner_from_rows(r, transformations)
+            self.create_partner_from_row(r, transformations)
             iterations += 1
             if iterations > 1000:
                 self.env.cr.commit
@@ -145,7 +145,7 @@ class ResPartner(models.Model):
     #             readers.update({'dict%s' % i : ReadCSV(path[i], old_header)})
     #             transformations.update({'dict%s' % i: trans})
         
-    #     #TODO: för varje reader läs en rad skicka båda tillsammans till create_partner_from_rows
+    #     #TODO: för varje reader läs en rad skicka båda tillsammans till create_partner_from_row
     #     iterations = 0
     #     for row in reader.get_data():
     #         r = {}
@@ -156,18 +156,18 @@ class ResPartner(models.Model):
     #                 #_logger.info("header %s: %s" % (i, row[field_map[header[i]]]))
     #                 r.update({header[i] : row[field_map[header[i]]]})
     #         #_logger.info("creating row %s" %r)
-    #         self.create_partner_from_rows(r, transformations)
+    #         self.create_partner_from_row(r, transformations)
     #         iterations += 1
     #         if iterations > 1000:
     #             self.env.cr.commit
     #             _logger.info("commit")
     #             iterations = 0
     #     reader.close()
-        #self.create_partner_from_rows(rows, transformations)
+        #self.create_partner_from_row(rows, transformations)
         
     
     @api.model
-    def create_partner_from_rows(self, row, transformations):
+    def create_partner_from_row(self, row, transformations):
         #TODO: läs given address först, skapa den och sen lägg på fältet given_address_id = xmlid_to_res_id
                 
         #_logger.info("row: %s" % row)
@@ -181,29 +181,21 @@ class ResPartner(models.Model):
                 
             
             
-            id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
-            if id_check == False:
-                _logger.warning("external id already in database, skipping")
-                #_logger.info("creating row %s" % row)
-                #_logger.info("creating external id: %s" % external_xmlid)
-                
-                partner = self.env['res.partner'].create(transformed_row)
-                visitation_address = secondary_address
-                visitation_address_transformations = secondary_address_transformations
-                #_logger.info("visitation address dict before create: %s" % visitation_address)
-                if visitation_address != {}:
-                    #_logger.info("CREATING VISITATION ADDRESS")
-                    visitation_address.update({'parent_id' : partner.id})
-                    self.create_partner_from_rows(visitation_address, visitation_address_transformations)
-                #self.env['res.partner'].update() #add visitation_address id to partner
-                self.env['ir.model.data'].create({
-                                'name': external_xmlid.split('.')[1],
-                                'module': external_xmlid.split('.')[0],
-                                'model': partner._name,
-                                'res_id': partner.id
-                                }) #creates an external id in the system for the partner.
-            else:
-                _logger.warning("Did not create row %s" % row)
+            
+            partner = self.env['res.partner'].create(transformed_row)
+            #_logger.info("visitation address dict before create: %s" % visitation_address)
+            if secondary_address != {}:
+                #_logger.info("CREATING VISITATION ADDRESS")
+                secondary_address.update({'parent_id' : partner.id})
+                self.create_partner_from_row(secondary_address, secondary_address_transformations)
+            #self.env['res.partner'].update() #add visitation_address id to partner
+            self.env['ir.model.data'].create({
+                            'name': external_xmlid.split('.')[1],
+                            'module': external_xmlid.split('.')[0],
+                            'model': partner._name,
+                            'res_id': partner.id
+                            }) #creates an external id in the system for the partner.
+        
         else:
             _logger.warning("Did not create row %s" % row)
          
@@ -250,7 +242,7 @@ class ResPartner(models.Model):
             keys_to_delete.append('%s_country_id' % key_stripped)
         #_logger.info("secondary address dict: %s" % secondary_address)
         keys_to_delete.append(key)
-        #for secondary_address_id in self.create_partner_from_rows([secondary_address], secondary_address_transformations):
+        #for secondary_address_id in self.create_partner_from_row([secondary_address], secondary_address_transformations):
         #   row.update({key : secondary_address_id}) 
         return [secondary_address, secondary_address_transformations, keys_to_delete, keys_to_update]
 
@@ -273,18 +265,7 @@ class ResPartner(models.Model):
                 if row[key].lower() == "j":
                     keys_to_update.append({key: "True"})
                 elif row[key].lower() == "n":
-                    keys_to_update.append({key: "False"})
-
-        if 'type' in row and row['type'].lower() == 'egen_angiven':
-            if 'street' in row:
-                row.update({'given_address_id': row['street']})
-            if 'street2' in row:
-                row.update({'given_address_street': row['street2']})
-            if 'city' in row:
-                row.update({'given_address_city': row['city']})
-            if 'zip' in row:
-                row.update({'given_address_zip': row['zip']})
-            transformations.update({'given_address_id': transformations['external_id']})           
+                    keys_to_update.append({key: "False"})           
             
         for key in row.keys():
             if key in transformations:
@@ -308,25 +289,36 @@ class ResPartner(models.Model):
                     partner_xmlid = "%s.%s" % (self.xmlid_module, partner_xmlid_name)
                     #_logger.info("parent xmlid: %s" % parent_xmlid)
                     partner_id = self.env['ir.model.data'].xmlid_to_res_id(partner_xmlid)
+                    partner = self.env['res.partner'].search_read([('id', '=', partner_id)], ['street', 'street2', 'city', 'zip'])[0]
+    
+                    #partner inehåller id
                     
-                    #TODO: hitta rätt sätt att komma åt och uppdatera en partner.
-
-                    partner = self.env['res.partner'].browse(partner_id)
-                    for record in partner:
-                        _logger.info("partner to add to, record: %s"%record)
+                    
                     if row['type'].lower() == 'egen_angiven':
-                        if 'street' not in partner and 'street' in row:
-                            if 'street2' in row: #this assumes empty fields aren't automatically created for a partner
+                        if not partner['street'] and 'street' in row:
+                            if 'street2' in row:
                                 partner['street2'] = row['street2']
                             if 'zip' in row:
                                 partner['zip'] = row['zip']
                             if 'city' in row:
-                                partner['zip'] = row['zip']
+                                partner['city'] = row['city']
                             partner['street'] = row['street']
+                            #browse+write?
+                        else:
+                            partner.update({'type': 'given_address', 'parent_id': partner['id'], 'external_id': '%s_%s' % (row['external_id'],row['id'])})
+                            partner.pop('id', None)
+                            create_partner_from_row(partner, {'external_id': transformations['external_id'], 'parent_id': transformations['partner_id']})
+                            
+                            #skapa och koppla med parent_id
 
                     elif row['type'].lower() == 'folkbokforing':
-                        if 'street' in row:
-                            partner['street'] = row['street']
+                        
+                        if partner['street'] and 'street' in row:
+                            partner.update({'type': 'given_address', 'parent_id': partner['id'], 'external_id': '%s_%s' % (row['external_id'],row['id'])})
+                            partner.pop('id', None)
+                            create_partner_from_row(partner, {'external_id': transformations['external_id'], 'parent_id': transformations['partner_id']})
+
+                        partner['street'] = row['street']
                         if 'street2' in row:
                             partner['street2'] = row['street2']
                         if 'zip' in row:
@@ -433,7 +425,7 @@ class ResPartner(models.Model):
         id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
         if id_check != False:
             create = False
-        _logger.warning("external id already in database, skipping")
+            _logger.warning("external id already in database, skipping")
         if create:
             return {'row': row, 
                     'external_xmlid': external_xmlid, 
