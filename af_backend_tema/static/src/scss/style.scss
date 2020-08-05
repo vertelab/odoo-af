@@ -23,12 +23,12 @@ $brand-pink: #d43372; // Kampanjyta, grafiska element
 $brand-pink-40: #eeadc7;
 $brand-white: #ffffff; // Bakgrundsfärg
 $brand-black: #000000;
-$brand-gray-90: #333333;
-$brand-gray-70: #666666;
-$brand-gray-50: #999999;
-$brand-gray-30: #d1d1d1;
+$brand-grey-90: #333333;
+$brand-grey-70: #666666;
+$brand-grey-50: #999999;
+$brand-grey-30: #d1d1d1;
 $brand-grey-20: #efefef; // Hover på dropdown
-$brand-grey_10: #f5f5f5; // Bakgrundsfärg om inte vitt fungerar
+$brand-grey-10: #f5f5f5; // Bakgrundsfärg om inte vitt fungerar
 
 
 // Funktionsfärger
@@ -53,6 +53,10 @@ body {
 
 .o_loading {
   background-color: $brand-primary;
+}
+
+::placeholder{
+  color: $brand-grey-50;
 }
 
 .o_main_navbar {
@@ -107,7 +111,7 @@ body {
 
 // // Fix color Add file button
 // .o_control_panel .o_cp_sidebar .o_hidden_input_file .o_form_binary_form span {
-//     color: $gray-dark !important;
+//     color: $grey-dark !important;
 // }
 
 // // Buttons
@@ -124,9 +128,15 @@ body {
 }
 
 .btn-primary:hover {
-  color: $brand-primary;
-  background-color: $brand-blue-hover;
-  border-color: $brand-primary;
+  color: $brand-white;
+  background-color: $brand-blue;
+  border-color: $brand-blue;
+  border-width: 1.5px;
+}
+
+.btn-primary:active {
+  background-color: $brand-blue;
+  border-color: $brand-blue;
   border-width: 1.5px;
 }
 
@@ -152,19 +162,20 @@ body {
 }
 
 .o_main >  main > div > ol > li.breadcrumb-item{
-  color: $brand-gray-90;
+  color: $brand-grey-90;
 }
 
 .o_form_label {
-  color: $brand-gray-70;
+  color: $brand-grey-90;
 }
 
 .o_group > table > tbody > tr > td > div.o_horizontal_separator {
-  color: $brand-gray-90;
+  color: $brand-grey-90;
 }
 
 .o_group > table > tbody > tr > td > span.o_field_char.o_field_widget {
   color: $brand-black;
+  margin-bottom: 20px;
 }
 
 .o_group > table > tbody > tr > td > div > span {
@@ -187,11 +198,12 @@ body {
 //     background-color: $brand-primary;
 // }
 
-// .btn:active, .btn.active {
-//     -webkit-box-shadow: none;
-//     box-shadow: none;
-//     background-color: $brand-pink !important;
-// }
+.btn:active, .btn.active {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background-color: $brand-grey-20 !important;
+    border-color: $brand-primary !important;
+}
 
 // .btn-group.open .dropdown-toggle {
 //     -webkit-box-shadow: none;
@@ -203,6 +215,12 @@ body {
 //     color: $brand-secondary;
 // }
 
+.fc-content {
+  background-color: $brand-primary;
+  color: $brand-white;
+}
+
+
 // .o_form_view .o_form_statusbar > .o_statusbar_status > .o_arrow_button.btn-primary.disabled {
 //     color: $brand-primary;
 // }
@@ -213,7 +231,7 @@ body {
 
 // .o_dropdown_toggler_btn, .o_dropdown_toggler_btn:hover, .o_dropdown_toggler_btn:focus, .o_dropdown_toggler_btn:hover, .o_dropdown_toggler_btn:focus, .btn-icon, .o_graph_button {
 //     text-transform: none !important;
-//     color: $gray-dark !important;
+//     color: $grey-dark !important;
 //     background-color: transparent !important;
 //     border: none !important;
 // }
@@ -293,6 +311,12 @@ body {
 // 	border-radius: 0;
 // }
 
+.o_calendar_container .o_calendar_view .o_calendar_widget .fc-view-container .fc-view > table > tbody > tr > td > div > div > div .fc-content-skeleton > table > tbody .fc-event-container > a .fc-content {
+  background-color: $brand-primary;
+  color: $brand-white;
+  padding: 2px;
+}
+
 // // Filter search label
 
 // .o_searchview {
@@ -347,12 +371,17 @@ body {
 // }
 
 .o_input {
-    border: 1px solid $brand-gray-70;
-    // border-top-style: none;
-    // border-right-style: none;
-    // border-left-style: none;
-    // color: $gray;§§§
+  border: 1px solid $brand-grey-70;
 }
+
+// .o_input_dropdown {
+//   padding-bottom: 0.5rem;
+// }
+
+// .o_field_char {
+//   padding-bottom: 0.5rem;
+// }
+
 
 // .o_field_widget {
 //     &.o_field_many2one .o_external_button {
@@ -419,10 +448,15 @@ body {
 //     color: $brand-primary;
 // }
 
-// .o_form_view .o_horizontal_separator {
-//     color: #666666;
-//     font-weight: bold;
-// }
+.o_form_view .o_horizontal_separator {
+    color: $brand-primary;
+    padding-bottom: 2rem;
+}
+
+.o_form_view .o_horizontal_separator {
+  color: $brand-primary;
+  padding-bottom: 2rem;
+}
 
 // // Forms
 
