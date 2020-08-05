@@ -40,8 +40,12 @@ BASE_DAY_STOP = pytz.timezone(LOCAL_TZ).localize(datetime.now().replace(hour=16,
 RESERVED_TIMEOUT = 300.0
 
 # Termer
+# appointment = faktiskt bokat möte
 # occasions = bokningsbara tider
-# schemaläggning = resursplanering?
+# schedule = occasions skapas utifrån informationen schedules
+
+# TODO
+# clean up _logger.warn messages in the code
 
 class CalendarSchedule(models.Model):
     _name = 'calendar.schedule'
@@ -232,8 +236,6 @@ class CalendarAppointment(models.Model):
 
         return res
 
-    # TODO: consider using _force_create_occasion instead (/in addition?) in create and update?
-
     # @api.model
     # def create(self, values):
     #     res = False
@@ -322,15 +324,13 @@ class CalendarOccasion(models.Model):
         """Returns the timeslot (as a start date, DateTime) with the least 
         amount of occurances for a specific timeframe"""
         date_start = date_start or copy.copy(BASE_DAY_START)
-        date_stop= date_stop or copy.copy(BASE_DAY_STOP)
-        go = True
+        date_stop = date_stop or copy.copy(BASE_DAY_STOP)
         loop_date = date_start
         occ_time = {}
-        while go:
+        while loop_date < date_stop:
+            # _logger.warn("loop_date: %s" % loop_date)
             occ_time[loop_date.strftime("%Y-%m-%dT%H:%M:%S")] = self.env['calendar.occasion'].search_count([('start', '=', loop_date),('type_id', '=', type_id.id)])
             loop_date = loop_date + timedelta(minutes=BASE_DURATION)
-            if loop_date >= date_stop:
-                go = False
         occ_time_min_key = min(occ_time, key=occ_time.get)
         res = datetime.strptime(occ_time_min_key, "%Y-%m-%dT%H:%M:%S")
         return res
@@ -348,7 +348,12 @@ class CalendarOccasion(models.Model):
 
     @api.model
     def _get_additional_booking(self, date, duration, type_id):
-        """"Creates extra, additional, occasions"""
+        """"Creates extra, additional, occasions. Iff overbooking is allowed. """
+        # Check if overbooking is allowed on this meeting type
+        if not type_id.additional_booking:
+            # TODO: Throw error instead?
+            _logger.warn("Overbooking not allowed on %s" % type_id.name) 
+            return False
         # Replace date with mapped date if we have one
         date = self._check_date_mapping(date)
         date_list = date.strftime("%Y-%-m-%-d").split("-")
@@ -356,15 +361,15 @@ class CalendarOccasion(models.Model):
         day_start = copy.copy(BASE_DAY_START)
         day_stop = copy.copy(BASE_DAY_STOP)
         # Ugly, ugly code..
-        day_start.replace(year=int(date_list[0]), month=int(date_list[1]), day=int(date_list[2]))
-        day_stop.replace(year=int(date_list[0]), month=int(date_list[1]), day=int(date_list[2]))
+        day_start = day_start.replace(year=int(date_list[0]), month=int(date_list[1]), day=int(date_list[2]))
+        day_stop = day_stop.replace(year=int(date_list[0]), month=int(date_list[1]), day=int(date_list[2]))
         # Find when to create new occasion
         start_date = self._get_min_occasions(type_id, day_start, day_stop)
         # Calculate how many occasions we need
         no_occasions = int(duration / BASE_DURATION)
         # Create new occasions.
         res = self.env['calendar.occasion']
-        _logger.warn('%s %s %s' % (date, duration, no_occasions))
+        _logger.warn('Additional booking: %s %s %s' % (start_date, duration, no_occasions))
         for i in range(no_occasions):
             vals = {
                 'name': '%sm @ %s' % (duration, start_date),
@@ -434,24 +439,29 @@ class CalendarOccasion(models.Model):
         # declare lists for each day
         for i in range(date_delta.days + 1):
             occ_lists.append([])
-
         
         # find occasions for each day, starting with last day
         # TODO: Go backwards
-        for day in range(date_delta.days + 1):
+        # for day in range(date_delta.days + 1):
+        for day in reversed(range(date_delta.days + 1)):
             occasions = []
             # find 'max_depth' number of free occasions for each timeslot
-            if day == 0:
-                start_dt = copy.copy(start)
-                last_slot = copy.copy(start)
-                last_slot.replace(hour=BASE_DAY_STOP.hour, minute=BASE_DAY_STOP.minute)
-                if last_slot > stop:
-                    last_slot = copy.copy(stop)
+            # if day == 0:
+            if day == date_delta.days:
+                start_dt = copy.copy(stop)
+                start_dt = start_dt.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute)
+                last_slot = copy.copy(stop)
+                last_slot = last_slot.replace(hour=BASE_DAY_STOP.hour, minute=BASE_DAY_STOP.minute)
+                # TODO: this if might be wrong after reversal of days, do we need it?
+                # if last_slot > stop:
+                #     last_slot = copy.copy(stop)
                 last_slot -= timedelta(minutes=duration)
             else:
                 # This will break given certain times and timezones. Should work for us.
-                start_dt = start_dt + timedelta(days=1)
-                start_dt.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute)
+                # start_dt = start_dt + timedelta(days=1)
+                start_dt = start_dt - timedelta(days=1)
+                start_dt = start_dt.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute)
+                last_slot = last_slot - timedelta(days=1)
             _logger.warn('%s - %s' % (start_dt, last_slot))
             while start_dt <= last_slot:
                 if not occasions:
@@ -459,7 +469,8 @@ class CalendarOccasion(models.Model):
                         dt_start = start_dt + td_base_duration * i
                         occasions.append(get_occasions(dt_start))
                 else:
-                    occasions.remove(0)
+                    # occasions.remove(0) # this tries to remove element "0" not index 0
+                    del occasions[0]
                     occasions.append(get_occasions(start_dt + td_base_duration * no_occasions))
                 available_depth = min([len(o) for o in occasions] or [0])
                 slot = []
@@ -488,8 +499,10 @@ class CalendarOccasion(models.Model):
         # if type allows additional bookings and  we didn't find any
         # free occasions, create new ones:
         # TODO: do not create extra occasions unless completely empty?
-        if all( not l for l in occ_lists):
-            occ_lists[-1].append(self._get_additional_booking(start_dt, duration, type_id))
+        if type_id.additional_booking and all( not l for l in occ_lists):
+            # Changed this line to create over bookings on the last available date.
+            # occ_lists[-1].append(self._get_additional_booking(start_dt, duration, type_id))
+            occ_lists[-1].append(self._get_additional_booking(stop, duration, type_id))
         """ for day in range(date_delta.days or 1):
             if len(occ_lists[day]) != no_occasions:
                 if type_id.additional_booking:
