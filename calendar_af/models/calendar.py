@@ -151,6 +151,8 @@ class CalendarAppointment(models.Model):
     _name = 'calendar.appointment'
     _description = "Appointment"
 
+    #radio button 30 min 1 timma 
+
     name = fields.Char(string='Name', required=True)
     start = fields.Datetime(string='Start', required=True, help="Start date of an appointment")
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an appointment")
