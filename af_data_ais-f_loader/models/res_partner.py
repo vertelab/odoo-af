@@ -107,12 +107,12 @@ class ResPartner(models.Model):
                 if header[i] in field_map:
                     #_logger.info("header %s: %s" % (i, row[field_map[header[i]]]))
                     r.update({header[i] : row[field_map[header[i]]]})
-            #_logger.info("creating row %s" %r)
+           #_loger.info("creating row %s" %r)
             self.create_partner_from_rows(r, transformations)
             iterations += 1
             if iterations > 500:
                 self.env.cr.commit()
-                _logger.info("commit")
+               #_loger.info("commit")
                 iterations = 0
         reader.close()
         
@@ -141,6 +141,9 @@ class ResPartner(models.Model):
                     keys_to_update.append({key: "True"})
                 elif row[key].lower() == "n":
                     keys_to_update.append({key: "False"})
+
+        if 'type' not in row:
+            row['type'] = 'contact'
 
         for key in row.keys():
             #_logger.info('key: %s' % key)
@@ -231,7 +234,7 @@ class ResPartner(models.Model):
             row.update(keys_to_update[i])
             #_logger.info("row updated with %s, now %s" % (keys_to_update[i], row) )
         
-        if not ('type' in row and row['type'] != 'contact') or ('name' not in row and 'lastname' not in row and 'firstname' not in row and 'type' not in row) or ('name' not in row and 'lastname' not in row and 'firstname' not in row and row['type'] == 'contact'):
+        if ('name' not in row and 'lastname' not in row and 'firstname' not in row and 'type' not in row) or ('name' not in row and 'lastname' not in row and 'firstname' not in row and row['type'] == 'contact'):
             row.update({'name' : row['external_id']})
 
         if 'country_id' not in row or row['country_id'] == 'SE' or row['country_id'].lower() == 'sverige':
@@ -292,10 +295,12 @@ class ResPartner(models.Model):
         if id_check != False:
             create = False
             _logger.warning("external id already in database, skipping")
+        
+       #_loger.info('create?: %s' % create)
         if create:
             for i in range(len(keys_to_delete)):
                 row.pop(keys_to_delete[i], None)
-            #_logger.info("creating row %s" % row)
+           #_loger.info("creating row %s" % row)
             #_logger.info("creating external id: %s" % external_xmlid)                    
             
             partner = self.env['res.partner'].create(row)
