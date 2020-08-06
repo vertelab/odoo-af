@@ -191,7 +191,7 @@ class CalendarAppointment(models.Model):
         stop = self.stop_meeting_search(start)
         suggestion_ids = []
         occasions = self.env['calendar.occasion'].get_bookable_occasions(start, stop, self.duration * 60, self.type_id, max_depth = 1)
-        _logger.warn(occasions)
+        # _logger.warn(occasions)
         for day in occasions:
             for day_occasions in day:
                 for occasion in day_occasions:
@@ -207,9 +207,6 @@ class CalendarAppointment(models.Model):
     def onchange_duration_start(self):
         if self.start and self.duration:
             self.stop = self.start + timedelta(minutes=int(self.duration * 60)) 
-    """ @api.onchange('suggestion_id')
-    def onchange_suggestion_id(self):
-        _logger.warn(self.suggestion_id.read()) """
 
     def start_meeting_search(self):
         start = datetime.now() + timedelta(days=int(self.env['ir.config_parameter'].sudo().get_param('af_calendar.start_meeting_search', default='3')))
@@ -369,7 +366,7 @@ class CalendarOccasion(models.Model):
         no_occasions = int(duration / BASE_DURATION)
         # Create new occasions.
         res = self.env['calendar.occasion']
-        _logger.warn('Additional booking: %s %s %s' % (start_date, duration, no_occasions))
+        # _logger.warn('Additional booking: %s %s %s' % (start_date, duration, no_occasions))
         for i in range(no_occasions):
             vals = {
                 'name': '%sm @ %s' % (duration, start_date),
@@ -382,7 +379,7 @@ class CalendarOccasion(models.Model):
                 'additional_booking': True,
                 'state': 'ok',
             }
-            _logger.warn(vals)
+            # _logger.warn(vals)
             res |= self.env['calendar.occasion'].create(vals)
             start_date = start_date + timedelta(minutes=BASE_DURATION)
         return res
@@ -425,12 +422,10 @@ class CalendarOccasion(models.Model):
         td_base_duration = timedelta(minutes=BASE_DURATION)
         
         def get_occasions(start_dt):
-            _logger.warn(start_dt)
             return self.env['calendar.occasion'].search(
                 [
                     ('start', '=', start_dt),
                     ('type_id', '=', type_id.id),
-                    #('channel', '=', channel),
                     ('appointment_id', '=', False)
                 ], limit=max_depth)
         #[[[], []], dag[tidsslot[ocassions]]]
@@ -441,7 +436,7 @@ class CalendarOccasion(models.Model):
             occ_lists.append([])
         
         # find occasions for each day, starting with last day
-        # TODO: Go backwards
+        # Changes made below this line to make the code loop over dates in reverse order.
         # for day in range(date_delta.days + 1):
         for day in reversed(range(date_delta.days + 1)):
             occasions = []
@@ -452,7 +447,7 @@ class CalendarOccasion(models.Model):
                 start_dt = start_dt.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute)
                 last_slot = copy.copy(stop)
                 last_slot = last_slot.replace(hour=BASE_DAY_STOP.hour, minute=BASE_DAY_STOP.minute)
-                # TODO: this if might be wrong after reversal of days, do we need it?
+                # TODO: I commented this if statement and nothing has exploded yet. Remove it completely?
                 # if last_slot > stop:
                 #     last_slot = copy.copy(stop)
                 last_slot -= timedelta(minutes=duration)
@@ -462,16 +457,20 @@ class CalendarOccasion(models.Model):
                 start_dt = start_dt - timedelta(days=1)
                 start_dt = start_dt.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute)
                 last_slot = last_slot - timedelta(days=1)
-            _logger.warn('%s - %s' % (start_dt, last_slot))
             while start_dt <= last_slot:
                 if not occasions:
                     for i in range(no_occasions):
                         dt_start = start_dt + td_base_duration * i
                         occasions.append(get_occasions(dt_start))
                 else:
-                    # occasions.remove(0) # this tries to remove element "0" not index 0
+                    # Remove first record in list and add a new occasion at the end
+                    # This way we shift the bookable occasion 30 min forward every iteration
                     del occasions[0]
-                    occasions.append(get_occasions(start_dt + td_base_duration * no_occasions))
+                    # The line below causes a bug that returns bookable occasions 
+                    # with 30 min (1 occasion) gaps before the last 30 min (1 occasion).
+                    # I fixed this with (no_occasions - 1). I have not investigated it further. 
+                    # occasions.append(get_occasions(start_dt + td_base_duration * no_occasions))
+                    occasions.append(get_occasions(start_dt + td_base_duration * (no_occasions - 1)))
                 available_depth = min([len(o) for o in occasions] or [0])
                 slot = []
                 for i in range(available_depth):
@@ -483,34 +482,13 @@ class CalendarOccasion(models.Model):
                     occ_lists[day].append(slot)
                 start_dt += td_base_duration
 
-                """ 
-                iteration_start = start + timedelta(minutes=BASE_DURATION) * i
-                occasion_ids = self.env['calendar.occasion'].search(
-                    [
-                        ('start', '=', iteration_start + timedelta(days=(date_delta.days - day))),
-                        ('type_id', '=', type_id.id),
-                        ('channel', '=', channel),
-                        ('appointment_id', '=', False)
-                    ], limit=max_depth)
-                # save one result from each timeslot in a seperate list 
-                for j in range(len(occasion_ids)):
-                    occ_lists[j] += occasion_ids[j] """
-
-        # if type allows additional bookings and  we didn't find any
+        # if type allows additional bookings and we didn't find any
         # free occasions, create new ones:
         # TODO: do not create extra occasions unless completely empty?
         if type_id.additional_booking and all( not l for l in occ_lists):
-            # Changed this line to create over bookings on the last available date.
+            # Changed this line to create over bookings on the LAST available date.
             # occ_lists[-1].append(self._get_additional_booking(start_dt, duration, type_id))
             occ_lists[-1].append(self._get_additional_booking(stop, duration, type_id))
-        """ for day in range(date_delta.days or 1):
-            if len(occ_lists[day]) != no_occasions:
-                if type_id.additional_booking:
-                    day_start = start + timedelta(days=(date_delta.days - day))
-                    occ_lists[day] = self._get_additional_booking(day_start, duration, type_id) """
-                # TODO: else: remove partial matches, these are unusable
-                # del occ_lists[i]
-                # del will cause problems with the for loop..
 
         return occ_lists
 
