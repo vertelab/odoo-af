@@ -60,6 +60,15 @@ class CalendarSchedule(models.Model):
     type_id = fields.Many2one(string='Meeting type', comodel_name='calendar.appointment.type', help="Related meeting type")
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
 
+    @api.one
+    def inactivate(self, b = True):
+        """Inactivates self. Used as a workaround to inactivate from server actions."""
+        if b:
+            self.active = False
+        else:
+            self.active = True
+        return self.active
+
     @api.multi
     def create_occasions(self):
         """Creates a number of occasions from schedules, depending on number of scheduled agents"""
