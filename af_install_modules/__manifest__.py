@@ -21,7 +21,14 @@
 		"partner_daily_notes",
 		"partner_desired_jobs",
 		"test_data_demo_sv",
+		"partner_af_case",
+		"edi_af_appointment",
+		"calendar_af",
+		"hr_org_chart",
+		"help_online",
+		# "af_security",
 			],
     "application": False,
     "installable": True,
 }
+
