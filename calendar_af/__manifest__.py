@@ -1,7 +1,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 {
-    "name": "Calendar AF",
+    "name": "Calendar management - AF",
     "version": "12.0.1.0.1",
     "author": "Vertel AB",
     "license": "AGPL-3",
@@ -9,9 +9,6 @@
     "category": "Tools",
     "depends": ["calendar", "contacts", "partner_view_360" ],
     "external_dependencies": [
-        # "service_identity",
-        # "stompest",
-        # "stompest.async",
     ],
     "data": [
         "views/res_partner_view.xml",

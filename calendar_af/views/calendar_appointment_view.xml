@@ -144,12 +144,12 @@
         </field>
     </record>
 
-    <record id="action_book_distans_meeting" model="ir.actions.act_window">
+    <!-- <record id="action_book_distans_meeting" model="ir.actions.act_window">
         <field name="name">Book</field>
         <field name="res_model">calendar.appointment</field>
         <field name="view_mode">form,calendar,tree,pivot,kanban</field>
         <field name="view_id" ref="calendar_af.view_calendar_appointment_form" />
-    </record>
+    </record> -->
 
     <record id="action_appointment" model="ir.actions.act_window">
         <field name="name">Appointments</field>
@@ -220,7 +220,7 @@
         <field name="view_id" ref="view_calendar_appointment_form" />
     </record>
 
-    <menuitem action="action_book_distans_meeting" id="menu_action_book_distans_meeting" parent="menu_book_distans_meeting" sequence="11" />
+    <!-- <menuitem action="action_book_distans_meeting" id="menu_action_book_distans_meeting" parent="menu_book_distans_meeting" sequence="11" /> -->
     <menuitem action="action_appointment" id="menu_action_appointment" parent="menu_pdm" sequence="12" />
     <menuitem action="action_local_appointment" id="menu_action_local_appointment" parent="menu_local" sequence="12" />
 </odoo>
