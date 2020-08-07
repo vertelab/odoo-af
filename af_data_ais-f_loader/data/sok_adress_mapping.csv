@@ -1,5 +1,5 @@
 sok_adress.csv,Notering,Trans,Odoo
-ID,,,
+ID,,,id
 TMSTAMP,,,
 SOKANDE_ID,,"external_id,part_jbskr_adr_",external_id
 SOKANDE_ID,,"partner_id,part_jbskr_",partner_id

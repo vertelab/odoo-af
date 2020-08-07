@@ -46,12 +46,13 @@ class ResPartner(models.Model):
         path = os.path.join(config.options.get('data_dir'), 'AIS-F/arbetssokande.csv')
         path = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/arbetssokande.csv" #testing purposes only
         header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/arbetssokande_mapping.csv"
-        headers_header2 = ['sok_adress.csv', 'Notering',  'Trans', 'Odoo']
-        path2 = os.path.join(config.options.get('data_dir'), 'AIS-F/sok_adress.csv')
-        path2 = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/sok_adress.csv" #testing purposes only
-        header_path2 = "usr/share/odoo-af/af_data_ais-f_loader/data/sok_adress_mapping.csv"
         self.create_partners(headers_header, path, header_path)
-        self.create_partners(headers_header2, path2, header_path2)
+
+        headers_header_adr = ['sok_adress.csv', 'Notering',  'Trans', 'Odoo']
+        path_adr = os.path.join(config.options.get('data_dir'), 'AIS-F/sok_adress.csv')
+        path_adr = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/sok_adress.csv" #testing purposes only
+        header_path_adr = "usr/share/odoo-af/af_data_ais-f_loader/data/sok_adress_mapping.csv"
+        self.create_partners(headers_header_adr, path_adr, header_path_adr)
 
 
     @api.model
@@ -70,6 +71,18 @@ class ResPartner(models.Model):
         header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/arbetsgivare_mapping.csv"
         self.create_partners(headers_header, path, header_path)
 
+        headers_header_sni = ['arbetsgivareSNI.csv', 'Notering', 'Trans', 'Odoo']
+        path_sni = os.path.join(config.options.get('data_dir'), 'AIS-F/arbetsgivareSNI.csv')
+        path_sni = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/arbetsgivareSNI.csv" #testing purposes only
+        header_path_sni = "usr/share/odoo-af/af_data_ais-f_loader/data/arbetsgivareSNI_mapping.csv"
+        self.create_partners(headers_header_sni, path_sni, header_path_sni)
+
+        headers_header_ssyk = ['ssyk.csv', 'Notering', 'Trans', 'Odoo']
+        path_ssyk = os.path.join(config.options.get('data_dir'), 'AIS-F/ssyk.csv')
+        path_ssyk = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/ssyk.csv" #testing purposes only
+        header_path_ssyk = "usr/share/odoo-af/af_data_ais-f_loader/data/ssyk_mapping.csv"
+        self.create_partners(headers_header_ssyk, path_ssyk, header_path_ssyk)
+
     @api.model
     def create_organisations(self):     
         headers_header = ['organisation.csv', 'Notering', 'Trans', 'Odoo']
@@ -77,6 +90,19 @@ class ResPartner(models.Model):
         path = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/organisation.csv" #testing purposes only
         header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/organisation_mapping.csv"
         self.create_partners(headers_header, path, header_path)
+        
+        headers_header_kpi = ['kpi.csv', 'Notering', 'Trans', 'Odoo']
+        path_kpi = os.path.join(config.options.get('data_dir'), 'AIS-F/kpi.csv')
+        path_kpi = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/kpi.csv" #testing purposes only
+        header_path_kpi = "usr/share/odoo-af/af_data_ais-f_loader/data/kpi_mapping.csv"
+        self.create_partners(headers_header_kpi, path_kpi, header_path_kpi)
+
+        headers_header_sni = ['organisationSNI.csv', 'Notering', 'Trans', 'Odoo']
+        path_sni = os.path.join(config.options.get('data_dir'), 'AIS-F/organisationSNI.csv')
+        path_sni = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/organisationSNI.csv" #testing purposes only
+        header_path_sni = "usr/share/odoo-af/af_data_ais-f_loader/data/organisationSNI_mapping.csv"
+        self.create_partners(headers_header_sni, path_sni, header_path_sni)
+
 
     #TODO: 
     # För varje adress sök upp partner utifrån external_id, lägg på address
@@ -119,51 +145,6 @@ class ResPartner(models.Model):
                 _logger.info("commit")
                 iterations = 0
         reader.close()
-
-    # @api.model
-    # def create_partners_multifile(self, headers_header, path, header_path):
-    
-    #     transformations = {}
-    #     readers = {}
-    #     for i in range(len(headers_header)):
-    #         header_reader = ReadCSV(header_path[i], headers_header[i])
-    #         header_rows = header_reader.parse_header()
-    #         old_header = []
-    #         field_map = {}
-    #         trans = {}
-    #         for row in header_rows:
-    #             #_logger.info("header_rows row processing: %s" % row)
-    #             if row['Odoo'] != '' and "!" not in row['Odoo']:
-    #                 field_map.update({row['Odoo']: row[headers_header[i][0]]})
-    #             # if row['Odoo2'] != '' and "!" not in row['Odoo2']:
-    #             #     field_map.update({row['Odoo2']: row[headers_header[0]]}) 
-    #             if row['Trans'] != '':
-    #                 key = row['Trans'].split(",")[0]
-    #                 value = row['Trans'].split(",")[1]
-    #                 trans.update({key: value})
-    #             old_header.append(row[headers_header[i][0]]) #AIS-F fields
-    #             readers.update({'dict%s' % i : ReadCSV(path[i], old_header)})
-    #             transformations.update({'dict%s' % i: trans})
-        
-    #     #TODO: för varje reader läs en rad skicka båda tillsammans till create_partner_from_row
-    #     iterations = 0
-    #     for row in reader.get_data():
-    #         r = {}
-    #         header = list(field_map.keys())
-    #         #_logger.info("header: %s" % header)
-    #         for i in range(len(header)):
-    #             if header[i] in field_map:
-    #                 #_logger.info("header %s: %s" % (i, row[field_map[header[i]]]))
-    #                 r.update({header[i] : row[field_map[header[i]]]})
-    #         #_logger.info("creating row %s" %r)
-    #         self.create_partner_from_row(r, transformations)
-    #         iterations += 1
-    #         if iterations > 1000:
-    #             self.env.cr.commit
-    #             _logger.info("commit")
-    #             iterations = 0
-    #     reader.close()
-        #self.create_partner_from_row(rows, transformations)
         
     
     @api.model
@@ -199,6 +180,55 @@ class ResPartner(models.Model):
         else:
             _logger.warning("Did not create row %s" % row)
          
+    @api.model
+    def create_kpi_from_row(self, row):
+        external_xmlid = '%s%s' % (self.xmlid_module, row['external_id'])
+        external_id = row['external_id']
+        row.pop('external_id', None)
+        id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
+        if id_check != False:
+            kpi = self.env['res.partner.kpi'].create(row)
+
+            self.env['ir.model.data'].create({
+                                'name': external_id,
+                                'module': self.xmlid_module,
+                                'model': kpi._name,
+                                'res_id': kpi.id
+                                })
+    
+        
+    # @api.model #ska använda api istället, om det inte blir api, flytta till separat modul som körs efteråt
+    # def create_daily_note_from_row(self, row):
+    #     external_xmlid = '%s%s' % (self.xmlid_module, row['external_id'])
+    #     external_id = row['external_id']
+    #     row.pop('external_id', None)
+    #     id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
+    #     if id_check != False:
+    #         kpi = self.env['res.partner.notes'].create(row)
+
+    #         self.env['ir.model.data'].create({
+    #                             'name': external_id,
+    #                             'module': self.xmlid_module,
+    #                             'model': kpi._name,
+    #                             'res_id': kpi.id
+    #                             })
+
+    @api.model
+    def create_desired_jobs_from_row(self, row):
+        external_xmlid = '%s%s' % (self.xmlid_module, row['external_id'])
+        external_id = row['external_id']
+        row.pop('external_id', None)
+        id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
+        if id_check != False:
+            kpi = self.env['res.partner.jobs'].create(row)
+
+            self.env['ir.model.data'].create({
+                                'name': external_id,
+                                'module': self.xmlid_module,
+                                'model': kpi._name,
+                                'res_id': kpi.id
+                                })
+
     @api.model
     def make_secondary_address(self, key, row, transformations):
         keys_to_delete = []
@@ -292,44 +322,92 @@ class ResPartner(models.Model):
                     partner = self.env['res.partner'].search_read([('id', '=', partner_id)], ['street', 'street2', 'city', 'zip'])[0]
     
                     #partner inehåller id
-                    
-                    
-                    if row['type'].lower() == 'egen_angiven':
-                        if not partner['street'] and 'street' in row:
+
+                    if 'ssyk_id' in row:
+                        ssyk_xmlid = "res_ssyk.ssyk_%s" % row['ssyk_id']
+                        ssyk_id = self.env['ir.model.data'].xmlid_to_res_id(ssyk_xmlid)
+                        if ssyk_id != False:
+                            #self.env['res.partner'].browse().write()
+                        else:
+                            _logger.warning("ssyk %s not found, skipping" % row['ssyk_id'])
+
+                    if 'sni_id' in row:
+                        sni_xmlid = "res_sni.sni_%s" % row['sni_id']
+                        sni_id = self.env['ir.model.data'].xmlid_to_res_id(sni_xmlid)
+                        if sni_id != False:
+                            #self.env['res.partner'].browse().write()
+                        else:
+                            _logger.warning("sni %s not found, skipping" % row['sni_id'])
+                        
+                                            
+                    if 'fiscal_year' in row:
+                        partner_id = self.env['res.partner'].search([('company_registry', '=', row[external_id])]).id
+                        self.create_kpi_from_row({
+                            'external_id': "%s%s_%s" % (transformations['external_id'],row['external_id'],row['id']), 
+                            'partner_id': partner_id,
+                            'fiscal_year': row['fiscal_year'],
+                            'profit': row['profit'],
+                            'turnover': row['turnover'],
+                            'employees': row['employees']
+                            })
+
+                    # if 'note' in row:
+                    #     self.create_kpi_from_row({
+                    #         'external_id': "%s%s_%s" % (transformations['external_id'],row['external_id'],), 
+                    #         'partner_id': partner_id,
+                    #         'note': row['note'],
+                    #         'note_type': "%s%s" % (transformations['note_type'], row['note_type']),
+                    #         'note_date': row['note_date'],
+                    #         'note_number': row['note_number']
+                    #         })
+
+                        create = False
+                    if row['fiscal_year']:
+                        self.create_kpi_from_row({
+                            'external_id': "%s%s" % (transformations['external_id'],row['external_id'],row['id']), 
+                            'fiscal_year': row['fiscal_year'],
+                            'profit': row['profit'],
+                            'turnover': row['turnover'],
+                            'employees': row['employees']
+                            })
+                        create = False
+
+                    if row['type']:
+                        if row['type'].lower() == 'egen_angiven':
+                            if not partner['street'] and 'street' in row:
+                                if 'street2' in row:
+                                    partner['street2'] = row['street2']
+                                if 'zip' in row:
+                                    partner['zip'] = row['zip']
+                                if 'city' in row:
+                                    partner['city'] = row['city']
+                                partner['street'] = row['street']
+                                #self.env['res.partner'].browse().write()
+                            else:
+                                partner.update({'type': 'given_address', 'parent_id': partner['id'], 'external_id': '%s_%s' % (row['external_id'],row['id'])})
+                                partner.pop('id', None)
+                                self.create_partner_from_row(partner, {'external_id': transformations['external_id'], 'parent_id': transformations['partner_id']})
+                                
+                                #skapa och koppla med parent_id
+
+                        elif row['type'].lower() == 'folkbokforing':
+                            
+                            if partner['street'] and 'street' in row:
+                                partner.update({'type': 'given_address', 'parent_id': partner['id'], 'external_id': '%s_%s' % (row['external_id'],row['id'])})
+                                partner.pop('id', None)
+                                self.create_partner_from_row(partner, {'external_id': transformations['external_id'], 'parent_id': transformations['partner_id']})
+
+                            partner['street'] = row['street']
                             if 'street2' in row:
                                 partner['street2'] = row['street2']
-                            if 'zip' in row:
-                                partner['zip'] = row['zip']
+                            if 'zip' in row:                               partner['zip'] = row['zip']
                             if 'city' in row:
                                 partner['city'] = row['city']
-                            partner['street'] = row['street']
-                            #browse+write?
-                        else:
-                            partner.update({'type': 'given_address', 'parent_id': partner['id'], 'external_id': '%s_%s' % (row['external_id'],row['id'])})
-                            partner.pop('id', None)
-                            create_partner_from_row(partner, {'external_id': transformations['external_id'], 'parent_id': transformations['partner_id']})
                             
-                            #skapa och koppla med parent_id
-
-                    elif row['type'].lower() == 'folkbokforing':
-                        
-                        if partner['street'] and 'street' in row:
-                            partner.update({'type': 'given_address', 'parent_id': partner['id'], 'external_id': '%s_%s' % (row['external_id'],row['id'])})
-                            partner.pop('id', None)
-                            create_partner_from_row(partner, {'external_id': transformations['external_id'], 'parent_id': transformations['partner_id']})
-
-                        partner['street'] = row['street']
-                        if 'street2' in row:
-                            partner['street2'] = row['street2']
-                        if 'zip' in row:
-                            partner['zip'] = row['zip']
-                        if 'city' in row:
-                            partner['city'] = row['city']
-                        
-                    elif row['type'].lower() == 'egen_utlandsk':
-                        _logger.warning("foreign address on jobseeker, skipping")
-                    create = False
-                    keys_to_delete.append('type')
+                        elif row['type'].lower() == 'egen_utlandsk':
+                            _logger.warning("foreign address on jobseeker, skipping")
+                        create = False
+                        keys_to_delete.append('type')
                 if key == 'parent_id': 
                     parent_xmlid_name = "%s%s" % (transform, row[key])
                     parent_xmlid = "%s.%s" % (self.xmlid_module, parent_xmlid_name)
