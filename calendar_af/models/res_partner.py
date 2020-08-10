@@ -27,7 +27,7 @@ _logger = logging.getLogger(__name__)
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    appointment_ids = fields.Many2many(comodel_name='calendar.appointment', string='Booked meetings', inverse_name="partner_ids")
+    appointment_ids = fields.Many2many(comodel_name='calendar.appointment', string='Booked meetings', inverse_name="partner_id")
 
     @api.one
     def _compute_appointment_count(self):
@@ -53,7 +53,7 @@ class ResPartner(models.Model):
     def open_partner_calendar(self):
         return{
             'name': _('Calendar'),
-            #'domain':[('partner_id', '=', self.ids)],
+            'domain':[('partner_id', '=', self.ids)],
             'view_type': 'calendar',
             'res_model': 'calendar.appointment',
             'view_id':  False, #bör vara view_id för standard kalendern

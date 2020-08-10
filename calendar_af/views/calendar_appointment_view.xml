@@ -9,7 +9,7 @@
                 readonly_form_view_id="%(calendar.view_calendar_event_form_popup)s"
                 event_open_popup="true"
                 event_limit="3"
-                color="partner_ids"> -->
+                color="partner_id"> -->
             <calendar string="Appointments" date_start="start" date_stop="stop" date_delay="duration">
                 <field name="name" />
                 <!-- <field name="is_highlighted" invisible="1"/> -->
@@ -27,7 +27,7 @@
                 <field name="start" />
                 <field name="stop" />
                 <field name="user_id" />
-                <field name="partner_ids" />
+                <field name="partner_id" />
                 <field name="location_code" />
                 <field name="office" />
             </tree>
@@ -101,8 +101,8 @@
                                 <field string="Meeting subject" name="name" placeholder="e.g. Business Lunch" class="oe_edit_only" />
                             </group>
                             <group>
-                                <field string="Attendees" name="partner_ids" widget="many2manyattendee" placeholder="Select attendees..." class="oe_edit_only" />
-                                <field string="Case worker" name="user_id" widget="many2manyattendee" placeholder="Select case worker..." class="oe_edit_only" invisible="1" />
+                                <field string="Attendees" name="partner_id" placeholder="Select attendees..." class="oe_edit_only" />
+                                <field string="Case worker" name="user_id" placeholder="Select case worker..." class="oe_edit_only" invisible="1" />
                             </group>
                         </group>
                     <!-- </div> -->

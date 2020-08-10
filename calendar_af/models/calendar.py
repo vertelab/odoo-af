@@ -164,15 +164,13 @@ class CalendarAppointment(models.Model):
     _name = 'calendar.appointment'
     _description = "Appointment"
 
-    #radio button 30 min 1 timma 
-
     name = fields.Char(string='Name', required=True)
     start = fields.Datetime(string='Start', required=True, help="Start date of an appointment")
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an appointment")
     duration_selection = fields.Selection(string="Duration", selection=[('30 minutes','30 minutes'), ('1 hour','1 hour')])
     duration = fields.Float('Duration')
-    user_id = fields.Many2many(string='Case worker', comodel_name='res.users', help="Booked case worker", default=lambda self: self.env.user)
-    partner_ids = fields.Many2many(string='Customer', comodel_name='res.partner', help="Booked customer")
+    user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker", related="partner_id.user_id")
+    partner_id = fields.Many2one(string='Customer', comodel_name='res.partner', help="Booked customer", default=lambda self: self.default_partners())
     state = fields.Selection(selection=[('free', 'Free'),
                                         ('reserved', 'Reserved'),
                                         ('confirmed', 'Confirmed'),
@@ -181,7 +179,7 @@ class CalendarAppointment(models.Model):
                                         default='free', 
                                         help="Status of the meeting")
     location_code = fields.Char(string='Location')
-    office = fields.Many2one('res.partner', string="Office", related="user_id.office")
+    office = fields.Many2one('res.partner', string="Office", related="partner_id.office")
     office_code = fields.Char(string='Office code', related="office.office_code")
     occasion_ids = fields.One2many(comodel_name='calendar.occasion', inverse_name='appointment_id', string="Occasion")
     type_id = fields.Many2one(string='Type', required=True, comodel_name='calendar.appointment.type')
@@ -192,6 +190,18 @@ class CalendarAppointment(models.Model):
     suggestion_ids = fields.One2many(comodel_name='calendar.appointment.suggestion', inverse_name='appointment_id', string='Suggested Dates')
     """ suggestion_id = fields.Many2one(comodel_name='calendar.appointment.suggestion', string='Suggested Dates') """
 
+    @api.model
+    def default_partners(self):
+        """ When active_model is res.partner, the current partners should be attendees """
+        partners = self.env['res.partner']
+        active_id = self._context.get('active_id')
+        _logger.info("active_id: %s" % active_id)
+        if self._context.get('active_model') == 'res.partner' and active_id:
+            if active_id not in partners.ids:
+                partners |= self.env['res.partner'].browse(active_id)
+        _logger.info("partners: %s" % partners)
+        return partners
+    
     @api.onchange('type_id')
     def set_duration_selection(self):
         if self.type_id.duration == 30.0:
