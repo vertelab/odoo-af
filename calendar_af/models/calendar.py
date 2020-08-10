@@ -158,7 +158,7 @@ class CalendarAppointment(models.Model):
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an appointment")
     duration = fields.Float('Duration')
     user_id = fields.Many2many(string='Case worker', comodel_name='res.users', help="Booked case worker")
-    partner_id = fields.Many2many(string='Customer', comodel_name='res.partner', help="Booked customer")
+    partner_ids = fields.Many2many(string='Customer', comodel_name='res.partner', help="Booked customer")
     state = fields.Selection(selection=[('free', 'Free'),
                                         ('reserved', 'Reserved'),
                                         ('confirmed', 'Confirmed'),
