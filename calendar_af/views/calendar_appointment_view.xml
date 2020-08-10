@@ -113,7 +113,8 @@
                                     <field name="office" options="{'no_create_edit': True}" domain="[('type', '=', 'af office')]" />
                                     <field name="start" />
                                     <field name="stop" invisible="1" />
-                                    <field name="duration" />
+                                    <field name="duration_selection" widget="radio"/>
+                                    <field name="duration" invisible="1"/>
                                 </group>
                                 <group>
                                     <field string="Description" name="description" class="oe_edit_only"/>
