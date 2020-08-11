@@ -161,9 +161,15 @@ class ResPartner(models.Model):
             secondary_address_transformations = transformed_row_and_id['secondary_address_transformations']
                 
             
-            
+            _logger.info("creating partner: %s" % transformed_row)
+
+            transformed_row.pop('state_id', None)
+            transformed_row.pop('education_level', None)
+            transformed_row.pop('country_id', None)
+            transformed_row.pop('jobseeker_category', None)
             
             partner = self.env['res.partner'].create(transformed_row)
+
             #_logger.info("visitation address dict before create: %s" % visitation_address)
             if secondary_address != {}:
                 #_logger.info("CREATING VISITATION ADDRESS")
@@ -187,6 +193,7 @@ class ResPartner(models.Model):
         row.pop('external_id', None)
         id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
         if id_check != False:
+            _logger.info("creating kpi: %s" % row)
             kpi = self.env['res.partner.kpi'].create(row)
 
             self.env['ir.model.data'].create({
@@ -220,61 +227,16 @@ class ResPartner(models.Model):
         row.pop('external_id', None)
         id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
         if id_check != False:
-            kpi = self.env['res.partner.jobs'].create(row)
+            _logger.info("creating desired job: %s" % row)
+
+            job = self.env['res.partner.jobs'].create(row)
 
             self.env['ir.model.data'].create({
                                 'name': external_id,
                                 'module': self.xmlid_module,
-                                'model': kpi._name,
-                                'res_id': kpi.id
+                                'model': job._name,
+                                'res_id': job.id
                                 })
-
-    @api.model
-    def make_secondary_address(self, key, row, transformations):
-        keys_to_delete = []
-        keys_to_update = []
-        key_stripped = key[:3]
-        secondary_address = {
-            'external_id': row['external_id'],
-            'name' : "%s, %s" % (row[key] ,row['external_id']),
-            'street' : row[key], #secondary_address_id contains street field for secondary address
-            }
-        secondary_address_transformations = {'external_id' : transformations[key]} #external id for secondary address = transformation for secondary_address_id + external id of current row 
-
-        if 'street' not in row and 'state_id' not in row and 'city' not in row and 'zip' not in row:
-            keys_to_update.append({'street' : row[key]})
-
-        if '%s_state_id' % key_stripped in row:
-            #secondary_address.update({'state_id' : row['%s_state_id']})
-            keys_to_delete.append('%s_state_id' % key_stripped)
-            if '%s_state_id' % key_stripped in transformations:
-                secondary_address_transformations.update({'state_id' : transformations['%s_state_id' % key_stripped]})
-            if ('street' not in row and 'state_id' not in row) or ('street' in row and row['street'] == row[key] and 'state_id' not in row):
-                keys_to_update.append({'state_id' : row['%s_state_id' % key_stripped]})
-        if "%s_city" % key_stripped in row:
-            secondary_address.update({'city' : row['%s_city' % key_stripped]})
-            keys_to_delete.append('%s_city' % key_stripped)
-            if '%s_city' % key_stripped in transformations:
-                secondary_address_transformations.update({'city' : transformations['%s_city' % key_stripped]})
-            if ('street' not in row and 'city' not in row) or ('street' in row and row['street'] == row[key] and 'city' not in row): #
-                keys_to_update.append({'city' : row['%s_city' % key_stripped]})
-
-        if '%s_zip' % key_stripped in row:
-            secondary_address.update({'zip' : row['%s_zip' % key_stripped]})
-            keys_to_delete.append('%s_zip' % key_stripped)
-            if '%s_zip' % key_stripped in transformations:
-                secondary_address_transformations.update({'zip' : transformations['%s_zip' % key_stripped]})
-            if 'street' not in row and 'zip' not in row or ('street' in row and row['street'] == row[key] and 'zip' not in row) : 
-                keys_to_update.append({'zip' : row['%s_zip' % key_stripped]})
-
-        if '%s_country_id' % key_stripped in row:
-            secondary_address.update({'country_id' : row['%s_country_id' % key_stripped]})
-            keys_to_delete.append('%s_country_id' % key_stripped)
-        #_logger.info("secondary address dict: %s" % secondary_address)
-        keys_to_delete.append(key)
-        #for secondary_address_id in self.create_partner_from_row([secondary_address], secondary_address_transformations):
-        #   row.update({key : secondary_address_id}) 
-        return [secondary_address, secondary_address_transformations, keys_to_delete, keys_to_update]
 
     @api.model
     def transform(self, row, transformations):
@@ -328,6 +290,7 @@ class ResPartner(models.Model):
                             self.env['res.ssyk'].browse(ssyk_id).write({'partner_ids' : [(4,partner_id)]})
                         else:
                             _logger.warning("ssyk %s not found, skipping" % row['ssyk_id'])
+                        
                         create = False
 
                     if 'sni_id' in row:
@@ -365,7 +328,7 @@ class ResPartner(models.Model):
 
                     if 'type' in row:
                         if row['type'].lower() == 'egen_angiven':
-                            if 'street' not in partner and 'street' in row:
+                            if not partner['street'] and 'street' in row:
                                 if 'street2' in row:
                                     partner['street2'] = row['street2']
                                 if 'zip' in row:
@@ -380,14 +343,14 @@ class ResPartner(models.Model):
                                     'city': partner['city']
                                     })
                             else:
-                                partner.update({'type': 'given_address', 'parent_id': partner['id'], 'external_id': '%s_%s' % (row['external_id'],row['id'])})
+                                partner.update({'type': 'given address', 'parent_id': partner['id'], 'external_id': '%s_%s' % (row['external_id'],row['id'])})
                                 partner.pop('id', None)
                                 self.create_partner_from_row(partner, {'external_id': transformations['external_id'], 'parent_id': transformations['partner_id']})
                                 #skapa och koppla med parent_id
 
                         elif row['type'].lower() == 'folkbokforing': 
                             if partner['street'] and 'street' in row:
-                                partner.update({'type': 'given_address', 'parent_id': partner['id'], 'external_id': '%s_%s' % (row['external_id'],row['id'])})
+                                partner.update({'type': 'given address', 'parent_id': partner['id'], 'external_id': '%s_%s' % (row['external_id'],row['id'])})
                                 partner.pop('id', None)
                                 self.create_partner_from_row(partner, {'external_id': transformations['external_id'], 'parent_id': transformations['partner_id']})     
                             partner['street'] = row['street']
@@ -418,16 +381,45 @@ class ResPartner(models.Model):
                         _logger.error("Could not find parent id %s, not adding to %s" % (row[key], row['external_id']))
                     else:
                         row.update({key: parent_id})
-                elif key == 'visitation_address_id' or key == 'given_address_id':
+                elif key == 'visitation_address_id':
                     if create:
-                        secondary_address_arr = self.make_secondary_address(key, row, transformations)
-                        secondary_address = secondary_address_arr[0]
-                        secondary_address_transformations = secondary_address_arr[1]
-                        for key in secondary_address_arr[2]:
-                            keys_to_delete.append(key)
-                        for key in secondary_address_arr[3]:
-                            keys_to_update.append(key)
-
+                        visitation_address = {
+                            'external_id': row['external_id'],
+                            'name' : "",
+                            'street' : row[key], #visitation_address_id contains street field for visitation address
+                            'type' : 'visitation address'
+                            }
+                        visitation_address_transformations = {'external_id' : transformations[key]} #external id for visitation address = transformation for visitation_address_id + external id of current row
+                        if 'street' not in row and 'state_id' not in row and 'city' not in row and 'zip' not in row:
+                            keys_to_update.append({'street' : row[key]})
+                        if 'visitation_address_state_id' in row:
+                            #visitation_address.update({'state_id' : row['visitation_address_state_id']})
+                            keys_to_delete.append('visitation_address_state_id')
+                            if 'visitation_address_state_id' in transformations:
+                                visitation_address_transformations.update({'state_id' : transformations['visitation_address_state_id']})
+                            if ('street' not in row and 'state_id' not in row) or ('street' in row and row['street'] == row[key] and 'state_id' not in row):
+                                keys_to_update.append({'state_id' : row['visitation_address_state_id']})
+                        if "visitation_address_city" in row:
+                            visitation_address.update({'city' : row['visitation_address_city']})
+                            keys_to_delete.append('visitation_address_city')
+                            if 'visitation_address_city' in transformations:
+                                visitation_address_transformations.update({'city' : transformations['visitation_address_city']})
+                            if ('street' not in row and 'city' not in row) or ('street' in row and row['street'] == row[key] and 'city' not in row): #
+                                keys_to_update.append({'city' : row['visitation_address_city']})
+                        if 'visitation_address_zip' in row:
+                            visitation_address.update({'zip' : row['visitation_address_zip']})
+                            keys_to_delete.append('visitation_address_zip')
+                            if 'visitation_address_zip' in transformations:
+                                visitation_address_transformations.update({'zip' : transformations['visitation_address_zip']})
+                            if 'street' not in row and 'zip' not in row or ('street' in row and row['street'] == row[key] and 'zip' not in row) :
+                                keys_to_update.append({'zip' : row['visitation_address_zip']})
+                        if 'visitation_address_country_id' in row:
+                            visitation_address.update({'country_id' : row['visitation_address_country_id']})
+                            keys_to_delete.append('visitation_address_country_id')
+                        #_logger.info("visitation address dict: %s" % visitation_address)
+                        keys_to_delete.append(key)
+                        #for visitation_address_id in self.create_partner_from_rows([visitation_address], visitation_address_transformations):
+                        #   row.update({key : visitation_address_id})
                 elif key == 'external_id':
                     if transform == "part_org_" or transform == "part_emplr_" or transform == "part_cct_":
                         keys_to_update.append({'is_employer' : True})
@@ -444,8 +436,7 @@ class ResPartner(models.Model):
             row.update(keys_to_update[i])
             #_logger.info("row updated with %s, now %s" % (keys_to_update[i], row) )
         
-        if ('name' not in row and 'lastname' not in row and 'firstname' not in row and 'type' not in row) or ('name' not in row and 'lastname' not in row and 'firstname' not in row and row['type'] == 'contact'):
-            
+        if create and (('name' not in row and 'lastname' not in row and 'firstname' not in row and 'type' not in row) or ('name' not in row and 'lastname' not in row and 'firstname' not in row and row['type'] == 'contact')):
             row.update({'name' : row['external_id']})
 
         if 'country_id' not in row or row['country_id'] == 'SE' or row['country_id'].lower() == 'sverige':
@@ -493,10 +484,11 @@ class ResPartner(models.Model):
             else:
                 _logger.warning("education_level is 0 for %s, leaving empty" % row['external_id'])
                 row.pop('education_level', None)
-            
+        
         for key in row.keys():
             if "skip" in key:
                 keys_to_delete.append(key)
+        _logger.info("keys to delete: %s" % keys_to_delete)
         for i in range(len(keys_to_delete)):
                 row.pop(keys_to_delete[i], None)
         id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
