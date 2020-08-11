@@ -161,7 +161,7 @@ class ResPartner(models.Model):
             secondary_address_transformations = transformed_row_and_id['secondary_address_transformations']
                 
             
-            _logger.info("creating partner: %s" % transformed_row)
+           #_logger.info("creating partner: %s" % transformed_row)
 
             transformed_row.pop('state_id', None)
             transformed_row.pop('education_level', None)
@@ -188,11 +188,12 @@ class ResPartner(models.Model):
          
     @api.model
     def create_kpi_from_row(self, row):
+        _logger.info("got to create kpi method")
         external_xmlid = '%s%s' % (self.xmlid_module, row['external_id'])
         external_id = row['external_id']
         row.pop('external_id', None)
         id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
-        if id_check != False:
+        if not id_check:
             _logger.info("creating kpi: %s" % row)
             kpi = self.env['res.partner.kpi'].create(row)
 
@@ -277,99 +278,70 @@ class ResPartner(models.Model):
                         _logger.warning("Skipping partner, contains J in RADERAD" )
                         break
                 if key == 'partner_id':
-                    partner_xmlid_name = "%s%s" % (transform, row[key])
-                    partner_xmlid = "%s.%s" % (self.xmlid_module, partner_xmlid_name)
-                    partner_id = self.env['ir.model.data'].xmlid_to_res_id(partner_xmlid)
-                    
-                    partner = self.env['res.partner'].search_read([('id', '=', partner_id)], ['street', 'street2', 'city', 'zip'])[0]
-    
-                    if 'ssyk_id' in row:
-                        ssyk_xmlid = "res_ssyk.ssyk_%s" % row['ssyk_id']
-                        ssyk_id = self.env['ir.model.data'].xmlid_to_res_id(ssyk_xmlid)
-                        if ssyk_id != False:
-                            self.env['res.ssyk'].browse(ssyk_id).write({'partner_ids' : [(4,partner_id)]})
-                        else:
-                            _logger.warning("ssyk %s not found, skipping" % row['ssyk_id'])
-                        
-                        create = False
-
-                    if 'sni_id' in row:
-                        sni_xmlid = "res_sni.sni_%s" % row['sni_id']
-                        sni_id = self.env['ir.model.data'].xmlid_to_res_id(sni_xmlid)
-                        if sni_id != False:
-                            self.env['res.sni'].browse(sni_id).write({'partner_ids' : [(4,partner_id)]})
-                        else:
-                            _logger.warning("sni %s not found, skipping" % row['sni_id'])
-                        create = False
-                        
-                                            
                     if 'fiscal_year' in row:
-                        partner_id = self.env['res.partner'].search([('company_registry', '=', row['external_id'])]).id
+                        
+                        fiscal_year_date = "%s-%s-01" % (row['fiscal_year'][:4], row['fiscal_year'][4:6])
+                        partner_id = self.env['res.partner'].search([('company_registry', '=', row['partner_id'])]).id
                         self.create_kpi_from_row({
-                            'external_id': "%s%s_%s" % (transformations['external_id'],row['external_id'],row['id']), 
+                            'external_id': "%s%s" % (transformations['external_id'],row['external_id']), 
                             'partner_id': partner_id,
-                            'fiscal_year': row['fiscal_year'],
+                            'fiscal_year': fiscal_year_date,
                             'profit': row['profit'],
                             'turnover': row['turnover'],
                             'employees': row['employees']
                             })
                         create = False
-
-                    # if 'note' in row:
-                    #     self.create_kpi_from_row({
-                    #         'external_id': "%s%s_%s" % (transformations['external_id'],row['external_id'],), 
-                    #         'partner_id': partner_id,
-                    #         'note': row['note'],
-                    #         'note_type': "%s%s" % (transformations['note_type'], row['note_type']),
-                    #         'note_date': row['note_date'],
-                    #         'note_number': row['note_number']
-                    #         })
-                    #     create = False
-
-                    if 'type' in row:
-                        if row['type'].lower() == 'egen_angiven':
-                            if not partner['street'] and 'street' in row:
-                                if 'street2' in row:
-                                    partner['street2'] = row['street2']
-                                if 'zip' in row:
-                                    partner['zip'] = row['zip']
-                                if 'city' in row:
-                                    partner['city'] = row['city']
-                                partner['street'] = row['street']
-                                self.env['res.partner'].browse(partner_id).write({
-                                    'street': partner['street'],
-                                    'street2': partner['street2'],
-                                    'zip': partner['zip'],
-                                    'city': partner['city']
-                                    })
+                    else:
+                        partner_xmlid_name = "%s%s" % (transform, row[key])
+                        partner_xmlid = "%s.%s" % (self.xmlid_module, partner_xmlid_name)
+                        partner_id = self.env['ir.model.data'].xmlid_to_res_id(partner_xmlid)
+                        
+                        partner = self.env['res.partner'].search_read([('id', '=', partner_id)], ['street', 'street2', 'city', 'zip'])[0]
+        
+                        if 'ssyk_id' in row:
+                            ssyk_xmlid = "res_ssyk.ssyk_%s" % row['ssyk_id']
+                            ssyk_id = self.env['ir.model.data'].xmlid_to_res_id(ssyk_xmlid)
+                            if ssyk_id != False:
+                                self.env['res.partner'].browse(partner_id).write({'ssyk_ids' : [(4,ssyk_id)]})
                             else:
+                                _logger.warning("ssyk %s not found, skipping" % row['ssyk_id'])
+                            
+                            create = False
+
+                        if 'sni_id' in row:
+                            sni_xmlid = "res_sni.sni_%s" % row['sni_id']
+                            sni_id = self.env['ir.model.data'].xmlid_to_res_id(sni_xmlid)
+                            if sni_id != False:
+                                self.env['res.partner'].browse(partner_id).write({'sni_ids' : [(4,sni_id)]})
+                            else:
+                                _logger.warning("sni %s not found, skipping" % row['sni_id'])
+                            create = False
+
+                        if 'type' in row:
+                            if row['type'].lower() == 'egen_angiven':
                                 partner.update({'type': 'given address', 'parent_id': partner['id'], 'external_id': '%s_%s' % (row['external_id'],row['id'])})
                                 partner.pop('id', None)
                                 self.create_partner_from_row(partner, {'external_id': transformations['external_id'], 'parent_id': transformations['partner_id']})
                                 #skapa och koppla med parent_id
 
-                        elif row['type'].lower() == 'folkbokforing': 
-                            if partner['street'] and 'street' in row:
-                                partner.update({'type': 'given address', 'parent_id': partner['id'], 'external_id': '%s_%s' % (row['external_id'],row['id'])})
-                                partner.pop('id', None)
-                                self.create_partner_from_row(partner, {'external_id': transformations['external_id'], 'parent_id': transformations['partner_id']})     
-                            partner['street'] = row['street']
-                            if 'street2' in row:
-                                partner['street2'] = row['street2']
-                            if 'zip' in row:                               
-                                partner['zip'] = row['zip']
-                            if 'city' in row:
-                                partner['city'] = row['city']
-                            self.env['res.partner'].browse(partner_id).write({
-                                    'street': partner['street'],
-                                    'street2': partner['street2'],
-                                    'zip': partner['zip'],
-                                    'city': partner['city']
-                                    })    
-                        elif row['type'].lower() == 'egen_utlandsk':
-                            _logger.warning("foreign address on jobseeker, skipping")
-                        create = False
-                        keys_to_delete.append('type')
+                            elif row['type'].lower() == 'folkbokforing': 
+                                partner['street'] = row['street']
+                                if 'street2' in row:
+                                    partner['street2'] = row['street2']
+                                if 'zip' in row:                               
+                                    partner['zip'] = row['zip']
+                                if 'city' in row:
+                                    partner['city'] = row['city']
+                                self.env['res.partner'].browse(partner_id).write({
+                                        'street': partner['street'],
+                                        'street2': partner['street2'],
+                                        'zip': partner['zip'],
+                                        'city': partner['city']
+                                        })  
+                            elif row['type'].lower() == 'egen_utlandsk':
+                                _logger.warning("foreign address on jobseeker, skipping")
+                            create = False
+                            keys_to_delete.append('type')
                 if key == 'parent_id': 
                     parent_xmlid_name = "%s%s" % (transform, row[key])
                     parent_xmlid = "%s.%s" % (self.xmlid_module, parent_xmlid_name)
@@ -488,7 +460,7 @@ class ResPartner(models.Model):
         for key in row.keys():
             if "skip" in key:
                 keys_to_delete.append(key)
-        _logger.info("keys to delete: %s" % keys_to_delete)
+       #_logger.info("keys to delete: %s" % keys_to_delete)
         for i in range(len(keys_to_delete)):
                 row.pop(keys_to_delete[i], None)
         id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
