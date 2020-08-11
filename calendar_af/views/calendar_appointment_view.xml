@@ -128,8 +128,8 @@
 
                     <span aria-atomic="true" class="btn-group oe-right oe_button_box">
                         <button name="compute_suggestion_ids" type="object" string="Update" />
-                        <button aria-label="Previous" class="fa fa-chevron-left btn btn-secondary o_pager_previous" accesskey="b" tabindex="-1" title="Previous" type="button"></button>
-                        <button aria-label="Next" class="fa fa-chevron-right btn btn-secondary o_pager_next" accesskey="f" tabindex="-1" title="Next" type="button"></button>
+                        <!-- <button aria-label="Previous" class="fa fa-chevron-left btn btn-secondary o_pager_previous" accesskey="b" tabindex="-1" title="Previous" type="button"></button>
+                        <button aria-label="Next" class="fa fa-chevron-right btn btn-secondary o_pager_next" accesskey="f" tabindex="-1" title="Next" type="button"></button> -->
                     </span>
 
                     <field name="suggestion_ids">

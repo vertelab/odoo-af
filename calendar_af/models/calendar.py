@@ -213,20 +213,23 @@ class CalendarAppointment(models.Model):
     @api.onchange('duration_selection')
     def set_duration(self):
         if self.duration_selection == "30 minutes":
-            self.duration = 30.0
+            self.duration = 0.5
         if self.duration_selection == "1 hour":
-            self.duration = 60.0
+            self.duration = 1.0
 
     @api.onchange('duration', 'channel')
     def compute_suggestion_ids(self):
         if not all((self.duration, self.type_id, self.channel)):
             return
         start = self.start_meeting_search()
+        
         stop = self.stop_meeting_search(start)
+        
         suggestion_ids = []
         if self.suggestion_ids:
             suggestion_ids.append((5,))
         occasions = self.env['calendar.occasion'].get_bookable_occasions(start, stop, self.duration * 60, self.type_id, max_depth = 1)
+        _logger.info("occasions: %s" % occasions)
         # _logger.warn(occasions)
         for day in occasions:
             for day_occasions in day:
@@ -460,6 +463,7 @@ class CalendarOccasion(models.Model):
         td_base_duration = timedelta(minutes=BASE_DURATION)
         
         def get_occasions(start_dt):
+            start_dt = start_dt.replace(second=0, microsecond=0)
             return self.env['calendar.occasion'].search(
                 [
                     ('start', '=', start_dt),
