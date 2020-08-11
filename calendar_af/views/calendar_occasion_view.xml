@@ -9,7 +9,7 @@
                 readonly_form_view_id="%(calendar.view_calendar_event_form_popup)s"
                 event_open_popup="true"
                 event_limit="3"
-                color="partner_id"> -->
+                color="partner_ids"> -->
             <calendar string="Occasions" date_start="start" date_stop="stop" date_delay="duration">
                 <field name="name" />
                 <!-- <field name="is_highlighted" invisible="1"/> -->

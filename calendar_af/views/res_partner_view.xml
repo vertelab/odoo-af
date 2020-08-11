@@ -12,6 +12,17 @@
             groups="base.group_user"> 
             <field string="Booked meetings" name="appointment_count" widget="statinfo"/>
         </button>
+
+      </div>
+    </field>
+  </record> 
+<record id="view_jobseeker_form_calendar_af_inherited" model="ir.ui.view"> 
+    <field name="name">res.partner.form.jobseeker.calendar_af.inherited</field>
+    <field name="model">res.partner</field> 
+    <field name="inherit_id" ref="partner_view_360.view_jobseeker_form" /> 
+    <field name="arch" type="xml"> 
+      <div name="button_box" position="inside">
+        <button name="open_partner_calendar" type="object" class="oe_stat_button" icon="fa-calendar">Calendar</button>
       </div>
     </field>
   </record> 
