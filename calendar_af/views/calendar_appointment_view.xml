@@ -132,8 +132,8 @@
                         <button aria-label="Next" class="fa fa-chevron-right btn btn-secondary o_pager_next" accesskey="f" tabindex="-1" title="Next" type="button"></button> -->
                     </span>
 
-                    <field name="suggestion_ids">
-                        <tree string="Bookable Occasions">
+                    <field name="suggestion_ids" >
+                        <tree string="Bookable Occasions" limit="10">
                             <field name="start" />
                             <field name="stop" />
                             <field name="occasion_ids" invisible="1" />
