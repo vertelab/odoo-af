@@ -57,6 +57,6 @@ class ResPartner(models.Model):
             'view_type': 'calendar',
             'res_model': 'calendar.appointment',
             'view_id':  False, #bör vara view_id för standard kalendern
-            'view_mode': 'calendar,tree,kanban,form',
+            'view_mode': 'tree, calendar,kanban,form',
             'type': 'ir.actions.act_window',
         }

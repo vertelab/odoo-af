@@ -24,6 +24,7 @@
         <field name="arch" type="xml">
             <tree string="Appointments">
                 <field name="name" />
+                <field name="type_id"/>
                 <field name="start" />
                 <field name="stop" />
                 <field name="user_id" />
