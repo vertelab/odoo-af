@@ -11,8 +11,8 @@ TMSTAMP,,,
 ARKIVERAD,,,
 VC_ORGNAMN_SOK,,,
 UTDELNINGSADRESS,id = part_emplr_adr_ + external_id,"visitation_address_id,part_org_adr_",visitation_address_id
-UTDELNINGSADRESS_POSTORT,,,visitation_address_zip
-UTDELNINGSADRESS_POSTNR,,,visitation_address_city
+UTDELNINGSADRESS_POSTORT,,,visitation_address_city
+UTDELNINGSADRESS_POSTNR,,,visitation_address_zip
 UTDELNINGSADRESS_KOMMUNKOD,"behöver transformation, behöver inläsning av states state_id/id",,visitation_address_state_id
 UTDELNINGSADRESS_LANDKOD,"behöver transformation, country_id/id",,visitation_address_country_id
 BESOKSADRESS,,,street

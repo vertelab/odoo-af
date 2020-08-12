@@ -6,7 +6,7 @@ REGDATUM,,,customer_since
 KONTOR_KOD,fel kod,,
 ANTAL_AKT_ORDER,,,
 ANTAL_AKT_ARENDEN,,,
-ARBETSSTALLENR,,,cfar_number
+ARBETSSTALLENR,,,cfar
 AG_NAMN,,,name
 TELNR,,,phone
 FAXNR,,,fax

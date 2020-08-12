@@ -127,9 +127,12 @@ class ResPartner(models.Model):
                 transformations.update({key: value})
             old_header.append(row[headers_header[0]]) #AIS-F fields
         #_logger.info("old_header: %s" % old_header)
-        reader = ReadCSV(path, old_header) 
+        reader = ReadCSV(path, old_header)
         iterations = 0
+        #_logger.info("get_data: %s" % next(reader.get_data()))
+        #reader.seek_zero()
         for row in reader.get_data():
+            #_logger.info("row: %s" % row)
             r = {}
             header = list(field_map.keys())
             #_logger.info("header: %s" % header)
@@ -140,9 +143,9 @@ class ResPartner(models.Model):
             #_logger.info("creating row %s" %r)
             self.create_partner_from_row(r, transformations)
             iterations += 1
-            if iterations > 1000:
-                self.env.cr.commit
-                _logger.info("commit")
+            if iterations > 500:
+                self.env.cr.commit()
+               #_loger.info("commit")
                 iterations = 0
         reader.close()
         
@@ -258,8 +261,11 @@ class ResPartner(models.Model):
                 if row[key].lower() == "j":
                     keys_to_update.append({key: "True"})
                 elif row[key].lower() == "n":
-                    keys_to_update.append({key: "False"})           
-            
+                    keys_to_update.append({key: "False"})
+
+        if 'type' not in row: #new
+            row['type'] = 'contact'
+
         for key in row.keys():
             if key in transformations:
                 transform = transformations[key]
@@ -467,6 +473,8 @@ class ResPartner(models.Model):
         if id_check != False:
             create = False
             _logger.warning("external id already in database, skipping")
+        
+       #_loger.info('create?: %s' % create)
         if create:
             return {'row': row, 
                     'external_xmlid': external_xmlid, 
@@ -493,7 +501,10 @@ class ReadCSV(object):
         except IOError as e:
             _logger.error(u'Could not read CSV file at path %s' % path)
             raise ValueError(e)
+        
         row = next(self.data)
+        self.f.seek(0)
+        next(self.data)
         for i in range(len(self.header)):
             if not self.header[i] in row.keys(): 
                 _logger.error(u'Row 0 could not find "%s"' % self.header[i])
