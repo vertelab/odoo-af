@@ -191,18 +191,17 @@ class ResPartner(models.Model):
          
     @api.model
     def create_kpi_from_row(self, row):
-        _logger.info("got to create kpi method")
-        external_xmlid = '%s%s' % (self.xmlid_module, row['external_id'])
-        external_id = row['external_id']
+        external_xmlid = '%s.%s' % (self.xmlid_module, row['external_id'])
         row.pop('external_id', None)
         id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
-        if not id_check:
+        _logger.info("id_check: %s" % id_check)
+        if id_check == False:
             _logger.info("creating kpi: %s" % row)
             kpi = self.env['res.partner.kpi'].create(row)
 
             self.env['ir.model.data'].create({
-                                'name': external_id,
-                                'module': self.xmlid_module,
+                                'name': external_xmlid.split('.')[1],
+                                'module': external_xmlid.split('.')[0],
                                 'model': kpi._name,
                                 'res_id': kpi.id
                                 })
@@ -230,7 +229,7 @@ class ResPartner(models.Model):
         external_id = row['external_id']
         row.pop('external_id', None)
         id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
-        if id_check != False:
+        if id_check == False:
             _logger.info("creating desired job: %s" % row)
 
             job = self.env['res.partner.jobs'].create(row)
@@ -325,7 +324,19 @@ class ResPartner(models.Model):
 
                         if 'type' in row:
                             if row['type'].lower() == 'egen_angiven':
-                                partner.update({'type': 'given address', 'parent_id': partner['id'], 'external_id': '%s_%s' % (row['external_id'],row['id'])})
+                                partner['street'] = row['street']
+                                if 'street2' in row:
+                                    partner['street2'] = row['street2']
+                                if 'zip' in row:                               
+                                    partner['zip'] = row['zip']
+                                if 'city' in row:
+                                    partner['city'] = row['city']
+                                partner.update({
+                                    'type': 'given address', 
+                                    'parent_id': partner['id'], 
+                                    'external_id': '%s_%s' % (row['external_id'],
+                                    row['id']),
+                                    })
                                 partner.pop('id', None)
                                 self.create_partner_from_row(partner, {'external_id': transformations['external_id'], 'parent_id': transformations['partner_id']})
                                 #skapa och koppla med parent_id
