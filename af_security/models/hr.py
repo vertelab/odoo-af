@@ -24,16 +24,29 @@ import logging
 _logger = logging.getLogger(__name__)
 
     
-class ResPartner(models.Model):
-    _inherit = "res.partner"
+class HrEmployee(models.Model):
+    _inherit = "hr.employee"
 
-    # Access rights to archive contacts. This is probably not good enough.
-    # Can't specify read/write.
-    # Can't specify domains per group (causes crossover between employers and jobseekers officers)
-    # TODO: Look for a solution. Existing module or build one.
-    #       Look at that encryption module to add new parameters to fields.
-    active = fields.Boolean(groups='base.group_system,af_security.group_af_employers_high,af_security.group_af_jobseekers_high')
+    office_id = fields.Many2one('res.partner', string='Office', domain=[('type', '=', 'af office')])
+    office_ids = fields.Many2many('res.partner', relation='res_partner_office_partner_rel', column1='partner_id', column2='office_id', string='Offices', domain=[('type', '=', 'af office')])
 
-    @api.model
-    def af_security_install_rules(self):
-        self.env.ref('base.res_partner_rule_private_employee').active = False
+    @api.one
+    # @api.onchange('office_id')
+    def update_office_ids(self):
+        """Add office_id to office_ids."""
+        if self.office_id not in self.office_ids:
+            self.office_ids |= self.office_id
+
+    @api.multi
+    def write(self, vals):
+        res = super(HrEmployee, self).write(vals)
+        if 'office_id' in vals:
+            self.update_office_ids()
+        return vals
+    
+    @api.model_create_multi
+    @api.returns('self', lambda value: value.id)
+    def create(self, vals_list):
+        records = super(HrEmployee, self).create(vals_list)
+        records.update_office_ids()
+        return records
