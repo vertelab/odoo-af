@@ -24,6 +24,7 @@
         <field name="arch" type="xml">
             <tree string="Appointments">
                 <field name="name" />
+                <field name="type_id"/>
                 <field name="start" />
                 <field name="stop" />
                 <field name="user_id" />
@@ -128,12 +129,12 @@
 
                     <span aria-atomic="true" class="btn-group oe-right oe_button_box">
                         <button name="compute_suggestion_ids" type="object" string="Update" />
-                        <button aria-label="Previous" class="fa fa-chevron-left btn btn-secondary o_pager_previous" accesskey="b" tabindex="-1" title="Previous" type="button"></button>
-                        <button aria-label="Next" class="fa fa-chevron-right btn btn-secondary o_pager_next" accesskey="f" tabindex="-1" title="Next" type="button"></button>
+                        <!-- <button aria-label="Previous" class="fa fa-chevron-left btn btn-secondary o_pager_previous" accesskey="b" tabindex="-1" title="Previous" type="button"></button>
+                        <button aria-label="Next" class="fa fa-chevron-right btn btn-secondary o_pager_next" accesskey="f" tabindex="-1" title="Next" type="button"></button> -->
                     </span>
 
-                    <field name="suggestion_ids">
-                        <tree string="Bookable Occasions">
+                    <field name="suggestion_ids" >
+                        <tree string="Bookable Occasions" limit="10">
                             <field name="start" />
                             <field name="stop" />
                             <field name="occasion_ids" invisible="1" />
@@ -155,7 +156,7 @@
     <record id="action_appointment" model="ir.actions.act_window">
         <field name="name">Appointments</field>
         <field name="res_model">calendar.appointment</field>
-        <field name="view_mode">calendar,tree,form,pivot,kanban</field>
+        <field name="view_mode">tree,calendar,form,pivot,kanban</field>
         <field name="view_id" ref="view_calendar_appointment_calendar" />
         <!-- <field name="search_view_id" ref="view_calendar_event_search"/> -->
         <!-- <field name="help" type="html">
@@ -172,7 +173,7 @@
     <record id="action_local_appointment" model="ir.actions.act_window">
         <field name="name">Local appointments</field>
         <field name="res_model">calendar.appointment</field>
-        <field name="view_mode">calendar,tree,form,pivot,kanban</field>
+        <field name="view_mode">tree,calendar,form,pivot,kanban</field>
         <field name="view_id" ref="view_calendar_appointment_calendar" />
         <!-- <field name="search_view_id" ref="view_calendar_event_search"/> -->
         <!-- <field name="help" type="html">
@@ -188,14 +189,14 @@
 
     <record id="action_view_calendar_appointment_calendar" model="ir.actions.act_window.view">
         <field name="act_window_id" ref="action_appointment" />
-        <field name="sequence" eval="1" />
+        <field name="sequence" eval="2" />
         <field name="view_mode">calendar</field>
         <field name="view_id" ref="view_calendar_appointment_calendar" />
     </record>
 
     <record id="action_view_calendar_appointment_tree" model="ir.actions.act_window.view">
         <field name="act_window_id" ref="action_appointment" />
-        <field name="sequence" eval="2" />
+        <field name="sequence" eval="1" />
         <field name="view_mode">tree</field>
         <field name="view_id" ref="view_calendar_appointment_tree" />
     </record>
@@ -222,6 +223,7 @@
     </record>
 
     <!-- <menuitem action="action_book_distans_meeting" id="menu_action_book_distans_meeting" parent="menu_book_distans_meeting" sequence="11" /> -->
+    <menuitem action="action_appointment" id="root_menu_action_appointment" sequence="2" />
     <menuitem action="action_appointment" id="menu_action_appointment" parent="menu_pdm" sequence="12" />
     <menuitem action="action_local_appointment" id="menu_action_local_appointment" parent="menu_local" sequence="12" />
 </odoo>

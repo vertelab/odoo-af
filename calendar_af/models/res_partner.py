@@ -54,9 +54,9 @@ class ResPartner(models.Model):
         return{
             'name': _('Calendar'),
             'domain':[('partner_id', '=', self.ids)],
-            'view_type': 'calendar',
+            'view_type': 'form',
             'res_model': 'calendar.appointment',
-            'view_id':  False, #bör vara view_id för standard kalendern
-            'view_mode': 'calendar,tree,kanban,form',
+            'view_id':  self.env.ref('calendar_af.view_calendar_appointment_tree').id,
+            'view_mode': 'tree',
             'type': 'ir.actions.act_window',
         }
