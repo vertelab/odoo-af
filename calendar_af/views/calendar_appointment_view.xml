@@ -223,6 +223,7 @@
     </record>
 
     <!-- <menuitem action="action_book_distans_meeting" id="menu_action_book_distans_meeting" parent="menu_book_distans_meeting" sequence="11" /> -->
+    <menuitem action="action_appointment" id="root_menu_action_appointment" sequence="2" />
     <menuitem action="action_appointment" id="menu_action_appointment" parent="menu_pdm" sequence="12" />
     <menuitem action="action_local_appointment" id="menu_action_local_appointment" parent="menu_local" sequence="12" />
 </odoo>
