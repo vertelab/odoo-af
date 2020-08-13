@@ -56,7 +56,7 @@ class ResPartner(models.Model):
             'domain':[('partner_id', '=', self.ids)],
             'view_type': 'form',
             'res_model': 'calendar.appointment',
-            'view_id':  self.env.ref('calendar_af.view_calendar_appointment_tree').id,
-            'view_mode': 'tree',
+            'view_id':  False,
+            'view_mode': 'tree,calendar,kanban,pivot,form',
             'type': 'ir.actions.act_window',
         }
