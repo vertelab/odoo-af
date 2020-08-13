@@ -177,6 +177,7 @@ class CalendarAppointment(models.Model):
                                         string='State', 
                                         default='free', 
                                         help="Status of the meeting")
+    cancel_reason = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason', help="Cancellation reason")
     location_code = fields.Char(string='Location')
     office = fields.Many2one('res.partner', string="Office")
     office_code = fields.Char(string='Office code', related="office.office_code")
@@ -187,7 +188,7 @@ class CalendarAppointment(models.Model):
     reserved = fields.Datetime(string='Reserved', help="Occasions was reserved at this date and time")
     description = fields.Text(string='Description')
     suggestion_ids = fields.One2many(comodel_name='calendar.appointment.suggestion', inverse_name='appointment_id', string='Suggested Dates')
-    """ suggestion_id = fields.Many2one(comodel_name='calendar.appointment.suggestion', string='Suggested Dates') """
+    # suggestion_id = fields.Many2one(comodel_name='calendar.appointment.suggestion', string='Suggested Dates')
 
 
     @api.onchange('duration', 'type_id', 'channel')
@@ -242,6 +243,7 @@ class CalendarAppointment(models.Model):
 
         return res
 
+    # NOT NEEDED, keeping this incase it is needed later.
     # @api.model
     # def create(self, values):
     #     res = False
@@ -287,6 +289,13 @@ class CalendarAppointment(models.Model):
             return True
         else:
             return False
+
+class CalendarAppointmentCancelReason(models.Model):
+    _name = 'calendar.appointment.cancel_reason'
+    _description = "Cancellation reason for an appointment"
+
+    name = fields.Char(string='Name', required=True)
+    appointment_id = fields.One2many(comodel_name='calendar.appointment', inverse_name='cancel_reason')
 
 class CalendarOccasion(models.Model):
     _name = 'calendar.occasion'
