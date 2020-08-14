@@ -173,6 +173,7 @@ class CalendarAppointment(models.Model):
     state = fields.Selection(selection=[('free', 'Free'),
                                         ('reserved', 'Reserved'),
                                         ('confirmed', 'Confirmed'),
+                                        ('done', 'Done'),
                                         ('canceled', 'Canceled')],
                                         string='State', 
                                         default='free', 
@@ -230,8 +231,14 @@ class CalendarAppointment(models.Model):
 
     def cancel(self, cancel_reason):
         """Cancels a planned meeting"""
-        if self.state == 'confirmed':
-            self.state = 'canceled'
+        # Do not allow cancelation of meetings that have been sent to ACE
+        if not cancel_reason:
+            return False
+        for appointment in self:
+            if appointment.state == 'confirmed':
+                appointment.state = 'canceled'
+                appointment.cancel_reason = cancel_reason.id
+                return True
 
     def confirm_appointment(self):
         """Confirm reserved booking"""
@@ -241,6 +248,12 @@ class CalendarAppointment(models.Model):
         else: 
             res = False
 
+        return res
+
+    def unlink(self):
+        """Delete the record"""
+        # TODO: add cancellation check
+        res = super(CalendarAppointment, self).unlink()
         return res
 
     # NOT NEEDED, keeping this incase it is needed later.

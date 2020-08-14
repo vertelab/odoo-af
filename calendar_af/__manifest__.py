@@ -23,6 +23,7 @@
         "security/ir.model.access.csv",
         "data/calendar.channel.csv",
         "data/calendar.appointment.type.csv",
+        "data/calendar.appointment.cancel_reason.csv",
     ],
     "application": True,
     "installable": True,
