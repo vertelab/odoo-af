@@ -369,11 +369,10 @@ class ResPartner(models.Model):
                                 partner.update({
                                     'type': 'given address', 
                                     'parent_id': partner['id'], 
-                                    'external_id': '%s_%s' % (row['external_id'],
-                                    row['id']),
+                                    'external_id': '%s_%s' % (row['external_id'], row['id']),
                                     })
                                 partner.pop('id', None)
-                                self.create_partner_from_row(partner, {'external_id': transformations['external_id'], 'parent_id': transformations['partner_id']})
+                                self.create_partner_from_row(partner, {'external_id': transformations['external_id']})
                                 #skapa och koppla med parent_id
 
                             elif row['type'].lower() == 'folkbokforing': 
@@ -497,11 +496,14 @@ class ResPartner(models.Model):
                     row.pop('sun_ids', None)
                           
         if 'education_level' in row:
+            _logger.info("education_level: %s" % row['education_level'])
             if row['education_level'] != '0':
                 education_level_xmlid = "res_sun.education_level_%s" % row['education_level']
+                _logger.info("education_level_xmlid: %s" % education_level_xmlid)
                 education_level = self.env['ir.model.data'].xmlid_to_res_id(education_level_xmlid)
                 if education_level != False:
                     row.update({'education_level' : education_level})
+                    _logger.info("adding education level to row %s" % row)
                 else:
                     _logger.warning("education_level res_sun.education_level_%s not found, leaving education_level for %s empty" %(row['education_level'],row['external_id']))
                     row.pop('education_level', None)
