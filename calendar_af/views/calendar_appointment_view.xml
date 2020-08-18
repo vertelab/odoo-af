@@ -220,7 +220,11 @@
         <field name="view_id" ref="view_calendar_appointment_form" />
     </record>
 
+<<<<<<< HEAD
     <!-- <menuitem action="action_book_distans_meeting" id="menu_action_book_distans_meeting" parent="menu_book_distans_meeting" sequence="11" /> -->
+=======
+    <menuitem action="action_book_distans_meeting" id="menu_action_book_distans_meeting" parent="menu_book_distans_meeting" sequence="11" />
+>>>>>>> b890b96b5de93b9df006773ce34cc60cbabfa518
     <menuitem action="action_appointment" id="menu_action_appointment" parent="menu_pdm" sequence="12" />
     <menuitem action="action_local_appointment" id="menu_action_local_appointment" parent="menu_local" sequence="12" />
 </odoo>
