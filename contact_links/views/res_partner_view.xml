@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_partner_form_for_links" model="ir.ui.view">
+        <field name="name">view.res.partner.form.inherited.links</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page name="partner_link" string="Links">
+                    <field name="link_ids" nolabel="1">
+                        <tree editable="top">
+                            <field name="name"/>
+                            <field name="static_url_1"/>
+                            <field name="inserted_field"
+                                   domain="[('model_id.model', '=', 'res.partner')]"/>
+                            <field name="static_url_2"/>
+                            <field name="target"/>
+                            <field name="group_ids" widget="many2many_tags"/>
+                            <field name="link"/>
+                        </tree>
+                        <form>
+                            <group>
+                                <group>
+                                    <field name="name"/>
+                                    <field name="static_url_1"/>
+                                    <field name="inserted_field"
+                                     domain="[('model_id.model', '=', 'res.partner')]"/>
+                                    <field name="static_url_2"/>
+                                </group>
+                                <group>
+                                    <field name="target"/>
+                                    <field name="group_ids" widget="many2many_tags"/>
+                                    <field name="link"/>
+                                </group>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_partner_links_tree" model="ir.ui.view">
+        <field name="name">view.res.partner.links.tree</field>
+        <field name="model">partner.links</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="static_url_1"/>
+                <field name="inserted_field" domain="[('model_id.model', '=', 'res.partner')]"/>
+                <field name="static_url_2"/>
+                <field name="target"/>
+                <field name="group_ids"/>
+                <field name="link"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_partner_links_form" model="ir.ui.view">
+        <field name="name">view.res.partner.links.form</field>
+        <field name="model">partner.links</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="name"/>
+                        <field name="static_url_1"/>
+                        <field name="inserted_field" domain="[('model_id.model', '=', 'res.partner')]"/>
+                        <field name="static_url_2"/>
+                    </group>
+                    <group>
+                        <field name="target"/>
+                        <field name="group_ids" widget="many2many_tags"/>
+                        <field name="link"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_partner_links" model="ir.actions.act_window">
+        <field name="name">Links</field>
+        <field name="res_model">partner.links</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem action="action_partner_links" id="menu_partner_links" groups="group_partner_link"
+              parent="contacts.menu_contacts" sequence="3" name="Links Administration"/>
+
+</odoo>
