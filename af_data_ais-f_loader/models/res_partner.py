@@ -54,6 +54,12 @@ class ResPartner(models.Model):
         header_path_adr = "usr/share/odoo-af/af_data_ais-f_loader/data/sok_adress_mapping.csv"
         self.create_partners(headers_header_adr, path_adr, header_path_adr)
 
+        headers_header_jobs = ['SOK_SOKTYRKE.csv', 'Notering',  'Trans', 'Odoo']
+        path_jobs = os.path.join(config.options.get('data_dir'), 'AIS-F/SOK_SOKTYRKE.csv')
+        path_jobs = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/SOK_SOKTYRKE.csv" #testing purposes only
+        header_path_jobs = "usr/share/odoo-af/af_data_ais-f_loader/data/SOK_SOKTYRKE_mapping.csv"
+        self.create_partners(headers_header_jobs, path_jobs, header_path_jobs)
+
 
     @api.model
     def create_contact_persons(self):     
@@ -205,6 +211,8 @@ class ResPartner(models.Model):
                                 'model': kpi._name,
                                 'res_id': kpi.id
                                 })
+        else:
+            _logger.info("kpi external_id already in database, skipping")
     
         
     # @api.model #ska använda api istället, om det inte blir api, flytta till separat modul som körs efteråt
@@ -225,8 +233,8 @@ class ResPartner(models.Model):
 
     @api.model
     def create_desired_jobs_from_row(self, row):
-        external_xmlid = '%s%s' % (self.xmlid_module, row['external_id'])
-        external_id = row['external_id']
+        _logger.info("got to create jobs")
+        external_xmlid = '%s.%s' % (self.xmlid_module, row['external_id'])
         row.pop('external_id', None)
         id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
         if id_check == False:
@@ -235,11 +243,13 @@ class ResPartner(models.Model):
             job = self.env['res.partner.jobs'].create(row)
 
             self.env['ir.model.data'].create({
-                                'name': external_id,
-                                'module': self.xmlid_module,
+                                'name': external_xmlid.split('.')[1],
+                                'module': external_xmlid.split('.')[0],
                                 'model': job._name,
                                 'res_id': job.id
                                 })
+        else:
+            _logger.info("desired job external_id already in database, skipping")
 
     @api.model
     def transform(self, row, transformations):
@@ -303,6 +313,31 @@ class ResPartner(models.Model):
                         
                         partner = self.env['res.partner'].search_read([('id', '=', partner_id)], ['street', 'street2', 'city', 'zip'])[0]
         
+                        if 'job_id' in row:
+                            ssyk_xmlid = "res_ssyk.ssyk_%s" % row['job_id']
+                            ssyk_id = self.env['ir.model.data'].xmlid_to_res_id(ssyk_xmlid)
+                            if ssyk_id != False:
+                                updated_values = {}
+                                if 'education' in row and row['education'].lower() == 'j':
+                                    updated_values.update({'education': True})
+                                else:
+                                    updated_values.update({'education': False})
+                                if 'experience' in row and row['experience'] == '4':
+                                    updated_values.update({'experience': True})
+                                else:
+                                    updated_values.update({'experience': True})
+                                self.create_desired_jobs_from_row({
+                                    'external_id': "%s%s" % (transformations['external_id'],row['external_id']), 
+                                    'partner_id': partner_id,
+                                    'name': ssyk_id,
+                                    'education': updated_values['education'],
+                                    'experience': updated_values['experience'],
+                                    })
+                            else:
+                                _logger.warning("ssyk %s not found, skipping" % row['name'])
+                            
+                            create = False
+
                         if 'ssyk_id' in row:
                             ssyk_xmlid = "res_ssyk.ssyk_%s" % row['ssyk_id']
                             ssyk_id = self.env['ir.model.data'].xmlid_to_res_id(ssyk_xmlid)
@@ -334,11 +369,10 @@ class ResPartner(models.Model):
                                 partner.update({
                                     'type': 'given address', 
                                     'parent_id': partner['id'], 
-                                    'external_id': '%s_%s' % (row['external_id'],
-                                    row['id']),
+                                    'external_id': '%s_%s' % (row['external_id'], row['id']),
                                     })
                                 partner.pop('id', None)
-                                self.create_partner_from_row(partner, {'external_id': transformations['external_id'], 'parent_id': transformations['partner_id']})
+                                self.create_partner_from_row(partner, {'external_id': transformations['external_id']})
                                 #skapa och koppla med parent_id
 
                             elif row['type'].lower() == 'folkbokforing': 
@@ -451,24 +485,27 @@ class ResPartner(models.Model):
                 _logger.warning("state_id is 0 for %s, leaving empty" % row['external_id'])
                 row.pop('state_id', None)
         
-        if 'sun_id' in row:
-            if row['sun_id'] != '0':
-                sun_xmlid = "res_sun.sun_%s" % row['sun_id']
+        if 'sun_ids' in row:
+            if row['sun_ids'] != '0':
+                sun_xmlid = "res_sun.sun_%s" % row['sun_ids']
                 sun_id = self.env['ir.model.data'].xmlid_to_res_id(sun_xmlid)
                 if sun_id != False:
-                    row.update({'sun_id' : sun_id})
+                    row.update({'sun_ids' : [(4,sun_id)]})
                 else:
-                    _logger.warning("sun_id sun_%s not found, leaving sun_id for %s empty" %(row['sun_id'],row['external_id']))
-                    row.pop('sun_id', None)
+                    _logger.warning("sun_id sun_%s not found, not appending sun_ids for %s" %(row['sun_ids'],row['external_id']))
+                    row.pop('sun_ids', None)
                           
         if 'education_level' in row:
+            _logger.info("education_level: %s" % row['education_level'])
             if row['education_level'] != '0':
                 education_level_xmlid = "res_sun.education_level_%s" % row['education_level']
+                _logger.info("education_level_xmlid: %s" % education_level_xmlid)
                 education_level = self.env['ir.model.data'].xmlid_to_res_id(education_level_xmlid)
                 if education_level != False:
                     row.update({'education_level' : education_level})
+                    _logger.info("adding education level to row %s" % row)
                 else:
-                    _logger.warning("education_level sun_%s not found, leaving education_level for %s empty" %(row['education_level'],row['external_id']))
+                    _logger.warning("education_level res_sun.education_level_%s not found, leaving education_level for %s empty" %(row['education_level'],row['external_id']))
                     row.pop('education_level', None)
             else:
                 _logger.warning("education_level is 0 for %s, leaving empty" % row['external_id'])
