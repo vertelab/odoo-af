@@ -1,3 +1,5 @@
 id,name
 calendar_cancel_reason.integration,"Integration"
 calendar_cancel_reason.admin,"Administrator"
+calendar_cancel_reason.noshow,"Jobseeker did not show up"
+calendar_cancel_reason.caseworker,"Canceled by case worker"

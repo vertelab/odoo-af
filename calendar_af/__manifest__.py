@@ -7,7 +7,12 @@
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
-    "depends": ["calendar", "contacts", "partner_view_360" ],
+    "depends": [
+        "calendar",
+        "contacts",
+        "partner_view_360",
+        "partner_daily_notes",
+    ],
     "external_dependencies": [
     ],
     "data": [
@@ -20,6 +25,7 @@
         "views/calendar_channel_view.xml",
         "views/calendar_appointment_type_view.xml",
         "views/calendar_mapped_dates_view.xml",
+        "wizard/cancel_appointment.xml",
         "security/ir.model.access.csv",
         "data/calendar.channel.csv",
         "data/calendar.appointment.type.csv",

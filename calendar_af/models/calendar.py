@@ -238,6 +238,18 @@ class CalendarAppointment(models.Model):
             if appointment.state == 'confirmed':
                 appointment.state = 'canceled'
                 appointment.cancel_reason = cancel_reason.id
+                
+                #create daily note
+                vals = {
+                    "name": "Meeting cancelled",
+                    "partner_id": self.partner_id.id,
+                    "administrative_officer": self.user_id.id,
+                    "note": "Meeting on %s cancelled with reason: %s" % (self.start, cancel_reason.name),
+                    "note_type": self.env.ref('partner_daily_notes.note_type_02').id,
+                    "office": self.partner_id.office.id,
+                }
+                appointment.partner_id.notes_ids = [(0, 0, vals)]
+                
                 return True
 
     def confirm_appointment(self):
