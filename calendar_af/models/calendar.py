@@ -264,7 +264,6 @@ class CalendarAppointment(models.Model):
 
     def unlink(self):
         """Delete the record"""
-        # TODO: add cancellation check
         res = super(CalendarAppointment, self).unlink()
         return res
 
