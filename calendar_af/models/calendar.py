@@ -174,10 +174,12 @@ class CalendarAppointment(models.Model):
     state = fields.Selection(selection=[('free', 'Free'),
                                         ('reserved', 'Reserved'),
                                         ('confirmed', 'Confirmed'),
+                                        ('done', 'Done'),
                                         ('canceled', 'Canceled')],
                                         string='State', 
                                         default='free', 
                                         help="Status of the meeting")
+    cancel_reason = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason', help="Cancellation reason")
     location_code = fields.Char(string='Location')
     office = fields.Many2one('res.partner', string="Office", related="partner_id.office")
     office_code = fields.Char(string='Office code', related="office.office_code")
@@ -188,7 +190,7 @@ class CalendarAppointment(models.Model):
     reserved = fields.Datetime(string='Reserved', help="Occasions was reserved at this date and time")
     description = fields.Text(string='Description')
     suggestion_ids = fields.One2many(comodel_name='calendar.appointment.suggestion', inverse_name='appointment_id', string='Suggested Dates')
-    """ suggestion_id = fields.Many2one(comodel_name='calendar.appointment.suggestion', string='Suggested Dates') """
+    # suggestion_id = fields.Many2one(comodel_name='calendar.appointment.suggestion', string='Suggested Dates')
 
     @api.model
     def default_partners(self):
@@ -261,8 +263,26 @@ class CalendarAppointment(models.Model):
 
     def cancel(self, cancel_reason):
         """Cancels a planned meeting"""
-        if self.state == 'confirmed':
-            self.state = 'canceled'
+        # Do not allow cancelation of meetings that have been sent to ACE
+        if not cancel_reason:
+            return False
+        for appointment in self:
+            if appointment.state == 'confirmed':
+                appointment.state = 'canceled'
+                appointment.cancel_reason = cancel_reason.id
+                
+                #create daily note
+                vals = {
+                    "name": "Meeting cancelled",
+                    "partner_id": self.partner_id.id,
+                    "administrative_officer": self.user_id.id,
+                    "note": "Meeting on %s cancelled with reason: %s" % (self.start, cancel_reason.name),
+                    "note_type": self.env.ref('partner_daily_notes.note_type_02').id,
+                    "office": self.partner_id.office.id,
+                }
+                appointment.partner_id.notes_ids = [(0, 0, vals)]
+                
+                return True
 
     def confirm_appointment(self):
         """Confirm reserved booking"""
@@ -274,6 +294,12 @@ class CalendarAppointment(models.Model):
 
         return res
 
+    def unlink(self):
+        """Delete the record"""
+        res = super(CalendarAppointment, self).unlink()
+        return res
+
+    # NOT NEEDED, keeping this incase it is needed later.
     # @api.model
     # def create(self, values):
     #     res = False
@@ -319,6 +345,13 @@ class CalendarAppointment(models.Model):
             return True
         else:
             return False
+
+class CalendarAppointmentCancelReason(models.Model):
+    _name = 'calendar.appointment.cancel_reason'
+    _description = "Cancellation reason for an appointment"
+
+    name = fields.Char(string='Name', required=True)
+    appointment_id = fields.One2many(comodel_name='calendar.appointment', inverse_name='cancel_reason')
 
 class CalendarOccasion(models.Model):
     _name = 'calendar.occasion'
