@@ -165,18 +165,21 @@ body {
   color: $brand-grey-90;
 }
 
+// Accessability change thickness of divider
 .o_form_view .o_group .o_td_label .o_form_label {
     font-weight: bold;
     margin-right: 0px;
     margin-bottom: 5px;
 }
 
+// Accessability change thickness of divider
 .nav-tabs .nav-link {
     border: 3px solid transparent;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
 }
 
+// Accessability change thickness of divider
 .nav-tabs {
    border-bottom: 3px solid #dee2e6;
 }
