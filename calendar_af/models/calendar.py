@@ -281,6 +281,7 @@ class CalendarAppointment(models.Model):
                     "office": self.partner_id.office.id,
                 }
                 appointment.partner_id.notes_ids = [(0, 0, vals)]
+                appointment.occasion_ids = [(5, 0, 0)]
                 
                 return True
 
