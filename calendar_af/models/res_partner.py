@@ -21,13 +21,18 @@
 
 from odoo import models, fields, api, _
 import logging
+from datetime import datetime
 
 _logger = logging.getLogger(__name__)
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    appointment_ids = fields.Many2many(comodel_name='calendar.appointment', string='Booked meetings', inverse_name="partner_id")
+    #appointment_ids_past = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings', compute="compute_show_dates_past")
+
+    appointment_ids_ahead = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings', compute="compute_show_dates_ahead")
+    
+    appointment_ids = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings', inverse_name="partner_id")
 
     @api.one
     def _compute_appointment_count(self):
@@ -60,3 +65,23 @@ class ResPartner(models.Model):
             'view_mode': 'tree,calendar,kanban,pivot,form',
             'type': 'ir.actions.act_window',
         }
+
+    @api.one
+    def compute_show_dates_ahead(self):
+        
+        appointments_ahead = []
+        for appointment in self.appointment_ids:
+            if appointment.start < datetime.now():
+                self.appointments_ahead = self.appointment_ids.filtered(lambda a: a.start < datetime.now())
+        self.appointment_ids_ahead = appointments_ahead
+    
+    # @api.one
+    # def compute_show_dates_past(self):
+    #     appointments_past = []
+    #     for appointment in self.appointment_ids:
+    #         if appointment.start < datetime.now():
+    #             appointments_past.append(appointment)
+    #     self.appointment_ids_ahead = appointments_ahead
+    
+    
+            
