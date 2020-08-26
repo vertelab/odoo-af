@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+
+		<template id="myproject_layout" name="Main layout" inherit_id="portal.frontend_layout">
+			<xpath expr="//footer" position="attributes">
+				<attribute name="class">footer-area</attribute>
+			</xpath>
+		</template>
+    </data>
+</odoo>

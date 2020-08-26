@@ -17,5 +17,6 @@
     ],
     "data": [
         'views/assets.xml',
+        'views/template.xml'
     ]
 }
