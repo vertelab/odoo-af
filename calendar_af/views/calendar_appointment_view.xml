@@ -196,15 +196,6 @@
         </field>
     </record>
 
-    <record id="action_move_meeting" model="ir.actions.act_window">
-            <field name="name">Move meeting</field>
-            <field name="res_model">calendar.appointment</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-           <field name="view_id" ref="calendar_af.view_calendar_appointment_move_form"/>
-           <field name="target">new</field>
-    </record>
-
     <record id="action_appointment" model="ir.actions.act_window">
         <field name="name">Appointments</field>
         <field name="res_model">calendar.appointment</field>

@@ -219,6 +219,30 @@ class CalendarAppointment(models.Model):
     description = fields.Text(string='Description')
     suggestion_ids = fields.One2many(comodel_name='calendar.appointment.suggestion', inverse_name='appointment_id', string='Suggested Dates')
 
+    @api.multi
+    def move_meeting_action(self):
+        return {
+            'res_model': 'calendar.appointment',
+            'res_id': self._context.get('active_id', False),
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': self.env.ref('calendar_af.view_calendar_appointment_move_form').id,
+            'target': 'new',
+            'type': 'ir.actions.act_window',
+        }
+
+    @api.multi
+    def cancel_meeting_action(self):
+        return {
+            'res_model': 'calendar.cancel_appointment',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': self.env.ref('calendar_af.cancel_appointment_view_form').id,
+            'target': 'new',
+            'type': 'ir.actions.act_window',
+            'context': {},
+        }
+
     @api.model
     def default_partners(self):
         """ When active_model is res.partner, the current partners should be attendees """
