@@ -151,7 +151,8 @@ class CalendarAppointmentSuggestion(models.Model):
                         ('appointment_id', '=', False)
                     ], limit=1)
                 if not free_occasion:
-                    raise Warning(_("You are screwed."))
+                    raise Warning(_("No free occasions. This shouldn't happen. Please contact the system administrator."))
+
                 occasions |= free_occasion
         occasions.write({'appointment_id': self.appointment_id.id})
         self.appointment_id.write({
@@ -174,10 +175,12 @@ class CalendarAppointment(models.Model):
     state = fields.Selection(selection=[('free', 'Free'),
                                         ('reserved', 'Reserved'),
                                         ('confirmed', 'Confirmed'),
+                                        ('done', 'Done'),
                                         ('canceled', 'Canceled')],
                                         string='State', 
                                         default='free', 
                                         help="Status of the meeting")
+    cancel_reason = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason', help="Cancellation reason")
     location_code = fields.Char(string='Location')
     office = fields.Many2one('res.partner', string="Office", related="partner_id.office")
     office_code = fields.Char(string='Office code', related="office.office_code")
@@ -188,7 +191,6 @@ class CalendarAppointment(models.Model):
     reserved = fields.Datetime(string='Reserved', help="Occasions was reserved at this date and time")
     description = fields.Text(string='Description')
     suggestion_ids = fields.One2many(comodel_name='calendar.appointment.suggestion', inverse_name='appointment_id', string='Suggested Dates')
-    """ suggestion_id = fields.Many2one(comodel_name='calendar.appointment.suggestion', string='Suggested Dates') """
 
     @api.model
     def default_partners(self):
@@ -230,7 +232,6 @@ class CalendarAppointment(models.Model):
             suggestion_ids.append((5,))
         occasions = self.env['calendar.occasion'].get_bookable_occasions(start, stop, self.duration * 60, self.type_id, max_depth = 1)
         _logger.info("occasions: %s" % occasions)
-        # _logger.warn(occasions)
         for day in occasions:
             for day_occasions in day:
                 for occasion in day_occasions:
@@ -261,36 +262,83 @@ class CalendarAppointment(models.Model):
 
     def cancel(self, cancel_reason):
         """Cancels a planned meeting"""
-        if self.state == 'confirmed':
-            self.state = 'canceled'
+        # Do not allow cancelation of meetings that have been sent to ACE
+        if not cancel_reason:
+            return False
+        for appointment in self:
+            if appointment.state == 'confirmed':
+                appointment.state = 'canceled'
+                appointment.cancel_reason = cancel_reason.id
+                
+                #create daily note
+                vals = {
+                    "name": "Meeting cancelled",
+                    "partner_id": self.partner_id.id,
+                    "administrative_officer": self.user_id.id,
+                    "note": "Meeting on %s cancelled with reason: %s" % (self.start, cancel_reason.name),
+                    "note_type": self.env.ref('partner_daily_notes.note_type_02').id,
+                    "office": self.partner_id.office.id,
+                }
+                appointment.partner_id.notes_ids = [(0, 0, vals)]
+                appointment.occasion_ids = [(5, 0, 0)]
+                
+                return True
 
     def confirm_appointment(self):
         """Confirm reserved booking"""
-        if self.state == 'reserved':
-            self.state = 'confirmed'
-            res = True
-        else: 
-            res = False
+        for appointment in self:
+            if appointment.state == 'reserved':
+                appointment.state = 'confirmed'
 
+                #create daily note
+                vals = {
+                    "name": "Meeting confirmed",
+                    "partner_id": self.partner_id.id,
+                    "administrative_officer": self.user_id.id,
+                    "note": "Meeting on %s confirmed." % self.start,
+                    "note_type": self.env.ref('partner_daily_notes.note_type_02').id,
+                    "office": self.partner_id.office.id,
+                }
+                appointment.partner_id.notes_ids = [(0, 0, vals)]
+
+                res = True
+            else: 
+                res = False
+
+            return res
+
+    def unlink(self):
+        """Delete the record"""
+        #create daily note
+        vals = {
+            "name": "Meeting deleted",
+            "partner_id": self.partner_id.id,
+            "administrative_officer": self.user_id.id,
+            "note": "Meeting on %s deleted." % self.start,
+            "note_type": self.env.ref('partner_daily_notes.note_type_02').id,
+            "office": self.partner_id.office.id,
+        }
+        self.partner_id.notes_ids = [(0, 0, vals)]
+
+        res = super(CalendarAppointment, self).unlink()
         return res
 
-    # @api.model
-    # def create(self, values):
-    #     res = False
-    #     start = datetime.strptime(values.get('start'), "%Y-%m-%d %H:%M:%S")
-    #     stop = datetime.strptime(values.get('stop'), "%Y-%m-%d %H:%M:%S")
-    #     duration = values.get('duration') * 60 # convert from hours to minutes
-    #     type_id = self.env['calendar.appointment.type'].browse(values.get('type_id'))
-    #     occasions = values.get('occasion_ids')
-    #     if not occasions:
-    #         occasions = self.env['calendar.occasion'].get_bookable_occasions(start, stop, duration, type_id, values.get('channel'))
-    #     if occasions:
-    #         values['occasion_ids'] =  [(6,0, [occasion.id for occasion in occasions[0]])]
-    #     # TODO: query user before moving appointment?
-    #     values['start'] = occasions[0][0].start
-    #     values['stop'] = occasions[0][len(occasions[0]) - 1].stop
-    #     res = super(CalendarAppointment, self).create(values)
-    #     return res
+    @api.model
+    def create(self, values):
+        res = super(CalendarAppointment, self).create(values)
+        
+        #create daily note
+        vals = {
+            "name": "Meeting created",
+            "partner_id": res.partner_id.id,
+            "administrative_officer": res.user_id.id,
+            "note": "Meeting on %s created." % res.start,
+            "note_type": res.env.ref('partner_daily_notes.note_type_02').id,
+            "office": res.partner_id.office.id,
+        }
+        res.partner_id.notes_ids = [(0, 0, vals)]
+
+        return res
 
     @api.model
     def update(self, values):
@@ -319,6 +367,13 @@ class CalendarAppointment(models.Model):
             return True
         else:
             return False
+
+class CalendarAppointmentCancelReason(models.Model):
+    _name = 'calendar.appointment.cancel_reason'
+    _description = "Cancellation reason for an appointment"
+
+    name = fields.Char(string='Name', required=True)
+    appointment_id = fields.One2many(comodel_name='calendar.appointment', inverse_name='cancel_reason')
 
 class CalendarOccasion(models.Model):
     _name = 'calendar.occasion'

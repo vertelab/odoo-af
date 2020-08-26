@@ -1,0 +1,11 @@
+<odoo>
+	<record model="ir.actions.server" id="action_sync_link">
+        <field name="name">Update Link</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                records.sync_link()
+        </field>
+    </record>
+</odoo>
