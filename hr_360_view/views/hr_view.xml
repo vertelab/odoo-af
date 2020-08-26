@@ -45,6 +45,7 @@
                         </field>
 
                     </page>
+
                     <page string="Case" name="case">
                         <field name="case_ids">
                             <tree>
@@ -62,7 +63,6 @@
                         </field>
 
                     </page>
-
                     <page string="History">
                         <field name="daily_note_ids">
                             <tree>
