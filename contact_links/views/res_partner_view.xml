@@ -7,14 +7,15 @@
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
             <div name="button_box" position="inside">
-                <button type="object" class="oe_stat_button fa fa-link 4x" name="action_partner_link"
-                        context="{'default_partner_id': active_id}">
-                    Links
+                <button type="object" class="oe_stat_button" name="action_partner_link" context="{'default_partner_id': active_id}">
+                    <div class="o_form_field o_stat_info">
+                        <span class="o_stat_text"><center>Links</center></span>
+                    </div>
                 </button>
             </div>
             <xpath expr="//notebook" position="inside">
                 <page name="partner_link" string="Links">
-                    <field name="link_ids" mode="kanban">
+                    <field name="link_ids" nolabel="1" mode="kanban">
                         <kanban>
                             <field name="name"/>
                             <field name='id'/>
@@ -22,27 +23,38 @@
                             <field name='link'/>
                             <templates>
                                 <t t-name="kanban-box">
-                                    <div t-att-class="oe_kanban_global_click" style="height:80px;width:150px">
-                                        <div class="o_kanban_image" style="width:100px">
-                                            <t t-if="record.image.raw_value">
-                                                <img alt="" style="width:70px;max-height:60px"
+                                    <div class="o_kanban_record_has_image_fill o_res_partner_kanban">
+                                        <a t-att-href="record.link.raw_value" target='new' t-if="record.link.raw_value">
+                                            <div class="o_kanban_image">
+                                                <img alt="" t-if="record.image.raw_value"
                                                      t-att-src="kanban_image('partner.links', 'image', record.id.raw_value)"/>
-                                            </t>
-                                            <t t-if="!record.image.raw_value">
-                                                <img alt="Avatar" style="width:70px;max-height:60px"
-                                                     t-att-src="_s + &quot;/base/static/img/avatar.png&quot;"/>
-                                            </t>
-                                        </div>
-                                        <div class="oe_kanban_details">
-                                            <a t-att-href="record.link.raw_value" target='new'
-                                               t-if="record.link.raw_value">
+                                            </div>
+                                            <div class="oe_kanban_details">
                                                 <field name="name"/>
-                                            </a>
-                                        </div>
+
+                                            </div>
+                                        </a>
                                     </div>
                                 </t>
                             </templates>
                         </kanban>
+                        <!--<form>-->
+                            <!--<group>-->
+                                <!--<group>-->
+                                    <!--<field name="name"/>-->
+                                    <!--<field name="static_url_1"/>-->
+                                    <!--<field name="inserted_field"-->
+                                     <!--domain="[('model_id.model', '=', 'res.partner')]"/>-->
+                                    <!--<field name="static_url_2"/>-->
+                                <!--</group>-->
+                                <!--<group>-->
+                                    <!--<field name="target"/>-->
+                                    <!--<field name="group_ids" widget="many2many_tags"/>-->
+                                    <!--<field name="link"/>-->
+                                    <!--<field name='image' widget='image' class='oe_avatar'/>-->
+                                <!--</group>-->
+                            <!--</group>-->
+                        <!--</form>-->
                     </field>
                 </page>
             </xpath>
@@ -62,7 +74,6 @@
                 <field name="group_ids"/>
                 <field name="link"/>
                 <field name="type_smart"/>
-                <field name="image"/>
             </tree>
         </field>
     </record>
@@ -72,23 +83,21 @@
         <field name="model">partner.links</field>
         <field name="arch" type="xml">
             <form>
-                <sheet>
+                <group>
                     <group>
-                        <group>
-                            <field name="name"/>
-                            <field name="static_url_1"/>
-                            <field name="inserted_field" domain="[('model_id.model', '=', 'res.partner')]"/>
-                            <field name="static_url_2"/>
-                            <field name="type_smart" widget='radio'/>
-                        </group>
-                        <group>
-                            <field name="target"/>
-                            <field name="group_ids" widget="many2many_tags"/>
-                            <field name="link" widget="url"/>
-                            <field name="image" widget="image" class="oe_avatar"/>
-                        </group>
+                        <field name="name"/>
+                        <field name="static_url_1"/>
+                        <field name="inserted_field" domain="[('model_id.model', '=', 'res.partner')]"/>
+                        <field name="static_url_2"/>
+                        <field name="type_smart" widget='radio'/>
                     </group>
-                </sheet>
+                    <group>
+                        <field name="target"/>
+                        <field name="group_ids" widget="many2many_tags"/>
+                        <field name="link"/>
+                        <field name="image" widget="image" class="oe_avatar"/>
+                    </group>
+                </group>
             </form>
         </field>
     </record>
@@ -104,37 +113,24 @@
                 <field name='link'/>
                 <templates>
                     <t t-name="kanban-box">
-                        <div t-att-class="oe_kanban_global_click">
+                        <div class="o_kanban_record_has_image_fill o_res_partner_kanban">
+                            <a t-att-href="record.link.raw_value" target='new' t-if="record.link.raw_value">
                             <div class="o_kanban_image">
-                                <t t-if="record.image.raw_value">
-                                    <img alt=""
-                                         t-att-src="kanban_image('partner.links', 'image', record.id.raw_value)"/>
-                                </t>
-                                <t t-if="!record.image.raw_value">
-                                    <img alt="Avatar"
-                                         t-att-src="_s + &quot;/base/static/img/avatar.png&quot;"/>
-                                </t>
+                                <img alt="" t-if="record.image.raw_value"
+                                     t-att-src="kanban_image('partner.links', 'image', record.id.raw_value)"/>
                             </div>
                             <div class="oe_kanban_details">
-                                <a t-att-href="record.link.raw_value" target='new' t-if="record.link.raw_value">
-                                    <field name="name"/>
-                                </a>
+                                <field name="name"/>
                             </div>
+                            </a>
                         </div>
-                        <!--  -->
-                        <!--                        <div class="o_kanban_record_has_image_fill o_res_partner_kanban" style="width:160px;height:80px">-->
-                        <!--                            <a t-att-href="record.link.raw_value" target='new' t-if="record.link.raw_value">-->
-                        <!--                            <div class="o_kanban_image">-->
-                        <!--                                <img style="min-width:140px; max-width:140px;max-height:65px" alt="" t-if="record.image.raw_value"-->
-                        <!--                                     t-att-src="kanban_image('partner.links', 'image', record.id.raw_value)"/>-->
-                        <!--                            </div>-->
-                        <!--                            </a>-->
-                        <!--                        </div>-->
                     </t>
                 </templates>
             </kanban>
         </field>
     </record>
+
+
 
     <record id="action_partner_links" model="ir.actions.act_window">
         <field name="name">Links</field>
@@ -149,6 +145,6 @@
     </record>
 
     <menuitem action="action_partner_links" id="menu_partner_links" groups="group_partner_link"
-              parent="contacts.res_partner_menu_config" sequence="10" name="Links Administration"/>
+              parent="contacts.menu_contacts" sequence="3" name="Links Administration"/>
 
 </odoo>

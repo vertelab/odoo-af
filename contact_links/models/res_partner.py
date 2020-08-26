@@ -5,14 +5,12 @@ class ResPartner(models.Model):
 
     _inherit = 'res.partner'
 
-    link_ids = fields.Many2many(
-        'partner.links', 'parnter_link_rel', 'partner_id', 'link_id', string="Links")
+    link_ids = fields.Many2many('partner.links', 'parnter_link_rel','partner_id','link_id', string="Links")
 
     def action_partner_link(self):
         kanban_view_id = self.env.ref(
             'contact_links.view_partner_links_kanban').ids
-        links = self.env['partner.links'].search(
-            [('type_smart', '=', 'smart')])
+        links = self.env['partner.links'].search([('type_smart', '=', 'smart')])
         return {
             'name': self.name,
             'view_mode': 'kanban',
@@ -25,12 +23,11 @@ class ResPartner(models.Model):
 
     def sync_link(self):
         for partner in self:
-            partner.write({'link_ids': [(5,)]})
-            links = self.env['partner.links'].search(
-                [('type_smart', '=', 'tab')])
+            links = self.env['partner.links'].search([('type_smart', '=', 'tab')])
             for link in links:
-                partner.link_ids =  [(4, link.id)]
-
+                for line in partner.link_ids:
+                    if not line:
+                        line.name = link.name
 
 class PartnerLinks(models.Model):
 
@@ -53,7 +50,7 @@ class PartnerLinks(models.Model):
         attachment=True,
     )
     type_smart = fields.Selection([('tab', 'Tab'),
-                                   ('smart', 'Smart Button')], string="Type", default='tab')
+                             ('smart', 'Smart Button')], string="Type", default='tab')
 
     @api.model
     def search(self, args, offset=0, limit=None, order=None, count=False):
@@ -76,3 +73,4 @@ class PartnerLinks(models.Model):
                 partner_link += "/"
             partner_link += partner.static_url_2 and partner.static_url_2 or ''
             partner.link = partner_link
+            print (" partner_link.link ::", partner.link)
