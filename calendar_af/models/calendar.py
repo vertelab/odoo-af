@@ -130,13 +130,18 @@ class CalendarAppointmentSuggestion(models.Model):
     start = fields.Datetime()
     stop = fields.Datetime()
     occasion_ids = fields.Many2many(comodel_name='calendar.occasion', string="Occasions")
+    # type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type', related='appointment_id.type_id')
+    type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type')
+    move_reason = fields.Many2one(comodel_name='calendar.appointment.cancel_reason', string='Move reason')
+    
 
     @api.multi
     def select_suggestion(self):
         # Kontrollera att occasion_ids fortfarande är lediga
         # Skriv data till appointment_id
-        if self.appointment_id.state == 'reserved':
+        if self.appointment_id.state in ['confirmed', 'reserved']:
             raise Warning("This appointment is already booked.")
+        
         occasions = self.env['calendar.occasion']
         for occasion in self.occasion_ids:
             # Ensure that occasions are still free
@@ -154,12 +159,34 @@ class CalendarAppointmentSuggestion(models.Model):
                     raise Warning(_("No free occasions. This shouldn't happen. Please contact the system administrator."))
 
                 occasions |= free_occasion
+        
         occasions.write({'appointment_id': self.appointment_id.id})
         self.appointment_id.write({
-            'state': 'reserved',
+            'state': 'confirmed',
             'start': self.start,
             'stop': self.stop,
         })
+
+    @api.multi
+    def select_suggestion_move(self):
+        occasions = self.env['calendar.occasion']
+        for occasion in self.occasion_ids:
+            # Ensure that occasions are still free
+            if not occasion.appointment_id:
+                occasions |= occasion
+            else:
+                free_occasion = occasion.search(
+                    [
+                        ('start', '=', self.start),
+                        ('type_id', '=', self.type_id.id),
+                        #('channel', '=', self.channel.id),
+                        ('appointment_id', '=', False)
+                    ], limit=1)
+                if not free_occasion:
+                    raise Warning(_("No free occasions. This shouldn't happen. Please contact the system administrator."))
+
+                occasions |= free_occasion
+        self.appointment_id.move_appointment(occasions, move_reason)
 
 class CalendarAppointment(models.Model):
     _name = 'calendar.appointment'
@@ -193,6 +220,30 @@ class CalendarAppointment(models.Model):
     description = fields.Text(string='Description')
     suggestion_ids = fields.One2many(comodel_name='calendar.appointment.suggestion', inverse_name='appointment_id', string='Suggested Dates')
 
+    @api.multi
+    def move_meeting_action(self):
+        return {
+            'res_model': 'calendar.appointment',
+            'res_id': self._context.get('active_id', False),
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': self.env.ref('calendar_af.view_calendar_appointment_move_form').id,
+            'target': 'new',
+            'type': 'ir.actions.act_window',
+        }
+
+    @api.multi
+    def cancel_meeting_action(self):
+        return {
+            'res_model': 'calendar.cancel_appointment',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': self.env.ref('calendar_af.cancel_appointment_view_form').id,
+            'target': 'new',
+            'type': 'ir.actions.act_window',
+            'context': {},
+        }
+
     @api.model
     def default_partners(self):
         """ When active_model is res.partner, the current partners should be attendees """
@@ -207,9 +258,10 @@ class CalendarAppointment(models.Model):
     
     @api.onchange('type_id')
     def set_duration_selection(self):
-        if self.type_id.duration == 30.0:
+        self.name = self.type_id.name
+        if self.duration == 30.0:
             self.duration_selection = '30 minutes'
-        elif self.type_id.duration == 60.0:
+        elif self.duration == 60.0:
             self.duration_selection = '1 hour'
         
     
@@ -225,7 +277,6 @@ class CalendarAppointment(models.Model):
         if not all((self.duration, self.type_id, self.channel)):
             return
         start = self.start_meeting_search()
-        
         stop = self.stop_meeting_search(start)
         
         suggestion_ids = []
@@ -240,11 +291,10 @@ class CalendarAppointment(models.Model):
                         # Fyll i occasions-data på förslagen
                         'start': occasion[0].start,
                         'stop': occasion[-1].stop,
+                        'type_id': occasion[0].type_id.id,
                         'occasion_ids': [(6, 0, occasion._ids)],
                     }))
         self.suggestion_ids = suggestion_ids
-    
-    
 
     @api.onchange('duration', 'start')
     def onchange_duration_start(self):
@@ -327,7 +377,6 @@ class CalendarAppointment(models.Model):
     @api.model
     def create(self, values):
         res = super(CalendarAppointment, self).create(values)
-        
         #create daily note
         vals = {
             "name": "Meeting created",
@@ -337,25 +386,40 @@ class CalendarAppointment(models.Model):
             "note_type": res.env.ref('partner_daily_notes.note_type_02').id,
             "office": res.partner_id.office.id,
         }
+        _logger.warn("res: %s" % res)
         res.partner_id.notes_ids = [(0, 0, vals)]
 
         return res
 
-    @api.model
-    def update(self, values):
+    @api.one
+    def move_appointment(self, occasions, reason):
+        """"Intended to be used to move appointments from one bookable occasion to another. 
+        :param occasions: a recordset of odoo occasions to move the meeting to."""
         res = False
-        start = datetime.strptime(values.get('start'), "%Y-%m-%d %H:%M:%S")
-        stop = datetime.strptime(values.get('stop'), "%Y-%m-%d %H:%M:%S")
-        duration = values.get('duration') * 60 # convert from hours to minutes
-        type_id = self.env['calendar.appointment.type'].browse(values.get('type_id'))
-
-        occasions = self.env['calendar.occasion'].get_bookable_occasions(start, stop, duration, type_id, values.get('channel'))
+        
         if occasions:
-            values['occasion_ids'] =  [(6,0, [occasion.id for occasion in occasions[0]])]
-            # TODO: query user before moving appointment?
-            values['start'] = occasions[0][0].start
-            values['stop'] = occasions[0][len(occasions[0]) - 1].stop
-            res = super(CalendarAppointment, self).write(values)
+            # replace the occasions for the appointment
+            vals = {
+                'start': occasions[0].start,
+                'stop': occasions[-1].stop,
+                'duration': len(occasions) * BASE_DURATION,
+                'type_id': occasions[0].type_id.id,
+                'occasion_ids': [(6, 0, occasions._ids)],
+            }
+            self.write(vals)
+
+            #create daily note
+            vals = {
+                "name": "Meeting moved",
+                "partner_id": self.partner_id.id,
+                "administrative_officer": self.user_id.id,
+                "note": "Meeting on %s created." % self.start,
+                "note_type": self.env.ref('partner_daily_notes.note_type_02').id,
+                "office": self.partner_id.office.id,
+            }
+            self.partner_id.notes_ids = [(0, 0, vals)]
+            res = True
+
         return res
 
     @api.model
