@@ -170,6 +170,7 @@ class CalendarAppointment(models.Model):
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an appointment")
     duration_selection = fields.Selection(string="Duration", selection=[('30 minutes','30 minutes'), ('1 hour','1 hour')])
     duration = fields.Float('Duration')
+    #administrative_officer = fields.Many2one(comodel_name='hr.employee', string="Case worker")
     user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
     partner_id = fields.Many2one(string='Customer', comodel_name='res.partner', help="Booked customer", default=lambda self: self.default_partners())
     state = fields.Selection(selection=[('free', 'Free'),
