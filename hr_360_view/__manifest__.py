@@ -10,6 +10,7 @@
     'data': [
         'views/menu.xml',
         'views/hr_view.xml',
+        'wizard/hr_employee_search_wizard.xml'
     ],
     'installable': True,
 }
