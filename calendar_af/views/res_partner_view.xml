@@ -26,6 +26,7 @@
       </div>
       <page name="apply_for_jobs" position="after">
         <page string="Upcoming meetings" name="upcoming_meetings">
+          <button name="create_appointment" type="object" string="New appointment" icon="fa-calendar"/>
           <field name="appointment_ids_ahead" mode="tree" nolabel="1">
             <tree>
               <field name="name"/>

@@ -66,6 +66,19 @@ class ResPartner(models.Model):
             'type': 'ir.actions.act_window',
         }
 
+    #unbook meeting?
+    @api.multi
+    def create_appointment(self):
+        return{
+            'name': _('Booked meetings'),
+            'domain':[('partner_id', '=', self.ids)],
+            'view_type': 'form',
+            'res_model': 'calendar.appointment',
+            'view_id': self.env.ref('calendar_af.view_calendar_appointment_form').id,
+            'view_mode': 'form', 
+            'type': 'ir.actions.act_window',
+        }    
+
     @api.one
     def compute_show_dates_ahead(self):
         self.appointment_ids_ahead = self.appointment_ids.filtered(lambda a: a.start > datetime.now())
