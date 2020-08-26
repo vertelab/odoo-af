@@ -72,7 +72,7 @@ class ResPartner(models.Model):
     
     @api.one
     def compute_show_dates_past(self):
-        self.appointment_ids_ahead = self.appointment_ids.filtered(lambda a: a.start < datetime.now())
+        self.appointment_ids_past = self.appointment_ids.filtered(lambda a: a.start < datetime.now())
 
     # @api.one
     # def compute_show_dates_past(self):
