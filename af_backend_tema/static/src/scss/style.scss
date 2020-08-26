@@ -1,6 +1,30 @@
 // Font
 //------------------------
 
+.o_form_view .o_group .o_td_label {
+    border-right: 1.5px solid #00005a;
+}
+
+.o_kanban_view .o_kanban_record {
+    position: relative;
+    display: inline-block;
+    border-color: #00005a;
+    min-width: 150px;
+    margin: 0 0 -1px;
+    border-width: 1.5px;
+}
+
+.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+    color: #495057;
+    background-color: #fff;
+    border-color: #00005a #00005a #00005a;
+}
+
+.nav-tabs {
+   border-bottom: 1.5px solid #00005a !important;
+}
+
+
 @font-face {
   font-family: OpenSans-Regular;
   src: url(/af_backend_tema/static/src/font/OpenSans-Regular.ttf);
@@ -163,6 +187,22 @@ body {
 
 .o_main >  main > div > ol > li.breadcrumb-item{
   color: $brand-grey-90;
+}
+
+.o_form_view .o_group .o_td_label .o_form_label {
+    font-weight: bold;
+    margin-right: 0px;
+    margin-bottom: 5px;
+}
+
+.nav-tabs .nav-link {
+    border: 3px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+.nav-tabs {
+   border-bottom: 3px solid #dee2e6;
 }
 
 .o_form_label {
