@@ -28,14 +28,12 @@
           <group>
             <button name="create_appointment" type="object" string="New appointment" icon="fa-calendar"/>
           </group>
-          <field name="appointment_ids_ahead" mode="tree" nolabel="1">
+          <field name="appointment_ids_ahead" mode="tree" nolabel="1" default_order="start">
             <tree>
-              <field name="name"/>
               <field name="type_id" options="{'no_create_edit': True}"/>
               <field name="start"/>
               <field name="stop"/>
               <field name="user_id"/>
-              <field name="partner_id"/>
               <field name="location_code"/>
               <field name="office"/>
               <button name="cancel_meeting_action" type="object" string="Cancel" icon="fa-times" context="{'active_id': id}"/>
@@ -44,13 +42,11 @@
           </field>
         </page>
          <page string="Previous meetings" name="previous_meetings">
-          <field name="appointment_ids_past" mode="tree" nolabel="1">
-                  <field name="name"/>
+          <field name="appointment_ids_past" mode="tree" nolabel="1" default_order="start">
                   <field name="type_id" options="{'no_create_edit': True}"/>
                   <field name="start"/>
                   <field name="stop"/>
                   <field name="user_id"/>
-                  <field name="partner_id"/>
                   <field name="location_code"/>
                   <field name="office"/>
               </field>

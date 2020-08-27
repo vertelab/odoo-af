@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="hr_employee_360_form" model="ir.ui.view">
         <field name="name">hr.employee.360</field>
@@ -109,13 +110,5 @@
         <field name="act_window_id" ref="hr.open_view_employee_list_my"/>
         <field name="view_id" ref="hr.hr_kanban_view_employees"/>
     </record>
-
-    <menuitem
-            id="menu_hr_employee_360"
-            name="HR 360"
-            parent="hr_360_view.menu_administrative_office_root"
-            groups="hr.group_hr_manager,hr.group_hr_user"
-            action="open_view_employee_360_list"
-            sequence="99"/>
 
 </odoo>

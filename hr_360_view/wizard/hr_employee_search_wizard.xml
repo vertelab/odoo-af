@@ -34,12 +34,10 @@
                 <group></group>
                 </page>
             </notebook>
+                <button name="search_jobseeker" string="search" type="object" class="btn-primary"/>
+                <button string="Cancel" class="btn-secondary" special="cancel"/>
                 
-                <footer>
-                    <button name="search_jobseeker" string="search" type="object" class="btn-primary"/>
-                    <button string="Cancel" class="btn-secondary" special="cancel"/>
-                </footer>
-            </form>
+           
             <notebook>
             <field name="employee_id" invisible="1"/>
                     <page name="jobseekers" string="My Jobseekers">
@@ -88,6 +86,7 @@
 
                     </page>
                 </notebook>
+                 </form>
         </field>
     </record>      
 
@@ -103,5 +102,13 @@
         name="My Administrative Officer Area"
         action="search_jobseeker_wizard" 
         sequence="3"/> 
+
+    <menuitem
+            id="menu_hr_employee_360"
+            name="HR 360"
+            parent="res_partner_jobseeker_search_wizard_menu"
+            groups="hr.group_hr_manager,hr.group_hr_user"
+            action="open_view_employee_360_list"
+            sequence="99"/>
 
 </odoo>
