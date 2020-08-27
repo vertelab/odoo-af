@@ -12,7 +12,6 @@
             groups="base.group_user"> 
             <field string="Booked meetings" name="appointment_count" widget="statinfo"/>
         </button>
-
       </div>
     </field>
   </record> 
@@ -26,7 +25,9 @@
       </div>
       <page name="apply_for_jobs" position="after">
         <page string="Upcoming meetings" name="upcoming_meetings">
-          <button name="create_appointment" type="object" string="New appointment" icon="fa-calendar"/>
+          <group>
+            <button name="create_appointment" type="object" string="New appointment" icon="fa-calendar"/>
+          </group>
           <field name="appointment_ids_ahead" mode="tree" nolabel="1" default_order="start">
             <tree>
               <field name="type_id" options="{'no_create_edit': True}"/>
