@@ -45,3 +45,10 @@ class HrEmployee(models.Model):
 
             appointment_record = rec.env['calendar.appointment'].search([('user_id', '!=', self.env.uid)])
             rec.appointment_ids_all = appointment_record
+
+class HrEmployeeJobseekerSearchWizard(models.TransientModel):
+    _inherit = 'hr.employee.jobseeker.search.wizard'
+
+    appointment_ids_ahead = fields.One2many(related="employee_id.appointment_ids_ahead")
+    
+    appointment_ids_all = fields.One2many(related="employee_id.appointment_ids_all")

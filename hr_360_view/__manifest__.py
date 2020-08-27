@@ -8,8 +8,9 @@
     'website': 'http://www.vertel.se',
     'depends': ['base', 'hr', 'partner_view_360', 'contacts', 'partner_af_case', 'partner_daily_notes', 'af_security'],
     'data': [
-        'views/menu.xml',
+        #'views/menu.xml',
         'views/hr_view.xml',
+        'wizard/hr_employee_search_wizard.xml'
     ],
     'installable': True,
 }

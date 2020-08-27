@@ -1,31 +1,11 @@
 <odoo>
     <record id="hr_employee_360_form" model="ir.ui.view">
-        <field name="name">hr.employee.360.wizard</field>
+        <field name="name">hr.employee.360</field>
         <field name="model">hr.employee</field>
         <field name="arch" type="xml">
-            <form string="Search Partner">
-                <notebook>
-                    <page string="When in contact">
-                        <group>
-                            <field name="identification"/>
-                            <field name="other_reason" attrs="{'invisible': [('search_reason','!=','other reason')]}"/>
-                            <field name="search_domain" widget="domain" options="{'model': 'res.partner'}"/>
-                        </group>
-                        <div style="min-height:5em;"> </div>
-                        <group></group>
-                    </page>
-                    <page string="Based on the needs of the authority">
-                        <group>
-                            <field name="search_reason"/>
-                            <field name="other_reason" attrs="{'invisible': [('search_reason','!=','other reason')]}"/>
-                            <field name="search_domain" widget="domain" options="{'model' : 'res.partner'}"/>
-                        </group>
-                        <div style="min-height:5em;"/>
-                        <group/>
-                    </page>
-                </notebook>
+            <form name="search_partner" string="Search Partner">
                 <footer>
-                    <button name="search_jobseeker" string="Search" type="object" class="btn-primary"/>
+                    <button name="search_jobseeker_action" string="Search Jobseekers" type="object" class="btn-primary"/>
                     <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
                 <div style="min-height:2em;"/>
