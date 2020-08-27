@@ -45,6 +45,7 @@ class HrEmployee(models.Model):
 
             appointment_record = rec.env['calendar.appointment'].search([('user_id', '!=', self.env.uid)])
             rec.appointment_ids_all = appointment_record
+    
 
 class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     _inherit = 'hr.employee.jobseeker.search.wizard'
@@ -52,3 +53,16 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     appointment_ids_ahead = fields.One2many(related="employee_id.appointment_ids_ahead")
     
     appointment_ids_all = fields.One2many(related="employee_id.appointment_ids_all")
+    
+    @api.multi
+    def create_appointment(self):
+        return{
+            'name': _('Booked meetings'),
+            'domain':[('partner_id', '=', self.ids)],
+            'view_type': 'form',
+            'res_model': 'calendar.appointment',
+            'view_id': self.env.ref('calendar_af.view_calendar_appointment_form').id,
+            'view_mode': 'form', 
+            'type': 'ir.actions.act_window',
+        }
+    
