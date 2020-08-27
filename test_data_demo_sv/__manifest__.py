@@ -36,7 +36,7 @@ PO translation:\n
         #"data/hr.job.csv", -> Module not found
         "data/hr.department.csv",
 		"data/res.partner.csv",
-		# "data/hr.employee.csv",
+		"data/hr.employee.csv",
         "data/calendar.event.csv",
         "data/project.project.csv",
         "data/project.task.csv",
