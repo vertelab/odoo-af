@@ -93,19 +93,20 @@
         <field name="priority" eval="2" />
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <field name="state" nolabel="1" widget="statusbar" statusbar_visible="reserved,confirmed,done,canceled"/>
+                </header>
                 <sheet>
-                    <!-- <div class="oe_title"> -->
-                        <group string="Book Distant Meeting">
-                            <group>
-                                <field string="Meeting type" name="type_id" class="oe_edit_only" />
-                                <field string="Meeting subject" name="name" placeholder="e.g. Business Lunch" class="oe_edit_only" />
-                            </group>
-                            <group>
-                                <field string="Attendees" name="partner_id" widget="many2manyattendee" placeholder="Select attendees..." class="oe_edit_only" />
-                                <field string="Case worker" name="user_id" widget="many2manyattendee" placeholder="Select case worker..." class="oe_edit_only" invisible="1" />
-                            </group>
+                    <group string="Book meeting">
+                        <group>
+                            <field string="Meeting type" name="type_id" class="oe_edit_only" />
+                            <field string="Meeting subject" name="name" placeholder="e.g. Business Lunch" class="oe_edit_only" />
                         </group>
-                    <!-- </div> -->
+                        <group>
+                            <field string="Attendees" name="partner_id" widget="many2oneattendee" placeholder="Select attendees..." class="oe_edit_only" />
+                            <field string="Case worker" name="user_id" widget="many2oneattendee" placeholder="Select case worker..." class="oe_edit_only" invisible="1" />
+                        </group>
+                    </group>
                     <notebook>
                         <page name="page_details" string="Meeting Details">
                             <group>
@@ -113,28 +114,82 @@
                                     <field name="office" options="{'no_create_edit': True}" domain="[('type', '=', 'af office')]" />
                                     <field name="start" />
                                     <field name="stop" invisible="1" />
-                                    <field name="duration" />
+                                    <field name="duration_selection" widget="radio"/>
+                                    <field name="duration" invisible="1" />
                                 </group>
                                 <group>
-                                    <field string="Description" name="description" class="oe_edit_only"/>
+                                    <field string="Description" name="description" class="oe_edit_only"  invisible="1"/>
+                                    <field name="occasion_ids" invisible="1" widget="many2many_tags" />
                                 </group>
                             </group>
                         </page>
                     </notebook>
-
-                    <!-- <label for="suggestion_ids" /> -->
-                    <!-- <field name="suggestion_id" domain="[('id', 'in', suggestion_ids)]" options="{'no_create': True, 'no_create_edit':True}"/> -->
-
                     <span aria-atomic="true" class="btn-group oe-right oe_button_box">
                         <button name="compute_suggestion_ids" type="object" string="Update" />
                         <button aria-label="Previous" class="fa fa-chevron-left btn btn-secondary o_pager_previous" accesskey="b" tabindex="-1" title="Previous" type="button"></button>
                         <button aria-label="Next" class="fa fa-chevron-right btn btn-secondary o_pager_next" accesskey="f" tabindex="-1" title="Next" type="button"></button>
                     </span>
-
                     <field name="suggestion_ids">
                         <tree string="Bookable Occasions">
                             <field name="start" />
                             <field name="stop" />
+                            <field name="type_id" />
+                            <field name="occasion_ids" invisible="1" />
+                            <button name="select_suggestion" type="object" string="Select" />
+                        </tree>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_calendar_appointment_move_form" model="ir.ui.view">
+        <field name="name">calendar.appointment.move.form</field>
+        <field name="model">calendar.appointment</field>
+        <field name="priority" eval="2" />
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" nolabel="1" widget="statusbar" statusbar_visible="reserved,confirmed,done,canceled"/>
+                </header>
+                <sheet>
+                    <group string="Move meeting">
+                        <group>
+                            <field string="Meeting type" name="type_id" class="oe_edit_only" />
+                            <field string="Meeting subject" name="name" placeholder="e.g. Business Lunch" class="oe_edit_only" />
+                        </group>
+                        <group>
+                            <field string="Attendees" name="partner_id" widget="many2oneattendee" placeholder="Select attendees..." class="oe_edit_only" />
+                            <field string="Case worker" name="user_id" widget="many2oneattendee" placeholder="Select case worker..." class="oe_edit_only" invisible="1" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="page_details" string="Meeting Details">
+                            <group>
+                                <group>
+                                    <field name="office" options="{'no_create_edit': True}" domain="[('type', '=', 'af office')]" />
+                                    <field name="start" />
+                                    <field name="stop" invisible="1" />
+                                    <field name="duration_selection" widget="radio"/>
+                                    <field name="duration" invisible="1" />
+                                </group>
+                                <group>
+                                    <field string="Description" name="description" class="oe_edit_only" invisible="1"/>
+                                    <field name="occasion_ids" invisible="1" widget="many2many_tags" />
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                    <span aria-atomic="true" class="btn-group oe-right oe_button_box">
+                        <button name="compute_suggestion_ids" type="object" string="Update" />
+                        <button aria-label="Previous" class="fa fa-chevron-left btn btn-secondary o_pager_previous" accesskey="b" tabindex="-1" title="Previous" type="button"></button>
+                        <button aria-label="Next" class="fa fa-chevron-right btn btn-secondary o_pager_next" accesskey="f" tabindex="-1" title="Next" type="button"></button>
+                    </span>
+                    <field name="suggestion_ids">
+                        <tree string="Bookable Occasions">
+                            <field name="start" />
+                            <field name="stop" />
+                            <field name="type_id" />
                             <field name="occasion_ids" invisible="1" />
                             <button name="select_suggestion" type="object" string="Select" />
                         </tree>
