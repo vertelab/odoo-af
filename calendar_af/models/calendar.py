@@ -132,7 +132,7 @@ class CalendarAppointmentSuggestion(models.Model):
     occasion_ids = fields.Many2many(comodel_name='calendar.occasion', string="Occasions")
     # type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type', related='appointment_id.type_id')
     type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type')
-    move_reason = fields.Many2one(comodel_name='calendar.appointment.cancel_reason', string='Move reason')
+    # move_reason = fields.Many2one(comodel_name='calendar.appointment.cancel_reason', string='Move reason')
     
 
     @api.multi
@@ -140,8 +140,11 @@ class CalendarAppointmentSuggestion(models.Model):
         # Kontrollera att occasion_ids fortfarande är lediga
         # Skriv data till appointment_id
         if self.appointment_id.state in ['confirmed', 'reserved']:
-            raise Warning("This appointment is already booked.")
+            raise Warning(_("This appointment is already booked."))
         
+        if not self.cancel_reason:
+            raise Warning(_("You have to select a reason for the move."))
+
         occasions = self.env['calendar.occasion']
         for occasion in self.occasion_ids:
             # Ensure that occasions are still free
@@ -186,7 +189,7 @@ class CalendarAppointmentSuggestion(models.Model):
                     raise Warning(_("No free occasions. This shouldn't happen. Please contact the system administrator."))
 
                 occasions |= free_occasion
-        self.appointment_id.move_appointment(occasions, move_reason)
+        self.appointment_id.move_appointment(occasions, self.appointment_id.cancel_reason)
 
 class CalendarAppointment(models.Model):
     _name = 'calendar.appointment'
@@ -387,7 +390,7 @@ class CalendarAppointment(models.Model):
             "office": res.partner_id.office.id,
         }
         _logger.warn("res: %s" % res)
-        res.partner_id.notes_ids = [(0, 0, vals)]
+        res.sudo().partner_id.notes_ids = [(0, 0, vals)]
 
         return res
 
@@ -404,6 +407,7 @@ class CalendarAppointment(models.Model):
                 'stop': occasions[-1].stop,
                 'duration': len(occasions) * BASE_DURATION,
                 'type_id': occasions[0].type_id.id,
+                'additional_booking': False,
                 'occasion_ids': [(6, 0, occasions._ids)],
             }
             self.write(vals)
@@ -417,7 +421,7 @@ class CalendarAppointment(models.Model):
                 "note_type": self.env.ref('partner_daily_notes.note_type_02').id,
                 "office": self.partner_id.office.id,
             }
-            self.partner_id.notes_ids = [(0, 0, vals)]
+            self.partner_id.sudo().notes_ids = [(0, 0, vals)]
             res = True
 
         return res
@@ -510,7 +514,7 @@ class CalendarOccasion(models.Model):
         # Check if overbooking is allowed on this meeting type
         if not type_id.additional_booking:
             # TODO: Throw error instead?
-            _logger.warn("Overbooking not allowed on %s" % type_id.name) 
+            _logger.warn(_("Overbooking not allowed on %s" % type_id.name))
             return False
         # Replace date with mapped date if we have one
         date = self._check_date_mapping(date)
