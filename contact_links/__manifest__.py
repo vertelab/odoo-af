@@ -16,14 +16,15 @@ Actions and search 'Update Link'. Open it and click on 'Create Contexual Action'
     'author': 'Jupical',
     'license': 'AGPL-3',
     'depends': [
-        'contacts', 'af_security'
+        'contacts', 'af_security', 'hr_360_view'
     ],
     'data': [
         'security/security.xml',
 		'views/res_partner_view.xml',
         'security/ir.model.access.csv',
         'data/server_action.xml',
-        'data/partner.links.csv'
+        'data/partner.links.csv',
+        'data/sync_link.xml'
     ],
     'demo': [
     ],
