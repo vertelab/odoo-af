@@ -13,9 +13,10 @@
     "license": "LGPL-3",
     "installable": True,
     "depends": [
-        'base',
+        'base', 'portal'
     ],
     "data": [
         'views/assets.xml',
+        'views/template.xml'
     ]
 }

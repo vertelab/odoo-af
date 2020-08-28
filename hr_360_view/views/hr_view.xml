@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_employee_360_form" model="ir.ui.view">
+        <field name="name">hr.employee.360</field>
+        <field name="model">hr.employee</field>
+        <field name="arch" type="xml">
+            <form name="search_partner" string="Search Partner">
+                <footer>
+                    <button name="search_jobseeker_action" string="Search Jobseekers" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+                <div style="min-height:2em;"/>
+
+                <notebook>
+                    <page string="My Jobseekers">
+                        <field name="user_id" invisible="1"/>
+
+                        <field name="jobseekers_ids">
+                            <tree>
+                                <field name="social_sec_nr"/>
+                                <field name="customer_id"/>
+                                <field name="name"/>
+                                <field name="city"/>
+                                <field name="office"/>
+                            </tree>
+                        </field>
+
+                    </page>
+
+                    <page string="Case" name="case">
+                        <field name="case_ids">
+                            <tree>
+                                <field name="case_id"/>
+                                <field name="name"/>
+                                <field name="case_description"/>
+                                <field name="administrative_officer"/>
+                                <field name="case_type"/>
+                                <field name="created_date"/>
+                                <field name="changed_date"/>
+                                <field name="due_date"/>
+                                <field name="closed_date"/>
+                                <field name="case_url"/>
+                            </tree>
+                        </field>
+
+                    </page>
+                    <page string="History">
+                        <field name="daily_note_ids">
+                            <tree>
+                                <field name="name"/>
+                                <field name="note"/>
+                                <field name="note_date"/>
+                                <field name="note_type"/>
+                                <field name="note_number"/>
+                                <field name="office"/>
+                            </tree>
+                        </field>
+
+                    </page>
+                </notebook>
+            </form>
+        </field>
+    </record>
+
+    <record id="open_view_employee_360_list" model="ir.actions.act_window">
+        <field name="name">Employees</field>
+        <field name="res_model">hr.employee</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">kanban,tree,form,activity</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="view_id" eval="False"/>
+        <field name="search_view_id" ref="hr.view_employee_filter"/>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Add a new employee
+          </p><p>
+            With just a quick glance on the Odoo employee screen, you
+            can easily find all the information you need for each person;
+            contact data, job position, availability, etc.
+          </p>
+        </field>
+    </record>
+
+    <record id="inherit_partner_form_view" model="ir.ui.view">
+        <field name="name">hr.employee</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <field name="user_id" position="after">
+                <field name="related_partner_id" invisible="1"/>
+            </field>
+            <xpath expr="//form/div[hasclass('oe_chatter')]" position="replace">
+                <div></div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="base_hr_form_view" model="ir.actions.act_window.view">
+        <field name="sequence">2</field>
+        <field name="view_mode">form</field>
+        <field name="act_window_id" ref="hr.open_view_employee_list_my" />
+        <field name="view_id" ref="hr.view_employee_form" />
+<!--        <field name="view_id" ref="hr_employee_360_form_id" />-->
+    </record>
+
+    <record id="base_hr_kanban_view" model="ir.actions.act_window.view">
+        <field name="sequence">1</field>
+        <field name="view_mode">kanban</field>
+        <field name="act_window_id" ref="hr.open_view_employee_list_my"/>
+        <field name="view_id" ref="hr.hr_kanban_view_employees"/>
+    </record>
+
+</odoo>
