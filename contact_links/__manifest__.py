@@ -21,6 +21,7 @@ Actions and search 'Update Link'. Open it and click on 'Create Contexual Action'
     'data': [
         'security/security.xml',
 		'views/res_partner_view.xml',
+        'views/hr_employee_view.xml',
         'security/ir.model.access.csv',
         'data/server_action.xml',
         'data/partner.links.csv',

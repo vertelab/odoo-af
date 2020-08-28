@@ -72,7 +72,7 @@
                         </field>
 
                     </page>
-                    <page string="History">
+                    <page name="history" string="History">
                         <field name="daily_note_ids">
                             <tree>
                                 <field name="name"/>

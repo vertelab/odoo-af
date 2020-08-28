@@ -6,12 +6,12 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
-            <div name="button_box" position="inside">
-                <!-- <button type="object" class="oe_stat_button fa fa-link 4x" name="action_partner_link"
+            <!-- <div name="button_box" position="inside">
+                <button type="object" class="oe_stat_button fa fa-link 4x" name="action_partner_link"
                         context="{'default_partner_id': active_id}">
                     Links
-                </button> -->
-            </div>
+                </button>
+            </div> -->
             <xpath expr="//notebook" position="inside">
                 <page name="partner_link" string="Links">
                     <field name="link_ids" mode="kanban">
@@ -56,12 +56,12 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="partner_view_360.view_partner_employer_form"/>
         <field name="arch" type="xml">
-            <div name="button_box" position="inside">
-                <!-- <button type="object" class="oe_stat_button fa fa-link 4x" name="action_partner_link"
+            <!-- <div name="button_box" position="inside">
+                <button type="object" class="oe_stat_button fa fa-link 4x" name="action_partner_link"
                         context="{'default_partner_id': active_id}">
                     Links
-                </button> -->
-            </div>
+                </button>
+            </div> -->
             <xpath expr="//notebook" position="inside">
                 <page name="partner_link" string="Links">
                     <field name="link_ids" mode="kanban">
@@ -106,12 +106,12 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="partner_view_360.view_jobseeker_form"/>
         <field name="arch" type="xml">
-            <div name="button_box" position="inside">
-                <!-- <button type="object" class="oe_stat_button fa fa-link 4x" name="action_partner_link"
+            <!-- <div name="button_box" position="inside">
+                <button type="object" class="oe_stat_button fa fa-link 4x" name="action_partner_link"
                         context="{'default_partner_id': active_id}">
                     Links
-                </button> -->
-            </div>
+                </button>
+            </div> -->
             <xpath expr="//notebook" position="inside">
                 <page name="partner_link" string="Links">
                     <field name="link_ids" mode="kanban">
