@@ -5,14 +5,8 @@
         <field name="model">calendar.occasion</field>
         <field name="priority" eval="2" />
         <field name="arch" type="xml">
-            <!-- <calendar string="occasions" date_start="start" date_stop="stop" date_delay="duration" all_day="allday"
-                readonly_form_view_id="%(calendar.view_calendar_event_form_popup)s"
-                event_open_popup="true"
-                event_limit="3"
-                color="partner_ids"> -->
             <calendar string="Occasions" date_start="start" date_stop="stop" date_delay="duration">
                 <field name="name" />
-                <!-- <field name="is_highlighted" invisible="1"/> -->
             </calendar>
         </field>
     </record>
@@ -135,14 +129,8 @@
         <field name="model">calendar.occasion</field>
         <field name="priority" eval="2" />
         <field name="arch" type="xml">
-            <!-- <calendar string="occasions" date_start="start" date_stop="stop" date_delay="duration" all_day="allday"
-                readonly_form_view_id="%(calendar.view_calendar_event_form_popup)s"
-                event_open_popup="true"
-                event_limit="3"
-                color="partner_ids"> -->
             <calendar string="Occasions" date_start="start" date_stop="stop" date_delay="duration" color="office">
                 <field name="name" />
-                <!-- <field name="is_highlighted" invisible="1"/> -->
             </calendar>
         </field>
     </record>
@@ -166,16 +154,6 @@
         <field name="res_model">calendar.occasion</field>
         <field name="view_mode">calendar,tree,form,pivot,kanban</field>
         <field name="view_id" ref="view_calendar_occasion_calendar" />
-        <!-- <field name="search_view_id" ref="view_calendar_event_search"/> -->
-        <!-- <field name="help" type="html">
-          <p class="o_view_nocontent_smiling_face">
-            occasion a new meeting
-          </p><p>
-            The calendar is shared between employees and fully integrated with
-            other applications such as the employee leaves or the business
-            opportunities.
-          </p>
-        </field> -->
     </record>
 
     <record id="action_calendar_local_occasion" model="ir.actions.act_window">
@@ -185,16 +163,6 @@
         <field name="view_id" ref="view_calendar_occasion_local_calendar" />
         <!-- This should be a reference to the external id instead. -->
         <field name="domain">[('type_id.channel.name', '=', 'Local')]</field>
-        <!-- <field name="search_view_id" ref="view_calendar_event_search"/> -->
-        <!-- <field name="help" type="html">
-          <p class="o_view_nocontent_smiling_face">
-            occasion a new meeting
-          </p><p>
-            The calendar is shared between employees and fully integrated with
-            other applications such as the employee leaves or the business
-            opportunities.
-          </p>
-        </field> -->
     </record>
 
     <record id="action_view_calendar_occasion_calendar" model="ir.actions.act_window.view">
