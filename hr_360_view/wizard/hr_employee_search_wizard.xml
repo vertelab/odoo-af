@@ -39,7 +39,7 @@
            
             <notebook>
             <field name="employee_id" invisible="1"/>
-                    <page name="jobseekers" string="My Jobseekers">
+                    <page name="jobseekers" string="My Jobseekers" groups="base.group_no_one">
                         <!-- <field name="user_id" invisible="1"/> -->
 
                         <field name="jobseekers_ids">
