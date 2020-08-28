@@ -103,8 +103,6 @@ class CalendarAppointmentType(models.Model):
     duration = fields.Float(string='Duration')
     ipf_num = fields.Integer(string='IPF Number')
     additional_booking = fields.Boolean(string='Over booking')
-    # ärendetyp ace
-    # könamn ace
     # standardtid, möte.
     # add competence
 
@@ -130,7 +128,6 @@ class CalendarAppointmentSuggestion(models.Model):
     start = fields.Datetime()
     stop = fields.Datetime()
     occasion_ids = fields.Many2many(comodel_name='calendar.occasion', string="Occasions")
-    # type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type', related='appointment_id.type_id')
     type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type')
     
 
@@ -138,11 +135,8 @@ class CalendarAppointmentSuggestion(models.Model):
     def select_suggestion(self):
         # Kontrollera att occasion_ids fortfarande är lediga
         # Skriv data till appointment_id
-        if self.appointment_id.state in ['confirmed', 'reserved']:
+        if self.appointment_id.state in ['reserved', 'confirmed']:
             raise Warning(_("This appointment is already booked."))
-        
-        if not self.cancel_reason:
-            raise Warning(_("You have to select a reason for the move."))
 
         occasions = self.env['calendar.occasion']
         for occasion in self.occasion_ids:
@@ -457,11 +451,12 @@ class CalendarOccasion(models.Model):
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel', related='type_id.channel')
     additional_booking = fields.Boolean(String='Over booking')
     user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
-    state = fields.Selection(selection=[('request', 'Awaiting acceptance'),
+    state = fields.Selection(selection=[('draft', 'Draft'),
+                                        ('request', 'Awaiting acceptance'),
                                         ('ok', 'Ready to book'),
                                         ('fail', 'Denied')],
                                         string='Occasion state', 
-                                        default='request', 
+                                        default='draft', 
                                         help="Status of the meeting")
     office = fields.Many2one(comodel_name='res.partner', string="Office", domain="[('type', '=', 'af office')]")
     office_code = fields.Char(string='Office code', related="office.office_code")
@@ -572,8 +567,19 @@ class CalendarOccasion(models.Model):
         return res
 
     @api.multi
-    def approve_occasion(self):
-        """User approves suggested occasion"""
+    def publish_occasion(self):
+        """User publishes suggested occasion"""
+        if self.state == 'draft':
+            self.state = 'request'
+            ret = True
+        else:
+            ret = False
+
+        return ret
+
+    @api.multi
+    def accept_occasion(self):
+        """User accepts suggested occasion"""
         if self.state == 'request':
             self.state = 'ok'
             ret = True
@@ -583,8 +589,8 @@ class CalendarOccasion(models.Model):
         return ret
 
     @api.multi
-    def deny_occasion(self):
-        """User denies suggested occasion"""
+    def reject_occasion(self):
+        """User rejects suggested occasion"""
         if self.state == 'request':
             self.state = 'fail'
             ret = True
@@ -629,19 +635,14 @@ class CalendarOccasion(models.Model):
         for day in reversed(range(date_delta.days + 1)):
             occasions = []
             # find 'max_depth' number of free occasions for each timeslot
-            # if day == 0:
             if day == date_delta.days:
                 start_dt = copy.copy(stop)
                 start_dt = start_dt.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute)
                 last_slot = copy.copy(stop)
                 last_slot = last_slot.replace(hour=BASE_DAY_STOP.hour, minute=BASE_DAY_STOP.minute)
-                # TODO: I commented this if statement and nothing has exploded yet. Remove it completely?
-                # if last_slot > stop:
-                #     last_slot = copy.copy(stop)
                 last_slot -= timedelta(minutes=duration)
             else:
                 # This will break given certain times and timezones. Should work for us.
-                # start_dt = start_dt + timedelta(days=1)
                 start_dt = start_dt - timedelta(days=1)
                 start_dt = start_dt.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute)
                 last_slot = last_slot - timedelta(days=1)
@@ -657,7 +658,6 @@ class CalendarOccasion(models.Model):
                     # The line below causes a bug that returns bookable occasions 
                     # with 30 min (1 occasion) gaps before the last 30 min (1 occasion).
                     # I fixed this with (no_occasions - 1). I have not investigated it further. 
-                    # occasions.append(get_occasions(start_dt + td_base_duration * no_occasions))
                     occasions.append(get_occasions(start_dt + td_base_duration * (no_occasions - 1)))
                 available_depth = min([len(o) for o in occasions] or [0])
                 slot = []
@@ -675,7 +675,6 @@ class CalendarOccasion(models.Model):
         # TODO: do not create extra occasions unless completely empty?
         if type_id.additional_booking and all( not l for l in occ_lists):
             # Changed this line to create over bookings on the LAST available date.
-            # occ_lists[-1].append(self._get_additional_booking(start_dt, duration, type_id))
             occ_lists[-1].append(self._get_additional_booking(stop, duration, type_id))
 
         return occ_lists
