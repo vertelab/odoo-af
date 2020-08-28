@@ -132,7 +132,6 @@ class CalendarAppointmentSuggestion(models.Model):
     occasion_ids = fields.Many2many(comodel_name='calendar.occasion', string="Occasions")
     # type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type', related='appointment_id.type_id')
     type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type')
-    # move_reason = fields.Many2one(comodel_name='calendar.appointment.cancel_reason', string='Move reason')
     
 
     @api.multi
@@ -330,7 +329,7 @@ class CalendarAppointment(models.Model):
                     "partner_id": self.partner_id.id,
                     "administrative_officer": self.user_id.id,
                     "note": "Meeting on %s cancelled with reason: %s" % (self.start, cancel_reason.name),
-                    "note_type": self.env.ref('partner_daily_notes.note_type_02').id,
+                    "note_type": self.env.ref('partner_daily_notes.note_type_ag_04').id,
                     "office": self.partner_id.office.id,
                 }
                 appointment.partner_id.notes_ids = [(0, 0, vals)]
@@ -350,7 +349,7 @@ class CalendarAppointment(models.Model):
                     "partner_id": self.partner_id.id,
                     "administrative_officer": self.user_id.id,
                     "note": "Meeting on %s confirmed." % self.start,
-                    "note_type": self.env.ref('partner_daily_notes.note_type_02').id,
+                    "note_type": self.env.ref('partner_daily_notes.note_type_ag_04').id,
                     "office": self.partner_id.office.id,
                 }
                 appointment.partner_id.notes_ids = [(0, 0, vals)]
@@ -369,7 +368,7 @@ class CalendarAppointment(models.Model):
             "partner_id": self.partner_id.id,
             "administrative_officer": self.user_id.id,
             "note": "Meeting on %s deleted." % self.start,
-            "note_type": self.env.ref('partner_daily_notes.note_type_02').id,
+            "note_type": self.env.ref('partner_daily_notes.note_type_ag_04').id,
             "office": self.partner_id.office.id,
         }
         self.partner_id.notes_ids = [(0, 0, vals)]
@@ -386,7 +385,7 @@ class CalendarAppointment(models.Model):
             "partner_id": res.partner_id.id,
             "administrative_officer": res.user_id.id,
             "note": "Meeting on %s created." % res.start,
-            "note_type": res.env.ref('partner_daily_notes.note_type_02').id,
+            "note_type": res.env.ref('partner_daily_notes.note_type_ag_04').id,
             "office": res.partner_id.office.id,
         }
         _logger.warn("res: %s" % res)
@@ -418,7 +417,7 @@ class CalendarAppointment(models.Model):
                 "partner_id": self.partner_id.id,
                 "administrative_officer": self.user_id.id,
                 "note": "Meeting on %s created." % self.start,
-                "note_type": self.env.ref('partner_daily_notes.note_type_02').id,
+                "note_type": self.env.ref('partner_daily_notes.note_type_ag_04').id,
                 "office": self.partner_id.office.id,
             }
             self.partner_id.sudo().notes_ids = [(0, 0, vals)]
@@ -451,6 +450,7 @@ class CalendarOccasion(models.Model):
     name = fields.Char(string='Name', required=True)
     start = fields.Datetime(string='Start', required=True, help="Start date of an occasion")
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an occasion")
+    duration_selection = fields.Selection(string="Duration", selection=[('30 minutes','30 minutes'), ('1 hour','1 hour')])
     duration = fields.Float('Duration')
     appointment_id = fields.Many2one(comodel_name='calendar.appointment', string="Appointment")
     type_id = fields.Many2one(comodel_name='calendar.appointment.type', string='Type')
@@ -463,6 +463,28 @@ class CalendarOccasion(models.Model):
                                         string='Occasion state', 
                                         default='request', 
                                         help="Status of the meeting")
+    office = fields.Many2one(comodel_name='res.partner', string="Office", domain="[('type', '=', 'af office')]")
+    office_code = fields.Char(string='Office code', related="office.office_code")
+
+    @api.onchange('type_id')
+    def set_duration_selection(self):
+        self.name = self.type_id.name
+        if self.duration == 30.0:
+            self.duration_selection = '30 minutes'
+        elif self.duration == 60.0:
+            self.duration_selection = '1 hour'
+
+    @api.onchange('duration_selection')
+    def set_duration(self):
+        if self.duration_selection == "30 minutes":
+            self.duration = 0.5
+        if self.duration_selection == "1 hour":
+            self.duration = 1.0
+
+    @api.onchange('duration', 'start')
+    def onchange_duration_start(self):
+        if self.start and self.duration:
+            self.stop = self.start + timedelta(minutes=int(self.duration * 60)) 
 
     @api.model
     def _force_create_occasion(self, duration, start, type_id, channel, state):
