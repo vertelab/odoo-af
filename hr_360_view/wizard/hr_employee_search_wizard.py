@@ -51,13 +51,16 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
 
     @api.multi
     def search_jobseeker(self):
-        domains = ['["|","|",']   
-        if len(self.social_sec_nr_search) == 13 and self.social_sec_nr_search[8] == "-":
-            domains.append('["social_sec_nr", "=", "%s"]' % self.social_sec_nr_search)
-        elif len(self.social_sec_nr_search) == 12:
-            domains.append('["social_sec_nr", "=", "%s-%s"]' % (self.social_sec_nr_search[:8],self.social_sec_nr_search[8:12]))
+        domains = ['["|","|",']
+        if self.social_sec_nr_search:
+            if len(self.social_sec_nr_search) == 13 and self.social_sec_nr_search[8] == "-":
+                domains.append('["social_sec_nr", "=", "%s"]' % self.social_sec_nr_search)
+            elif len(self.social_sec_nr_search) == 12:
+                domains.append('["social_sec_nr", "=", "%s-%s"]' % (self.social_sec_nr_search[:8],self.social_sec_nr_search[8:12]))
+            else:
+                raise Warning(_("Incorrectly formated social security number: %s" % self.social_sec_nr_search))
         else:
-            raise Warning(_("Incorrectly formated social security number: %s" % self.social_sec_nr_search))
+            domains.append('["social_sec_nr", "=", "%s"]' % self.social_sec_nr_search)
         domains.append(',["customer_id","=","%s"]' % self.customer_id_search)
         domains.append(',["email","=","%s"]' % self.email_search)
         domains.append(']')
