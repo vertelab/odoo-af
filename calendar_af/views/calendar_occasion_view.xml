@@ -37,6 +37,9 @@
         <field name="priority" eval="2" />
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <field name="state" nolabel="1" widget="statusbar" statusbar_visible="request,ok,fail"/>
+                </header>
                 <sheet>
                     <div class="oe_title">
                         <div class="oe_edit_only">
@@ -47,18 +50,18 @@
                         </h1>
                     </div>
                     <notebook>
-                        <page name="page_details" string="Meeting Details">
+                        <page name="page_details" string="Occasion Details">
                             <group>
                                 <group>
                                     <field name="start" />
-                                    <field name="duration" />
+                                    <field name="duration_selection" widget="radio"/>
                                 </group>
                                 <group>
-                                    <field name="type_id" />
+                                    <field name="type_id" domain="[('channel.name', '=', 'Local')]" />
+                                    <field name="office" />
                                 </group>
                             </group>
                         </page>
-                        <page name="page_alternatives" string="Alternatives"></page>
                     </notebook>
                 </sheet>
             </form>
@@ -118,6 +121,37 @@
         </field>
     </record>
 
+    <record id="view_calendar_occasion_local_calendar" model="ir.ui.view">
+        <field name="name">calendar.occasion.local.calendar</field>
+        <field name="model">calendar.occasion</field>
+        <field name="priority" eval="2" />
+        <field name="arch" type="xml">
+            <!-- <calendar string="occasions" date_start="start" date_stop="stop" date_delay="duration" all_day="allday"
+                readonly_form_view_id="%(calendar.view_calendar_event_form_popup)s"
+                event_open_popup="true"
+                event_limit="3"
+                color="partner_ids"> -->
+            <calendar string="Occasions" date_start="start" date_stop="stop" date_delay="duration" color="office">
+                <field name="name" />
+                <!-- <field name="is_highlighted" invisible="1"/> -->
+            </calendar>
+        </field>
+    </record>
+
+    <record id="view_calendar_occasion_local_tree" model="ir.ui.view">
+        <field name="name">calendar.occasion.local.tree</field>
+        <field name="model">calendar.occasion</field>
+        <field name="priority" eval="2" />
+        <field name="arch" type="xml">
+            <tree string="Appointments">
+                <field name="name" />
+                <field name="start" />
+                <field name="stop" />
+                <field name="appointment_id" />
+            </tree>
+        </field>
+    </record>
+
     <record id="action_calendar_occasion" model="ir.actions.act_window">
         <field name="name">Occasions</field>
         <field name="res_model">calendar.occasion</field>
@@ -138,8 +172,10 @@
     <record id="action_calendar_local_occasion" model="ir.actions.act_window">
         <field name="name">Local occasions</field>
         <field name="res_model">calendar.occasion</field>
-        <field name="view_mode">calendar,tree,form,kanban</field>
-        <field name="view_id" ref="view_calendar_occasion_calendar" />
+        <field name="view_mode">calendar,tree,form,pivot,kanban</field>
+        <field name="view_id" ref="view_calendar_occasion_local_calendar" />
+        <!-- This should be a reference to the external id instead. -->
+        <field name="domain">[('type_id.channel.name', '=', 'Local')]</field>
         <!-- <field name="search_view_id" ref="view_calendar_event_search"/> -->
         <!-- <field name="help" type="html">
           <p class="o_view_nocontent_smiling_face">
@@ -187,6 +223,6 @@
         <field name="view_id" ref="view_calendar_occasion_kanban" />
     </record>
 
-    <menuitem action="action_calendar_occasion" id="menu_action_occasion" parent="menu_pdm" sequence="11" />
+    <!-- <menuitem action="action_calendar_occasion" id="menu_action_occasion" parent="menu_pdm" sequence="11" /> -->
     <menuitem action="action_calendar_local_occasion" id="menu_action_local_occasion" parent="menu_local" sequence="11" />
 </odoo>
