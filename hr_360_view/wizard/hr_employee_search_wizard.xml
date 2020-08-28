@@ -24,7 +24,6 @@
                     <group>
                         <group>
                             <field name="search_reason"/> <!--widget="radio" options="{'horizontal': true}"-->
-                            <field name="other_reason" attrs="{'invisible': [('search_reason','!=','other reason')]}"/>
                             
                             <field name="social_sec_nr_search"/>
                             <field name="customer_id_search"/>
@@ -40,7 +39,7 @@
            
             <notebook>
             <field name="employee_id" invisible="1"/>
-                    <page name="jobseekers" string="My Jobseekers">
+                    <page name="jobseekers" string="My Jobseekers" groups="base.group_no_one">
                         <!-- <field name="user_id" invisible="1"/> -->
 
                         <field name="jobseekers_ids">

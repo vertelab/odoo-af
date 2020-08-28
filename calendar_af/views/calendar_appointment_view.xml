@@ -20,6 +20,7 @@
             <tree string="Appointments">
                 <field name="type_id" />
                 <field name="start" />
+                <field name="duration"/>
                 <field name="stop" />
                 <field name="user_id" />
                 <field name="partner_id" />
@@ -70,7 +71,7 @@
         </field>
     </record>
 
-    <record id="view_calendar_appointment_pivot" model="ir.ui.view">
+    <!-- <record id="view_calendar_appointment_pivot" model="ir.ui.view">
         <field name="name">calendar.appointment.pivot</field>
         <field name="model">calendar.appointment</field>
         <field name="priority" eval="2" />
@@ -80,7 +81,7 @@
                 <field name="user_id" type="row" />
             </pivot>
         </field>
-    </record>
+    </record> -->
 
     <record id="view_calendar_appointment_local_calendar" model="ir.ui.view">
         <field name="name">calendar.appointment.local.calendar</field>
@@ -261,12 +262,12 @@
         <field name="view_id" ref="view_calendar_appointment_kanban" />
     </record>
 
-    <record id="action_view_calendar_appointment_pivot" model="ir.actions.act_window.view">
+    <!-- <record id="action_view_calendar_appointment_pivot" model="ir.actions.act_window.view">
         <field name="act_window_id" ref="action_appointment" />
         <field name="sequence" eval="4" />
         <field name="view_mode">pivot</field>
         <field name="view_id" ref="view_calendar_appointment_pivot" />
-    </record>
+    </record> -->
 
     <record id="action_view_calendar_appointment_local_calendar" model="ir.actions.act_window.view">
         <field name="act_window_id" ref="action_local_appointment" />

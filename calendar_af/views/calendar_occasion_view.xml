@@ -70,7 +70,7 @@
             </form>
         </field>
     </record>
-
+<!-- 
     <record id="view_calendar_occasion_pivot" model="ir.ui.view">
         <field name="name">calendar.occasion.pivot</field>
         <field name="model">calendar.occasion</field>
@@ -81,7 +81,7 @@
                 <field name="appointment_id" type="row" />
             </pivot>
         </field>
-    </record>
+    </record> -->
 
     <record id="view_calendar_occasion_kanban" model="ir.ui.view">
         <field name="name">calendar.occasion.kanban</field>
@@ -160,23 +160,22 @@
         <field name="name">Local occasions</field>
         <field name="res_model">calendar.occasion</field>
         <field name="view_mode">calendar,tree,form,pivot,kanban</field>
-        <field name="view_id" ref="view_calendar_occasion_local_calendar" />
+        <field name="view_id" ref="view_calendar_occasion_local_tree" />
         <!-- This should be a reference to the external id instead. -->
         <field name="domain">[('type_id.channel.name', '=', 'Local')]</field>
+    </record>
+    <record id="action_view_calendar_occasion_tree" model="ir.actions.act_window.view">
+        <field name="act_window_id" ref="action_calendar_occasion" />
+        <field name="sequence" eval="1" />
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_calendar_occasion_tree" />
     </record>
 
     <record id="action_view_calendar_occasion_calendar" model="ir.actions.act_window.view">
         <field name="act_window_id" ref="action_calendar_occasion" />
-        <field name="sequence" eval="1" />
+        <field name="sequence" eval="2" />
         <field name="view_mode">calendar</field>
         <field name="view_id" ref="view_calendar_occasion_calendar" />
-    </record>
-
-    <record id="action_view_calendar_occasion_tree" model="ir.actions.act_window.view">
-        <field name="act_window_id" ref="action_calendar_occasion" />
-        <field name="sequence" eval="2" />
-        <field name="view_mode">tree</field>
-        <field name="view_id" ref="view_calendar_occasion_tree" />
     </record>
 
     <record id="action_view_calendar_occasion_form" model="ir.actions.act_window.view">
@@ -186,12 +185,12 @@
         <field name="view_id" ref="view_calendar_occasion_form" />
     </record>
 
-    <record id="action_view_calendar_occasion_pivot" model="ir.actions.act_window.view">
+    <!-- <record id="action_view_calendar_occasion_pivot" model="ir.actions.act_window.view">
         <field name="act_window_id" ref="action_calendar_occasion" />
         <field name="sequence" eval="4" />
         <field name="view_mode">pivot</field>
         <field name="view_id" ref="view_calendar_occasion_pivot" />
-    </record>
+    </record> -->
 
     <record id="action_view_calendar_occasion_kanban" model="ir.actions.act_window.view">
         <field name="act_window_id" ref="action_calendar_occasion" />
@@ -200,6 +199,7 @@
         <field name="view_id" ref="view_calendar_occasion_kanban" />
     </record>
 
-    <!-- <menuitem action="action_calendar_occasion" id="menu_action_occasion" parent="menu_pdm" sequence="11" /> -->
-    <menuitem action="action_calendar_local_occasion" id="menu_action_local_occasion" parent="menu_local" sequence="11" />
+
+    <!-- <menuitem action="action_calendar_occasion" id="menu_action_occasion" parent="menu_pdm" sequence="11" groups="af_security.group_af_employers_high,af_security.group_af_jobseekers_high"/> -->
+    <menuitem action="action_calendar_local_occasion" id="menu_action_local_occasion" parent="menu_local" sequence="11" groups="af_security.group_af_employers_high,af_security.group_af_jobseekers_high"/>
 </odoo>

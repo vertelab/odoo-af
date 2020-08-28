@@ -38,7 +38,7 @@ This module adds cases to a partner.
         'partner_view_360'
     ],
     'data': [
-		    'views/res_partner_view.xml',
+	    'views/res_partner_view.xml',
             'security/ir.model.access.csv',
             'views/res_partner_notes_view.xml',
             #'data/ir.model.fields.csv', 
