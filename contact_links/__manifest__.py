@@ -24,7 +24,7 @@ Actions and search 'Update Link'. Open it and click on 'Create Contexual Action'
         'security/ir.model.access.csv',
         'data/server_action.xml',
         'data/partner.links.csv',
-        'data/sync_link.xml'
+        #'data/sync_link.xml'
     ],
     'demo': [
     ],

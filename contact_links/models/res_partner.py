@@ -1,7 +1,5 @@
 from odoo import models, fields, api, _
-import logging
 
-_logger = logging.getLogger(__name__)
 
 class ResPartner(models.Model):
 
@@ -26,15 +24,12 @@ class ResPartner(models.Model):
         }
 
     def sync_link(self):
-        for partner in self.env['res.partner'].search([]):
-            _logger.info("got this far")
+        for partner in self:
             partner.write({'link_ids': [(5,)]})
             links = self.env['partner.links'].search(
                 [('type_smart', '=', 'tab')])
             for link in links:
-                _logger.info("got further")
                 partner.link_ids =  [(4, link.id)]
-            _logger.info("got to the end")
 
 
 class PartnerLinks(models.Model):
