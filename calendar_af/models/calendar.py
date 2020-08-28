@@ -460,6 +460,14 @@ class CalendarOccasion(models.Model):
                                         help="Status of the meeting")
     office = fields.Many2one(comodel_name='res.partner', string="Office", domain="[('type', '=', 'af office')]")
     office_code = fields.Char(string='Office code', related="office.office_code")
+    create_type = fields.Selection(string='Type', selection=[('single', 'Single'), ('repeating', 'Repeating'),], default='single')
+    start_range = fields.Date(string='Start of repeat')
+    stop_range = fields.Date(string='End of repeat')
+    repeat_mon = fields.Boolean(string='Monday')
+    repeat_tue = fields.Boolean(string='Tuesday')
+    repeat_wed = fields.Boolean(string='Wednesday')
+    repeat_thu = fields.Boolean(string='Thursday')
+    repeat_fri = fields.Boolean(string='Friday')
 
     @api.onchange('type_id')
     def set_duration_selection(self):
@@ -475,6 +483,7 @@ class CalendarOccasion(models.Model):
             self.duration = 0.5
         if self.duration_selection == "1 hour":
             self.duration = 1.0
+        self.onchange_duration_start()
 
     @api.onchange('duration', 'start')
     def onchange_duration_start(self):
