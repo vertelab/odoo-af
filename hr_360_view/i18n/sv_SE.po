@@ -196,7 +196,7 @@ msgstr "Matchning"
 #. module: hr_360_view
 #: model:ir.ui.menu,name:hr_360_view.res_partner_jobseeker_search_wizard_menu
 msgid "My Administrative Officer Area"
-msgstr "Handläggaryta"
+msgstr "Arbetsyta"
 
 #. module: hr_360_view
 #: model_terms:ir.ui.view,arch_db:hr_360_view.hr_employee_360_form
@@ -225,7 +225,7 @@ msgstr "Annan orsak vald, men annan orsak fältet är tomt"
 #. module: hr_360_view
 #: model:ir.model.fields,help:hr_360_view.field_hr_employee__related_partner_id
 msgid "Partner-related data of the user"
-msgstr ""
+msgstr "Partner-relaterad data om användaren"
 
 #. module: hr_360_view
 #: selection:hr.employee.jobseeker.search.wizard,search_reason:0
@@ -240,7 +240,7 @@ msgstr "Relaterad samarbetspartner"
 #. module: hr_360_view
 #: model:ir.model.fields,field_description:hr_360_view.field_hr_employee_jobseeker_search_wizard__search_domain
 msgid "Search Filter"
-msgstr "Sök Filter"
+msgstr "Sökfilter"
 
 #. module: hr_360_view
 #: model_terms:ir.ui.view,arch_db:hr_360_view.hr_employee_360_form
@@ -252,7 +252,7 @@ msgstr "Sök Arbetssökande"
 #: model_terms:ir.ui.view,arch_db:hr_360_view.hr_employee_360_form
 #: model_terms:ir.ui.view,arch_db:hr_360_view.search_jobseeker_form
 msgid "Search Partner"
-msgstr "Sök efter kund"
+msgstr "Sök efter kontakter"
 
 #. module: hr_360_view
 #: model:ir.model.fields,field_description:hr_360_view.field_hr_employee_jobseeker_search_wizard__search_reason
@@ -263,7 +263,7 @@ msgstr "Sökorsak"
 #: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:68
 #, python-format
 msgid "Search reason or identification must be set before searching"
-msgstr "Sök orsak eller identifieringsmetod måste vara vald före sökning"
+msgstr "Du måste välja Sökorsak eller Identifieringsmetod före sökning"
 
 #. module: hr_360_view
 #: model:ir.model.fields,field_description:hr_360_view.field_hr_employee_jobseeker_search_wizard__social_sec_nr_search
@@ -278,15 +278,18 @@ msgstr "Vid kontakt"
 #. module: hr_360_view
 #: model_terms:ir.actions.act_window,help:hr_360_view.open_view_employee_360_list
 msgid ""
-"With just a quick glance on the Odoo employee screen, you\n"
+"Help - hr_360_view With just a quick glance on the Odoo employee screen, you\n"
 "            can easily find all the information you need for each person;\n"
 "            contact data, job position, availability, etc."
 msgstr ""
+"Hjälp för - hr_360_view With just a quick glance on the Odoo employee screen, you\n"
+"            can easily find all the information you need for each person;\n"
+"            contact data, job position, availability, etc."
 
 #. module: hr_360_view
 #: model:ir.model,name:hr_360_view.model_hr_employee_jobseeker_search_wizard
 msgid "hr.employee.jobseeker.search.wizard"
-msgstr ""
+msgstr "hr_360_view-sökvizard"
 
 #. module: hr_360_view
 #: model_terms:ir.ui.view,arch_db:hr_360_view.search_jobseeker_form
