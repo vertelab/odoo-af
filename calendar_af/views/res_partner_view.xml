@@ -32,6 +32,7 @@
             <tree>
               <field name="type_id" options="{'no_create_edit': True}"/>
               <field name="start"/>
+              <field name="duration"/>
               <field name="stop"/>
               <field name="user_id"/>
               <field name="location_code"/>
@@ -45,6 +46,7 @@
           <field name="appointment_ids_past" mode="tree" nolabel="1" default_order="start">
                   <field name="type_id" options="{'no_create_edit': True}"/>
                   <field name="start"/>
+                  <field name="duration"/>
                   <field name="stop"/>
                   <field name="user_id"/>
                   <field name="location_code"/>

@@ -5,15 +5,9 @@
         <field name="model">calendar.appointment</field>
         <field name="priority" eval="2" />
         <field name="arch" type="xml">
-            <!-- <calendar string="appointments" date_start="start" date_stop="stop" date_delay="duration" all_day="allday"
-                readonly_form_view_id="%(calendar.view_calendar_event_form_popup)s"
-                event_open_popup="true"
-                event_limit="3"
-                color="partner_id"> -->
             <calendar string="Appointments" date_start="start" date_stop="stop" date_delay="duration"
                 color="type_id">
                 <field name="name" />
-                <!-- <field name="is_highlighted" invisible="1"/> -->
             </calendar>
         </field>
     </record>
@@ -26,6 +20,7 @@
             <tree string="Appointments">
                 <field name="type_id" />
                 <field name="start" />
+                <field name="duration"/>
                 <field name="stop" />
                 <field name="user_id" />
                 <field name="partner_id" />
@@ -93,15 +88,9 @@
         <field name="model">calendar.appointment</field>
         <field name="priority" eval="2" />
         <field name="arch" type="xml">
-            <!-- <calendar string="appointments" date_start="start" date_stop="stop" date_delay="duration" all_day="allday"
-                readonly_form_view_id="%(calendar.view_calendar_event_form_popup)s"
-                event_open_popup="true"
-                event_limit="3"
-                color="partner_id"> -->
             <calendar string="Appointments" date_start="start" date_stop="stop" date_delay="duration"
-                color="type_id">
+                color="office">
                 <field name="name" />
-                <!-- <field name="is_highlighted" invisible="1"/> -->
             </calendar>
         </field>
     </record>
@@ -130,7 +119,7 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <field name="state" nolabel="1" widget="statusbar" statusbar_visible="reserved,confirmed,done,canceled"/>
+                    <field name="state" nolabel="1" widget="statusbar" statusbar_visible="free,reserved,confirmed,done,canceled"/>
                 </header>
                 <sheet>
                     <group string="Book meeting">
@@ -186,7 +175,7 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <field name="state" nolabel="1" widget="statusbar" statusbar_visible="reserved,confirmed,done,canceled"/>
+                    <field name="state" nolabel="1" widget="statusbar" statusbar_visible="free,reserved,confirmed,done,canceled"/>
                 </header>
                 <sheet>
                     <group string="Move meeting">
@@ -241,16 +230,6 @@
         <field name="res_model">calendar.appointment</field>
         <field name="view_mode">tree,calendar,form,kanban</field>
         <field name="view_id" ref="view_calendar_appointment_calendar" />
-        <!-- <field name="search_view_id" ref="view_calendar_event_search"/> -->
-        <!-- <field name="help" type="html">
-          <p class="o_view_nocontent_smiling_face">
-            appointment a new meeting
-          </p><p>
-            The calendar is shared between employees and fully integrated with
-            other applications such as the employee leaves or the business
-            opportunities.
-          </p>
-        </field> -->
     </record>
 
     <record id="action_local_appointment" model="ir.actions.act_window">
@@ -260,16 +239,6 @@
         <field name="view_id" ref="view_calendar_appointment_local_calendar" />
         <!-- This should be a reference to the external id instead. -->
         <field name="domain">[('type_id.channel.name', '=', 'Local')]</field>
-        <!-- <field name="search_view_id" ref="view_calendar_event_search"/> -->
-        <!-- <field name="help" type="html">
-          <p class="o_view_nocontent_smiling_face">
-            appointment a new meeting
-          </p><p>
-            The calendar is shared between employees and fully integrated with
-            other applications such as the employee leaves or the business
-            opportunities.
-          </p>
-        </field> -->
     </record>
 
     <record id="action_view_calendar_appointment_calendar" model="ir.actions.act_window.view">

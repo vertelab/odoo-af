@@ -30,13 +30,13 @@ msgstr "Handläggare"
 #: model_terms:ir.ui.view,arch_db:partner_af_case.view_partner_form2
 #, python-format
 msgid "Case"
-msgstr "Ärende"
+msgstr "Ärenden"
 
 #. module: partner_af_case
 #: model:ir.model.fields,field_description:partner_af_case.field_res_partner__case_count
 #: model:ir.model.fields,field_description:partner_af_case.field_res_users__case_count
 msgid "Case Count"
-msgstr ""
+msgstr "Antal ärenden"
 
 #. module: partner_af_case
 #: model:ir.model.fields,field_description:partner_af_case.field_res_partner_case__case_id
@@ -51,7 +51,7 @@ msgstr "Ärendetyp"
 #. module: partner_af_case
 #: model:ir.actions.act_window,name:partner_af_case.action_partner_case_type_tree
 msgid "Case Types Action"
-msgstr "Ärenden"
+msgstr "Ärendetypshändelser"
 
 #. module: partner_af_case
 #: model:ir.model.fields,field_description:partner_af_case.field_res_partner_case__case_description
@@ -61,7 +61,7 @@ msgstr "Beskrivning"
 #. module: partner_af_case
 #: model:ir.model,name:partner_af_case.model_res_partner_case
 msgid "Case for a partner"
-msgstr ""
+msgstr "Kundens ärende"
 
 #. module: partner_af_case
 #: model:ir.ui.menu,name:partner_af_case.partner_case_type_menu_action
@@ -69,7 +69,7 @@ msgstr ""
 #: model:ir.ui.menu,name:partner_af_case.partner_case_type_menu_action_jobseeker
 #: model_terms:ir.ui.view,arch_db:partner_af_case.view_partner_case_type_tree
 msgid "Case types"
-msgstr ""
+msgstr "Ärendetyper"
 
 #. module: partner_af_case
 #: model:ir.model,name:partner_af_case.model_res_partner
@@ -117,13 +117,13 @@ msgstr "Visningsnamn"
 #. module: partner_af_case
 #: model:ir.model.fields,field_description:partner_af_case.field_res_partner_case__due_date
 msgid "Due date"
-msgstr ""
+msgstr "Förfallodag"
 
 #. module: partner_af_case
 #: model:ir.model.fields,field_description:partner_af_case.field_res_partner_case__id
 #: model:ir.model.fields,field_description:partner_af_case.field_res_partner_case_type__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: partner_af_case
 #: model:ir.model.fields,field_description:partner_af_case.field_res_partner_case__partner_id
@@ -156,7 +156,7 @@ msgstr "Namn"
 #. module: partner_af_case
 #: model:ir.actions.act_window,name:partner_af_case.action_partner_case_tree
 msgid "Partner Case Action"
-msgstr ""
+msgstr "Kundensärendehändelse"
 
 #. module: partner_af_case
 #: model:ir.model.fields,field_description:partner_af_case.field_res_partner_case__name
@@ -166,7 +166,7 @@ msgstr "Titel"
 #. module: partner_af_case
 #: model:ir.model.fields,field_description:partner_af_case.field_res_partner_case__case_url
 msgid "URL"
-msgstr ""
+msgstr "Länk"
 
 #. module: partner_af_case
 #: model:ir.model.fields,field_description:partner_af_case.field_res_partner__case_ids
@@ -179,6 +179,6 @@ msgstr "Ärende"
 
 #. module: partner_af_case
 #: model:ir.model,name:partner_af_case.model_res_partner_case_type
-msgid "res.partner.case.type"
-msgstr ""
+msgid "Case type"
+msgstr "Ärendetyp"
 
