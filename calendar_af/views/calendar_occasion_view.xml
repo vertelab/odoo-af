@@ -225,6 +225,6 @@
     </record>
 
 
-    <!-- <menuitem action="action_calendar_occasion" id="menu_action_occasion" parent="menu_pdm" sequence="11" groups="af_security.group_af_employers_high,af_security.group_af_jobseekers_high"/> -->
-    <menuitem action="action_calendar_local_occasion" id="menu_action_local_occasion" parent="menu_local" sequence="11" groups="af_security.group_af_employers_high,af_security.group_af_jobseekers_high"/>
+    <!-- <menuitem action="action_calendar_occasion" id="menu_action_occasion" parent="menu_pdm" sequence="11" groups="af_security.group_af_employers_editor,af_security.group_af_jobseekers_editor"/> -->
+    <menuitem action="action_calendar_local_occasion" id="menu_action_local_occasion" parent="menu_local" sequence="11" groups="af_security.af_employers_editor,af_security.af_jobseekers_editor"/>
 </odoo>
