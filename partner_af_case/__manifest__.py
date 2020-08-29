@@ -21,13 +21,15 @@
 
 {
     'name': 'Cases',
-    'version': '12.0.1.1',
+    'version': '12.0.1.2',
     'category': '',
     'description': """
 Cases
 ===============================================================================
-AFC-185, 199
+v12.0.1.1 AFC-185, 199
 This module adds cases to a partner.
+
+v12.0.1.2 Lagt till översättningar som saknades.
 
 """,
     'author': 'Vertel AB',
