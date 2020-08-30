@@ -64,13 +64,6 @@ unused_occasions.unlink()</field>
       raise Warning("One of your occasions is not a request.")</field>
     </record>
 
-    <!-- <record id="ir_occasion_publish" model="ir.values">
-        <field eval="client_action_multi" name="key2"/>
-        <field eval="calendar.occasion" name="model"/>
-        <field name="name">Publish</field>
-        <field eval="'ir.actions.server,%d'%action_occasion_publish" name="value"/>
-    </record> -->
-
     <menuitem name="Distans Meeting" id="menu_book_distans_meeting" parent="calendar.mail_menu_calendar" sequence="10" />
     <menuitem name="PDM" id="menu_pdm" parent="calendar.mail_menu_calendar" sequence="11" />
     <menuitem name="Local" id="menu_local" parent="calendar.mail_menu_calendar" sequence="12" />
