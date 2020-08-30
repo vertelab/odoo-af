@@ -2,11 +2,11 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 {
-    'name': 'AF demodata for Employees',
+    'name': 'AF Demodata for Employees',
     'version': '12.0.0.1',
     'category': 'Human Resources',
     'sequence': 75,
-    'summary': 'Adds demo data to the Employee module',
+    'summary': 'Adds demodata to the Employee module',
     'description': "",
     'website': 'https://www.odoo.com/page/employees',
     'images': [

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 {
-    'name': 'Contact Links',
-    'version': '12.0.1.1',
+    'name': 'AF Contact Links',
+    'version': '12.0.1.2',
     'category': '',
     'description': """
 Cases
@@ -12,11 +12,17 @@ Added server action 'Update Link' to add all links in contact.Select contacts in
 Actions -> Update Link. If you can't see 'Update Link' inside Action then Go to Setting >> Technical >> Actions >> Server
 Actions and search 'Update Link'. Open it and click on 'Create Contexual Action' button then refresh browser.
 
+v12.0.1.2	- Updated manifest and added Af-logo to description. \n
+			- Updated the security-groups in the datafile to match new version of af_security-groups. \n
+\n
 """,
-    'author': 'Jupical',
+    'author': 'Vertel AB',
     'license': 'AGPL-3',
+    'website': 'http://www.vertel.se',
     'depends': [
-        'contacts', 'af_security', 'hr_360_view'
+        'contacts',
+		'af_security',
+		'hr_360_view'
     ],
     'data': [
         'security/security.xml',
@@ -31,4 +37,3 @@ Actions and search 'Update Link'. Open it and click on 'Create Contexual Action'
     'application': False,
     'installable': True,
 }
-# vim:expandtab:smartindent:tabstop=4s:softtabstop=4:shiftwidth=4:
