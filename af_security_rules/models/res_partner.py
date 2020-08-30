@@ -24,6 +24,7 @@ from pytz import timezone
 from datetime import timedelta
 from zeep.client import CachingClient
 from zeep import xsd
+import traceback
 from uuid import uuid4
 
 import logging
@@ -37,9 +38,33 @@ INITIERANDE_NYCKELTJANST = None
 INIT_HEADER_SYSTEM_ID = 'CRM'
 INIT_HEADER_API_VERSION = '1.3'
 
+class BHTJModel(models.AbstractModel):
+    _name = 'bhtj.model'
+    _description = 'BHTJ Abstract Model'
+
+    @api.model
+    def _apply_ir_rules(self, query, mode='read'):
+        """ Inject BHTJ data into context so we only run it once per call,
+            instead of once per rule (or more!).
+        """
+        keys = self.env.user.sudo()._bhtj_get_user_keys()
+        return super(BHTJModel, self.with_context(bhtj_keys=keys))._apply_ir_rules(query, mode=mode)
     
+    @api.multi
+    def check_access_rule(self, operation):
+        """ Inject BHTJ data into context so we only run it once per call,
+            instead of once per rule (or more!).
+        """
+        keys = self.env.user.sudo()._bhtj_get_user_keys()
+        return super(BHTJModel, self.with_context(bhtj_keys=keys)).check_access_rule(operation)
+
+class ResPartnerNotes(models.Model):
+    _name = 'res.partner.notes'
+    _inherit = ['res.partner.notes', 'bhtj.model']
+
 class ResPartner(models.Model):
-    _inherit = 'res.partner'
+    _name = 'res.partner'
+    _inherit = ['res.partner', 'bhtj.model']
 
     # Access rights to archive contacts. This is probably not good enough.
     # Can't specify read/write.
@@ -79,9 +104,19 @@ class ResPartner(models.Model):
             :returns: A new search domain matching BHTJ data.
         """
         _logger.warn(self.env.user)
-        # Function is run by odoobot when evaluating record rules.
-        user = self.env['res.users'].browse(self._context['uid'])
-        keys = user._bhtj_get_user_keys()
+        _logger.warn(self.env.context)
+        #raise Warning('foobar')
+        # BHTJ data injected in _apply_ir_rules
+        if 'bhtj_keys' in self._context:
+            keys = self._context.get('bhtj_keys', {'STARK': [], 'MYCKET_STARK': []})
+        else:
+            # New exiting path to get here. Try to find original user and contact BHTJ.
+            _logger.warn(_("No BHTJ data in context. Extra call made."
+                "Additional models need to inherit bhtj.model."))
+            _logger.debug(''.join(traceback.format_stack()))
+            user = self._context.get('uid')
+            user = user and self.env['res.users'].browse(user) or self.env.user
+            keys = user._bhtj_get_user_keys()
         _logger.warn(keys)
         if op in ('=', '!='):
             if value in ('STARK', 'MYCKET_STARK'):
@@ -89,13 +124,13 @@ class ResPartner(models.Model):
             elif not value:
                 pnr = keys['STARK'] + keys['MYCKET_STARK']
             if op == '=' and value:
-                return [('personnummer', 'in', pnr)]
+                return [('social_sec_nr', 'in', pnr)]
             elif op == '=':
-                return [('personnummer', 'not in', pnr)]
+                return [('social_sec_nr', 'not in', pnr)]
             if op == '!=' and value:
-                return [('personnummer', 'not in', pnr)]
+                return [('social_sec_nr', 'not in', pnr)]
             elif op == '!=':
-                return [('personnummer', 'in', pnr)]
+                return [('social_sec_nr', 'in', pnr)]
         if op in ('in', 'not in'):
             pnr = []
             for v in value:
@@ -221,6 +256,10 @@ class User(models.Model):
     @api.model
     def _bhtj_get_user_keys(self):
         """Fetch the jobseeker access rights of this user from BHTJ."""
+        # TODO: This happens multiple times in one function call.
+        # We need to cache this or BHTJ will get swamped.
+        # DONE: Attempted to move to abstract model bhtj.model and inject
+        # result into context. 
         bhtj = self.partner_id._bhtj_get_nyckeltjanst()
         def normalize_pnr(pnr):
             return '%s-%s' % (pnr[:8], pnr[8:12])
@@ -239,3 +278,8 @@ class User(models.Model):
         #except:
         #    # TODO: Log error properly.
         #    raise Warning(_("Failed to connect to BHTJ!"))
+    
+    @api.model
+    def _get_notes_edit_limit(self):
+        return (fields.Datetime.now() - timedelta(days=1)).replace(
+            hour=0, minute=0, second=0, microsecond=0)

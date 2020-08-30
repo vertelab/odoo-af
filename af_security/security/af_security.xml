@@ -52,6 +52,83 @@
             <field name="comment">The user will have acces to all swedish jobseekers.</field>
         </record>
 
+        <!-- Meeting Planner -->
+
+        <record model="ir.module.category" id="module_category_af_meeting">
+            <field name="name">Meeting</field>
+            <field name="description">Allows you to work with appointments.</field>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="af_meeting_planner" model="res.groups">
+            <field name="name">Planner</field>
+            <field name="category_id" ref="module_category_af_meeting"/>
+            <field name="comment">The user will have access to the appointments planner.</field>
+        </record>
+
+        <record id="af_meeting_admin" model="res.groups">
+            <field name="name">Admin</field>
+            <field name="category_id" ref="module_category_af_meeting"/>
+            <field name="implied_ids" eval="[(4, ref('af_meeting_planner'))]"/>
+            <field name="comment">The user will be able to administrate the appointments planner.</field>
+        </record>
+
+        <!-- Newsletter -->
+
+        <record model="ir.module.category" id="module_category_af_newsletter">
+            <field name="name">Newsletter</field>
+            <field name="description">Allows you to handle jobseekers.</field>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="af_newsletter_manual" model="res.groups">
+            <field name="name">Manual</field>
+            <field name="category_id" ref="module_category_af_newsletter"/>
+            <field name="comment"></field>
+        </record>
+
+        <record id="af_newsletter_automatic" model="res.groups">
+            <field name="name">Automatic</field>
+            <field name="category_id" ref="module_category_af_newsletter"/>
+            <field name="implied_ids" eval="[(4, ref('af_newsletter_manual'))]"/>
+            <field name="comment"></field>
+        </record>
+
+        <record id="af_newsletter_editor" model="res.groups">
+            <field name="name">Editor</field>
+            <field name="category_id" ref="module_category_af_newsletter"/>
+            <field name="implied_ids" eval="[(4, ref('af_newsletter_automatic'))]"/>
+            <field name="comment"></field>
+        </record>
+
+        <!-- Support -->
+
+        <record model="ir.module.category" id="module_category_af_support">
+            <field name="name">Support</field>
+            <field name="description">Allows you to perform technical support.</field>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="1_line_support" model="res.groups">
+            <field name="name">1st Line</field>
+            <field name="category_id" ref="module_category_af_support"/>
+            <field name="comment"></field>
+        </record>
+
+        <record id="2_line_support" model="res.groups">
+            <field name="name">2nd Line</field>
+            <field name="category_id" ref="module_category_af_support"/>
+            <field name="implied_ids" eval="[(4, ref('1_line_support'))]"/>
+            <field name="comment"></field>
+        </record>
+
+        <record id="3_line_support" model="res.groups">
+            <field name="name">3rd Line</field>
+            <field name="category_id" ref="module_category_af_support"/>
+            <field name="implied_ids" eval="[(4, ref('2_line_support'))]"/>
+            <field name="comment"></field>
+        </record>
+
     </data>
 
 </odoo>
