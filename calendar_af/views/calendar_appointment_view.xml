@@ -124,19 +124,22 @@
                 <sheet>
                     <group string="Book meeting">
                         <group>
+                            <p attrs="{'invisible':[('channel_name', '!=', 'Local')]}">Just nu går det inte att boka lokala möten</p>
                             <field string="Meeting type" name="type_id" />
+                            <field string="Meeting channel" name="channel_name" invisible="1" />
                             <field string="Meeting subject" name="name" placeholder="e.g. Business Lunch" />
                         </group>
                         <group>
                             <field string="Attendees" name="partner_id" widget="many2oneattendee" placeholder="Select attendees..." />
-                            <field string="Case worker" name="user_id" widget="many2oneattendee" placeholder="Select case worker..." invisible="1" />
+                            <field string="Case worker" name="user_id" widget="many2oneattendee" placeholder="Select case worker..." 
+                                attrs="{'invisible':[('channel_name', '!=', 'Local')]}" />
                         </group>
                     </group>
                     <notebook>
                         <page name="page_details" string="Meeting Details">
                             <group>
                                 <group>
-                                    <field name="office" domain="[('type', '=', 'af office')]" />
+                                    <field name="office" domain="[('type', '=', 'af office')]" attrs="{'invisible':[('channel_name', '!=', 'Local')]}" />
                                     <field name="start" />
                                     <field name="stop" invisible="1" />
                                     <field name="duration_selection" widget="radio"/>
@@ -180,19 +183,22 @@
                 <sheet>
                     <group string="Move meeting">
                         <group>
+                            <p attrs="{'invisible':[('channel_name', '!=', 'Local')]}">Just nu går det inte att boka lokala möten</p>
                             <field string="Meeting type" name="type_id" />
+                            <field string="Meeting channel" name="channel_name" invisible="1" />
                             <field string="Meeting subject" name="name" placeholder="e.g. Business Lunch" />
                         </group>
                         <group>
                             <field string="Attendees" name="partner_id" widget="many2oneattendee" placeholder="Select attendees..." />
-                            <field string="Case worker" name="user_id" widget="many2oneattendee" placeholder="Select case worker..." invisible="1" />
+                            <field string="Case worker" name="user_id" widget="many2oneattendee" placeholder="Select case worker..." 
+                                attrs="{'invisible':[('channel_name', '!=', 'Local')]}" />
                         </group>
                     </group>
                     <notebook>
                         <page name="page_details" string="Meeting Details">
                             <group>
                                 <group>
-                                    <field name="office" domain="[('type', '=', 'af office')]" />
+                                    <field name="office" domain="[('type', '=', 'af office')]" attrs="{'invisible':[('channel_name', '!=', 'Local')]}" />
                                     <field name="start" />
                                     <field name="stop" invisible="1" />
                                     <field name="duration_selection" widget="radio"/>
@@ -238,7 +244,7 @@
         <field name="view_mode">calendar,tree,form,kanban</field>
         <field name="view_id" ref="view_calendar_appointment_local_calendar" />
         <!-- This should be a reference to the external id instead. -->
-        <field name="domain">[('type_id.channel.name', '=', 'Local')]</field>
+        <field name="domain">[('channel_name', '=', 'Local')]</field>
     </record>
 
     <record id="action_view_calendar_appointment_calendar" model="ir.actions.act_window.view">
