@@ -60,9 +60,9 @@ class CreateLocalOccasion(models.TransientModel):
     @api.onchange('type_id')
     def set_duration_selection(self):
         self.name = self.type_id.name
-        if self.duration == 30.0:
+        if self.duration == 0.5:
             self.duration_selection = '30 minutes'
-        elif self.duration == 60.0:
+        elif self.duration == 1.0:
             self.duration_selection = '1 hour'
 
     @api.onchange('duration_selection')
