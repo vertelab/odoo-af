@@ -377,17 +377,18 @@ class CalendarAppointment(models.Model):
     @api.model
     def create(self, values):
         res = super(CalendarAppointment, self).create(values)
-        #create daily note
-        vals = {
-            "name": "Meeting created",
-            "partner_id": res.partner_id.id,
-            "administrative_officer": res.user_id.id,
-            "note": "Meeting on %s created." % res.start,
-            "note_type": res.env.ref('partner_daily_notes.note_type_ag_04').id,
-            "office": res.partner_id.office.id,
-        }
-        _logger.warn("res: %s" % res)
-        res.sudo().partner_id.notes_ids = [(0, 0, vals)]
+        if res.sudo().partner_id:
+            #create daily note
+            vals = {
+                "name": "Meeting created",
+                "partner_id": res.partner_id.id,
+                "administrative_officer": res.user_id.id,
+                "note": "Meeting on %s created." % res.start,
+                "note_type": res.env.ref('partner_daily_notes.note_type_ag_04').id,
+                "office": res.partner_id.office.id,
+            }
+            _logger.warn("res: %s" % res)
+            res.sudo().partner_id.notes_ids = [(0, 0, vals)]
 
         return res
 
@@ -465,14 +466,14 @@ class CalendarOccasion(models.Model):
                                         help="Status of the meeting")
     office = fields.Many2one(comodel_name='res.partner', string="Office", domain="[('type', '=', 'af office')]")
     office_code = fields.Char(string='Office code', related="office.office_code")
-    create_type = fields.Selection(string='Type', selection=[('single', 'Single'), ('repeating', 'Repeating'),], default='single')
-    start_range = fields.Date(string='Start of repeat')
-    stop_range = fields.Date(string='End of repeat')
-    repeat_mon = fields.Boolean(string='Monday')
-    repeat_tue = fields.Boolean(string='Tuesday')
-    repeat_wed = fields.Boolean(string='Wednesday')
-    repeat_thu = fields.Boolean(string='Thursday')
-    repeat_fri = fields.Boolean(string='Friday')
+    # create_type = fields.Selection(string='Type', selection=[('single', 'Single'), ('repeating', 'Repeating'),], default='single')
+    # start_range = fields.Date(string='Start of repeat')
+    # stop_range = fields.Date(string='End of repeat')
+    # repeat_mon = fields.Boolean(string='Monday')
+    # repeat_tue = fields.Boolean(string='Tuesday')
+    # repeat_wed = fields.Boolean(string='Wednesday')
+    # repeat_thu = fields.Boolean(string='Thursday')
+    # repeat_fri = fields.Boolean(string='Friday')
 
     @api.onchange('type_id')
     def set_duration_selection(self):
@@ -496,7 +497,7 @@ class CalendarOccasion(models.Model):
             self.stop = self.start + timedelta(minutes=int(self.duration * 60)) 
 
     @api.model
-    def _force_create_occasion(self, duration, start, type_id, channel, state, office=False):
+    def _force_create_occasion(self, duration, start, type_id, channel, state, user=False, office=False, additional_booking=True):
         """In case we need to force through a new occasion for some reason"""
         vals = {
             'name': '%sm @ %s' % (duration, start),
@@ -507,7 +508,8 @@ class CalendarOccasion(models.Model):
             'type_id': type_id,
             'channel': channel,
             'office': office.id if office else False,
-            'additional_booking': True,
+            'user_id': user.id if user else False,
+            'additional_booking': additional_booking,
             'state': state,
         }
         res = self.env['calendar.occasion'].create(vals)

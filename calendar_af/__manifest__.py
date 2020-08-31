@@ -28,6 +28,7 @@
         "views/calendar_appointment_type_view.xml",
         "views/calendar_mapped_dates_view.xml",
         "wizard/cancel_appointment.xml",
+        "wizard/create_local_occasion.xml",
         "security/ir.model.access.csv",
         "data/calendar.channel.csv",
         "data/calendar.appointment.type.csv",
