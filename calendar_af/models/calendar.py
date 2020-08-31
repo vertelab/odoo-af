@@ -196,6 +196,7 @@ class CalendarAppointment(models.Model):
     duration = fields.Float('Duration')
     #administrative_officer = fields.Many2one(comodel_name='hr.employee', string="Case worker")
     user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
+    user_id_ = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
     partner_id = fields.Many2one(string='Customer', comodel_name='res.partner', help="Booked customer", default=lambda self: self.default_partners())
     state = fields.Selection(selection=[('free', 'Free'),
                                         ('reserved', 'Reserved'),
@@ -257,9 +258,9 @@ class CalendarAppointment(models.Model):
     @api.onchange('type_id')
     def set_duration_selection(self):
         self.name = self.type_id.name
-        if self.duration == 30.0:
+        if self.duration == 0.5:
             self.duration_selection = '30 minutes'
-        elif self.duration == 60.0:
+        elif self.duration == 1.0:
             self.duration_selection = '1 hour'
         
     
@@ -323,10 +324,10 @@ class CalendarAppointment(models.Model):
                 
                 #create daily note
                 vals = {
-                    "name": "Meeting cancelled",
+                    "name": _("Meeting cancelled"),
                     "partner_id": self.partner_id.id,
                     "administrative_officer": self.user_id.id,
-                    "note": "Meeting on %s cancelled with reason: %s" % (self.start, cancel_reason.name),
+                    "note": _("Meeting on %s cancelled with reason: %s") % (self.start, cancel_reason.name),
                     "note_type": self.env.ref('partner_daily_notes.note_type_ag_04').id,
                     "office": self.partner_id.office.id,
                 }
@@ -362,10 +363,10 @@ class CalendarAppointment(models.Model):
         """Delete the record"""
         #create daily note
         vals = {
-            "name": "Meeting deleted",
+            "name": _("Meeting deleted"),
             "partner_id": self.partner_id.id,
             "administrative_officer": self.user_id.id,
-            "note": "Meeting on %s deleted." % self.start,
+            "note": _("Meeting on %s deleted.") % self.start,
             "note_type": self.env.ref('partner_daily_notes.note_type_ag_04').id,
             "office": self.partner_id.office.id,
         }
@@ -377,17 +378,20 @@ class CalendarAppointment(models.Model):
     @api.model
     def create(self, values):
         res = super(CalendarAppointment, self).create(values)
-        #create daily note
-        vals = {
-            "name": "Meeting created",
-            "partner_id": res.partner_id.id,
-            "administrative_officer": res.user_id.id,
-            "note": "Meeting on %s created." % res.start,
-            "note_type": res.env.ref('partner_daily_notes.note_type_ag_04').id,
-            "office": res.partner_id.office.id,
-        }
-        _logger.warn("res: %s" % res)
-        res.sudo().partner_id.notes_ids = [(0, 0, vals)]
+        if res.sudo().partner_id:
+            #create daily note
+            # TODO: when we have time, this should be turned 
+            # into a function we can call on the daily-notes model.
+            vals = {
+                "name": _("Meeting created"),
+                "partner_id": res.partner_id.id,
+                "administrative_officer": res.user_id.id,
+                "note": _("Meeting on %s created.") % res.start,
+                "note_type": res.env.ref('partner_daily_notes.note_type_ag_04').id,
+                "office": res.partner_id.office.id,
+            }
+            _logger.warn("res: %s" % res)
+            res.sudo().partner_id.notes_ids = [(0, 0, vals)]
 
         return res
 
@@ -411,10 +415,10 @@ class CalendarAppointment(models.Model):
 
             #create daily note
             vals = {
-                "name": "Meeting moved",
+                "name": _("Meeting moved"),
                 "partner_id": self.partner_id.id,
                 "administrative_officer": self.user_id.id,
-                "note": "Meeting on %s created." % self.start,
+                "note": _("Meeting on %s created.") % self.start,
                 "note_type": self.env.ref('partner_daily_notes.note_type_ag_04').id,
                 "office": self.partner_id.office.id,
             }
@@ -465,21 +469,13 @@ class CalendarOccasion(models.Model):
                                         help="Status of the meeting")
     office = fields.Many2one(comodel_name='res.partner', string="Office", domain="[('type', '=', 'af office')]")
     office_code = fields.Char(string='Office code', related="office.office_code")
-    create_type = fields.Selection(string='Type', selection=[('single', 'Single'), ('repeating', 'Repeating'),], default='single')
-    start_range = fields.Date(string='Start of repeat')
-    stop_range = fields.Date(string='End of repeat')
-    repeat_mon = fields.Boolean(string='Monday')
-    repeat_tue = fields.Boolean(string='Tuesday')
-    repeat_wed = fields.Boolean(string='Wednesday')
-    repeat_thu = fields.Boolean(string='Thursday')
-    repeat_fri = fields.Boolean(string='Friday')
 
     @api.onchange('type_id')
     def set_duration_selection(self):
         self.name = self.type_id.name
-        if self.duration == 30.0:
+        if self.duration == 0.5:
             self.duration_selection = '30 minutes'
-        elif self.duration == 60.0:
+        elif self.duration == 1.0:
             self.duration_selection = '1 hour'
 
     @api.onchange('duration_selection')
@@ -496,7 +492,7 @@ class CalendarOccasion(models.Model):
             self.stop = self.start + timedelta(minutes=int(self.duration * 60)) 
 
     @api.model
-    def _force_create_occasion(self, duration, start, type_id, channel, state, office=False):
+    def _force_create_occasion(self, duration, start, type_id, channel, state, user=False, office=False, additional_booking=True):
         """In case we need to force through a new occasion for some reason"""
         vals = {
             'name': '%sm @ %s' % (duration, start),
@@ -507,7 +503,8 @@ class CalendarOccasion(models.Model):
             'type_id': type_id,
             'channel': channel,
             'office': office.id if office else False,
-            'additional_booking': True,
+            'user_id': user.id if user else False,
+            'additional_booking': additional_booking,
             'state': state,
         }
         res = self.env['calendar.occasion'].create(vals)
