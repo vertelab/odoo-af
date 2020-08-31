@@ -13,7 +13,6 @@ class HR(models.Model):
 
     @api.depends('user_id')
     def _get_records(self):
-        _logger.warn('hepp!')
         for rec in self:
             if rec.user_id:
                 rec.jobseekers_ids = rec.env['res.partner'].search([('user_id', '=', rec.user_id.id)])
