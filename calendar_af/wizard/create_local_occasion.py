@@ -79,7 +79,7 @@ class CreateLocalOccasion(models.TransientModel):
             self.stop = self.start + timedelta(minutes=int(self.duration * 60)) 
 
     def action_create_occasions(self):
-        # duration dela på 30 slottar.
+        # Check how many 30min occasions we need
         if self.duration > 0.5:
             no_occ = int(self.duration / 0.5)
             _logger.warn("no_occ: %s" % no_occ)
