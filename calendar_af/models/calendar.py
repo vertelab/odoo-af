@@ -196,6 +196,7 @@ class CalendarAppointment(models.Model):
     duration = fields.Float('Duration')
     #administrative_officer = fields.Many2one(comodel_name='hr.employee', string="Case worker")
     user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
+    user_id_ = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
     partner_id = fields.Many2one(string='Customer', comodel_name='res.partner', help="Booked customer", default=lambda self: self.default_partners())
     state = fields.Selection(selection=[('free', 'Free'),
                                         ('reserved', 'Reserved'),
@@ -323,10 +324,10 @@ class CalendarAppointment(models.Model):
                 
                 #create daily note
                 vals = {
-                    "name": "Meeting cancelled",
+                    "name": _("Meeting cancelled"),
                     "partner_id": self.partner_id.id,
                     "administrative_officer": self.user_id.id,
-                    "note": "Meeting on %s cancelled with reason: %s" % (self.start, cancel_reason.name),
+                    "note": _("Meeting on %s cancelled with reason: %s") % (self.start, cancel_reason.name),
                     "note_type": self.env.ref('partner_daily_notes.note_type_ag_04').id,
                     "office": self.partner_id.office.id,
                 }
@@ -362,10 +363,10 @@ class CalendarAppointment(models.Model):
         """Delete the record"""
         #create daily note
         vals = {
-            "name": "Meeting deleted",
+            "name": _("Meeting deleted"),
             "partner_id": self.partner_id.id,
             "administrative_officer": self.user_id.id,
-            "note": "Meeting on %s deleted." % self.start,
+            "note": _("Meeting on %s deleted.") % self.start,
             "note_type": self.env.ref('partner_daily_notes.note_type_ag_04').id,
             "office": self.partner_id.office.id,
         }
@@ -379,11 +380,13 @@ class CalendarAppointment(models.Model):
         res = super(CalendarAppointment, self).create(values)
         if res.sudo().partner_id:
             #create daily note
+            # TODO: when we have time, this should be turned 
+            # into a function we can call on the daily-notes model.
             vals = {
-                "name": "Meeting created",
+                "name": _("Meeting created"),
                 "partner_id": res.partner_id.id,
                 "administrative_officer": res.user_id.id,
-                "note": "Meeting on %s created." % res.start,
+                "note": _("Meeting on %s created.") % res.start,
                 "note_type": res.env.ref('partner_daily_notes.note_type_ag_04').id,
                 "office": res.partner_id.office.id,
             }
@@ -412,10 +415,10 @@ class CalendarAppointment(models.Model):
 
             #create daily note
             vals = {
-                "name": "Meeting moved",
+                "name": _("Meeting moved"),
                 "partner_id": self.partner_id.id,
                 "administrative_officer": self.user_id.id,
-                "note": "Meeting on %s created." % self.start,
+                "note": _("Meeting on %s created.") % self.start,
                 "note_type": self.env.ref('partner_daily_notes.note_type_ag_04').id,
                 "office": self.partner_id.office.id,
             }

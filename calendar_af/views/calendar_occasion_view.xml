@@ -16,7 +16,7 @@
         <field name="model">calendar.occasion</field>
         <field name="priority" eval="2" />
         <field name="arch" type="xml">
-            <tree string="Appointments">
+            <tree string="Occasions">
                 <field name="name" />
                 <field name="start" />
                 <field name="stop" />
@@ -131,12 +131,13 @@
         <field name="model">calendar.occasion</field>
         <field name="priority" eval="2" />
         <field name="arch" type="xml">
-            <tree string="Appointments">
+            <tree string="Occasions">
                 <field name="name" />
                 <field name="start" />
                 <field name="stop" />
                 <field name="type_id" />
                 <field name="office" />
+                <field name="state" />
                 <field name="appointment_id" />
             </tree>
         </field>
