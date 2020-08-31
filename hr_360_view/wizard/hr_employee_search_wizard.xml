@@ -5,6 +5,9 @@
         <field name="model">hr.employee.jobseeker.search.wizard</field>
         <field name="arch" type="xml"> 
             <form string="Search Partner">
+            <h1>
+                Search Jobseekers
+            </h1>
             <notebook>
                 <page string="When in contact">
                     <group>
