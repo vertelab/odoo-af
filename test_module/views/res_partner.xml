@@ -10,7 +10,10 @@
             <div name="button_box" position="inside">
                 <button name="hello_world" type="object">Hello world button</button>
             </div>
-            <field name="phone" position="before"> <!-- position can be before, after or inside (if applied to a notebook, page or similar)-->
+            <page name="internal_notes" position="after"> <!-- position can be before, after or inside (if applied to a notebook, page or similar)-->
+                <page name="a_page" string="A test page"/>
+            </page>
+            <xpath expr="//field[@name='phone']/.." position="after"> <!--more specific xpath in case greater specificity is necessary, in this case <field name=phone position="after"> caused everything to end up inside the field for some reason -->
                 <label for="test_char_field" string="This is a custom label"/>
                 <field name="test_char_field" nolabel="1"/>
                 <field name="test_float_field"/>
@@ -20,9 +23,6 @@
                 <field name="test_model_ids" widget="many2many_tags"/> <!--widgets can change the way a field is presented-->
                 <field name="test_related_field"/> 
                 <field name="test_model_m2o_id"/>
-            </field>
-            <xpath expr="//page[@name='internal_notes']" position="after"> <!--more specific xpath in case greater specificity is necessary -->
-                <page name="a_page" string="A test page"/>
             </xpath>
         </field>
     </record> 

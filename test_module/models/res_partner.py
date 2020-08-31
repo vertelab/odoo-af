@@ -23,6 +23,7 @@ class ResPartner(models.Model):
         _logger.info("hello world in the log!") #you can also use warn and error depending on the situation
         raise Warning('hello world!')
 
+#these models require access rights to be set in an ir.model.access.csv file in order to work properly
 class TestModel(models.Model):
     _name = "res.partner.test.model"
 

@@ -17,7 +17,8 @@ For more information make sure you are in debug mode
     "external_dependencies": [
     ],
     "data": [
-        'views/res_partner.xml'
+        'views/res_partner.xml',
+        'security/ir.model.access.csv' 
     ],
     "application": False,
     "installable": True,
