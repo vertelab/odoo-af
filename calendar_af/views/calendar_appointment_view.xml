@@ -124,7 +124,6 @@
                 <sheet>
                     <group string="Book meeting">
                         <group>
-                            <p attrs="{'invisible':[('channel_name', '!=', 'Local')]}">Just nu går det inte att boka lokala möten</p>
                             <field string="Meeting type" name="type_id" />
                             <field string="Meeting channel" name="channel_name" invisible="1" />
                             <field string="Meeting subject" name="name" placeholder="e.g. Business Lunch" />
@@ -183,7 +182,6 @@
                 <sheet>
                     <group string="Move meeting">
                         <group>
-                            <p attrs="{'invisible':[('channel_name', '!=', 'Local')]}">Just nu går det inte att boka lokala möten</p>
                             <field string="Meeting type" name="type_id" />
                             <field string="Meeting channel" name="channel_name" invisible="1" />
                             <field string="Meeting subject" name="name" placeholder="e.g. Business Lunch" />
