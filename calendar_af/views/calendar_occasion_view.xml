@@ -38,16 +38,6 @@
                     <group string="Create occasion">
                         <group>
                             <field name="name" placeholder="e.g. Business Lunch" />
-                            <!-- <field name="create_type" widget="radio"/>
-                            <field name="start_range" attrs="{'invisible':[('create_type', '!=', 'repeating')]}"/>
-                            <field name="stop_range" attrs="{'invisible':[('create_type', '!=', 'repeating')]}"/>
-                        </group>
-                        <group>
-                            <field name="repeat_mon" attrs="{'invisible':[('create_type', '!=', 'repeating')]}"/>
-                            <field name="repeat_tue" attrs="{'invisible':[('create_type', '!=', 'repeating')]}"/>
-                            <field name="repeat_wed" attrs="{'invisible':[('create_type', '!=', 'repeating')]}"/>
-                            <field name="repeat_thu" attrs="{'invisible':[('create_type', '!=', 'repeating')]}"/>
-                            <field name="repeat_fri" attrs="{'invisible':[('create_type', '!=', 'repeating')]}"/> -->
                         </group>
                     </group>
                     <notebook>
