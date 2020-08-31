@@ -82,7 +82,6 @@ class CreateLocalOccasion(models.TransientModel):
         # Check how many 30min occasions we need
         if self.duration > 0.5:
             no_occ = int(self.duration / 0.5)
-            _logger.warn("no_occ: %s" % no_occ)
         if self.create_type == 'single':
             for curr_occ in range(no_occ):
                 occ = self.env['calendar.occasion']._force_create_occasion(30, self.start + timedelta(minutes=curr_occ*30), self.type_id.id, self.channel.id, 'draft', self.user_id, self.office, True)

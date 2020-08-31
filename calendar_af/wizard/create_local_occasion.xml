@@ -6,9 +6,6 @@
         <field name="model">calendar.create_local_occasion</field>
         <field name="arch" type="xml">
             <form string="Create occasion">
-                <!-- <header>
-                    <field name="state" nolabel="1" widget="statusbar" statusbar_visible="draft,request,ok,fail"/>
-                </header> -->
                 <sheet>
                     <group string="Create occasion">
                         <group>
