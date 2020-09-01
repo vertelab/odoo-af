@@ -189,6 +189,8 @@
                         <group>
                             <field string="Attendees" name="partner_id" widget="many2oneattendee" placeholder="Select attendees..." />
                             <field string="Case worker" name="user_id" widget="many2oneattendee" placeholder="Select case worker..." 
+                                invisible="1" />
+                            <field string="Case worker" name="user_id_local" widget="many2oneattendee" placeholder="Select case worker..." 
                                 attrs="{'invisible':[('channel_name', '!=', 'Local')]}" />
                         </group>
                     </group>

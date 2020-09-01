@@ -189,6 +189,17 @@ class CalendarAppointment(models.Model):
     _name = 'calendar.appointment'
     _description = "Appointment"
 
+    @api.model
+    def _local_user_domain(self):
+        if self.partner_id:
+            res = []
+            res.append(('partner_id.office.id', '=', self.office.id))
+            # TODO: add competence
+            # TODO: add check if case worker has occasions and that these are free. Maybe use a computed field on res.users?
+        else:
+            res = []
+        return res
+
     name = fields.Char(string='Name', required=True)
     start = fields.Datetime(string='Start', required=True, help="Start date of an appointment")
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an appointment")
@@ -196,7 +207,7 @@ class CalendarAppointment(models.Model):
     duration = fields.Float('Duration')
     #administrative_officer = fields.Many2one(comodel_name='hr.employee', string="Case worker")
     user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
-    user_id_local = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
+    user_id_local = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker", domain=_local_user_domain)
     partner_id = fields.Many2one(string='Customer', comodel_name='res.partner', help="Booked customer", default=lambda self: self.default_partners())
     state = fields.Selection(selection=[('free', 'Free'),
                                         ('reserved', 'Reserved'),
