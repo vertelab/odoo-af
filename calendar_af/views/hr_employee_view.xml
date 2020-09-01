@@ -12,9 +12,9 @@
                   <field name="start" t-options="{'format': 'dd / MM / yyyy HH / mm'}"/>
                   <field name="duration"/>
                   <field name="stop"/>
-                  <field name="user_id"/>
+                  <field name="case_worker_name"/>
                   <field name="partner_id"/>
-                  <field name="location_code"/>
+                  <field name="location"/>
                   <field name="office"/>
                   <button name="cancel_meeting_action" type="object" string="Cancel" icon="fa-times" context="{'active_id': id}"/>
                   <button name="move_meeting_action" type="object" string="Move" icon="fa-repeat" context="{'active_id': id}"/>
@@ -26,9 +26,9 @@
                   <field name="start"/>
                   <field name="duration"/>
                   <field name="stop"/>
-                  <field name="user_id"/>
+                  <field name="case_worker_name"/>
                   <field name="partner_id"/>
-                  <field name="location_code"/>
+                  <field name="location"/>
                   <field name="office"/>
               </field>
         </page>
