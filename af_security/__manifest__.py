@@ -16,6 +16,7 @@
     "data": [
         "security/af_security.xml",
         "views/hr_views.xml",
+        "views/res_users.xml",
     ],
     "application": True,
     "installable": True,
