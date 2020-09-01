@@ -208,6 +208,7 @@ class CalendarAppointment(models.Model):
                                         help="Status of the meeting")
     cancel_reason = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason', help="Cancellation reason")
     location_code = fields.Char(string='Location')
+    location = fields.Char(string="Location", compute="compute_location")
     office = fields.Many2one(comodel_name='res.partner', string="Office")
     office_code = fields.Char(string='Office code', related="office.office_code")
     occasion_ids = fields.One2many(comodel_name='calendar.occasion', inverse_name='appointment_id', string="Occasion")
@@ -218,6 +219,23 @@ class CalendarAppointment(models.Model):
     reserved = fields.Datetime(string='Reserved', help="Occasions was reserved at this date and time")
     description = fields.Text(string='Description')
     suggestion_ids = fields.One2many(comodel_name='calendar.appointment.suggestion', inverse_name='appointment_id', string='Suggested Dates')
+    case_worker_name = fields.Char(string="Case worker", compute="compute_case_worker_name")
+
+    @api.one
+    def compute_location(self):
+        if self.channel_name == "PDM":
+            self.location = _("Distance")
+        else:
+            self.location = self.office_code
+
+    @api.one
+    def compute_case_worker_name(self):
+        if self.channel_name == "PDM":
+            self.case_worker_name = _("Employment service officer")
+        else:
+            self.case_worker_name = self.user_id.login
+
+
 
     @api.multi
     def move_meeting_action(self):
