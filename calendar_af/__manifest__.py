@@ -12,7 +12,7 @@
         "contacts",
         "partner_view_360",
         "partner_daily_notes",
-        "hr_360_view"
+        "hr_360_view",
     ],
     "external_dependencies": [
     ],
