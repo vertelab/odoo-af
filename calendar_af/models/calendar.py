@@ -313,6 +313,17 @@ class CalendarAppointment(models.Model):
         if self.start and self.duration:
             self.stop = self.start + timedelta(minutes=int(self.duration * 60)) 
 
+    @api.onchange('user_id_local')
+    def onchange_user_id_local(self):
+        if self.user_id_local:
+            # TODO: add check and transfer occasions
+            free_occ = self.env['calendar.occasion'].search([('id', 'in', self.user_id.free_occ), ('start', '=', self.start)])
+            if free_occ:
+                self.occasion_ids = [(6, 0, free_occ._ids)]
+                self.user_id = self.user_id_local
+            else:
+                raise Warning(_("Case worker has no free occasions at that time."))
+
     def start_meeting_search(self):
         start = datetime.now() + timedelta(days=int(self.env['ir.config_parameter'].sudo().get_param('af_calendar.start_meeting_search', default='3')))
         start.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute, second=0, microsecond=0)
