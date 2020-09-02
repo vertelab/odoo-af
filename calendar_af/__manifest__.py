@@ -13,7 +13,7 @@
         "partner_view_360",
         "partner_daily_notes",
         "hr_360_view",
-        # "af_security",
+        "af_security",
     ],
     "external_dependencies": [
     ],
