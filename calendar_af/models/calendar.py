@@ -95,15 +95,18 @@ class CalendarSchedule(models.Model):
 class CalendarAppointmentType(models.Model):
     _name = 'calendar.appointment.type'
     _description = "Meeting type"
-
+    _order = 'ipf_num'
     name = fields.Char('Name', required=True)
-    ipf_id = fields.Char('IPF Id', required=True, help="The IPF type id, if this is wrong the integration won't work")
+    ipf_id = fields.Char('Teleopti competence', required=True, help="The IPF type id, if this is wrong the integration won't work")
     # mötestyps_id
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
     duration = fields.Float(string='Duration')
-    ipf_num = fields.Integer(string='IPF Number')
+    duration_default = fields.Boolean(string='Use default')
+    days_first = fields.Integer(string='First allowed day for type')
+    days_last = fields.Integer(string='Last allowed day for type')
+    ipf_num = fields.Integer(string='AF id')
     additional_booking = fields.Boolean(string='Over booking')
-    # standardtid, möte.
+    text = fields.Text(string='Comment')
     # add competence
 
 class CalendarChannel(models.Model):
@@ -127,8 +130,10 @@ class CalendarAppointmentSuggestion(models.Model):
     appointment_id = fields.Many2one(comodel_name='calendar.appointment', ondelete='cascade')
     start = fields.Datetime()
     stop = fields.Datetime()
+    duration = fields.Float(string='Duration') 
     occasion_ids = fields.Many2many(comodel_name='calendar.occasion', string="Occasions")
     type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type')
+    channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
     office = fields.Many2one(comodel_name='res.partner', string="Office")
     
 
@@ -201,7 +206,7 @@ class CalendarAppointment(models.Model):
         return res
 
     name = fields.Char(string='Name', required=True)
-    start = fields.Datetime(string='Start', required=True, help="Start date of an appointment")
+    start = fields.Datetime(string='Start', required=True, help="Start date of an appointment", default=datetime.now())
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an appointment")
     duration_selection = fields.Selection(string="Duration", selection=[('30 minutes','30 minutes'), ('1 hour','1 hour')])
     duration = fields.Float('Duration')
@@ -223,7 +228,7 @@ class CalendarAppointment(models.Model):
     office_code = fields.Char(string='Office code', related="office.office_code")
     occasion_ids = fields.One2many(comodel_name='calendar.occasion', inverse_name='appointment_id', string="Occasion")
     type_id = fields.Many2one(string='Type', required=True, comodel_name='calendar.appointment.type')
-    channel =  fields.Many2one(string='Channel', required=True, comodel_name='calendar.channel', related='type_id.channel')
+    channel =  fields.Many2one(string='Channel', required=True, comodel_name='calendar.channel', related='type_id.channel', readonly=False)
     channel_name = fields.Char(string='Channel', related='type_id.channel.name')
     additional_booking = fields.Boolean(String='Over booking', related='occasion_ids.additional_booking')
     reserved = fields.Datetime(string='Reserved', help="Occasions was reserved at this date and time")
@@ -302,7 +307,9 @@ class CalendarAppointment(models.Model):
                         # Fyll i occasions-data på förslagen
                         'start': occasion[0].start,
                         'stop': occasion[-1].stop,
+                        'duration': len(occasion)*30,
                         'type_id': occasion[0].type_id.id,
+                        'channel': occasion[0].channel.id,
                         'office': occasion[0].office.id,
                         'occasion_ids': [(6, 0, occasion._ids)],
                     }))
@@ -311,7 +318,18 @@ class CalendarAppointment(models.Model):
     @api.onchange('duration', 'start')
     def onchange_duration_start(self):
         if self.start and self.duration:
-            self.stop = self.start + timedelta(minutes=int(self.duration * 60)) 
+            self.stop = self.start + timedelta(minutes=int(self.duration * 60))
+ 
+    @api.onchange('channel')
+    def onchange_channel(self):
+        if self.type_id and (self.channel != self.type_id.channel):
+            self.type_id = False
+
+    @api.onchange('channel_name')
+    def onchange_channel(self):
+        channel = self.env['calendar.channel'].search([('name', '=', self.name)])
+        if channel:
+            self.channel = channel.id
 
     @api.onchange('user_id_local')
     def onchange_user_id_local(self):
@@ -483,9 +501,9 @@ class CalendarOccasion(models.Model):
     additional_booking = fields.Boolean(String='Over booking')
     user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
     state = fields.Selection(selection=[('draft', 'Draft'),
-                                        ('request', 'Awaiting acceptance'),
-                                        ('ok', 'Ready to book'),
-                                        ('fail', 'Denied')],
+                                        ('request', 'Published'),
+                                        ('ok', 'Accepted'),
+                                        ('fail', 'Rejected')],
                                         string='Occasion state', 
                                         default='draft', 
                                         help="Status of the meeting")
