@@ -1,10 +1,11 @@
 {
     'name': 'HR 360 View',
-    'version': '12.0.0.2',
+    'version': '12.0.0.3',
     'category': 'Human resources',
       "description": """
 	 v12.0.0.1 AFC-667 - HR 360 View Module. Lägger till huvudsida för handläggare med sökyta samt flikar med uppgifter centrerade från handläggaren.
 	 v12.0.0.2 AFC-713 - Bytt namn från Handläggaryta till Arbetsyta enligt beslut från Införandegruppen. Dolt menyn HR 360.
+	 v12.0.0.3 AFC-715 - Lagt till rubrik på vyn för Arbetsyta.
     """,
     'author': 'Vertel AB',
     'license': 'AGPL-3',
