@@ -105,6 +105,8 @@ class CalendarAppointmentType(models.Model):
     additional_booking = fields.Boolean(string='Over booking')
     text = fields.Text(string='Comment')
     skill_ids = fields.Many2many(comodel_name='hr.skill', string='Skills')
+    ace_update_user = fields.Boolean(string='ACE updates case worker', default=False)
+    
 
 class CalendarChannel(models.Model):
     _name = 'calendar.channel'
@@ -136,8 +138,8 @@ class CalendarAppointmentSuggestion(models.Model):
 
     @api.multi
     def select_suggestion(self):
-        # Kontrollera att occasion_ids fortfarande är lediga
-        # Skriv data till appointment_id
+        # Check that occasion_ids still are free
+        # Write data to appointment_id
         if self.appointment_id.state in ['reserved', 'confirmed']:
             raise Warning(_("This appointment is already booked."))
 
@@ -193,8 +195,8 @@ class CalendarAppointment(models.Model):
     def _local_user_domain(self):
         if self.partner_id:
             res = []
-            res.append(('partner_id.office.id', '=', self.office.id))
-            # TODO: add competence
+            res.append(('partner_id.office.id', '=', self.env.user.office.id))
+            # TODO: add hr.skill check ('type_id.skills_ids', 'in', self.env.user.skill_ids)
             # TODO: add check if case worker has occasions and that these are free. Maybe use a computed field on res.users?
         else:
             res = []
