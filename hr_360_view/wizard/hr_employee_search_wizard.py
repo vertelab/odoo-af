@@ -32,9 +32,13 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     #gdpr_id = fields.Many2one('gdpr.inventory') 
     #gdpr_reasons = fields.Many2one(related="gdpr_id.reasons?")
     employee_id = fields.Many2one(comodel_name='hr.employee', default=lambda self: self._default_hr_employee())
-    jobseekers_ids = fields.One2many(related='employee_id.jobseekers_ids')
-    case_ids = fields.One2many(related='employee_id.case_ids')
-    daily_note_ids = fields.One2many(related='employee_id.daily_note_ids')
+    jobseekers_ids = fields.One2many('res.partner', compute='_get_records')
+    case_ids = fields.One2many('res.partner.case', compute='_get_records')
+    daily_note_ids = fields.One2many('res.partner.notes', compute='_get_records')
+    # Looks like related doesn't work on computed fields :(
+    #jobseekers_ids = fields.One2many(related='employee_id.jobseekers_ids')
+    #case_ids = fields.One2many(related='employee_id.case_ids')
+    #daily_note_ids = fields.One2many(related='employee_id.daily_note_ids')
 
     search_reason = fields.Selection(string="Search reason",selection=[('record incoming documents','Record incoming documents'), ("follow-up of job seekers' planning","Follow-up of job seekers' planning"), ('directory Assistance','Directory Assistance'), ('matching','Matching'), ('decisions for other officer','Decisions for other officer'),('administration of recruitment meeting/group activity/project','Administration of recruitment meeting/group activity/project'),('investigation','Investigation'),('callback','Callback'),('other reason','Other reason')])#
     identification = fields.Selection(string="Identification",selection=[('id document','ID document'), ('Digital ID','Digital ID'), ('id document-card/residence permit card','ID document-card/Residence permit card'), ('known (previously identified)','Known (previously identified)'), ('identified by certifier','Identified by certifier')])#
@@ -46,45 +50,74 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     search_domain = fields.Char(string="Search Filter")
     other_reason = fields.Char(string="Other reason")
 
+    @api.depends('employee_id')
+    def _get_records(self):
+        _logger.warn('hepp!')
+        for rec in self:
+            if rec.employee_id.user_id:
+                rec.jobseekers_ids = rec.env['res.partner'].search([('user_id', '=', rec.employee_id.user_id.id)])
+                rec.case_ids = rec.env['res.partner.case'].search([('administrative_officer', '=', rec.employee_id.user_id.id)])
+                rec.daily_note_ids = rec.env['res.partner.notes'].search([('administrative_officer', '=', rec.employee_id.user_id.id)])
+
     def _default_hr_employee(self):
         return self.env.user.employee_ids
+    
+    @api.multi
+    def name_get(self):
+        """ name_get() -> [(id, name), ...]
+
+        Returns a textual representation for the records in ``self``.
+        By default this is the value of the ``display_name`` field.
+
+        :return: list of pairs ``(id, text_repr)`` for each records
+        :rtype: list(tuple)
+        """
+        result = []
+        for record in self:
+            result.append((record.id, _('Handläggaryta')))
+        return result
 
     @api.multi
     def search_jobseeker(self):
-        domains = ['["|","|",']   
-        if len(self.social_sec_nr_search) == 13 and self.social_sec_nr_search[8] == "-":
-            domains.append('["social_sec_nr", "=", "%s"]' % self.social_sec_nr_search)
-        elif len(self.social_sec_nr_search) == 12:
-            domains.append('["social_sec_nr", "=", "%s-%s"]' % (self.social_sec_nr_search[:8],self.social_sec_nr_search[8:12]))
-        else:
-            raise Warning(_("Incorrectly formated social security number: %s" % self.social_sec_nr_search))
-        domains.append(',["customer_id","=","%s"]' % self.customer_id_search)
-        domains.append(',["email","=","%s"]' % self.email_search)
-        domains.append(']')
-        self.search_domain = ''.join(domains)
-        _logger.info("domain: %s" % self.search_domain)
+        # TODO: This should be made into two separate functions so it's 100% clear what the user is trying to do.
+        domain = []
+        if self.social_sec_nr_search:
+            if len(self.social_sec_nr_search) == 13 and self.social_sec_nr_search[8] == "-":
+                domain.append(("social_sec_nr", "=", self.social_sec_nr_search))
+            elif len(self.social_sec_nr_search) == 12:
+                domain.append(("social_sec_nr", "=", "%s-%s" % (self.social_sec_nr_search[:8], self.social_sec_nr_search[8:12])))
+            else:
+                raise Warning(_("Incorrectly formated social security number: %s" % self.social_sec_nr_search))
+        if self.customer_id_search:
+            domain.append(("customer_id", "=", self.customer_id_search))
+        if self.email_search:
+            domain.append(("email", "=", self.email_search))
+        domain = ['|' for x in range(len(domain) - 1)] + domain
+        domain.insert(0, ('is_jobseeker', '=', True))
+        _logger.info("domain: %s" % domain)
         
         if self.search_reason == False and self.identification == False:
             raise Warning(_("Search reason or identification must be set before searching"))
         elif self.search_reason == "other reason" and self.other_reason == False:
             raise Warning(_("Other reason selected but other reason field is not filled in"))
         
-        partner_ids = self.env['res.partner'].search(safe_eval(self.search_domain)).mapped('id')
-        if len(partner_ids) < 1:
-            raise Warning(_("No id found"))       
+        partners = self.env['res.partner'].sudo().search(domain)
+        if not partners:
+            raise Warning(_("No id found"))
+        # TODO: Set correct access level. Probably varies with the reason for the search.
+        partners._grant_jobseeker_access('MYCKET_STARK', user=self.env.user, reason=self.search_reason or self.identification)
             
         action = {
             'name': _('Jobseekers'),
-            'domain': [('id', '=', partner_ids), ('is_jobseeker', '=', True)],
+            'domain': [('id', '=', partners._ids), ('is_jobseeker', '=', True)],
             #'view_type': 'tree',
             'res_model': 'res.partner',
             'view_ids':  [self.env.ref("partner_view_360.view_jobseeker_kanban").id, self.env.ref("partner_view_360.view_jobseeker_form").id, self.env.ref("partner_view_360.view_jobseeker_tree").id], 
             'view_mode': 'kanban,tree,form',
             'type': 'ir.actions.act_window',
         }
-        if len(partner_ids) == 1:
+        if len(partners) == 1:
             action['view_id'] = self.env.ref("partner_view_360.view_jobseeker_form").id
-            action['res_id'] = partner_ids[0]
+            action['res_id'] = partners.id
             action['view_mode'] = 'form'
-
         return action

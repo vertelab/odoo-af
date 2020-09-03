@@ -5,16 +5,9 @@
         <field name="model">calendar.schedule</field>
         <field name="priority" eval="2"/>
         <field name="arch" type="xml">
-            <!-- <calendar string="Schedules" date_start="start" date_stop="stop" date_delay="duration" all_day="allday"
-                readonly_form_view_id="%(calendar.view_calendar_event_form_popup)s"
-                event_open_popup="true"
-                event_limit="3"
-                color="partner_ids"> -->
             <calendar string="Schedules" date_start="start" date_stop="stop" date_delay="duration"
                 color="type_id">
                 <field name="name"/>
-                <!-- <field name="type_id"/> -->
-                <!-- <field name="is_highlighted" invisible="1"/> -->
             </calendar>
         </field>
     </record>
@@ -64,18 +57,6 @@
         </field>
     </record>
 
-    <record id="view_calendar_schedule_pivot" model="ir.ui.view">
-        <field name="name">calendar.schedule.pivot</field>
-        <field name="model">calendar.schedule</field>
-        <field name="priority" eval="2"/>
-        <field name="arch" type="xml">
-            <pivot string="Appointment">
-                <field name="start" type="col" interval="day" />
-                <field name="scheduled_agents" type="row"/>
-            </pivot>
-        </field>
-    </record>
-
     <record id="view_calendar_schedule_kanban" model="ir.ui.view">
         <field name="name">calendar.schedule.kanban</field>
         <field name="model">calendar.schedule</field>
@@ -86,7 +67,6 @@
                 <field name="start"/>
                 <field name="stop"/>
                 <field name="type_id" />
-
                 <templates>
                     <t t-name="kanban-box">
                         <div class="oe_kanban_global_click">
@@ -98,7 +78,7 @@
                                     <ul>
                                         <li> Start: <field name="start"/> </li>
                                         <li> Stop: <field name="stop"/> </li> 
-                                         <li> Meeting type: <field name="type_id"/> </li>
+                                        <li> Meeting type: <field name="type_id"/> </li>
                                     </ul>
                                 </div>
                             </div>
@@ -112,18 +92,9 @@
     <record id="action_calendar_schedule" model="ir.actions.act_window">
         <field name="name">Schedules</field>
         <field name="res_model">calendar.schedule</field>
-        <field name="view_mode">calendar,tree,form,pivot,kanban</field>
+        <field name="view_mode">calendar,tree,form,kanban</field>
         <field name="view_id" ref="view_calendar_schedule_calendar"/>
-        <!-- <field name="search_view_id" ref="view_calendar_event_search"/> -->
-        <!-- <field name="help" type="html">
-          <p class="o_view_nocontent_smiling_face">
-            Schedule a new meeting
-          </p><p>
-            The calendar is shared between employees and fully integrated with
-            other applications such as the employee leaves or the business
-            opportunities.
-          </p>
-        </field> -->
+        <field name="domain">[('name', '!=', 'IPF request')]</field>
     </record>
 
     <record id="action_view_calendar_schedule_calendar" model="ir.actions.act_window.view">
@@ -145,13 +116,6 @@
         <field name="sequence" eval="3"/>
         <field name="view_mode">form</field>
         <field name="view_id" ref="view_calendar_schedule_form"/>
-    </record>
-
-    <record id="action_view_calendar_schedule_form" model="ir.actions.act_window.view">
-        <field name="act_window_id" ref="action_calendar_schedule"/>
-        <field name="sequence" eval="4"/>
-        <field name="view_mode">pivot</field>
-        <field name="view_id" ref="view_calendar_schedule_pivot"/>
     </record>
 
     <record id="action_view_calendar_schedule_form" model="ir.actions.act_window.view">

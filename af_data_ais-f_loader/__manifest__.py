@@ -2,14 +2,17 @@
 
 {
     "name": "AIS-F Data Loader",
-    "version": "12.0.1.0.1",
+    "version": "12.0.1.2",
     "description": """
 
 AIS-F Data Loader
 ==========================================
-Loads database dumps from AIS-F into odoo 
-Database dump files must be located in AIS-F/filename.csv in 'data_dir' directory defined in odoo.conf
-There are test dump files located in data/test_dumps
+Loads database dumps from AIS-F into odoo \n
+Database dump files must be located in AIS-F/filename.csv in 'data_dir' directory defined in odoo.conf\n
+There are test dump files located in data/test_dumps\n
+v12.0.1.2  - added version -explanation\n
+\n
+\n
 """,
 
     "author": "Vertel AB",

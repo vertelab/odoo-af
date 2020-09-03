@@ -1,19 +1,22 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 {
-    "name": "Security AF",
+    "name": "AF Security",
     "version": "12.0.1.0.1",
     "author": "Vertel AB",
     "license": "AGPL-3",
+    "description": "User groups for Arbetsförmedlingen.",
     "website": "https://vertel.se/",
     "category": "Tools",
-    "depends": ["contacts", "partner_view_360", "partner_daily_notes", "hr" ],
-    "external_dependencies": [],
+    "depends": [
+        "contacts",
+        'hr',
+        ],
+    "external_dependencies": {'python': ['zeep']},
     "data": [
         "security/af_security.xml",
-        "security/ir.model.access.csv",
         "views/hr_views.xml",
-        "data/data.xml",
+        "views/res_users.xml",
     ],
     "application": True,
     "installable": True,

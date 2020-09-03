@@ -320,7 +320,7 @@
         </record>
         <record id="res_partner_main1" model="res.partner">
             <field name="name">Chester Reed</field>
-            <field name="parent_id" eval="ref('main_partner')"/>
+            <field name="parent_id" eval="ref('base.main_partner')"/>
             <field name="function">Chief Executive Officer (CEO)</field>
             <field name="customer" eval="False"/>
             <field name="email">chester.reed79@example.com</field>
@@ -330,7 +330,7 @@
             <field name="name">Dwayne Newman</field>
             <field name="function">Chief Operations Officer (COO)</field>
             <field name="customer" eval="False"/>
-            <field name="parent_id" eval="ref('main_partner')"/>
+            <field name="parent_id" eval="ref('base.main_partner')"/>
             <field name="email">dwayne.newman28@example.com</field>
             <field name="phone">(614)-177-4937</field>
         </record>

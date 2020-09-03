@@ -19,8 +19,9 @@
 #
 ##############################################################################
 {
-    'name': 'AF Demodata for base',
+    'name': 'AF Old Demodata for base - depreciated',
     'version': '12.0.1.0',
+    'author': 'Vertel AB',
     'license': 'AGPL-3',
     'description': """
 CSV File Creator -- dokumentation

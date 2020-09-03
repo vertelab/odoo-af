@@ -95,17 +95,18 @@ class CalendarSchedule(models.Model):
 class CalendarAppointmentType(models.Model):
     _name = 'calendar.appointment.type'
     _description = "Meeting type"
-
+    _order = 'ipf_num'
     name = fields.Char('Name', required=True)
-    ipf_id = fields.Char('IPF Id', required=True, help="The IPF type id, if this is wrong the integration won't work")
+    ipf_id = fields.Char('Teleopti competence', required=True, help="The IPF type id, if this is wrong the integration won't work")
     # mötestyps_id
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
     duration = fields.Float(string='Duration')
-    ipf_num = fields.Integer(string='IPF Number')
+    duration_default = fields.Boolean(string='Use default')
+    days_first = fields.Integer(string='First allowed day for type')
+    days_last = fields.Integer(string='Last allowed day for type')
+    ipf_num = fields.Integer(string='AF id')
     additional_booking = fields.Boolean(string='Over booking')
-    # ärendetyp ace
-    # könamn ace
-    # standardtid, möte.
+    text = fields.Text(string='Comment')
     # add competence
 
 class CalendarChannel(models.Model):
@@ -129,21 +130,19 @@ class CalendarAppointmentSuggestion(models.Model):
     appointment_id = fields.Many2one(comodel_name='calendar.appointment', ondelete='cascade')
     start = fields.Datetime()
     stop = fields.Datetime()
+    duration = fields.Float(string='Duration') 
     occasion_ids = fields.Many2many(comodel_name='calendar.occasion', string="Occasions")
-    # type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type', related='appointment_id.type_id')
     type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type')
-    # move_reason = fields.Many2one(comodel_name='calendar.appointment.cancel_reason', string='Move reason')
+    channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
+    office = fields.Many2one(comodel_name='res.partner', string="Office")
     
 
     @api.multi
     def select_suggestion(self):
         # Kontrollera att occasion_ids fortfarande är lediga
         # Skriv data till appointment_id
-        if self.appointment_id.state in ['confirmed', 'reserved']:
+        if self.appointment_id.state in ['reserved', 'confirmed']:
             raise Warning(_("This appointment is already booked."))
-        
-        if not self.cancel_reason:
-            raise Warning(_("You have to select a reason for the move."))
 
         occasions = self.env['calendar.occasion']
         for occasion in self.occasion_ids:
@@ -195,13 +194,25 @@ class CalendarAppointment(models.Model):
     _name = 'calendar.appointment'
     _description = "Appointment"
 
+    @api.model
+    def _local_user_domain(self):
+        if self.partner_id:
+            res = []
+            res.append(('partner_id.office.id', '=', self.office.id))
+            # TODO: add competence
+            # TODO: add check if case worker has occasions and that these are free. Maybe use a computed field on res.users?
+        else:
+            res = []
+        return res
+
     name = fields.Char(string='Name', required=True)
-    start = fields.Datetime(string='Start', required=True, help="Start date of an appointment")
+    start = fields.Datetime(string='Start', required=True, help="Start date of an appointment", default=datetime.now())
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an appointment")
     duration_selection = fields.Selection(string="Duration", selection=[('30 minutes','30 minutes'), ('1 hour','1 hour')])
     duration = fields.Float('Duration')
     #administrative_officer = fields.Many2one(comodel_name='hr.employee', string="Case worker")
     user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
+    user_id_local = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker", domain=_local_user_domain)
     partner_id = fields.Many2one(string='Customer', comodel_name='res.partner', help="Booked customer", default=lambda self: self.default_partners())
     state = fields.Selection(selection=[('free', 'Free'),
                                         ('reserved', 'Reserved'),
@@ -213,15 +224,34 @@ class CalendarAppointment(models.Model):
                                         help="Status of the meeting")
     cancel_reason = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason', help="Cancellation reason")
     location_code = fields.Char(string='Location')
-    office = fields.Many2one('res.partner', string="Office", related="partner_id.office")
+    location = fields.Char(string="Location", compute="compute_location")
+    office = fields.Many2one(comodel_name='res.partner', string="Office")
     office_code = fields.Char(string='Office code', related="office.office_code")
     occasion_ids = fields.One2many(comodel_name='calendar.occasion', inverse_name='appointment_id', string="Occasion")
     type_id = fields.Many2one(string='Type', required=True, comodel_name='calendar.appointment.type')
-    channel =  fields.Many2one(string='Channel', required=True, comodel_name='calendar.channel', related='type_id.channel')
+    channel =  fields.Many2one(string='Channel', required=True, comodel_name='calendar.channel', related='type_id.channel', readonly=False)
+    channel_name = fields.Char(string='Channel', related='type_id.channel.name')
     additional_booking = fields.Boolean(String='Over booking', related='occasion_ids.additional_booking')
     reserved = fields.Datetime(string='Reserved', help="Occasions was reserved at this date and time")
     description = fields.Text(string='Description')
     suggestion_ids = fields.One2many(comodel_name='calendar.appointment.suggestion', inverse_name='appointment_id', string='Suggested Dates')
+    case_worker_name = fields.Char(string="Case worker", compute="compute_case_worker_name")
+
+    @api.one
+    def compute_location(self):
+        if self.channel_name == "PDM":
+            self.location = _("Distance")
+        else:
+            self.location = self.office_code
+
+    @api.one
+    def compute_case_worker_name(self):
+        if self.channel_name == "PDM":
+            self.case_worker_name = _("Employment service officer")
+        else:
+            self.case_worker_name = self.user_id.login
+
+
 
     @api.multi
     def move_meeting_action(self):
@@ -262,9 +292,9 @@ class CalendarAppointment(models.Model):
     @api.onchange('type_id')
     def set_duration_selection(self):
         self.name = self.type_id.name
-        if self.duration == 30.0:
+        if self.duration == 0.5:
             self.duration_selection = '30 minutes'
-        elif self.duration == 60.0:
+        elif self.duration == 1.0:
             self.duration_selection = '1 hour'
         
     
@@ -275,7 +305,7 @@ class CalendarAppointment(models.Model):
         if self.duration_selection == "1 hour":
             self.duration = 1.0
 
-    @api.onchange('duration', 'channel')
+    @api.onchange('duration', 'type_id')
     def compute_suggestion_ids(self):
         if not all((self.duration, self.type_id, self.channel)):
             return
@@ -285,7 +315,8 @@ class CalendarAppointment(models.Model):
         suggestion_ids = []
         if self.suggestion_ids:
             suggestion_ids.append((5,))
-        occasions = self.env['calendar.occasion'].get_bookable_occasions(start, stop, self.duration * 60, self.type_id, max_depth = 1)
+        _logger.info("self.office: %s" % self.office)
+        occasions = self.env['calendar.occasion'].get_bookable_occasions(start, stop, self.duration * 60, self.type_id, self.office, max_depth = 1)
         _logger.info("occasions: %s" % occasions)
         for day in occasions:
             for day_occasions in day:
@@ -294,7 +325,10 @@ class CalendarAppointment(models.Model):
                         # Fyll i occasions-data på förslagen
                         'start': occasion[0].start,
                         'stop': occasion[-1].stop,
+                        'duration': len(occasion)*30,
                         'type_id': occasion[0].type_id.id,
+                        'channel': occasion[0].channel.id,
+                        'office': occasion[0].office.id,
                         'occasion_ids': [(6, 0, occasion._ids)],
                     }))
         self.suggestion_ids = suggestion_ids
@@ -302,7 +336,29 @@ class CalendarAppointment(models.Model):
     @api.onchange('duration', 'start')
     def onchange_duration_start(self):
         if self.start and self.duration:
-            self.stop = self.start + timedelta(minutes=int(self.duration * 60)) 
+            self.stop = self.start + timedelta(minutes=int(self.duration * 60))
+ 
+    @api.onchange('channel')
+    def onchange_channel(self):
+        if self.type_id and (self.channel != self.type_id.channel):
+            self.type_id = False
+
+    @api.onchange('channel_name')
+    def onchange_channel(self):
+        channel = self.env['calendar.channel'].search([('name', '=', self.name)])
+        if channel:
+            self.channel = channel.id
+
+    @api.onchange('user_id_local')
+    def onchange_user_id_local(self):
+        if self.user_id_local:
+            # TODO: add check and transfer occasions
+            free_occ = self.env['calendar.occasion'].search([('id', 'in', self.user_id.free_occ), ('start', '=', self.start)])
+            if free_occ:
+                self.occasion_ids = [(6, 0, free_occ._ids)]
+                self.user_id = self.user_id_local
+            else:
+                raise Warning(_("Case worker has no free occasions at that time."))
 
     def start_meeting_search(self):
         start = datetime.now() + timedelta(days=int(self.env['ir.config_parameter'].sudo().get_param('af_calendar.start_meeting_search', default='3')))
@@ -326,11 +382,11 @@ class CalendarAppointment(models.Model):
                 
                 #create daily note
                 vals = {
-                    "name": "Meeting cancelled",
+                    "name": _("Meeting cancelled"),
                     "partner_id": self.partner_id.id,
                     "administrative_officer": self.user_id.id,
-                    "note": "Meeting on %s cancelled with reason: %s" % (self.start, cancel_reason.name),
-                    "note_type": self.env.ref('partner_daily_notes.note_type_02').id,
+                    "note": _("Meeting on %s cancelled with reason: %s") % (self.start, cancel_reason.name),
+                    "note_type": self.env.ref('partner_daily_notes.note_type_ag_04').id,
                     "office": self.partner_id.office.id,
                 }
                 appointment.partner_id.notes_ids = [(0, 0, vals)]
@@ -350,7 +406,7 @@ class CalendarAppointment(models.Model):
                     "partner_id": self.partner_id.id,
                     "administrative_officer": self.user_id.id,
                     "note": "Meeting on %s confirmed." % self.start,
-                    "note_type": self.env.ref('partner_daily_notes.note_type_02').id,
+                    "note_type": self.env.ref('partner_daily_notes.note_type_ag_04').id,
                     "office": self.partner_id.office.id,
                 }
                 appointment.partner_id.notes_ids = [(0, 0, vals)]
@@ -365,11 +421,11 @@ class CalendarAppointment(models.Model):
         """Delete the record"""
         #create daily note
         vals = {
-            "name": "Meeting deleted",
+            "name": _("Meeting deleted"),
             "partner_id": self.partner_id.id,
             "administrative_officer": self.user_id.id,
-            "note": "Meeting on %s deleted." % self.start,
-            "note_type": self.env.ref('partner_daily_notes.note_type_02').id,
+            "note": _("Meeting on %s deleted.") % self.start,
+            "note_type": self.env.ref('partner_daily_notes.note_type_ag_04').id,
             "office": self.partner_id.office.id,
         }
         self.partner_id.notes_ids = [(0, 0, vals)]
@@ -380,17 +436,20 @@ class CalendarAppointment(models.Model):
     @api.model
     def create(self, values):
         res = super(CalendarAppointment, self).create(values)
-        #create daily note
-        vals = {
-            "name": "Meeting created",
-            "partner_id": res.partner_id.id,
-            "administrative_officer": res.user_id.id,
-            "note": "Meeting on %s created." % res.start,
-            "note_type": res.env.ref('partner_daily_notes.note_type_02').id,
-            "office": res.partner_id.office.id,
-        }
-        _logger.warn("res: %s" % res)
-        res.sudo().partner_id.notes_ids = [(0, 0, vals)]
+        if res.sudo().partner_id:
+            #create daily note
+            # TODO: when we have time, this should be turned 
+            # into a function we can call on the daily-notes model.
+            vals = {
+                "name": _("Meeting created"),
+                "partner_id": res.partner_id.id,
+                "administrative_officer": res.user_id.id,
+                "note": _("Meeting on %s created.") % res.start,
+                "note_type": res.env.ref('partner_daily_notes.note_type_ag_04').id,
+                "office": res.partner_id.office.id,
+            }
+            _logger.warn("res: %s" % res)
+            res.sudo().partner_id.notes_ids = [(0, 0, vals)]
 
         return res
 
@@ -414,11 +473,11 @@ class CalendarAppointment(models.Model):
 
             #create daily note
             vals = {
-                "name": "Meeting moved",
+                "name": _("Meeting moved"),
                 "partner_id": self.partner_id.id,
                 "administrative_officer": self.user_id.id,
-                "note": "Meeting on %s created." % self.start,
-                "note_type": self.env.ref('partner_daily_notes.note_type_02').id,
+                "note": _("Meeting on %s created.") % self.start,
+                "note_type": self.env.ref('partner_daily_notes.note_type_ag_04').id,
                 "office": self.partner_id.office.id,
             }
             self.partner_id.sudo().notes_ids = [(0, 0, vals)]
@@ -451,21 +510,47 @@ class CalendarOccasion(models.Model):
     name = fields.Char(string='Name', required=True)
     start = fields.Datetime(string='Start', required=True, help="Start date of an occasion")
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an occasion")
+    duration_selection = fields.Selection(string="Duration", selection=[('30 minutes','30 minutes'), ('1 hour','1 hour')])
     duration = fields.Float('Duration')
     appointment_id = fields.Many2one(comodel_name='calendar.appointment', string="Appointment")
     type_id = fields.Many2one(comodel_name='calendar.appointment.type', string='Type')
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel', related='type_id.channel')
+    channel_name = fields.Char(string='Channel', related='type_id.channel.name')
     additional_booking = fields.Boolean(String='Over booking')
     user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
-    state = fields.Selection(selection=[('request', 'Awaiting acceptance'),
-                                        ('ok', 'Ready to book'),
-                                        ('fail', 'Denied')],
+    state = fields.Selection(selection=[('draft', 'Draft'),
+                                        ('request', 'Published'),
+                                        ('ok', 'Accepted'),
+                                        ('fail', 'Rejected')],
                                         string='Occasion state', 
-                                        default='request', 
+                                        default='draft', 
                                         help="Status of the meeting")
+    office = fields.Many2one(comodel_name='res.partner', string="Office", domain="[('type', '=', 'af office')]")
+    office_code = fields.Char(string='Office code', related="office.office_code")
+
+    @api.onchange('type_id')
+    def set_duration_selection(self):
+        self.name = self.type_id.name
+        if self.duration == 0.5:
+            self.duration_selection = '30 minutes'
+        elif self.duration == 1.0:
+            self.duration_selection = '1 hour'
+
+    @api.onchange('duration_selection')
+    def set_duration(self):
+        if self.duration_selection == "30 minutes":
+            self.duration = 0.5
+        if self.duration_selection == "1 hour":
+            self.duration = 1.0
+        self.onchange_duration_start()
+
+    @api.onchange('duration', 'start')
+    def onchange_duration_start(self):
+        if self.start and self.duration:
+            self.stop = self.start + timedelta(minutes=int(self.duration * 60)) 
 
     @api.model
-    def _force_create_occasion(self, duration, start, type_id, channel, state):
+    def _force_create_occasion(self, duration, start, type_id, channel, state, user=False, office=False, additional_booking=True):
         """In case we need to force through a new occasion for some reason"""
         vals = {
             'name': '%sm @ %s' % (duration, start),
@@ -475,7 +560,9 @@ class CalendarOccasion(models.Model):
             'appointment_id': False,
             'type_id': type_id,
             'channel': channel,
-            'additional_booking': True,
+            'office': office.id if office else False,
+            'user_id': user.id if user else False,
+            'additional_booking': additional_booking,
             'state': state,
         }
         res = self.env['calendar.occasion'].create(vals)
@@ -509,7 +596,7 @@ class CalendarOccasion(models.Model):
         return res
 
     @api.model
-    def _get_additional_booking(self, date, duration, type_id):
+    def _get_additional_booking(self, date, duration, type_id, office=False):
         """"Creates extra, additional, occasions. Iff overbooking is allowed. """
         # Check if overbooking is allowed on this meeting type
         if not type_id.additional_booking:
@@ -541,6 +628,7 @@ class CalendarOccasion(models.Model):
                 'appointment_id': False,
                 'type_id': type_id.id,
                 'channel': type_id.channel.id,
+                'office': office.id if office else False,
                 'additional_booking': True,
                 'state': 'ok',
             }
@@ -550,8 +638,19 @@ class CalendarOccasion(models.Model):
         return res
 
     @api.multi
-    def approve_occasion(self):
-        """User approves suggested occasion"""
+    def publish_occasion(self):
+        """User publishes suggested occasion"""
+        if self.state == 'draft':
+            self.state = 'request'
+            ret = True
+        else:
+            ret = False
+
+        return ret
+
+    @api.multi
+    def accept_occasion(self):
+        """User accepts suggested occasion"""
         if self.state == 'request':
             self.state = 'ok'
             ret = True
@@ -561,8 +660,8 @@ class CalendarOccasion(models.Model):
         return ret
 
     @api.multi
-    def deny_occasion(self):
-        """User denies suggested occasion"""
+    def reject_occasion(self):
+        """User rejects suggested occasion"""
         if self.state == 'request':
             self.state = 'fail'
             ret = True
@@ -572,7 +671,7 @@ class CalendarOccasion(models.Model):
         return ret
 
     @api.model
-    def get_bookable_occasions(self, start, stop, duration, type_id, max_depth = 1):
+    def get_bookable_occasions(self, start, stop, duration, type_id, office=False, max_depth = 1):
         """Returns a list of occasions matching the defined parameters of the appointment. Creates additional 
         occasions if allowed.
         :param start: Start search as this time.
@@ -585,14 +684,16 @@ class CalendarOccasion(models.Model):
         no_occasions = int(duration / BASE_DURATION)
         date_delta = (stop - start)
         td_base_duration = timedelta(minutes=BASE_DURATION)
-        
+        _logger.warn("office: %s" % office)
+        _logger.warn("office.id if office else False: %s" % office.id if office else False)
         def get_occasions(start_dt):
             start_dt = start_dt.replace(second=0, microsecond=0)
             return self.env['calendar.occasion'].search(
                 [
                     ('start', '=', start_dt),
                     ('type_id', '=', type_id.id),
-                    ('appointment_id', '=', False)
+                    ('appointment_id', '=', False),
+                    ('office', '=', office.id if office else False),
                 ], limit=max_depth)
         #[[[], []], dag[tidsslot[ocassions]]]
 
@@ -607,19 +708,14 @@ class CalendarOccasion(models.Model):
         for day in reversed(range(date_delta.days + 1)):
             occasions = []
             # find 'max_depth' number of free occasions for each timeslot
-            # if day == 0:
             if day == date_delta.days:
                 start_dt = copy.copy(stop)
                 start_dt = start_dt.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute)
                 last_slot = copy.copy(stop)
                 last_slot = last_slot.replace(hour=BASE_DAY_STOP.hour, minute=BASE_DAY_STOP.minute)
-                # TODO: I commented this if statement and nothing has exploded yet. Remove it completely?
-                # if last_slot > stop:
-                #     last_slot = copy.copy(stop)
                 last_slot -= timedelta(minutes=duration)
             else:
                 # This will break given certain times and timezones. Should work for us.
-                # start_dt = start_dt + timedelta(days=1)
                 start_dt = start_dt - timedelta(days=1)
                 start_dt = start_dt.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute)
                 last_slot = last_slot - timedelta(days=1)
@@ -635,7 +731,6 @@ class CalendarOccasion(models.Model):
                     # The line below causes a bug that returns bookable occasions 
                     # with 30 min (1 occasion) gaps before the last 30 min (1 occasion).
                     # I fixed this with (no_occasions - 1). I have not investigated it further. 
-                    # occasions.append(get_occasions(start_dt + td_base_duration * no_occasions))
                     occasions.append(get_occasions(start_dt + td_base_duration * (no_occasions - 1)))
                 available_depth = min([len(o) for o in occasions] or [0])
                 slot = []
@@ -653,8 +748,7 @@ class CalendarOccasion(models.Model):
         # TODO: do not create extra occasions unless completely empty?
         if type_id.additional_booking and all( not l for l in occ_lists):
             # Changed this line to create over bookings on the LAST available date.
-            # occ_lists[-1].append(self._get_additional_booking(start_dt, duration, type_id))
-            occ_lists[-1].append(self._get_additional_booking(stop, duration, type_id))
+            occ_lists[-1].append(self._get_additional_booking(stop, duration, type_id, office))
 
         return occ_lists
 
