@@ -5,7 +5,8 @@
         <field name="model">calendar.occasion</field>
         <field name="priority" eval="2" />
         <field name="arch" type="xml">
-            <calendar string="Occasions" date_start="start" date_stop="stop" date_delay="duration">
+            <calendar string="Occasions" date_start="start" date_stop="stop" date_delay="duration"
+            color="user_id">
                 <field name="name" />
             </calendar>
         </field>
@@ -35,28 +36,28 @@
                     <field name="state" nolabel="1" widget="statusbar" statusbar_visible="draft,request,ok,fail"/>
                 </header>
                 <sheet>
-                    <group string="Create occasion">
+                    <!-- <group string="Create occasion">
                         <group>
                             <field name="name" placeholder="e.g. Business Lunch" />
                         </group>
+                    </group> -->
+                    <!-- <notebook>
+                        <page name="page_details" string="Occasion Details"> -->
+                    <group string="Create occasion">
+                        <group>
+                            <field name="start"/>
+                            <field name="stop" invisible="0"/>
+                            <field name="duration_selection" widget="radio" invisible="1"/>
+                            <field name="duration" invisible="0" />
+                        </group>
+                        <group>
+                            <field name="type_id" domain="[('channel', '=', %(calendar_channel.channel_local)d)]" required="1" />
+                            <field name="office" required="1" />
+                            <field name="user_id" string="Case worker" widget="many2oneattendee" placeholder="Select case worker..." required="1" />
+                        </group>
                     </group>
-                    <notebook>
-                        <page name="page_details" string="Occasion Details">
-                            <group>
-                                <group>
-                                    <field name="start"/>
-                                    <field name="stop" invisible="1"/>
-                                    <field name="duration_selection" widget="radio"/>
-                                    <field name="duration" invisible="1" />
-                                </group>
-                                <group>
-                                    <field name="type_id" domain="[('channel_name', '=', 'Local')]" required="1" />
-                                    <field name="office" required="1" />
-                                    <field name="user_id" string="Case worker" widget="many2oneattendee" placeholder="Select case worker..." required="1" />
-                                </group>
-                            </group>
-                        </page>
-                    </notebook>
+                        <!-- </page>
+                    </notebook> -->
                 </sheet>
             </form>
         </field>
@@ -156,7 +157,7 @@
         <field name="view_mode">calendar,tree,form,pivot,kanban</field>
         <field name="view_id" ref="view_calendar_occasion_local_tree" />
         <!-- This should be a reference to the external id instead. -->
-        <field name="domain">[('channel_name', '=', 'Local')]</field>
+        <field name="domain">[('channel', '=', 'Local')]</field>
     </record>
     <record id="action_view_calendar_occasion_tree" model="ir.actions.act_window.view">
         <field name="act_window_id" ref="action_calendar_occasion" />
