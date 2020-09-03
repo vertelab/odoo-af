@@ -209,7 +209,7 @@ class CalendarAppointment(models.Model):
     user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
     user_id_local = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker", domain=_local_user_domain)
     partner_id = fields.Many2one(string='Customer', comodel_name='res.partner', help="Booked customer", default=lambda self: self.default_partners())
-    state = fields.Selection(selection=[('free', 'Free'),
+    state = fields.Selection(selection=[('free', 'Draft'),
                                         ('reserved', 'Reserved'),
                                         ('confirmed', 'Confirmed'),
                                         ('done', 'Done'),
