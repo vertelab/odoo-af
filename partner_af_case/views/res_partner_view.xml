@@ -33,7 +33,7 @@
                           <field name="changed_date" widget="date"/>
                           <field name="due_date" widget="date"/>
                           <field name="closed_date" widget="date"/>
-                          <field name="case_url"/>
+                          <field name="case_url" groups="base.group_no_one"/>
                             <!-- <field name="created_date" widget="date"/> 
                             <field name="case_type" options="{'no_create_edit': True}"/>
                             <field name="case_number" groups="base.group_no_one"/>
@@ -77,7 +77,7 @@
                           <field name="changed_date" widget="date"/>
                           <field name="due_date" widget="date"/>
                           <field name="closed_date" widget="date"/>
-                          <field name="case_url"/>
+                          <field name="case_url" groups="base.group_no_one"/>
                             <!-- <field name="created_date" widget="date"/> 
                             <field name="case_type" options="{'no_create_edit': True}"/>
                             <field name="case_number" groups="base.group_no_one"/>
@@ -123,7 +123,7 @@
                           <field name="changed_date" widget="date"/>
                           <field name="due_date" widget="date"/>
                           <field name="closed_date" widget="date"/>
-                          <field name="case_url"/>
+                          <field name="case_url" groups="base.group_no_one"/>
                             <!-- <field name="created_date" widget="date"/> 
                             <field name="case_type" options="{'no_create_edit': True}"/>
                             <field name="case_number" groups="base.group_no_one"/>
