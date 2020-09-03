@@ -1,21 +1,19 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* hr_360_view
+#	* hr_360_view
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 12.0-20190808\n"
+"Project-Id-Version: Odoo Server 12.0-20200508\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-27 15:13+0000\n"
-"PO-Revision-Date: 2020-08-27 17:24+0200\n"
+"POT-Creation-Date: 2020-09-02 12:42+0000\n"
+"PO-Revision-Date: 2020-09-02 12:42+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-"Language: sv\n"
-"X-Generator: Poedit 2.0.6\n"
 
 #. module: hr_360_view
 #: model_terms:ir.actions.act_window,help:hr_360_view.open_view_employee_360_list
@@ -49,7 +47,7 @@ msgstr "Avbryt"
 #: model_terms:ir.ui.view,arch_db:hr_360_view.hr_employee_360_form
 #: model_terms:ir.ui.view,arch_db:hr_360_view.search_jobseeker_form
 msgid "Case"
-msgstr "Ärende"
+msgstr "Ärenden"
 
 #. module: hr_360_view
 #: model:ir.model.fields,field_description:hr_360_view.field_hr_employee_jobseeker_search_wizard__create_uid
@@ -114,8 +112,9 @@ msgid "Follow-up of job seekers' planning"
 msgstr "Uppföljning av arbetssökandes planering"
 
 #. module: hr_360_view
-#: model:ir.ui.menu,name:hr_360_view.menu_hr_employee_360
-msgid "HR 360"
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:77
+#, python-format
+msgid "Handläggaryta"
 msgstr ""
 
 #. module: hr_360_view
@@ -150,7 +149,7 @@ msgid "Identified by certifier"
 msgstr "Identifierad genom intygsgivare"
 
 #. module: hr_360_view
-#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:60
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:90
 #, python-format
 msgid "Incorrectly formated social security number: %s"
 msgstr "Felformaterat personnummer: %s"
@@ -161,7 +160,7 @@ msgid "Investigation"
 msgstr "Utredning"
 
 #. module: hr_360_view
-#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:77
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:111
 #: model:ir.model.fields,field_description:hr_360_view.field_hr_employee__jobseekers_ids
 #: model:ir.model.fields,field_description:hr_360_view.field_hr_employee_jobseeker_search_wizard__jobseekers_ids
 #, python-format
@@ -205,7 +204,7 @@ msgid "My Jobseekers"
 msgstr "Mina arbetssökande"
 
 #. module: hr_360_view
-#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:74
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:106
 #, python-format
 msgid "No id found"
 msgstr "Finns inget id"
@@ -217,7 +216,7 @@ msgid "Other reason"
 msgstr "Annan orsak"
 
 #. module: hr_360_view
-#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:70
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:102
 #, python-format
 msgid "Other reason selected but other reason field is not filled in"
 msgstr "Annan orsak vald, men annan orsak fältet är tomt"
@@ -244,6 +243,7 @@ msgstr "Sökfilter"
 
 #. module: hr_360_view
 #: model_terms:ir.ui.view,arch_db:hr_360_view.hr_employee_360_form
+#: model_terms:ir.ui.view,arch_db:hr_360_view.search_jobseeker_form
 msgid "Search Jobseekers"
 msgstr "Sök Arbetssökande"
 
@@ -260,7 +260,7 @@ msgid "Search reason"
 msgstr "Sökorsak"
 
 #. module: hr_360_view
-#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:68
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:100
 #, python-format
 msgid "Search reason or identification must be set before searching"
 msgstr "Du måste välja Sökorsak eller Identifieringsmetod före sökning"
@@ -277,14 +277,10 @@ msgstr "Vid kontakt"
 
 #. module: hr_360_view
 #: model_terms:ir.actions.act_window,help:hr_360_view.open_view_employee_360_list
-msgid ""
-"Help - hr_360_view With just a quick glance on the Odoo employee screen, you\n"
+msgid "With just a quick glance on the Odoo employee screen, you\n"
 "            can easily find all the information you need for each person;\n"
 "            contact data, job position, availability, etc."
 msgstr ""
-"Hjälp för - hr_360_view With just a quick glance on the Odoo employee screen, you\n"
-"            can easily find all the information you need for each person;\n"
-"            contact data, job position, availability, etc."
 
 #. module: hr_360_view
 #: model:ir.model,name:hr_360_view.model_hr_employee_jobseeker_search_wizard
@@ -295,3 +291,4 @@ msgstr "hr_360_view-sökvizard"
 #: model_terms:ir.ui.view,arch_db:hr_360_view.search_jobseeker_form
 msgid "search"
 msgstr "Sök"
+
