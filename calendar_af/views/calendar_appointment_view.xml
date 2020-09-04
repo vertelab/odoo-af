@@ -71,18 +71,6 @@
         </field>
     </record>
 
-    <!-- <record id="view_calendar_appointment_pivot" model="ir.ui.view">
-        <field name="name">calendar.appointment.pivot</field>
-        <field name="model">calendar.appointment</field>
-        <field name="priority" eval="2" />
-        <field name="arch" type="xml">
-            <pivot string="Appointment">
-                <field name="start" type="col" interval="day" />
-                <field name="user_id" type="row" />
-            </pivot>
-        </field>
-    </record> -->
-
     <record id="view_calendar_appointment_local_calendar" model="ir.ui.view">
         <field name="name">calendar.appointment.local.calendar</field>
         <field name="model">calendar.appointment</field>
@@ -232,6 +220,92 @@
         </field>
     </record>
 
+    <record id="calendar_appointment_search" model="ir.ui.view">
+        <field name="name">calendar.appointment.search</field>
+        <field name="model">calendar.appointment</field>
+        <field name="arch" type="xml">
+            <search string="Rules">
+                <field name="name" />
+                <field name="state" />
+                <field name="type_id" />
+                <filter
+                    name="state_confirmed"
+                    domain="[('state','=','confirmed')]"
+                    string="Confirmed"
+                />
+                <group expand="0" string="Group By...">
+                    <filter
+                        name="group_by_state"
+                        string="State"
+                        domain="[]"
+                        context="{'group_by':'state'}"
+                    />
+                    <filter
+                        name="group_by_office"
+                        string="Office"
+                        domain="[]"
+                        context="{'group_by':'office'}"
+                    />
+                    <filter
+                        name="group_by_type_id"
+                        string="Meeting type"
+                        domain="[]"
+                        context="{'group_by':'type_id'}"
+                    />
+                    <filter
+                        name="group_by_user_id"
+                        string="Case worker"
+                        domain="[]"
+                        context="{'group_by':'user_id'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="calendar_appointment_local_search" model="ir.ui.view">
+        <field name="name">calendar.appointment.local.search</field>
+        <field name="model">calendar.appointment</field>
+        <field name="arch" type="xml">
+            <search string="Rules">
+                <field name="name" />
+                <field name="state" />
+                <field name="type_id" />
+                <filter
+                    name="state_confirmed"
+                    domain="[('state','=','confirmed')]"
+                    string="Confirmed"
+                />
+                <group expand="0" string="Group By...">
+                    <filter
+                        name="group_by_state"
+                        string="State"
+                        domain="[]"
+                        context="{'group_by':'state'}"
+                    />
+                    <filter
+                        name="group_by_office"
+                        string="Office"
+                        domain="[]"
+                        context="{'group_by':'office'}"
+                    />
+                    <filter
+                        name="group_by_type_id"
+                        string="Meeting type"
+                        domain="[]"
+                        context="{'group_by':'type_id'}"
+                    />
+                    <filter
+                        name="group_by_user_id"
+                        string="Case worker"
+                        domain="[]"
+                        context="{'group_by':'user_id'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="action_appointment" model="ir.actions.act_window">
         <field name="name">Appointments</field>
         <field name="res_model">calendar.appointment</field>
@@ -239,6 +313,7 @@
         <field name="view_id" ref="view_calendar_appointment_calendar" />
         <field name="domain">[('channel', '=', 'PDM')]</field>
         <field name="context">{'default_channel': 'PDM'}</field>
+        <field name="search_view_id" ref="calendar_appointment_search" />
     </record>
 
     <record id="action_local_appointment" model="ir.actions.act_window">
@@ -250,6 +325,7 @@
         <field name="domain">[('channel', '=', 'Local')]</field>
         <!-- <field name="context">{'default_channel': %(calendar_channel.channel_local)d}</field> -->
         <field name="context">{'default_channel': 'Local'}</field>
+        <field name="search_view_id" ref="calendar_appointment_local_search" />
     </record>
 
     <record id="action_view_calendar_appointment_calendar" model="ir.actions.act_window.view">

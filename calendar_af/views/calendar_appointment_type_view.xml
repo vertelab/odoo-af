@@ -14,6 +14,7 @@
                 <field name="channel"/>
                 <field name="additional_booking"/>
                 <field name="ipf_id"/>
+                <field name="skill_ids" widget="Many2many_tags"/>
                 <field name="text"/>
             </tree>
         </field>
