@@ -60,6 +60,14 @@ class ResPartner(models.Model):
         header_path_jobs = "usr/share/odoo-af/af_data_ais-f_loader/data/SOK_SOKTYRKE_mapping.csv"
         self.create_partners(headers_header_jobs, path_jobs, header_path_jobs)
 
+    @api.model
+    def create_offices(self):
+        headers_header = ['kontor.csv', 'Notering',  'Trans', 'Odoo']
+        path = os.path.join(config.options.get('data_dir'), 'AIS-F/kontor.csv')
+        path = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/kontor.csv" #testing purposes only
+        header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/kontor_mapping.csv"
+        self.create_partners(headers_header, path, header_path)
+
 
     @api.model
     def create_contact_persons(self):     
@@ -274,6 +282,8 @@ class ResPartner(models.Model):
 
         if 'type' not in row: #new
             row['type'] = 'contact'
+        if 'office_code' in row:
+            row['type'] = 'af office'
 
         for key in row.keys():
             if key in transformations:
@@ -459,6 +469,8 @@ class ResPartner(models.Model):
             row.update(keys_to_update[i])
             #_logger.info("row updated with %s, now %s" % (keys_to_update[i], row) )
         
+        
+
         if create and (('name' not in row and 'lastname' not in row and 'firstname' not in row and 'type' not in row) or ('name' not in row and 'lastname' not in row and 'firstname' not in row and row['type'] == 'contact')):
             row.update({'name' : row['external_id']})
 

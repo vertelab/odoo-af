@@ -1,0 +1,9 @@
+kpi.csv,Notering,Trans,Odoo
+ID,,"external_id,kpi_",external_id
+TMSTAMP,,,
+ORGNR,,"partner_id,placeholder_due_to_dumb_code",partner_id
+BOKSLUTSPERIOD,,,fiscal_year
+NETTO_OMSATTNING,,,profit
+TOTAL_OMSATTNING,,,turnover
+RORELSE_RESULTAT,,,
+ANTAL_ANSTALLDA,,,employees
