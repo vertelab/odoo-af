@@ -2,7 +2,7 @@
 
 {
     "name": "AF Calendar Report",
-    "version": "12.0.1.0.1",
+    "version": "12.0.1.0.2",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
@@ -10,6 +10,7 @@
     "depends": ["calendar_af"],
     "external_dependencies": [],
     "data": [
+        'views/calendar_appointment.xml',
         'views/appointment_report.xml',
         'views/updated_appointment_report.xml',
         'data/mail_template.xml',

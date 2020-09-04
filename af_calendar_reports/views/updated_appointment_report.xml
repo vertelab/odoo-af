@@ -30,7 +30,7 @@
         </t>
     </template>
 
-    <report id="updated_calendar_appointment_report" model="calendar.appointment" string="Calendar Appointment"
+    <report id="updated_calendar_appointment_report" model="calendar.appointment" string="Updated Calendar Appointment"
             report_type="qweb-pdf"
             name="af_calendar_reports.updated_calendar_appointment_report_doc"
             file="af_calendar_reports.updated_calendar_appointment_report_doc"

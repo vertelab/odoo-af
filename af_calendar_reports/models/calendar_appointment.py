@@ -5,6 +5,8 @@ from  datetime import datetime
 class CalendarAppointment(models.Model):
     _inherit = 'calendar.appointment'
 
+    company_id = fields.Many2one('res.company', default=lambda self: self.env.user.company_id)
+
     @api.model
     def create(self, vals):
         res = super(CalendarAppointment, self).create(vals)
