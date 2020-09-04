@@ -14,6 +14,7 @@
         "partner_daily_notes",
         "hr_360_view",
         "af_security",
+        "hr_skill",
     ],
     "external_dependencies": [
     ],
