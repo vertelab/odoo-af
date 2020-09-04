@@ -21,7 +21,7 @@ msgstr ""
 #: selection:calendar.create_local_occasion,duration_selection:0
 #: selection:calendar.occasion,duration_selection:0
 msgid "1 hour"
-msgstr "1 timma"
+msgstr "60 minuter"
 
 #. module: calendar_af
 #: selection:calendar.appointment,duration_selection:0
