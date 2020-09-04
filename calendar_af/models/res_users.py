@@ -47,3 +47,8 @@ class ResUsers(models.Model):
             'view_mode': 'tree', 
             'type': 'ir.actions.act_window',
         }
+
+    def _compute_free_occasions(self):
+        return self.env['calendar.occasion'].search([('user_id', '=', self.id), ('appointment_id', '=', False)])
+
+    free_occ = fields.Many2one(comodel_name='calendar.occasions', string='Free occasions', compute=_compute_free_occasions)

@@ -1,21 +1,22 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* calendar_af
+#	* calendar_af
 #
 msgid ""
 msgstr ""
+
 "Project-Id-Version: Odoo Server 12.0-20200508\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-03 14:28+0000\n"
 "PO-Revision-Date: 2020-09-03 17:05+0200\n"
+
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-"Language: sv_SE\n"
-"X-Generator: Poedit 2.0.6\n"
+
 
 #. module: calendar_af
 #: selection:calendar.appointment,duration_selection:0
@@ -219,6 +220,7 @@ msgid "Cancellation reason for an appointment"
 msgstr "Avbokningsorsak för mötet"
 
 #. module: calendar_af
+#: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment__case_worker_name
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment__user_id
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_create_local_occasion__user_id
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_occasion__user_id
@@ -271,7 +273,6 @@ msgstr "Skapa"
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_create_local_occasion_form
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_occasion_form
 msgid "Create occasion"
-msgstr "Skapa tillfälle"
 
 #. module: calendar_af
 #: model:ir.actions.act_window,name:calendar_af.create_local_occasion_form_action
@@ -338,6 +339,12 @@ msgid "Display Name"
 msgstr "Visningsnamn"
 
 #. module: calendar_af
+#: code:addons/calendar_af/models/calendar.py:227
+#, python-format
+msgid "Distance"
+msgstr "Distans"
+
+#. module: calendar_af
 #: model:ir.ui.menu,name:calendar_af.menu_book_distans_meeting
 msgid "Distans Meeting"
 msgstr "Distansmöte"
@@ -374,6 +381,11 @@ msgstr "Anställd"
 msgid "End of repeat"
 msgstr "Slut på repetitioner"
 
+#: code:addons/calendar_af/models/calendar.py:234
+#, python-format
+msgid "Employment service officer"
+msgstr "Arbetsförmedlare"
+
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_schedule__forecasted_agents
 msgid "Forecasted agents"
@@ -383,6 +395,11 @@ msgstr "Prognosagenter"
 #: selection:calendar.appointment,state:0
 msgid "Free"
 msgstr "Tillgänglig"
+
+#. module: calendar_af
+#: model:ir.model.fields,field_description:calendar_af.field_calendar_create_local_occasion__repeat_fri
+msgid "Friday"
+msgstr "Fredag"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_create_local_occasion__repeat_fri
@@ -478,6 +495,7 @@ msgid "Local occasions"
 msgstr "Lokalkontorstillfällen"
 
 #. module: calendar_af
+#: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment__location
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment__location_code
 msgid "Location"
 msgstr "Plats"
@@ -496,6 +514,7 @@ msgid "Meeting Details"
 msgstr "Mötesdetaljer"
 
 #. module: calendar_af
+
 #: code:addons/calendar_af/models/calendar.py:327
 #, python-format
 msgid "Meeting cancelled"
@@ -690,6 +709,7 @@ msgstr "Överbokning"
 
 #. module: calendar_af
 #: code:addons/calendar_af/models/calendar.py:546
+
 #, python-format
 msgid "Overbooking not allowed on %s"
 msgstr "Överbokning inte tillåtet på %s"
@@ -802,6 +822,11 @@ msgstr "Startdatum för ett möte"
 #: model:ir.model.fields,help:calendar_af.field_calendar_occasion__start
 msgid "Start date of an occasion"
 msgstr "Startdatum för en tillfälle"
+
+#. module: calendar_af
+#: model:ir.model.fields,field_description:calendar_af.field_calendar_create_local_occasion__start_range
+msgid "Start of repeat"
+msgstr "Start för repetition"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_create_local_occasion__start_range
@@ -937,3 +962,4 @@ msgstr "t.ex. Affärslunch"
 #: model:ir.model,name:calendar_af.model_hr_employee_jobseeker_search_wizard
 msgid "hr.employee.jobseeker.search.wizard"
 msgstr "Sök Arbetssökande"
+

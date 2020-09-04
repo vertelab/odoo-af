@@ -1,0 +1,7 @@
+arbetsgivareSNI.csv,Notering,Trans,Odoo
+ID,,,
+TMSTAMP,,,
+ARBETSGIVARE_KUNDNR,,"partner_id,part_org_",partner_id
+SNI_KOD,,"sni_id,sni_",sni_id
+SNI_KOD,,,
+SNI_TEXT,,,
