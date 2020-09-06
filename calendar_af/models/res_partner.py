@@ -78,14 +78,6 @@ class ResPartner(models.Model):
         }
 
     @api.one
-    def set_user(self, signature):
-        """Updates the responsible officer of a res.partner from an AF-signature """
-        user = self.env['res.users'].search([('login', '=', signature)])
-        if not user:
-            raise Warning('Invalid signature!')
-        self.user_id = user.id
-
-    @api.one
     def compute_show_dates_ahead(self):
         self.appointment_ids_ahead = self.appointment_ids.filtered(lambda a: a.start > datetime.now())
     
