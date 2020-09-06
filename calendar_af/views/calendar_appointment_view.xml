@@ -142,8 +142,6 @@
                     </notebook>
                     <span aria-atomic="true" class="btn-group oe-right oe_button_box">
                         <button name="compute_suggestion_ids" type="object" string="Update" />
-                        <button aria-label="Previous" class="fa fa-chevron-left btn btn-secondary o_pager_previous" accesskey="b" tabindex="-1" title="Previous" type="button"></button>
-                        <button aria-label="Next" class="fa fa-chevron-right btn btn-secondary o_pager_next" accesskey="f" tabindex="-1" title="Next" type="button"></button>
                     </span>
                     <field name="suggestion_ids">
                         <tree string="Bookable Occasions">
@@ -152,7 +150,7 @@
                             <field name="duration" />
                             <field name="type_id" />
                             <field name="occasion_ids" invisible="1" />
-                            <button name="select_suggestion" type="object" string="Select" />
+                            <button name="select_suggestion" type="object" string="Book" />
                         </tree>
                     </field>
                 </sheet>
@@ -202,8 +200,6 @@
                     </notebook>
                     <span aria-atomic="true" class="btn-group oe-right oe_button_box">
                         <button name="compute_suggestion_ids" type="object" string="Update" />
-                        <button aria-label="Previous" class="fa fa-chevron-left btn btn-secondary o_pager_previous" accesskey="b" tabindex="-1" title="Previous" type="button"></button>
-                        <button aria-label="Next" class="fa fa-chevron-right btn btn-secondary o_pager_next" accesskey="f" tabindex="-1" title="Next" type="button"></button>
                     </span>
                     <field name="suggestion_ids">
                         <tree string="Bookable Occasions">
@@ -212,7 +208,7 @@
                             <field name="duration" />
                             <field name="type_id" />
                             <field name="occasion_ids" invisible="1" />
-                            <button name="select_suggestion" type="object" string="Select" />
+                            <button name="select_suggestion" type="object" string="Move" />
                         </tree>
                     </field>
                 </sheet>

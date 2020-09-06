@@ -93,20 +93,19 @@ class CalendarAppointmentType(models.Model):
     _name = 'calendar.appointment.type'
     _description = "Meeting type"
     _order = 'ipf_num'
-    name = fields.Char('Name', required=True)
-    ipf_id = fields.Char('Teleopti competence', required=True, help="The IPF type id, if this is wrong the integration won't work")
-    # mötestyps_id
+
+    name = fields.Char('Meeting type name', required=True)
+    ipf_id = fields.Char('Teleopti competence id', required=True, help="The IPF type id, if this is wrong the integration won't work")
+    ipf_name = fields.Char('Teleopti competence name')
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
     duration = fields.Float(string='Duration')
     duration_default = fields.Boolean(string='Use default')
     days_first = fields.Integer(string='First allowed day for type')
     days_last = fields.Integer(string='Last allowed day for type')
-    ipf_num = fields.Integer(string='AF id')
+    ipf_num = fields.Integer(string='Meeting type id')
     additional_booking = fields.Boolean(string='Over booking')
     text = fields.Text(string='Comment')
     skill_ids = fields.Many2many(comodel_name='hr.skill', string='Skills')
-    ace_update_user = fields.Boolean(string='ACE updates case worker', default=False)
-    
 
 class CalendarChannel(models.Model):
     _name = 'calendar.channel'
@@ -302,8 +301,8 @@ class CalendarAppointment(models.Model):
     def compute_suggestion_ids(self):
         if not all((self.duration, self.type_id, self.channel)):
             return
-        start = self.start_meeting_search()
-        stop = self.stop_meeting_search(start)
+        start = self.start_meeting_search(self.type_id)
+        stop = self.stop_meeting_search(start, self.type_id)
         
         suggestion_ids = []
         if self.suggestion_ids:
@@ -335,7 +334,7 @@ class CalendarAppointment(models.Model):
             self.type_id = False
 
     @api.onchange('channel_name')
-    def onchange_channel(self):
+    def onchange_channel_name(self):
         channel = self.env['calendar.channel'].search([('name', '=', self.name)])
         if channel:
             self.channel = channel.id
