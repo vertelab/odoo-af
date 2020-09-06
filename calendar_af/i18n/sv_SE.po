@@ -401,11 +401,6 @@ msgid "Friday"
 msgstr "Fredag"
 
 #. module: calendar_af
-#: model:ir.model.fields,field_description:calendar_af.field_calendar_create_local_occasion__repeat_fri
-msgid "Friday"
-msgstr "Fredag"
-
-#. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_mapped_dates__from_date
 msgid "From Date"
 msgstr "Från datum"
@@ -819,11 +814,6 @@ msgstr "Startdatum för ett möte"
 #: model:ir.model.fields,help:calendar_af.field_calendar_occasion__start
 msgid "Start date of an occasion"
 msgstr "Startdatum för en tillfälle"
-
-#. module: calendar_af
-#: model:ir.model.fields,field_description:calendar_af.field_calendar_create_local_occasion__start_range
-msgid "Start of repeat"
-msgstr "Start för repetition"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_create_local_occasion__start_range
