@@ -51,4 +51,4 @@ class ResUsers(models.Model):
     def _compute_free_occasions(self):
         return self.env['calendar.occasion'].search([('user_id', '=', self.id), ('appointment_id', '=', False)])
 
-    free_occ = fields.Many2one(comodel_name='calendar.occasions', string='Free occasions', compute=_compute_free_occasions)
+    free_occ = fields.Many2one(comodel_name='calendar.occasion', string='Free occasions', compute=_compute_free_occasions)
