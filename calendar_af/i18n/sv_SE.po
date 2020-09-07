@@ -368,7 +368,7 @@ msgstr "Utkast"
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_occasion__duration_selection
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_schedule__duration
 msgid "Duration"
-msgstr "Varaktighet"
+msgstr "Möteslängd"
 
 #. module: calendar_af
 #: model:ir.model,name:calendar_af.model_hr_employee
@@ -517,7 +517,7 @@ msgstr "Mötet är avbokat"
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_appointment_form
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_appointment_move_form
 msgid "Meeting channel"
-msgstr "Möteskanal"
+msgstr "Kontaktväg"
 
 #. module: calendar_af
 #: code:addons/calendar_af/models/calendar.py:386
@@ -908,7 +908,7 @@ msgstr "Tisdag"
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_create_local_occasion__type_id
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_occasion__type_id
 msgid "Type"
-msgstr "Typ"
+msgstr "Mötestyp"
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_employee_360_form_calendar_af_inherited
