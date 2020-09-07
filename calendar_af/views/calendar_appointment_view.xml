@@ -144,7 +144,7 @@
                         <button name="compute_suggestion_ids" type="object" string="Update" />
                     </span>
                     <field name="suggestion_ids">
-                        <tree string="Bookable Occasions">
+                        <tree string="Bookable Occasions" limit="10">
                             <field name="start" />
                             <field name="stop" />
                             <field name="duration" />
