@@ -4,7 +4,7 @@
         <field name="name">search.jobseeker.wizard</field>
         <field name="model">hr.employee.jobseeker.search.wizard</field>
         <field name="arch" type="xml"> 
-            <form string="Search Partner">
+            <form string="Search Partner" create="false">
             <h1>Search Jobseekers</h1>
             <notebook>
                 <page string="When in contact">
@@ -93,7 +93,7 @@
             src_model="hr.employee"
             res_model="hr.employee.jobseeker.search.wizard"
             view_mode="form"
-            target="current" 
+            target="inline"
             key2="client_action_multi"/>       
 
    <menuitem id="res_partner_jobseeker_search_wizard_menu"
