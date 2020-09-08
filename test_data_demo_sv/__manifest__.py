@@ -18,8 +18,7 @@ v12.0.1.4  - Moved content of the module from af_base_demo to this module, since
     'depends': ['base'],
     'demo': [
 			'data/base_partner_demo_se.xml',
-            #'data/res.country.state.se.csv',
-			#'data/res_company_data_se.xml',
+  			#'data/res_company_data_se.xml',
 			#'data/res_company_data_se.xml',
 			#'data/res_partner_image_demo_se.xml',
 			#'data/res_users_demo_se.xml'			
