@@ -1,0 +1,169 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* contact_links
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0-20200508\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-09-07 14:24+0000\n"
+"PO-Revision-Date: 2020-09-07 16:34+0200\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: sv_SE\n"
+"X-Generator: Poedit 2.0.6\n"
+
+#. module: contact_links
+#: model_terms:ir.ui.view,arch_db:contact_links.view_partner_employer_form_for_links
+#: model_terms:ir.ui.view,arch_db:contact_links.view_partner_form_for_links
+#: model_terms:ir.ui.view,arch_db:contact_links.view_partner_jobseeker_form_for_links
+#: model_terms:ir.ui.view,arch_db:contact_links.view_partner_links_kanban
+msgid "Avatar"
+msgstr "Avatar"
+
+#. module: contact_links
+#: model:ir.model,name:contact_links.model_res_partner
+#: model:ir.model.fields,field_description:contact_links.field_partner_links__partner_id
+msgid "Contact"
+msgstr "Kontakt"
+
+#. module: contact_links
+#: model:ir.model.fields,field_description:contact_links.field_partner_links__create_uid
+msgid "Created by"
+msgstr "Skapad av"
+
+#. module: contact_links
+#: model:ir.model.fields,field_description:contact_links.field_partner_links__create_date
+msgid "Created on"
+msgstr "Skapad den"
+
+#. module: contact_links
+#: model:ir.model.fields,field_description:contact_links.field_partner_links__display_name
+#: model:ir.model.fields,field_description:contact_links.field_partner_links__name
+msgid "Display Name"
+msgstr "Visningsnamn"
+
+#. module: contact_links
+#: model:ir.model.fields,field_description:contact_links.field_partner_links__group_ids
+msgid "Groups"
+msgstr "Grupper"
+
+#. module: contact_links
+#: model:ir.model.fields,field_description:contact_links.field_partner_links__id
+msgid "ID"
+msgstr "ID"
+
+#. module: contact_links
+#: model:ir.model.fields,field_description:contact_links.field_partner_links__image
+msgid "Image"
+msgstr "Bild"
+
+#. module: contact_links
+#: model:ir.model.fields,field_description:contact_links.field_partner_links__inserted_field
+msgid "Inserted Field"
+msgstr "Infogad fil"
+
+#. module: contact_links
+#: model:ir.model.fields,field_description:contact_links.field_partner_links____last_update
+msgid "Last Modified on"
+msgstr "Senast redigerad"
+
+#. module: contact_links
+#: model:ir.model.fields,field_description:contact_links.field_partner_links__write_uid
+msgid "Last Updated by"
+msgstr "Senast uppdaterad av"
+
+#. module: contact_links
+#: model:ir.model.fields,field_description:contact_links.field_partner_links__write_date
+msgid "Last Updated on"
+msgstr "Senast uppdaterad"
+
+#. module: contact_links
+#: model:ir.model.fields,field_description:contact_links.field_partner_links__link
+msgid "Link"
+msgstr "Länk"
+
+#. module: contact_links
+#: model:res.groups,name:contact_links.group_partner_link
+msgid "Link Admin"
+msgstr "Länk Admin"
+
+#. module: contact_links
+#: model:ir.actions.act_window,name:contact_links.action_partner_links
+#: model:ir.actions.act_window,name:contact_links.action_partner_links_tab
+#: model:ir.model.fields,field_description:contact_links.field_res_partner__link_ids
+#: model:ir.model.fields,field_description:contact_links.field_res_users__link_ids
+#: model_terms:ir.ui.view,arch_db:contact_links.view_partner_employer_form_for_links
+#: model_terms:ir.ui.view,arch_db:contact_links.view_partner_form_for_links
+#: model_terms:ir.ui.view,arch_db:contact_links.view_partner_jobseeker_form_for_links
+msgid "Links"
+msgstr "Länkar"
+
+#. module: contact_links
+#: model:ir.ui.menu,name:contact_links.menu_partner_links
+msgid "Links Administration"
+msgstr "Länkar Administration"
+
+#. module: contact_links
+#: model:ir.model,name:contact_links.model_partner_links
+msgid "Partner Links"
+msgstr "Partner länkar"
+
+#. module: contact_links
+#: selection:partner.links,type_smart:0
+msgid "Smart Button"
+msgstr "Smart knapp"
+
+#. module: contact_links
+#: model:ir.model.fields,field_description:contact_links.field_partner_links__static_url_1
+msgid "Static URL Part 1"
+msgstr "Static URL Del 1"
+
+#. module: contact_links
+#: model:ir.model.fields,field_description:contact_links.field_partner_links__static_url_2
+msgid "Static URL Part 2"
+msgstr "Static URL del 2"
+
+#. module: contact_links
+#: selection:partner.links,type_smart:0
+msgid "Tab"
+msgstr "Tab"
+
+#. module: contact_links
+#: model:ir.model.fields,field_description:contact_links.field_partner_links__target
+msgid "Target"
+msgstr "Mål"
+
+#. module: contact_links
+#: model:ir.model.fields,field_description:contact_links.field_partner_links__type_smart
+msgid "Type"
+msgstr "Typ"
+
+#. module: contact_links
+#: model:ir.actions.server,name:contact_links.action_sync_link
+msgid "Update Link"
+msgstr "Uppdatera länk"
+
+#. module: contact_links
+#: selection:partner.links,target:0
+msgid "_blank"
+msgstr "_blank"
+
+#. module: contact_links
+#: selection:partner.links,target:0
+msgid "_parent"
+msgstr "_förälder"
+
+#. module: contact_links
+#: selection:partner.links,target:0
+msgid "_self"
+msgstr "_själv"
+
+#. module: contact_links
+#: selection:partner.links,target:0
+msgid "_top"
+msgstr "_överst"
