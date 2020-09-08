@@ -1,4 +1,8 @@
 // Increase width and change color of line divider
+.o_cp_switch_buttons .btn-secondary:not(:disabled):not(.disabled):active, .o_cp_switch_buttons .btn-secondary:not(:disabled):not(.disabled).active, .show > .btn-secondary.dropdown-toggle {
+    color: white !important;
+    background-color: #00005a !important;
+}
 
 .o_form_view .o_group .o_td_label {
     border-right: 1.5px solid #00005a;
