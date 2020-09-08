@@ -73,7 +73,7 @@ class CalendarSchedule(models.Model):
             no_occasions = self.env['calendar.occasion'].search_count([('start', '=', schedule.start), ('type_id', '=', schedule.type_id.id), ('additional_booking', '=', False)])
             if (schedule.scheduled_agents - no_occasions) > 0:
                 vals = {
-                    'name': _('%sm @ %s') % (schedule.duration, pytz.timezone(LOCAL_TZ).localize(schedule.start.strftime("%Y-%m-%dT%H:%M:%S").astimezone(pytz.utc))),
+                    'name': _('%sm @ %s') % (schedule.duration, pytz.timezone(LOCAL_TZ).localize(schedule.start)),
                     'duration': schedule.duration,
                     'start': schedule.start,
                     'stop': schedule.stop,
@@ -546,7 +546,7 @@ class CalendarOccasion(models.Model):
     def _force_create_occasion(self, duration, start, type_id, channel, state, user=False, office=False, additional_booking=True):
         """In case we need to force through a new occasion for some reason"""
         vals = {
-            'name': _('%sm @ %s') % (duration, pytz.timezone(LOCAL_TZ).localize(start.strftime("%Y-%m-%dT%H:%M:%S").astimezone(pytz.utc))),
+            'name': _('%sm @ %s') % (duration, pytz.timezone(LOCAL_TZ).localize(start)),
             'start': start,
             'stop': start + timedelta(minutes=duration),
             'duration': duration,
