@@ -676,13 +676,10 @@ class CalendarOccasion(models.Model):
         td_base_duration = timedelta(minutes=BASE_DURATION)
         def get_occasions(start_dt):
             start_dt = start_dt.replace(second=0, microsecond=0)
-            return self.env['calendar.occasion'].search(
-                [
-                    ('start', '=', start_dt),
-                    ('type_id', '=', type_id.id),
-                    ('appointment_id', '=', False),
-                    ('office', '=', office.id if office else False),
-                ], limit=max_depth)
+            domain = [('start', '=', start_dt), ('type_id', '=', type_id.id), ('appointment_id', '=', False)]
+            if office:
+                domain.append(('office', '=', office.id))
+            return self.env['calendar.occasion'].search(domain, limit=max_depth)
         #[[[], []], dag[tidsslot[ocassions]]]
 
         occ_lists = []
