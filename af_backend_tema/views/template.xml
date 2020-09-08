@@ -9,6 +9,8 @@
             </xpath>
         </template>
 
+<!-- this is a backend theme. website is not part of backend. if we want to do this it should be moved to another module.  -->
+<!--
 		<template id="website.language_selector">
     <ul class="js_language_selector mb0 list-inline" t-if="(request and request.is_frontend_multilang and len(languages) &gt; 1) or (website and (editable or translatable))">
         <li class="list-inline-item">
@@ -123,6 +125,7 @@
                 </div>
             </xpath>
         </template>
+        -->
 
     </data>
 </odoo>

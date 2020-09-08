@@ -4,15 +4,14 @@
         <field name="name">search.jobseeker.wizard</field>
         <field name="model">hr.employee.jobseeker.search.wizard</field>
         <field name="arch" type="xml"> 
-            <form string="Search Partner">
+            <form string="Search Partner" create="false">
+            <h1>Search Jobseekers</h1>
             <notebook>
                 <page string="When in contact">
                     <group>
                     <group>
                         <field name="identification" />
-                        <field name="other_reason" attrs="{'invisible': [('search_reason','!=','other reason')]}"/>
                         <!-- <field name="search_domain" widget="domain" options="{'model' : 'res.partner'}"> </field> -->
-                    
                         <field name="social_sec_nr_search"/>
                         <!-- <field name="customer_id_search"/>
                         <field name="email_search"/> -->
@@ -24,7 +23,7 @@
                     <group>
                         <group>
                             <field name="search_reason"/> <!--widget="radio" options="{'horizontal': true}"-->
-                            
+                            <field name="other_reason" attrs="{'invisible': [('search_reason','!=','other reason')]}"/>
                             <field name="social_sec_nr_search"/>
                             <field name="customer_id_search"/>
                             <field name="email_search"/>     
@@ -94,7 +93,7 @@
             src_model="hr.employee"
             res_model="hr.employee.jobseeker.search.wizard"
             view_mode="form"
-            target="current" 
+            target="inline"
             key2="client_action_multi"/>       
 
    <menuitem id="res_partner_jobseeker_search_wizard_menu"

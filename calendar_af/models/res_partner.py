@@ -29,9 +29,7 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     appointment_ids_past = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings', compute="compute_show_dates_past")
-
     appointment_ids_ahead = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings', compute="compute_show_dates_ahead")
-    
     appointment_ids = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings', inverse_name="partner_id")
 
     @api.one
@@ -77,7 +75,7 @@ class ResPartner(models.Model):
             'view_id': self.env.ref('calendar_af.view_calendar_appointment_form').id,
             'view_mode': 'form', 
             'type': 'ir.actions.act_window',
-        }    
+        }
 
     @api.one
     def compute_show_dates_ahead(self):

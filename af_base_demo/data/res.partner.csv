@@ -29,7 +29,7 @@ base.res_partner_1,Träfabriken AB,,Helikoptervägen 3,,17563,,Järfälla,base.s
 base.res_partner_address_2,Erik Strömberg,,Helikoptervägen 3,,17563,,Järfälla,base.se,073 397 40 91,erik.stromberg@trafabriken.se,,sv_SE,Europe/Stockholm,
 base.res_partner_address_27,Tom Ek,,Helikoptervägen 3,,17563,,Järfälla,base.se,073 834 16 02,tom.ek@trafabriken.se,,sv_SE,Europe/Stockholm,
 base.res_partner_address_1,Olof Stenberg,,Helikoptervägen 3,,17563,,Järfälla,base.se,073 523 21 11,olof.stenberg@trafabriken.se,,sv_SE,Europe/Stockholm,
-base.main_partner,Spelhuset AB,,Birger Jarlsgatan 140,,11420,,Stockholm,base.se,073 123 80 69,info@spelhuset.se,,sv_SE,Europe/Stockholm,http://www.spelhuset.se
+base.main_partner,Demodataföretaget AB,,Birger Jarlsgatan 140,,11420,,Stockholm,base.se,073 123 80 69,info@demodata.se,,sv_SE,Europe/Stockholm,http://www.spelhuset.se
 base.res_partner_main1,Håkan Lindblom,,Birger Jarlsgatan 140,,11420,,Stockholm,base.se,073 904 89 02,hakan.lindblom@spelhuset.se,,sv_SE,Europe/Stockholm,
 base.res_partner_main2,Albin Dahl,,Birger Jarlsgatan 140,,11420,,Stockholm,base.se,073 177 49 37,albin.dahl@spelhuset.se,,sv_SE,Europe/Stockholm,
 base.demo_user0_res_partner,Joel Willis,,Dalagatan 9,,11361,,Stockholm,base.se,073 556 51 04,joel.willis@exempel.se,,sv_SE,Europe/Stockholm,
