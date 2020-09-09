@@ -3,7 +3,7 @@ SOKANDE_ID,,"external_id,part_jbskr_",external_id
 SOKANDE_ID,,,customer_id
 PERSONNR,,,company_registry
 TMSTAMP,,,
-REGDATUM,,,customer_since
+REGDATUM,,,
 FODELSEDATUM,,,
 AUT_ALDSTA_PAMINNELSEDATUM,,,
 STATUS,,,
@@ -14,7 +14,7 @@ ANSV_SIGN,,,
 INFO_AIS_TILL_SOK,,,
 PRESENTATIONSFORM,,,
 INFO_TILL_AG,,,share_info_with_employers
-AKTUELL_SEDAN,,,
+AKTUELL_SEDAN,,,customer_since
 AKTUELL_SEDAN_OLD,,,
 HPL_DATUM,,,
 EFTERNAMN,,,lastname
