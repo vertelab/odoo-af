@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+
+    <t t-extend="AppsMenu">
+         <t t-jquery="a[class='full']" t-operation="replace">
+            <a class="full" data-toggle="dropdown" data-display="static" href="#">
+                <img style="height:30px" src="/af_backend_tema/static/src/img/favicon.ico"></img>
+            </a>
+        </t>
+    </t>
+
+</templates>
