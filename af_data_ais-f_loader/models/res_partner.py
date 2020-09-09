@@ -44,28 +44,28 @@ class ResPartner(models.Model):
     def create_jobseekers(self):     
         headers_header = ['arbetssokande.csv', 'Notering',  'Trans', 'Odoo']
         path = os.path.join(config.options.get('data_dir'), 'AIS-F/arbetssokande.csv')
-        path = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/arbetssokande.csv" #testing purposes only
-        header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/arbetssokande_mapping.csv"
+        path = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/arbetssokande.csv" #testing purposes only
+        header_path = "/usr/share/odoo-af/af_data_ais-f_loader/data/arbetssokande_mapping.csv"
         self.create_partners(headers_header, path, header_path)
 
         headers_header_adr = ['sok_adress.csv', 'Notering',  'Trans', 'Odoo']
         path_adr = os.path.join(config.options.get('data_dir'), 'AIS-F/sok_adress.csv')
-        path_adr = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/sok_adress.csv" #testing purposes only
-        header_path_adr = "usr/share/odoo-af/af_data_ais-f_loader/data/sok_adress_mapping.csv"
+        path_adr = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/sok_adress.csv" #testing purposes only
+        header_path_adr = "/usr/share/odoo-af/af_data_ais-f_loader/data/sok_adress_mapping.csv"
         self.create_partners(headers_header_adr, path_adr, header_path_adr)
 
         headers_header_jobs = ['SOK_SOKTYRKE.csv', 'Notering',  'Trans', 'Odoo']
         path_jobs = os.path.join(config.options.get('data_dir'), 'AIS-F/SOK_SOKTYRKE.csv')
-        path_jobs = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/SOK_SOKTYRKE.csv" #testing purposes only
-        header_path_jobs = "usr/share/odoo-af/af_data_ais-f_loader/data/SOK_SOKTYRKE_mapping.csv"
+        path_jobs = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/SOK_SOKTYRKE.csv" #testing purposes only
+        header_path_jobs = "/usr/share/odoo-af/af_data_ais-f_loader/data/SOK_SOKTYRKE_mapping.csv"
         self.create_partners(headers_header_jobs, path_jobs, header_path_jobs)
 
     @api.model
     def create_offices(self):
         headers_header = ['kontor.csv', 'Notering',  'Trans', 'Odoo']
         path = os.path.join(config.options.get('data_dir'), 'AIS-F/kontor.csv')
-        path = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/kontor.csv" #testing purposes only
-        header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/kontor_mapping.csv"
+        path = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/kontor.csv" #testing purposes only
+        header_path = "/usr/share/odoo-af/af_data_ais-f_loader/data/kontor_mapping.csv"
         self.create_partners(headers_header, path, header_path)
 
 
@@ -73,48 +73,48 @@ class ResPartner(models.Model):
     def create_contact_persons(self):     
         headers_header = ['kontaktperson.csv', 'Notering',  'Trans', 'Odoo']
         path = os.path.join(config.options.get('data_dir'), 'AIS-F/kontaktperson.csv')
-        path = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/kontaktperson.csv" #testing purposes only
-        header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/kontaktperson_mapping.csv"
+        path = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/kontaktperson.csv" #testing purposes only
+        header_path = "/usr/share/odoo-af/af_data_ais-f_loader/data/kontaktperson_mapping.csv"
         self.create_partners(headers_header, path, header_path)
 
     @api.model
     def create_employers(self):     
         headers_header = ['arbetsgivare.csv', 'Notering',  'Trans', 'Odoo']
         path = os.path.join(config.options.get('data_dir'), 'AIS-F/arbetsgivare.csv')
-        path = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/arbetsgivare.csv" #testing purposes only
-        header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/arbetsgivare_mapping.csv"
+        path = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/arbetsgivare.csv" #testing purposes only
+        header_path = "/usr/share/odoo-af/af_data_ais-f_loader/data/arbetsgivare_mapping.csv"
         self.create_partners(headers_header, path, header_path)
 
         headers_header_sni = ['arbetsgivareSNI.csv', 'Notering', 'Trans', 'Odoo']
         path_sni = os.path.join(config.options.get('data_dir'), 'AIS-F/arbetsgivareSNI.csv')
-        path_sni = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/arbetsgivareSNI.csv" #testing purposes only
-        header_path_sni = "usr/share/odoo-af/af_data_ais-f_loader/data/arbetsgivareSNI_mapping.csv"
+        path_sni = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/arbetsgivareSNI.csv" #testing purposes only
+        header_path_sni = "/usr/share/odoo-af/af_data_ais-f_loader/data/arbetsgivareSNI_mapping.csv"
         self.create_partners(headers_header_sni, path_sni, header_path_sni)
 
         headers_header_ssyk = ['ssyk.csv', 'Notering', 'Trans', 'Odoo']
         path_ssyk = os.path.join(config.options.get('data_dir'), 'AIS-F/ssyk.csv')
-        path_ssyk = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/ssyk.csv" #testing purposes only
-        header_path_ssyk = "usr/share/odoo-af/af_data_ais-f_loader/data/ssyk_mapping.csv"
+        path_ssyk = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/ssyk.csv" #testing purposes only
+        header_path_ssyk = "/usr/share/odoo-af/af_data_ais-f_loader/data/ssyk_mapping.csv"
         self.create_partners(headers_header_ssyk, path_ssyk, header_path_ssyk)
 
     @api.model
     def create_organisations(self):     
         headers_header = ['organisation.csv', 'Notering', 'Trans', 'Odoo']
         path = os.path.join(config.options.get('data_dir'), 'AIS-F/organisation.csv')
-        path = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/organisation.csv" #testing purposes only
-        header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/organisation_mapping.csv"
+        path = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/organisation.csv" #testing purposes only
+        header_path = "/usr/share/odoo-af/af_data_ais-f_loader/data/organisation_mapping.csv"
         self.create_partners(headers_header, path, header_path)
         
         headers_header_kpi = ['kpi.csv', 'Notering', 'Trans', 'Odoo']
         path_kpi = os.path.join(config.options.get('data_dir'), 'AIS-F/kpi.csv')
-        path_kpi = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/kpi.csv" #testing purposes only
-        header_path_kpi = "usr/share/odoo-af/af_data_ais-f_loader/data/kpi_mapping.csv"
+        path_kpi = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/kpi.csv" #testing purposes only
+        header_path_kpi = "/usr/share/odoo-af/af_data_ais-f_loader/data/kpi_mapping.csv"
         self.create_partners(headers_header_kpi, path_kpi, header_path_kpi)
 
         headers_header_sni = ['organisationSNI.csv', 'Notering', 'Trans', 'Odoo']
         path_sni = os.path.join(config.options.get('data_dir'), 'AIS-F/organisationSNI.csv')
-        path_sni = "usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/organisationSNI.csv" #testing purposes only
-        header_path_sni = "usr/share/odoo-af/af_data_ais-f_loader/data/organisationSNI_mapping.csv"
+        path_sni = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/organisationSNI.csv" #testing purposes only
+        header_path_sni = "/usr/share/odoo-af/af_data_ais-f_loader/data/organisationSNI_mapping.csv"
         self.create_partners(headers_header_sni, path_sni, header_path_sni)
 
 
