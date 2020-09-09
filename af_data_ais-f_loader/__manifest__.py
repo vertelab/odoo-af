@@ -20,20 +20,14 @@ v12.0.1.3  - removed state-partner.csv\n
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
-    "depends": [
-        #"contacts", 
+    "depends": [ 
         "hr", 
         "calendar", 
         "partner_view_360", 
-        #"partner_kpi_data", 
-        #"res_drivers_license", 
-		#"res_sni", 
-		#"res_ssyk", 
-		#"res_sun", 
+        "partner_kpi_data", 
+        "res_drivers_license", 
 		#"partner_daily_notes", 
-		#"partner_desired_jobs",
-        #"partner_fax",
-        #"partner_firstname",
+		"partner_desired_jobs",
         ],
     
     "data": [
