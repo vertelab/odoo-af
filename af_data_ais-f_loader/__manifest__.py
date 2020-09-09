@@ -37,7 +37,7 @@ v12.0.1.3  - removed state-partner.csv\n
         ],
     
     "data": [
-        "data/res.country.state.csv",
+        #"data/res.country.state.csv",
         "data/res_partner.xml",
     ],
     "application": False,
