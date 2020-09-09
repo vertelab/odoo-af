@@ -4,8 +4,8 @@ TMSTAMP,,,
 SOKANDE_ID,,"external_id,part_jbskr_adr_",external_id
 SOKANDE_ID,,"partner_id,part_jbskr_",partner_id
 ADRESS_TYP,"om egen angiven ge en extra adress partner kalla för given adress, om folkbokföringsadress visa upp som huvudadress om egen utländsk skippa just nu",,type
-GATUADRESS1,,,street2
-GATUADRESS2,,,street
+GATUADRESS1,,,street
+GATUADRESS2,,,street2
 CO_ADRESS,,,
 POSTNR,,,zip
 POSTORT,,,city
