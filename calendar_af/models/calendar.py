@@ -382,7 +382,7 @@ class CalendarAppointment(models.Model):
                     "office": self.partner_id.office.id,
                     "note_date": datetime.now(),
                 }
-                appointment.partner_id.notes_ids = [(0, 0, vals)]
+                appointment.partner_id.sudo().notes_ids = [(0, 0, vals)]
                 appointment.occasion_ids = [(5, 0, 0)]
                 
                 return True
