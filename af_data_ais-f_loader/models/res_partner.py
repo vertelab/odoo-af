@@ -369,7 +369,8 @@ class ResPartner(models.Model):
 
                         if 'type' in row:
                             if row['type'].lower() == 'egen_angiven':
-                                partner['street'] = row['street']
+                                if 'street' in row:
+                                    partner['street'] = row['street']
                                 if 'street2' in row:
                                     partner['street2'] = row['street2']
                                 if 'zip' in row:                               
@@ -386,7 +387,8 @@ class ResPartner(models.Model):
                                 #skapa och koppla med parent_id
 
                             elif row['type'].lower() == 'folkbokforing': 
-                                partner['street'] = row['street']
+                                if 'street' in row:
+                                    partner['street'] = row['street']
                                 if 'street2' in row:
                                     partner['street2'] = row['street2']
                                 if 'zip' in row:                               
