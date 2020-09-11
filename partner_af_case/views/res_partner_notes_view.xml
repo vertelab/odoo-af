@@ -115,7 +115,7 @@
         <menuitem id="partner_case_menu_action" name="case" parent="contacts.menu_contacts" action="action_partner_case_tree" sequence="50" />
    
         <menuitem id="partner_case_type_menu_action_jobseeker" name="Case types" parent="partner_view_360.res_partner_jobseekers_config_menu" action="action_partner_case_type_tree" sequence="50" />
-        <menuitem id="partner_case_menu_action_jobseeker" name="case" parent="partner_view_360.res_partner_jobseekers_menu" action="action_partner_case_tree" sequence="50" />
+        <menuitem id="partner_case_menu_action_jobseeker" name="case" parent="partner_view_360.res_partner_jobseekers_menu" action="action_partner_case_tree" sequence="30" groups="base.group_no_one" />
         
         <menuitem id="partner_case_type_menu_action_employer" name="Case types" parent="partner_view_360.res_partner_employers_config_menu" action="action_partner_case_type_tree" sequence="50" />
         <menuitem id="partner_case_menu_action_employer" name="case" parent="partner_view_360.res_partner_employers_menu" action="action_partner_case_tree" sequence="50" />
