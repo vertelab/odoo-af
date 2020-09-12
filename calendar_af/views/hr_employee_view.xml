@@ -10,7 +10,7 @@
           <field name="appointment_ids_ahead" mode="tree" nolabel="1" default_order="start">
                   <field name="type_id" options="{'no_create_edit': True}"/>
                   <field name="start" t-options="{'format': 'dd / MM / yyyy HH / mm'}"/>
-                  <field name="duration"/>
+                  <field name="duration" widget="float_time"/>
                   <field name="case_worker_name"/>
                   <field name="partner_id"/>
                   <field name="location"/>
@@ -22,7 +22,7 @@
           <field name="appointment_ids_all" mode="tree" nolabel="1" default_order="start">
                   <field name="type_id" options="{'no_create_edit': True}"/>
                   <field name="start"/>
-                  <field name="duration"/>
+                  <field name="duration" widget="float_time"/>
                   <field name="case_worker_name"/>
                   <field name="partner_id"/>
                   <field name="location"/>

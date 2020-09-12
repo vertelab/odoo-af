@@ -40,10 +40,10 @@ class HrEmployee(models.Model):
     @api.depends('user_id')
     def _get_records(self):
         for rec in self:
-            appointment_record = rec.env['calendar.appointment'].search([('user_id', '=', self.env.uid)])
+            appointment_record = rec.env['calendar.appointment'].search([('user_id', '=', self.env.user.id)])
             rec.appointment_ids = appointment_record
 
-            appointment_record = rec.env['calendar.appointment'].search([('user_id', '!=', self.env.uid)])
+            appointment_record = rec.env['calendar.appointment'].search([('user_id', '!=', self.env.user.id), ('office', '=', self.env.user.office.id)])
             rec.appointment_ids_all = appointment_record
     
 
