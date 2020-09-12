@@ -5,7 +5,7 @@
 "TMSTAMP",,,
 "NAMN",,,"name"
 "BESOKSADRESS",,,"street"
-"UTDELNINGSADRESS",,,"street2"
+"UTDELNINGSADRESS",,,
 "POSTNR",,,"zip"
 "POSTORT",,,"city"
 "TELNR",,,"phone"
