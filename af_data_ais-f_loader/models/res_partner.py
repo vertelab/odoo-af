@@ -323,7 +323,7 @@ class ResPartner(models.Model):
                     vals = {
                         "name": row['name'],
                         "office_code": row["office_code"],
-                        "external_id": row['office_code']
+                        "external_id": "%s%s" % (transform['external_id'], row['external_id'])
                     }
 
                 if key == 'partner_id':
