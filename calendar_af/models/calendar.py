@@ -378,7 +378,7 @@ class CalendarAppointment(models.Model):
                     "partner_id": self.partner_id.id,
                     "administrative_officer": self.user_id.id,
                     "note": _("%sm meeting on %s cancelled with reason: %s") % (self.duration * 30, self.start, cancel_reason.name),
-                    "note_type": self.env.ref('partner_daily_notes.note_type_ag_04').id,
+                    "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
                     "office": self.partner_id.office.id,
                     "note_date": datetime.now(),
                 }
@@ -399,7 +399,7 @@ class CalendarAppointment(models.Model):
                     "partner_id": self.partner_id.id,
                     "administrative_officer": self.user_id.id,
                     "note": "%sm meeting on %s confirmed." % (self.duration * 30, self.start),
-                    "note_type": self.env.ref('partner_daily_notes.note_type_ag_04').id,
+                    "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
                     "office": self.partner_id.office.id,
                     "note_date": datetime.now(),
                 }
@@ -419,7 +419,7 @@ class CalendarAppointment(models.Model):
             "partner_id": self.partner_id.id,
             "administrative_officer": self.user_id.id,
             "note": _("%sm meeting on %s deleted.") % (self.duration * 30, self.start),
-            "note_type": self.env.ref('partner_daily_notes.note_type_ag_04').id,
+            "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
             "office": self.partner_id.office.id,
             "note_date": datetime.now(),
         }
@@ -438,7 +438,7 @@ class CalendarAppointment(models.Model):
                 "partner_id": res.partner_id.id,
                 "administrative_officer": res.user_id.id,
                 "note": _("%sm meeting on %s created.") % (res.duration * 30, res.start),
-                "note_type": res.env.ref('partner_daily_notes.note_type_ag_04').id,
+                "note_type": res.env.ref('partner_daily_notes.note_type_as_02').id,
                 "office": res.partner_id.office.id,
                 "note_date": datetime.now(),
             }
@@ -470,7 +470,7 @@ class CalendarAppointment(models.Model):
                 "partner_id": self.partner_id.id,
                 "administrative_officer": self.user_id.id,
                 "note": _("Meeting on %s created.") % self.start,
-                "note_type": self.env.ref('partner_daily_notes.note_type_ag_04').id,
+                "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
                 "office": self.partner_id.office.id,
             }
             self.partner_id.sudo().notes_ids = [(0, 0, vals)]
