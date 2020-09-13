@@ -70,6 +70,8 @@
                         </field>
 
                     </page>
+<!-- Commented out for now, will return in the future -->                    
+<!--
                     <page string="History">
                         <field name="daily_note_ids">
                             <tree>
@@ -81,8 +83,8 @@
                                 <field name="office"/>
                             </tree>
                         </field>
-
                     </page>
+-->
                 </notebook>
                  </form>
         </field>
