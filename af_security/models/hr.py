@@ -24,8 +24,8 @@ from odoo import models, fields, api, _
 class HrEmployee(models.Model):
     _inherit = "hr.employee"
 
-    office_id = fields.Many2one('res.partner', string='Office', domain=[('type', '=', 'af office')])
-    office_ids = fields.Many2many('res.partner', relation='res_partner_office_partner_rel', column1='partner_id', column2='office_id', string='Offices', domain=[('type', '=', 'af office')])
+    office_id = fields.Many2one('hr.department', string='Office', domain=[('type', '=', 'af office')])
+    office_ids = fields.Many2many('hr.department', relation='res_partner_office_partner_rel', column1='partner_id', column2='office_id', string='Offices', domain=[('type', '=', 'af office')])
 
     @api.one
     # @api.onchange('office_id')
