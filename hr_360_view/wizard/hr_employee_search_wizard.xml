@@ -47,7 +47,7 @@
                                 <field name="customer_id"/>
                                 <field name="name"/>
                                 <field name="city"/>
-                                <field name="office"/>
+                                <field name="office_id"/>
                             </tree>
                         </field>
 
@@ -78,7 +78,7 @@
                                 <field name="note_date"/>
                                 <field name="note_type"/>
                                 <field name="note_number"/>
-                                <field name="office"/>
+                                <field name="office_id"/>
                             </tree>
                         </field>
 
