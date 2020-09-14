@@ -19,7 +19,6 @@
         <record id="af_employers_officer" model="res.groups">
             <field name="name">Officer</field>
             <field name="category_id" ref="module_category_af_employers"/>
-            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
             <field name="comment">The user will have acces to local employers.</field>
         </record>
 
@@ -41,7 +40,6 @@
         <record id="af_jobseekers_officer" model="res.groups">
             <field name="name">Officer</field>
             <field name="category_id" ref="module_category_af_jobseekers"/>
-            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
             <field name="comment">The user will have acces to local jobseekers.</field>
         </record>
 
