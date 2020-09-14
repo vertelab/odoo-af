@@ -78,7 +78,7 @@ msgstr "Anställd"
 #. module: af_security
 #: model:ir.module.category,name:af_security.module_category_af_employers
 msgid "Employers Officer"
-msgstr "Arbetagivare"
+msgstr "Arbetsgivare"
 
 #. module: af_security
 #: model:ir.module.category,name:af_security.module_category_af_jobseekers
