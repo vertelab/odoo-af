@@ -35,6 +35,7 @@
         "views/calendar_mapped_dates_view.xml",
         "wizard/cancel_appointment.xml",
         "wizard/create_local_occasion.xml",
+        "report/calendar_report_views.xml",
     ],
     "application": True,
     "installable": True,
