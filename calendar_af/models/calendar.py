@@ -249,8 +249,9 @@ class CalendarAppointment(models.Model):
 
     @api.multi
     def move_meeting_action(self):
+        partner = self.env['calendar.appointment'].browse(self._context.get('active_id')).partner_id
         return {
-            'name': _('Move meeting for %s') % self.env['calendar.appointment'].browse(self._context.get('active_id')).partner_id.company_registry,
+            'name': _('Move meeting for %s - %s') % (partner.company_registry, partner.display_name),
             'res_model': 'calendar.appointment',
             'res_id': self._context.get('active_id', False),
             'view_type': 'form',
@@ -262,8 +263,9 @@ class CalendarAppointment(models.Model):
 
     @api.multi
     def cancel_meeting_action(self):
+        partner = self.env['calendar.appointment'].browse(self._context.get('active_id')).partner_id
         return {
-            'name': _('Cancel meeting for %s') % self.env['calendar.appointment'].browse(self._context.get('active_id')).partner_id.company_registry,
+            'name': _('Cancel meeting for %s - %s') % (partner.company_registry, partner.display_name),
             'res_model': 'calendar.cancel_appointment', 
             'view_type': 'form',
             'view_mode': 'form',
