@@ -56,6 +56,7 @@ class CalendarSchedule(models.Model):
     forecasted_agents = fields.Integer(string='Forecasted agents', help="Number of forecasted agents")
     type_id = fields.Many2one(string='Meeting type', comodel_name='calendar.appointment.type', help="Related meeting type")
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
+    active = fields.Boolean(string='Active', default=True)
 
     @api.one
     def inactivate(self, b = True):
@@ -232,7 +233,8 @@ class CalendarAppointment(models.Model):
     description = fields.Text(string='Description')
     suggestion_ids = fields.One2many(comodel_name='calendar.appointment.suggestion', inverse_name='appointment_id', string='Suggested Dates')
     case_worker_name = fields.Char(string="Case worker", compute="compute_case_worker_name")
-
+    active = fields.Boolean(string='Active', default=True)
+    
     @api.one
     def compute_location(self):
         if self.channel_name == "PDM":
@@ -365,6 +367,15 @@ class CalendarAppointment(models.Model):
         stop = start_meeting_search + timedelta(days=days_last)
         stop.replace(hour=BASE_DAY_STOP.hour, minute=BASE_DAY_STOP.minute, second=0, microsecond=0)
         return stop
+
+    @api.one
+    def inactivate(self, b = True):
+        """Inactivates self. Used as a workaround to inactivate from server actions."""
+        if b:
+            self.active = False
+        else:
+            self.active = True
+        return self.active
 
     def cancel(self, cancel_reason):
         """Cancels a planned meeting"""
