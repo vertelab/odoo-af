@@ -323,8 +323,9 @@ class ResPartner(models.Model):
                     vals = {
                         "name": row['name'],
                         "office_code": row["office_code"],
-                        "external_id": "%s%s" % (transform['external_id'], row['external_id'])
+                        "external_id": "%s%s" % (transformations['external_id'],row['external_id'])
                     }
+                    create = False
 
                 if key == 'partner_id':
                     if 'fiscal_year' in row:
