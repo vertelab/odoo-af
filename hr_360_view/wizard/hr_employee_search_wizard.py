@@ -96,8 +96,8 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
         domain.insert(0, ('is_jobseeker', '=', True))
         _logger.info("domain: %s" % domain)
         
-        if self.search_reason == False and self.identification == False:
-            raise Warning(_("Search reason or identification must be set before searching"))
+        if self.identification == False:
+            raise Warning(_("Identification must be set before searching"))
         elif self.search_reason == "other reason" and self.other_reason == False:
             raise Warning(_("Other reason selected but other reason field is not filled in"))
         
@@ -121,3 +121,49 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             action['res_id'] = partners.id
             action['view_mode'] = 'form'
         return action
+
+    @api.multi
+    def search_jobseeker1(self):
+        # TODO: This should be made into two separate functions so it's 100% clear what the user is trying to do.
+        domain = []
+        if self.social_sec_nr_search:
+            if len(self.social_sec_nr_search) == 13 and self.social_sec_nr_search[8] == "-":
+                domain.append(("social_sec_nr", "=", self.social_sec_nr_search))
+            elif len(self.social_sec_nr_search) == 12:
+                domain.append(("social_sec_nr", "=", "%s-%s" % (self.social_sec_nr_search[:8], self.social_sec_nr_search[8:12])))
+            else:
+                raise Warning(_("Incorrectly formated social security number: %s" % self.social_sec_nr_search))
+        if self.customer_id_search:
+            domain.append(("customer_id", "=", self.customer_id_search))
+        if self.email_search:
+            domain.append(("email", "=", self.email_search))
+        domain = ['|' for x in range(len(domain) - 1)] + domain
+        domain.insert(0, ('is_jobseeker', '=', True))
+        _logger.info("domain: %s" % domain)
+        
+        if self.search_reason == False:
+            raise Warning(_("Search reason must be set before searching"))
+        elif self.search_reason == "other reason" and self.other_reason == False:
+            raise Warning(_("Other reason selected but other reason field is not filled in"))
+        
+        partners = self.env['res.partner'].sudo().search(domain)
+        if not partners:
+            raise Warning(_("No id found"))
+        # TODO: Set correct access level. Probably varies with the reason for the search.
+        partners._grant_jobseeker_access('MYCKET_STARK', user=self.env.user, reason=self.search_reason or self.identification)
+            
+        action = {
+            'name': _('Jobseekers'),
+            'domain': [('id', '=', partners._ids), ('is_jobseeker', '=', True)],
+            #'view_type': 'tree',
+            'res_model': 'res.partner',
+            'view_ids':  [self.env.ref("partner_view_360.view_jobseeker_kanban").id, self.env.ref("partner_view_360.view_jobseeker_form").id, self.env.ref("partner_view_360.view_jobseeker_tree").id], 
+            'view_mode': 'kanban,tree,form',
+            'type': 'ir.actions.act_window',
+        }
+        if len(partners) == 1:
+            action['view_id'] = self.env.ref("partner_view_360.view_jobseeker_form").id
+            action['res_id'] = partners.id
+            action['view_mode'] = 'form'
+        return action
+
