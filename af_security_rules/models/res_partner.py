@@ -43,6 +43,11 @@ class BHTJModel(models.AbstractModel):
     _name = 'bhtj.model'
     _description = 'BHTJ Abstract Model'
 
+    # This model makes it so that BHTJ is called when checking access rules for the inheriting model.
+    # BHTJ data is then injected into context and used in field calculations for res.partner.
+    # This is useful for models that will trigger a check of res.partner access rules, such as res.users.
+    # The goal is to not call BHTJ more than once per server call.
+
     @api.model
     def _apply_ir_rules(self, query, mode='read'):
         """ Inject BHTJ data into context so we only run it once per call,
@@ -104,21 +109,21 @@ class ResPartner(models.Model):
             :param value: the search value.
             :returns: A new search domain matching BHTJ data.
         """
-        _logger.warn(self.env.user)
-        _logger.warn(self.env.context)
+        _logger.debug(self.env.user)
+        _logger.debug(self.env.context)
         #raise Warning('foobar')
         # BHTJ data injected in _apply_ir_rules
         if 'bhtj_keys' in self._context:
             keys = self._context.get('bhtj_keys', {'STARK': [], 'MYCKET_STARK': []})
         else:
             # New exiting path to get here. Try to find original user and contact BHTJ.
-            _logger.warn(_("No BHTJ data in context. Extra call made."
+            _logger.info(_("No BHTJ data in context. Extra call made."
                 "Additional models need to inherit bhtj.model."))
             _logger.debug(''.join(traceback.format_stack()))
             user = self._context.get('uid')
             user = user and self.env['res.users'].browse(user) or self.env.user
             keys = user._bhtj_get_user_keys()
-        _logger.warn(keys)
+        _logger.debug(keys)
         if op in ('=', '!='):
             if value in ('STARK', 'MYCKET_STARK'):
                 pnr = keys[value]
@@ -144,7 +149,7 @@ class ResPartner(models.Model):
                     pnr = 'error'
                     break
             if pnr != 'error':
-                _logger.warn(pnr)
+                _logger.debug(pnr)
                 return [('social_sec_nr', op, pnr)]
         # This search is not supported. Let the developer (hopefully) know.
         raise Warning(_("res.partner._searchjobseeker_access: Search operator '%s'"
@@ -165,15 +170,14 @@ class ResPartner(models.Model):
         global NYCKELTJANST
         if NYCKELTJANST:
             return NYCKELTJANST
-        #try:
-        if True:
+        try:
             key_service = CachingClient(WSDL_NYCKELTJANST)
             if not NYCKELTJANST:
                 NYCKELTJANST = key_service
             return NYCKELTJANST
-        #except:
-        #    # TODO: better logging
-        #    raise Warning(_("Could not connect to BHTJ to check access rights!"))
+        except:
+            # TODO: better logging
+            raise Warning(_("Could not connect to BHTJ to check access rights!"))
     
     @api.model
     def _bhtj_get_initierande_nyckeltjanst(self):
@@ -200,6 +204,7 @@ class ResPartner(models.Model):
             :param start: Datetime. The time when access is to start. Defaults to now. Works in mysterious ways.
             Past dates (time seems to be ignored) generates an error. Future times grant access immediately. Ignore it.
             :param interval: Integer. How many days access is to last. One of 1, 7, 14, 30, 60, 100 and 365.
+            :returns: The BHTJ response as a Dict.
         """
         user = user or self.env.user
         start = start or fields.Datetime.now()
@@ -230,7 +235,7 @@ class ResPartner(models.Model):
                 'friTxt': reason or '',
                 'orsakKod': reason_code or '',},
             'nyckelTyp': access_type,
-            'signatur': user.login
+            'signatur': login
         }
         if reason_code:
             values['orsak']['orsakDef'] = 'NYKOD'
@@ -238,13 +243,12 @@ class ResPartner(models.Model):
             values['orsak']['orsakDef'] = 'FRITXT'
 
         bhtj = self._bhtj_get_initierande_nyckeltjanst()
-        #try:
-        if True:
+        try:
             response = bhtj.service.skapaNyckel(**values)
             response = serialize_object(response, target_cls=dict)
-        #except:
-        #    # TODO: Log error properly.
-        #    raise Warning(_("Could not connect to BHTJ."))
+        except:
+            # TODO: Log error properly.
+            raise Warning(_("Could not connect to BHTJ."))
         return response
 
     @api.model
@@ -265,8 +269,7 @@ class User(models.Model):
         bhtj = self.partner_id._bhtj_get_nyckeltjanst()
         def normalize_pnr(pnr):
             return '%s-%s' % (pnr[:8], pnr[8:12])
-        #try:
-        if True:
+        try:
             # Fetch keys from BHTJ
             response = bhtj.service.hamtaNyckelknippa(self.login)
             # Translate to a more usable structure.
@@ -277,9 +280,9 @@ class User(models.Model):
                 elif key['nyckeltyp'] == 'Mycket stark':
                     keys['MYCKET_STARK'].append(normalize_pnr(key['personnummer']))
             return keys
-        #except:
-        #    # TODO: Log error properly.
-        #    raise Warning(_("Failed to connect to BHTJ!"))
+        except:
+            # TODO: Log error properly.
+            raise Warning(_("Failed to connect to BHTJ!"))
     
     @api.model
     def _get_notes_edit_limit(self):
