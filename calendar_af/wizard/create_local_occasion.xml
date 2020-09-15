@@ -25,7 +25,7 @@
                         <page name="page_details" string="Occasion Details">
                             <group>
                                 <group>
-                                    <field name="name" placeholder="e.g. Business Lunch" invisible="1" />
+                                    <field name="name" invisible="1" />
                                     <field name="start"/>
                                     <field name="stop" invisible="1"/>
                                     <field name="duration_selection" widget="radio"/>

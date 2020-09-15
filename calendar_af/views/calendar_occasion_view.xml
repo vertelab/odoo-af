@@ -45,6 +45,7 @@
                         <page name="page_details" string="Occasion Details"> -->
                     <group string="Create occasion">
                         <group>
+                            <field name="name" invisible="1"/>
                             <field name="start"/>
                             <field name="stop" invisible="0"/>
                             <field name="duration_selection" widget="radio" invisible="1"/>
@@ -133,13 +134,14 @@
         <field name="priority" eval="2" />
         <field name="arch" type="xml">
             <tree string="Occasions">
-                <field name="name" />
-                <field name="start" />
-                <field name="stop" />
-                <field name="type_id" />
-                <field name="office" />
-                <field name="state" />
-                <field name="appointment_id" />
+                <field name="name" invisible="1"/>
+                <field name="type_id"/>
+                <field name="start"/>
+                <field name="stop"/>
+                <field name="office"/>
+                <field name="state"/>
+                <field name="user_id"/>
+                <field name="appointment_id"/>
             </tree>
         </field>
     </record>
