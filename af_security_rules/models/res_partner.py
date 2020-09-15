@@ -235,7 +235,7 @@ class ResPartner(models.Model):
                 'friTxt': reason or '',
                 'orsakKod': reason_code or '',},
             'nyckelTyp': access_type,
-            'signatur': login
+            'signatur': user.login
         }
         if reason_code:
             values['orsak']['orsakDef'] = 'NYKOD'
