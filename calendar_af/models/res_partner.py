@@ -21,7 +21,7 @@
 
 from odoo import models, fields, api, _
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 
 _logger = logging.getLogger(__name__)
 
@@ -85,13 +85,30 @@ class ResPartner(models.Model):
     def compute_show_dates_past(self):
         self.appointment_ids_past = self.appointment_ids.filtered(lambda a: a.start < datetime.now())
 
-    # @api.one
-    # def compute_show_dates_past(self):
-    #     appointments_past = []
-    #     for appointment in self.appointment_ids:
-    #         if appointment.start < datetime.now():
-    #             appointments_past.append(appointment)
-    #     self.appointment_ids_ahead = appointments_ahead
-    
-    
-            
+    @api.model
+    def send_to_stom_track(self, pnr_list):
+        # pnr_list = [{'pnr': '20000202-2382'}, {'pnr': '20000105-2380'}, {'pnr': '20000203-2399'}, {'foo': 'bar' }]
+        pnr_domain = []
+        for pnr in pnr_list:
+            pnr_domain.append(pnr.get('pnr'))
+        # get partners from pnr
+        partner_ids = self.env['res.partner'].sudo().search([('company_registry', 'in', pnr_domain)])
+        # find our appointment types
+        type_21 = self.env.ref('calendar_meeting_type.type_21')
+        type_26 = self.env.ref('calendar_meeting_type.type_26')
+        # find appointments that need to be moved
+        appointment_ids = self.env['calendar.appointment'].search([('partner_id', 'in', partner_ids._ids),('type_id', '=', type_21.id)])
+        
+        desired_time = datetime.now()
+        # loop through appointments to be moved
+        for appointment in appointment_ids:
+            appointment_length = appointment.duration 
+            office = appointment.office
+            # find free occasions for meeting type 26
+            occasions = self.env['calendar.occasion'].sudo().get_bookable_occasions(desired_time, desired_time + timedelta(appointment_length), appointment_length, type_26, office, 1)
+            # loop result until we find a free occasion
+            for book_occasion in occasions:
+                if book_occasion and book_occasion[0]:
+                    # move the appointment
+                    res = appointment.move_appointment(book_occasion[0])
+                    break

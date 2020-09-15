@@ -462,7 +462,7 @@ class CalendarAppointment(models.Model):
         return res
 
     @api.one
-    def move_appointment(self, occasions, reason):
+    def move_appointment(self, occasions, reason=False):
         """"Intended to be used to move appointments from one bookable occasion to another. 
         :param occasions: a recordset of odoo occasions to move the meeting to."""
         res = False
@@ -472,7 +472,7 @@ class CalendarAppointment(models.Model):
             vals = {
                 'start': occasions[0].start,
                 'stop': occasions[-1].stop,
-                'duration': len(occasions) * BASE_DURATION,
+                'duration': len(occasions) * BASE_DURATION/60,
                 'type_id': occasions[0].type_id.id,
                 'additional_booking': False,
                 'occasion_ids': [(6, 0, occasions._ids)],
@@ -622,7 +622,7 @@ class CalendarOccasion(models.Model):
         # Find when to create new occasion
         start_date = self._get_min_occasions(type_id, day_start, day_stop)
         # Calculate how many occasions we need
-        no_occasions = int(duration / BASE_DURATION)
+        no_occasions = int(duration*60.0 / BASE_DURATION)
         # Create new occasions.
         res = self.env['calendar.occasion']
         for i in range(no_occasions):
@@ -630,7 +630,7 @@ class CalendarOccasion(models.Model):
                 'name': '%sm @ %s' % (duration, start_date),
                 'start': start_date,
                 'stop': start_date + timedelta(minutes=BASE_DURATION),
-                'duration': BASE_DURATION,
+                'duration': BASE_DURATION/60,
                 'appointment_id': False,
                 'type_id': type_id.id,
                 'channel': type_id.channel.id,
