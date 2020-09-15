@@ -23,6 +23,7 @@ from odoo import models, fields, api, _
 from pytz import timezone
 from datetime import timedelta
 from zeep.client import CachingClient
+from zeep.helpers import serialize_object
 from zeep import xsd
 import traceback
 from uuid import uuid4
@@ -240,6 +241,7 @@ class ResPartner(models.Model):
         #try:
         if True:
             response = bhtj.service.skapaNyckel(**values)
+            response = serialize_object(response, target_cls=dict)
         #except:
         #    # TODO: Log error properly.
         #    raise Warning(_("Could not connect to BHTJ."))
