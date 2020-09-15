@@ -223,7 +223,7 @@ class CalendarAppointment(models.Model):
     location_code = fields.Char(string='Location')
     location = fields.Char(string="Location", compute="compute_location")
     office = fields.Many2one(comodel_name='res.partner', string="Office")
-    office_code = fields.Char(string='Office code', related="office.office_code")
+#    office_code = fields.Char(string='Office code', related="office.office_code")
     occasion_ids = fields.One2many(comodel_name='calendar.occasion', inverse_name='appointment_id', string="Occasion")
     type_id = fields.Many2one(string='Type', required=True, comodel_name='calendar.appointment.type')
     channel =  fields.Many2one(string='Channel', required=True, comodel_name='calendar.channel', related='type_id.channel', readonly=True)
@@ -240,7 +240,7 @@ class CalendarAppointment(models.Model):
         if self.channel_name == "PDM":
             self.location = _("Distance")
         else:
-            self.location = self.office_code
+            self.location = None #self.office_code
 
     @api.one
     def compute_case_worker_name(self):
@@ -534,7 +534,7 @@ class CalendarOccasion(models.Model):
                                         default='draft', 
                                         help="Status of the meeting")
     office = fields.Many2one(comodel_name='res.partner', string="Office", domain="[('type', '=', 'af office')]")
-    office_code = fields.Char(string='Office code', related="office.office_code")
+   # office_code = fields.Char(string='Office code', related="office.office_code")
 
     @api.onchange('type_id')
     def set_duration_selection(self):
