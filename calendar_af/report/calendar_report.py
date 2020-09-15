@@ -29,6 +29,13 @@ class CalendarAppointmentReport(models.Model):
 
     name = fields.Char(string='Name', readonly=True)
     duration = fields.Float(string='Duration', readonly=True)
+    app_count = fields.Integer(string='Booked appointments', readonly=True)
+    occ_count = fields.Integer(string='Possible appointments', readonly=True)
+    add_book_count = fields.Integer(string='No. additional occasions', readonly=True)
+    booked_from_cal = fields.Integer(string='Booked from calendar', readonly=True)
+    free_occ = fields.Integer(string='Free occasions', readonly=True)
+    no_overbooked = fields.Integer(string='Overbooked occasions', readonly=True)
+    app_id = fields.Integer(string='Occasion id', readonly=True)
     user_id = fields.Many2one(comodel_name='res.users', string='Case worker', readonly=True)
     partner_id = fields.Many2one(comodel_name='res.users', string='Case worker', readonly=True)
     app_state = fields.Selection(selection=[('free', 'Draft'),
@@ -56,21 +63,18 @@ class CalendarAppointmentReport(models.Model):
     app_stop = fields.Datetime(string='Appointment stop', readonly=True)
     occ_start_time = fields.Char(string='Occasion start time', readonly=True)
     app_start_time = fields.Char(string='Appointment start time', readonly=True)
-    
-    # app_datetime = fields.Datetime(string='Scheduled Agents', readonly=True)
-    # week_num = fields.Char(string='Scheduled Agents', readonly=True)
-    # scheduled_agents = fields.Integer(string='Scheduled Agents', readonly=True)
-    # booked_apps_total = fields.Integer(string='Total booked appointments', readonly=True)
-    # additional_bookings = fields.Integer(string='Additional bookings', readonly=True)
-    # booked_ordinary_apps = fields.Integer(string='Booked ordinary appointments', readonly=True)
-    # free_occasions = fields.Integer(string='Free occasions', readonly=True)
-    # overbooking = fields.Integer(string='Overbooking', readonly=True)
-    
+
     def _select(self):
         select_str = """
              SELECT
-                    (select 1 ) AS nbr,
+                    COUNT(DISTINCT ca.id) as app_count,
+                    COUNT(case co.additional_booking when 'f' then 1 else null end) as occ_count,
+                    COUNT(case co.additional_booking when 't' then 1 else null end) as add_book_count,
+                    COUNT(DISTINCT ca.id) - COUNT(case co.additional_booking when 't' then 1 else null end) as booked_from_cal,
+                    COUNT(DISTINCT co.id) - COUNT(ca.id) as free_occ,
+                    case when COUNT(case co.additional_booking when 'f' then 1 else null end) - COUNT(ca.id) > 0 then 0 else -(COUNT(case co.additional_booking when 'f' then 1 else null end) - COUNT(ca.id)) end as no_overbooked,
                     co.id as id,
+                    ca.id as app_id,
                     co.start as occ_start,
                     co.stop as occ_stop,
                     co.duration as duration,
@@ -85,16 +89,16 @@ class CalendarAppointmentReport(models.Model):
                     co.additional_booking as additional_booking,
                     ca.start as app_start,
                     ca.stop as app_stop,
-                    CONCAT(CAST(EXTRACT(HOUR FROM co.start) AS varchar),':',CAST(EXTRACT(MINUTE FROM co.start) AS varchar)) as occ_start_time,
-                    CONCAT(CAST(EXTRACT(HOUR FROM ca.start) AS varchar),':',CAST(EXTRACT(MINUTE FROM ca.start) AS varchar)) as app_start_time
+                    CONCAT(LPAD(CAST(EXTRACT(HOUR FROM co.start) AS varchar),2,'0'),':',RPAD(CAST(EXTRACT(MINUTE FROM co.start) AS varchar),2,'0')) as occ_start_time,
+                    CONCAT(LPAD(CAST(EXTRACT(HOUR FROM ca.start) AS varchar),2,'0'),':',RPAD(CAST(EXTRACT(MINUTE FROM ca.start) AS varchar),2,'0')) as app_start_time
         """
-        # (extract('epoch' from (t.date_deadline-(now() at time zone 'UTC'))))/(3600*24)  as delay_endings_days
         return select_str
 
     def _group_by(self):
         group_by_str = """
                 GROUP BY
                     co.id,
+                    ca.id,
                     co.start,
                     co.stop,
                     co.duration,
@@ -121,19 +125,3 @@ class CalendarAppointmentReport(models.Model):
                 LEFT JOIN calendar_appointment ca ON ca.id = co.appointment_id
                     %s
         """ % (self._table, self._select(), self._group_by()))
-
-
-
-        # """
-        # select * from calendar_occasion co
-        # LEFT JOIN calendar_appointment ca ON ca.id = co.appointment_id
-        # """
-
-        # self._cr.execute("""
-        #     CREATE view %s as
-        #       %s
-        #       FROM calendar_occasion co
-        #         LEFT JOIN calendar_appointment ca ON ca.id = co.appointment_id
-        #             WHERE t.active = 'true'
-        #             %s
-        # """ % (self._table, self._select(), self._group_by()))
