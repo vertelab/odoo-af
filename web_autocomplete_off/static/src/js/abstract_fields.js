@@ -12,12 +12,12 @@ odoo.define('web_autocomplete_off.AbstractField', function (require) {
                 self.$el.each(function (i, el) {
                     if (['INPUT', 'TEXTAREA','SELECT'].some(t => t === el.tagName)
                         && !el.hasAttribute('autocomplete')) {
-                        el.setAttribute('autocomplete', 'none');
+                        el.setAttribute('autocomplete', 'off');
                     }
                 })
                 self.$('input, select, textarea')
                     .filter((i, el) => !el.hasAttribute('autocomplete'))
-                    .attr('autocomplete', 'none');
+                    .attr('autocomplete', 'off');
                     return self._render();
                 });
         },
