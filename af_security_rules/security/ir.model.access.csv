@@ -7,3 +7,6 @@ access_af_emp_officer_res_partner_notes,res.partner.notes - Employers Officer,pa
 access_af_emp_editor_res_partner_notes,res.partner.notes - Employers Editor,partner_daily_notes.model_res_partner_notes,af_security.af_employers_editor,1,0,1,1
 access_af_seekers_officer_res_partner_notes,res.partner.notes - Jobseekers Officer,partner_daily_notes.model_res_partner_notes,af_security.af_jobseekers_officer,1,0,1,0
 access_af_seekers_editor_res_partner_notes,res.partner.notes - Jobseekers Editor,partner_daily_notes.model_res_partner_notes,af_security.af_jobseekers_editor,1,0,1,1
+access_af_seekers_officer_calendar_appointment,calendar.appointment - Jobseekers Officer,calendar_af.model_calendar_appointment,af_security.af_jobseekers_officer,1,1,1,0
+access_af_seekers_officer_calendar_occasion,calendar.occasion - Jobseekers Officer,calendar_af.model_calendar_occasion,af_security.af_jobseekers_officer,1,1,1,0
+access_af_seekers_officer_calendar_appointment_suggestion,calendar.appointment.suggestion - Jobseekers Officer,calendar_af.model_calendar_appointment_suggestion,af_security.af_jobseekers_officer,1,1,1,1
