@@ -59,7 +59,9 @@ class CreateLocalOccasion(models.TransientModel):
 
     @api.onchange('type_id')
     def set_duration_selection(self):
-        self.name = self.type_id.name
+        self.name = self.type_id.name,
+        self.duration = self.type_id.duration / 60.0
+
         if self.duration == 0.5:
             self.duration_selection = '30 minutes'
         elif self.duration == 1.0:
@@ -79,6 +81,8 @@ class CreateLocalOccasion(models.TransientModel):
             self.stop = self.start + timedelta(minutes=int(self.duration * 60)) 
 
     def action_create_occasions(self):
+        if not ((self.start.minute in [0,30] and self.stop.second == 0) and (self.stop.minute in [0,30] and self.stop.second == 0)):
+            raise Warning('Start or stop time is not and exacly an hour or halfhour.')
         # Check how many 30min occasions we need
         if self.duration > 0.5:
             no_occ = int(self.duration / 0.5)

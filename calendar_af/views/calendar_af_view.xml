@@ -58,7 +58,7 @@ unused_occasions.unlink()</field>
         <field name="model_id" ref="calendar_af.model_calendar_occasion"/>
         <field name="state">code</field>
         <field name="code">for rec in records:
-  if rec.state == 'request':
+  if rec.state in ['request', 'ok']:
     res = rec.reject_occasion()
     if not res:
       raise Warning("One of your occasions is not a request.")</field>

@@ -134,7 +134,7 @@ class CalendarAppointmentSuggestion(models.Model):
     type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type')
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
     office = fields.Many2one(comodel_name='res.partner', string="Office")
-    
+    user_id = fields.Many2one(comodel_name='res.users', string="Case worker")
 
     @api.multi
     def select_suggestion(self):
@@ -325,6 +325,7 @@ class CalendarAppointment(models.Model):
                         'type_id': occasion[0].type_id.id,
                         'channel': occasion[0].channel.id,
                         'office': occasion[0].office.id,
+                        'user_id': occasion[0].user_id,
                         'occasion_ids': [(6, 0, occasion._ids)],
                     }))
         self.suggestion_ids = suggestion_ids
@@ -531,10 +532,11 @@ class CalendarOccasion(models.Model):
                                         ('ok', 'Accepted'),
                                         ('fail', 'Rejected')],
                                         string='Occasion state', 
-                                        default='draft', 
+                                        default='request', 
                                         help="Status of the meeting")
     office = fields.Many2one(comodel_name='res.partner', string="Office", domain="[('type', '=', 'af office')]")
-   # office_code = fields.Char(string='Office code', related="office.office_code")
+    office_code = fields.Char(string='Office code', related="office.office_code", readonly=True)
+    app_partner_pnr = fields.Char(string='Attendee SSN', related="appointment_id.partner_id.company_registry", readonly=True)
 
     @api.onchange('type_id')
     def set_duration_selection(self):
@@ -667,7 +669,7 @@ class CalendarOccasion(models.Model):
     @api.multi
     def reject_occasion(self):
         """User rejects suggested occasion"""
-        if self.state == 'request':
+        if self.state in ['request','ok']:
             self.state = 'fail'
             ret = True
         else:
@@ -694,6 +696,8 @@ class CalendarOccasion(models.Model):
             domain = [('start', '=', start_dt), ('type_id', '=', type_id.id), ('appointment_id', '=', False)]
             if office:
                 domain.append(('office', '=', office.id))
+            if type_id.channel == self.env.ref('calendar_channel.channel_local'):
+                domain.append(('state', '=', 'ok'))
             return self.env['calendar.occasion'].search(domain, limit=max_depth)
         #[[[], []], dag[tidsslot[ocassions]]]
 

@@ -82,7 +82,7 @@ msgstr "AF Publicering av tillfälle"
 #. module: calendar_af
 #: model:ir.actions.server,name:calendar_af.action_occasion_reject
 msgid "AF Reject occasion"
-msgstr "AF Avvisat tillfälle"
+msgstr "AF Avböjt tillfälle"
 
 #. module: calendar_af
 #: selection:calendar.occasion,state:0
@@ -926,7 +926,7 @@ msgstr "Anledning för avbokning"
 #: selection:calendar.occasion,state:0
 #: selection:report.calendar.appointment,occ_state:0
 msgid "Rejected"
-msgstr ""
+msgstr "Avböjd"
 
 #. module: calendar_af
 #: model:ir.model.fields,help:calendar_af.field_calendar_schedule__type_id
