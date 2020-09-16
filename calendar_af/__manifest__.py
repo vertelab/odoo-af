@@ -10,9 +10,7 @@
     "depends": [
         "calendar",
         "contacts",
-        "partner_view_360",
         "partner_daily_notes",
-        "hr_360_view",
         "af_security",
         "hr_skill",
     ],
@@ -25,7 +23,7 @@
         "security/ir.model.access.csv",
         "views/res_partner_view.xml",
         "views/res_users_view.xml",
-        "views/hr_employee_view.xml",
+        #"views/hr_employee_view.xml",
         "views/calendar_af_view.xml",
         "views/calendar_schedule_view.xml",
         "views/calendar_appointment_view.xml",
