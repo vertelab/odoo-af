@@ -223,7 +223,7 @@ class CalendarAppointment(models.Model):
     location_code = fields.Char(string='Location')
     location = fields.Char(string="Location", compute="compute_location")
     office = fields.Many2one(comodel_name='res.partner', string="Office")
-    office_code = fields.Char(string='Office code', related="office.office_code")
+#    office_code = fields.Char(string='Office code', related="office.office_code")
     occasion_ids = fields.One2many(comodel_name='calendar.occasion', inverse_name='appointment_id', string="Occasion")
     type_id = fields.Many2one(string='Type', required=True, comodel_name='calendar.appointment.type')
     channel =  fields.Many2one(string='Channel', required=True, comodel_name='calendar.channel', related='type_id.channel', readonly=True)
@@ -240,7 +240,7 @@ class CalendarAppointment(models.Model):
         if self.channel_name == "PDM":
             self.location = _("Distance")
         else:
-            self.location = self.office_code
+            self.location = None #self.office_code
 
     @api.one
     def compute_case_worker_name(self):
@@ -259,7 +259,7 @@ class CalendarAppointment(models.Model):
             'view_type': 'form',
             'view_mode': 'form',
             'view_id': self.env.ref('calendar_af.view_calendar_appointment_move_form').id,
-            'target': 'new',
+            'target': 'current',
             'type': 'ir.actions.act_window',
         }
 
@@ -485,7 +485,7 @@ class CalendarAppointment(models.Model):
                 "name": _("Meeting moved"),
                 "partner_id": self.partner_id.id,
                 "administrative_officer": self.user_id.id,
-                "note": _("Meeting on %s created.") % self.start,
+                "note": _("Meeting on %s moved") % self.start + (_(" because of reason: %s.") % reason.name) if reason else ".",
                 "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
                 "office": self.partner_id.office.id,
             }
@@ -610,7 +610,7 @@ class CalendarOccasion(models.Model):
         # Check if overbooking is allowed on this meeting type
         if not type_id.additional_booking:
             # TODO: Throw error instead?
-            _logger.warn(_("Overbooking not allowed on %s" % type_id.name))
+            _logger.debug(_("Overbooking not allowed on %s" % type_id.name))
             return False
         # Replace date with mapped date if we have one
         date = self._check_date_mapping(date)
