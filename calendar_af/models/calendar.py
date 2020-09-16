@@ -135,6 +135,21 @@ class CalendarAppointmentSuggestion(models.Model):
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
     office = fields.Many2one(comodel_name='res.partner', string="Office")
     user_id = fields.Many2one(comodel_name='res.users', string="Case worker")
+    weekday = fields.Char(string='Weekday', compute="_compute_weekday")
+    
+    @api.one
+    def _compute_weekday(self):
+        if self.start:
+            daynum2dayname = {
+                0: _("Monday"),
+                1: _("Tuesday"),
+                2: _("Wednesday"),
+                3: _("Thursday"),
+                4: _("Friday"),
+                5: _("Saturday"),
+                6: _("Sunday"),
+            }
+            self.weekday = daynum2dayname[self.start.weekday()]
 
     @api.multi
     def select_suggestion(self):
