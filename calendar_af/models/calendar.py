@@ -259,7 +259,7 @@ class CalendarAppointment(models.Model):
             'view_type': 'form',
             'view_mode': 'form',
             'view_id': self.env.ref('calendar_af.view_calendar_appointment_move_form').id,
-            'target': 'new',
+            'target': 'current',
             'type': 'ir.actions.act_window',
         }
 
@@ -484,7 +484,7 @@ class CalendarAppointment(models.Model):
                 "name": _("Meeting moved"),
                 "partner_id": self.partner_id.id,
                 "administrative_officer": self.user_id.id,
-                "note": _("Meeting on %s created.") % self.start,
+                "note": _("Meeting on %s moved") % self.start + (_(" because of reason: %s.") % reason.name) if reason else ".",
                 "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
                 "office": self.partner_id.office.id,
             }
@@ -608,7 +608,7 @@ class CalendarOccasion(models.Model):
         # Check if overbooking is allowed on this meeting type
         if not type_id.additional_booking:
             # TODO: Throw error instead?
-            _logger.warn(_("Overbooking not allowed on %s" % type_id.name))
+            _logger.debug(_("Overbooking not allowed on %s" % type_id.name))
             return False
         # Replace date with mapped date if we have one
         date = self._check_date_mapping(date)

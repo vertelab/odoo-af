@@ -181,6 +181,7 @@
                             <field string="Attendees" name="partner_id" widget="many2oneattendee" placeholder="Select attendees..." />
                             <field string="Case worker" name="user_id" widget="many2oneattendee" placeholder="Select case worker..." 
                                 attrs="{'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}" />
+                            <field string="Move reason" name="cancel_reason"/>
                         </group>
                     </group>
                     <notebook>
@@ -204,13 +205,13 @@
                         <button name="compute_suggestion_ids" type="object" string="Update" />
                     </span>
                     <field name="suggestion_ids">
-                        <tree string="Bookable Occasions">
+                        <tree string="Bookable Occasions" limit="10">
                             <field name="start" />
                             <field name="stop" />
                             <field name="duration" />
                             <field name="type_id" />
                             <field name="occasion_ids" invisible="1" />
-                            <button name="select_suggestion" type="object" string="Move" />
+                            <button name="select_suggestion_move" type="object" string="Move" />
                         </tree>
                     </field>
                 </sheet>
