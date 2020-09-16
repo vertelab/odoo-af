@@ -176,7 +176,7 @@ msgstr "Möten att avboka"
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_occasion__app_partner_pnr
 msgid "Attendee SSN"
-msgstr ""
+msgstr "Deltagare (pnr)"
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_appointment_form
@@ -342,7 +342,7 @@ msgstr "Handläggare"
 #: code:addons/calendar_af/models/calendar.py:373
 #, python-format
 msgid "Case worker has no free occasions at that time."
-msgstr ""
+msgstr "Handläggare har inga lediga tider vid det klockslaget"
 
 #. module: calendar_af
 #: model:ir.model,name:calendar_af.model_calendar_channel
@@ -677,7 +677,7 @@ msgstr "Möteskanal"
 #: code:addons/calendar_af/models/calendar.py:429
 #, python-format
 msgid "Meeting confirmed"
-msgstr ""
+msgstr "Möte bekräftat"
 
 #. module: calendar_af
 #: code:addons/calendar_af/models/calendar.py:468
@@ -927,12 +927,12 @@ msgstr "Föregående möten"
 #: selection:calendar.occasion,state:0
 #: selection:report.calendar.appointment,occ_state:0
 msgid "Published"
-msgstr ""
+msgstr "Publicerat"
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.calendar_occasion_local_search
 msgid "Published or Accepted"
-msgstr ""
+msgstr "Publicerat eller Accepterat"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_cancel_appointment__cancel_reason
@@ -972,13 +972,13 @@ msgstr "Reserverad"
 #: model_terms:ir.ui.view,arch_db:calendar_af.calendar_appointment_search
 #: model_terms:ir.ui.view,arch_db:calendar_af.calendar_occasion_local_search
 msgid "Rules"
-msgstr ""
+msgstr "Regler"
 
 #. module: calendar_af
 #: code:addons/calendar_af/models/calendar.py:149
 #, python-format
 msgid "Saturday"
-msgstr ""
+msgstr "Lördag"
 
 #. module: calendar_af
 #: model:ir.model,name:calendar_af.model_calendar_schedule
@@ -1115,7 +1115,7 @@ msgstr "Föreslagna Datum"
 #: code:addons/calendar_af/models/calendar.py:150
 #, python-format
 msgid "Sunday"
-msgstr ""
+msgstr "Söndag"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment_type__ipf_id
