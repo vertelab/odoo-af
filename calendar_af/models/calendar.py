@@ -56,6 +56,7 @@ class CalendarSchedule(models.Model):
     forecasted_agents = fields.Integer(string='Forecasted agents', help="Number of forecasted agents")
     type_id = fields.Many2one(string='Meeting type', comodel_name='calendar.appointment.type', help="Related meeting type")
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
+    active = fields.Boolean(string='Active', default=True)
 
     @api.one
     def inactivate(self, b = True):
@@ -222,7 +223,7 @@ class CalendarAppointment(models.Model):
     location_code = fields.Char(string='Location')
     location = fields.Char(string="Location", compute="compute_location")
     office = fields.Many2one(comodel_name='res.partner', string="Office")
-    office_code = fields.Char(string='Office code', related="office.office_code")
+#    office_code = fields.Char(string='Office code', related="office.office_code")
     occasion_ids = fields.One2many(comodel_name='calendar.occasion', inverse_name='appointment_id', string="Occasion")
     type_id = fields.Many2one(string='Type', required=True, comodel_name='calendar.appointment.type')
     channel =  fields.Many2one(string='Channel', required=True, comodel_name='calendar.channel', related='type_id.channel', readonly=True)
@@ -232,13 +233,14 @@ class CalendarAppointment(models.Model):
     description = fields.Text(string='Description')
     suggestion_ids = fields.One2many(comodel_name='calendar.appointment.suggestion', inverse_name='appointment_id', string='Suggested Dates')
     case_worker_name = fields.Char(string="Case worker", compute="compute_case_worker_name")
-
+    active = fields.Boolean(string='Active', default=True)
+    
     @api.one
     def compute_location(self):
         if self.channel_name == "PDM":
             self.location = _("Distance")
         else:
-            self.location = self.office_code
+            self.location = None #self.office_code
 
     @api.one
     def compute_case_worker_name(self):
@@ -366,6 +368,15 @@ class CalendarAppointment(models.Model):
         stop.replace(hour=BASE_DAY_STOP.hour, minute=BASE_DAY_STOP.minute, second=0, microsecond=0)
         return stop
 
+    @api.one
+    def inactivate(self, b = True):
+        """Inactivates self. Used as a workaround to inactivate from server actions."""
+        if b:
+            self.active = False
+        else:
+            self.active = True
+        return self.active
+
     def cancel(self, cancel_reason):
         """Cancels a planned meeting"""
         # Do not allow cancelation of meetings that have been sent to ACE
@@ -451,7 +462,7 @@ class CalendarAppointment(models.Model):
         return res
 
     @api.one
-    def move_appointment(self, occasions, reason):
+    def move_appointment(self, occasions, reason=False):
         """"Intended to be used to move appointments from one bookable occasion to another. 
         :param occasions: a recordset of odoo occasions to move the meeting to."""
         res = False
@@ -461,7 +472,7 @@ class CalendarAppointment(models.Model):
             vals = {
                 'start': occasions[0].start,
                 'stop': occasions[-1].stop,
-                'duration': len(occasions) * BASE_DURATION,
+                'duration': len(occasions) * BASE_DURATION/60,
                 'type_id': occasions[0].type_id.id,
                 'additional_booking': False,
                 'occasion_ids': [(6, 0, occasions._ids)],
@@ -523,7 +534,7 @@ class CalendarOccasion(models.Model):
                                         default='draft', 
                                         help="Status of the meeting")
     office = fields.Many2one(comodel_name='res.partner', string="Office", domain="[('type', '=', 'af office')]")
-    office_code = fields.Char(string='Office code', related="office.office_code")
+   # office_code = fields.Char(string='Office code', related="office.office_code")
 
     @api.onchange('type_id')
     def set_duration_selection(self):
@@ -611,7 +622,7 @@ class CalendarOccasion(models.Model):
         # Find when to create new occasion
         start_date = self._get_min_occasions(type_id, day_start, day_stop)
         # Calculate how many occasions we need
-        no_occasions = int(duration / BASE_DURATION)
+        no_occasions = int(duration*60.0 / BASE_DURATION)
         # Create new occasions.
         res = self.env['calendar.occasion']
         for i in range(no_occasions):
@@ -619,7 +630,7 @@ class CalendarOccasion(models.Model):
                 'name': '%sm @ %s' % (duration, start_date),
                 'start': start_date,
                 'stop': start_date + timedelta(minutes=BASE_DURATION),
-                'duration': BASE_DURATION,
+                'duration': BASE_DURATION/60,
                 'appointment_id': False,
                 'type_id': type_id.id,
                 'channel': type_id.channel.id,

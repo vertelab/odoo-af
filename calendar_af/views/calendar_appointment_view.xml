@@ -112,6 +112,7 @@
                 <sheet>
                     <group string="Book meeting">
                         <group>
+                            <field name="name" invisible="1"/>
                             <field string="Meeting channel" name="channel" readonly="0" />
                             <field string="Meeting channel" name="channel_name" invisible="1" />
                             <field string="Meeting type" name="type_id" domain="[('channel', '=', channel)]" context="{ 'default_channel': %(calendar_channel.channel_pdm)d }"/>
@@ -170,6 +171,7 @@
                 <sheet>
                     <group string="Move meeting">
                         <group>
+                            <field name="name" invisible="1"/>
                             <field string="Meeting channel" name="channel" readonly="0" />
                             <field string="Meeting channel" name="channel_name" invisible="1" />
                             <field string="Meeting type" name="type_id" domain="[('channel', '=', channel)]" context="{ 'default_channel': %(calendar_channel.channel_pdm)d }"/>
