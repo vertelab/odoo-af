@@ -36,6 +36,7 @@ BASE_DURATION = 30.0
 # BASE_DAY_START, BASE_DAY_STOP: The hours between which we normally accept appointments
 BASE_DAY_START = pytz.timezone(LOCAL_TZ).localize(datetime.now().replace(hour=9, minute=0, second=0, microsecond=0)).astimezone(pytz.utc)
 BASE_DAY_STOP = pytz.timezone(LOCAL_TZ).localize(datetime.now().replace(hour=16, minute=0, second=0, microsecond=0)).astimezone(pytz.utc)
+BASE_DAY_LUNCH = pytz.timezone(LOCAL_TZ).localize(datetime.now().replace(hour=12, minute=0, second=0, microsecond=0)).astimezone(pytz.utc)
 # RESERVED_TIMEOUT is the default time before a reservation times out.
 RESERVED_TIMEOUT = 300.0
 
@@ -153,8 +154,7 @@ class CalendarAppointmentSuggestion(models.Model):
 
     @api.multi
     def select_suggestion(self):
-        # Check that occasion_ids still are free
-        # Write data to appointment_id
+        # check state of appointment
         if self.appointment_id.state in ['reserved', 'confirmed']:
             raise Warning(_("This appointment is already booked."))
 
@@ -175,6 +175,7 @@ class CalendarAppointmentSuggestion(models.Model):
 
                 occasions |= free_occasion
         
+        # Write data to appointment_id
         occasions.write({'appointment_id': self.appointment_id.id})
         self.appointment_id.write({
             'state': 'confirmed',
@@ -374,13 +375,28 @@ class CalendarAppointment(models.Model):
 
     def start_meeting_search(self, type_id):
         days_first = self.type_id.days_first if self.type_id.days_first else 3
-        start = datetime.now() + timedelta(days=days_first)
+        start = loop_start = datetime.now()
+        j = 0
+        for i in range(days_first):
+            loop_start = loop_start + timedelta(days=1)
+            if loop_start.weekday() in [5,6]:
+                j += 1
+        days_first = days_first + j
+        start = start + timedelta(days=days_first)
         start.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute, second=0, microsecond=0)
         return start
 
     def stop_meeting_search(self, start_meeting_search, type_id):
         days_last = self.type_id.days_last if self.type_id.days_last else 15
-        stop = start_meeting_search + timedelta(days=days_last)
+        stop = loop_start = start_meeting_search
+
+        j = 0
+        for i in range(days_last):
+            loop_start = loop_start + timedelta(days=1)
+            if loop_start.weekday() in [5,6]:
+                j += 1
+        days_last = days_last + j
+        stop = stop + timedelta(days=days_last)
         stop.replace(hour=BASE_DAY_STOP.hour, minute=BASE_DAY_STOP.minute, second=0, microsecond=0)
         return stop
 
@@ -598,11 +614,14 @@ class CalendarOccasion(models.Model):
         """Returns the timeslot (as a start date, DateTime) with the least 
         amount of occurances for a specific timeframe"""
         date_start = date_start or copy.copy(BASE_DAY_START)
+        # Additional occasions should not be created after 15:00
         date_stop = date_stop or copy.copy(BASE_DAY_STOP)
         loop_date = date_start
         occ_time = {}
         while loop_date < date_stop:
-            occ_time[loop_date.strftime("%Y-%m-%dT%H:%M:%S")] = self.env['calendar.occasion'].search_count([('start', '=', loop_date),('type_id', '=', type_id.id)])
+            # make sure we don't book meetings during lunch
+            if loop_date.hour != BASE_DAY_LUNCH.hour:
+                occ_time[loop_date.strftime("%Y-%m-%dT%H:%M:%S")] = self.env['calendar.occasion'].search_count([('start', '=', loop_date),('type_id', '=', type_id.id)])
             loop_date = loop_date + timedelta(minutes=BASE_DURATION)
         occ_time_min_key = min(occ_time, key=occ_time.get)
         res = datetime.strptime(occ_time_min_key, "%Y-%m-%dT%H:%M:%S")
@@ -632,14 +651,14 @@ class CalendarOccasion(models.Model):
         date_list = date.strftime("%Y-%-m-%-d").split("-")
         # Copy to make sure we dont overwrite BASE_DAY_START or BASE_DAY_STOP
         day_start = copy.copy(BASE_DAY_START)
-        day_stop = copy.copy(BASE_DAY_STOP)
+        day_stop = copy.copy(BASE_DAY_STOP) - timedelta(hours=1)
         # Ugly, ugly code..
         day_start = day_start.replace(year=int(date_list[0]), month=int(date_list[1]), day=int(date_list[2]))
         day_stop = day_stop.replace(year=int(date_list[0]), month=int(date_list[1]), day=int(date_list[2]))
         # Find when to create new occasion
         start_date = self._get_min_occasions(type_id, day_start, day_stop)
         # Calculate how many occasions we need
-        no_occasions = int(duration*60.0 / BASE_DURATION)
+        no_occasions = int(duration / BASE_DURATION)
         # Create new occasions.
         res = self.env['calendar.occasion']
         for i in range(no_occasions):
@@ -693,7 +712,7 @@ class CalendarOccasion(models.Model):
         return ret
 
     @api.model
-    def get_bookable_occasions(self, start, stop, duration, type_id, office=False, max_depth = 1):
+    def get_bookable_occasions(self, start, stop, duration, type_id, office=False, max_depth=1):
         """Returns a list of occasions matching the defined parameters of the appointment. Creates additional 
         occasions if allowed.
         :param start: Start search as this time.
@@ -708,9 +727,10 @@ class CalendarOccasion(models.Model):
         td_base_duration = timedelta(minutes=BASE_DURATION)
         def get_occasions(start_dt):
             start_dt = start_dt.replace(second=0, microsecond=0)
-            domain = [('start', '=', start_dt), ('type_id', '=', type_id.id), ('appointment_id', '=', False)]
+            domain = [('start', '=', start_dt), ('type_id', '=', type_id.id), ('appointment_id', '=', False), ('additional_booking', '=', False)]
             if office:
                 domain.append(('office', '=', office.id))
+            # TODO: This if can and should probably be removed but I don't want to break anything right now
             if type_id.channel == self.env.ref('calendar_channel.channel_local'):
                 domain.append(('state', '=', 'ok'))
             return self.env['calendar.occasion'].search(domain, limit=max_depth)
@@ -766,7 +786,7 @@ class CalendarOccasion(models.Model):
         # free occasions, create new ones:
         if type_id.additional_booking and all( not l for l in occ_lists):
             # Changed this line to create over bookings on the LAST allowed date.
-            occ_lists[-1].append(self._get_additional_booking(stop, duration, type_id, office))
+            occ_lists[-1].append([self._get_additional_booking(stop, duration, type_id, office)])
 
         return occ_lists
 
