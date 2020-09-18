@@ -50,7 +50,7 @@
                                 <field name="customer_id"/>
                                 <field name="name"/>
                                 <field name="city"/>
-                                <field name="office"/>
+                                <!-- <field name="office"/> -->
                             </tree>
                         </field>
 

@@ -566,7 +566,7 @@ class CalendarOccasion(models.Model):
                                         default='request', 
                                         help="Status of the meeting")
     office = fields.Many2one(comodel_name='res.partner', string="Office", domain="[('type', '=', 'af office')]")
-    office_code = fields.Char(string='Office code', related="office.office_code", readonly=True)
+    #office_code = fields.Char(string='Office code', related="office.office_code", readonly=True)
     app_partner_pnr = fields.Char(string='Attendee SSN', related="appointment_id.partner_id.company_registry", readonly=True)
 
     @api.onchange('type_id')
