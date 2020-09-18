@@ -18,6 +18,8 @@
                     </group>
                 </group>
                 <group></group>
+                <button name="search_jobseeker" string="search" type="object" class="btn-primary"/>
+                <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </page>
                 <page string="Based on the needs of the authority">
                     <group>
@@ -30,10 +32,11 @@
                         </group>           
                     </group>
                 <group></group>
+                <button name="search_jobseeker1" string="search" type="object" class="btn-primary"/>
+                <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </page>
             </notebook>
-                <button name="search_jobseeker" string="search" type="object" class="btn-primary"/>
-                <button string="Cancel" class="btn-secondary" special="cancel"/>
+                
                 
            
             <notebook>
@@ -47,7 +50,7 @@
                                 <field name="customer_id"/>
                                 <field name="name"/>
                                 <field name="city"/>
-                                <field name="office_id"/>
+                                <!-- <field name="office_id"/> -->
                             </tree>
                         </field>
 
@@ -70,6 +73,8 @@
                         </field>
 
                     </page>
+<!-- Commented out for now, will return in the future -->                    
+<!--
                     <page string="History">
                         <field name="daily_note_ids">
                             <tree>
@@ -81,8 +86,8 @@
                                 <field name="office_id"/>
                             </tree>
                         </field>
-
                     </page>
+-->
                 </notebook>
                  </form>
         </field>

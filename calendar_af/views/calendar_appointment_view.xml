@@ -112,13 +112,14 @@
                 <sheet>
                     <group string="Book meeting">
                         <group>
+                            <field name="name" invisible="1"/>
                             <field string="Meeting channel" name="channel" readonly="0" />
                             <field string="Meeting channel" name="channel_name" invisible="1" />
                             <field string="Meeting type" name="type_id" domain="[('channel', '=', channel)]" context="{ 'default_channel': %(calendar_channel.channel_pdm)d }"/>
                             <field string="Meeting subject" name="name" placeholder="e.g. Business Lunch" invisible="1" />
                         </group>
                         <group>
-                            <field string="Attendees" name="partner_id" widget="many2oneattendee" placeholder="Select attendees..." />
+                            <field string="Attendees" name="partner_id" widget="many2oneattendee" placeholder="Select attendees..." attrs="{'readonly':[('state', '!=', 'free')]}"/>
                             <field string="Case worker" name="user_id" widget="many2oneattendee" placeholder="Select case worker..." 
                                 attrs="{'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}" />
                         </group>
@@ -145,6 +146,7 @@
                     </span>
                     <field name="suggestion_ids">
                         <tree string="Bookable Occasions" limit="10">
+                            <field name="weekday" />
                             <field name="start" />
                             <field name="stop" />
                             <field name="duration" />
@@ -170,15 +172,17 @@
                 <sheet>
                     <group string="Move meeting">
                         <group>
+                            <field name="name" invisible="1"/>
                             <field string="Meeting channel" name="channel" readonly="0" />
                             <field string="Meeting channel" name="channel_name" invisible="1" />
                             <field string="Meeting type" name="type_id" domain="[('channel', '=', channel)]" context="{ 'default_channel': %(calendar_channel.channel_pdm)d }"/>
                             <field string="Meeting subject" name="name" placeholder="e.g. Business Lunch" invisible="1" />
                         </group>
                         <group>
-                            <field string="Attendees" name="partner_id" widget="many2oneattendee" placeholder="Select attendees..." />
+                            <field string="Attendees" name="partner_id" widget="many2oneattendee" placeholder="Select attendees..." attrs="{'readonly':[('state', '!=', 'free')]}"/>
                             <field string="Case worker" name="user_id" widget="many2oneattendee" placeholder="Select case worker..." 
                                 attrs="{'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}" />
+                            <field string="Move reason" name="cancel_reason" required="1"/>
                         </group>
                     </group>
                     <notebook>
@@ -202,13 +206,14 @@
                         <button name="compute_suggestion_ids" type="object" string="Update" />
                     </span>
                     <field name="suggestion_ids">
-                        <tree string="Bookable Occasions">
+                        <tree string="Bookable Occasions" limit="10">
+                            <field name="weekday" />
                             <field name="start" />
                             <field name="stop" />
                             <field name="duration" />
                             <field name="type_id" />
                             <field name="occasion_ids" invisible="1" />
-                            <button name="select_suggestion" type="object" string="Move" />
+                            <button name="select_suggestion_move" type="object" string="Move" />
                         </tree>
                     </field>
                 </sheet>
@@ -344,13 +349,6 @@
         <field name="view_mode">kanban</field>
         <field name="view_id" ref="view_calendar_appointment_kanban" />
     </record>
-
-    <!-- <record id="action_view_calendar_appointment_pivot" model="ir.actions.act_window.view">
-        <field name="act_window_id" ref="action_appointment" />
-        <field name="sequence" eval="4" />
-        <field name="view_mode">pivot</field>
-        <field name="view_id" ref="view_calendar_appointment_pivot" />
-    </record> -->
 
     <record id="action_view_calendar_appointment_local_calendar" model="ir.actions.act_window.view">
         <field name="act_window_id" ref="action_local_appointment" />

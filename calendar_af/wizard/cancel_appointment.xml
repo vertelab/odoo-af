@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <form string="Cancel appointment">
                     <group>
-                        <field name="cancel_reason"/>
+                        <field name="cancel_reason" required="1"/>
                         <field name="appointment_ids"/>
                     </group>
                 <footer>

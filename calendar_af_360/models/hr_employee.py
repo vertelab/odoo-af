@@ -35,7 +35,8 @@ class HrEmployee(models.Model):
 
     @api.one
     def compute_show_dates_ahead(self):
-        self.appointment_ids_ahead = self.appointment_ids.filtered(lambda a: a.start > datetime.now())
+        self.appointment_ids = self.env['calendar.appointment'].search([('user_id', '=', self.env.user.id)])
+        self.appointment_ids_ahead = self.appointment_ids.filtered(lambda a: a.start > datetime.now() and a.state == 'confirmed')
     
     @api.depends('user_id')
     def _get_records(self):
@@ -43,8 +44,10 @@ class HrEmployee(models.Model):
             appointment_record = rec.env['calendar.appointment'].search([('user_id', '=', self.env.user.id)])
             rec.appointment_ids = appointment_record
 
-            appointment_record = rec.env['calendar.appointment'].search([('user_id', '!=', self.env.user.id), ('office', '=', self.env.user.office.id)])
-            rec.appointment_ids_all = appointment_record
+            # TODO: re-add office once we know how.
+            # appointment_record = rec.env['calendar.appointment'].search([('user_id', '!=', self.env.user.id), ('office', '=', self.env.user.office.id)])
+            appointment_record = rec.env['calendar.appointment'].search([('user_id', '!=', self.env.user.id)])
+            rec.appointment_ids_all = appointment_record.filtered(lambda a: a.start > datetime.now() and a.state == 'confirmed')
     
 
 class HrEmployeeJobseekerSearchWizard(models.TransientModel):

@@ -31,6 +31,20 @@ reservation = env['calendar.occasion'].reserve_occasion(occasions[0])</field>
 unused_occasions.unlink()</field>
     </record>
 
+    <record id="ir_cron_additional_times_autovacuum" model="ir.cron">
+        <field name='name'>Auto-vacuum additional times</field>
+        <field name='interval_number'>1</field>
+        <field name='interval_type'>days</field>
+        <field name="numbercall">-1</field>
+        <field name="nextcall">2020-09-19 20:00:00</field>
+        <field name="active" eval="True" />
+        <field name="doall" eval="False" />
+        <field name="code">model.autovacuum_additional_occasion()</field>
+        <field name="state">code</field>
+        <field name="model_id" ref="model_calendar_occasion" />
+    </record>
+
+
     <record id="action_occasion_publish" model="ir.actions.server">
         <field name="name">AF Publish occasion</field>
         <field name="model_id" ref="calendar_af.model_calendar_occasion"/>
@@ -58,7 +72,7 @@ unused_occasions.unlink()</field>
         <field name="model_id" ref="calendar_af.model_calendar_occasion"/>
         <field name="state">code</field>
         <field name="code">for rec in records:
-  if rec.state == 'request':
+  if rec.state in ['request', 'ok']:
     res = rec.reject_occasion()
     if not res:
       raise Warning("One of your occasions is not a request.")</field>
@@ -67,5 +81,6 @@ unused_occasions.unlink()</field>
     <menuitem name="Distans Meeting" id="menu_book_distans_meeting" parent="calendar.mail_menu_calendar" sequence="10" />
     <menuitem name="PDM" id="menu_pdm" parent="calendar.mail_menu_calendar" sequence="11" />
     <menuitem name="Local" id="menu_local" parent="calendar.mail_menu_calendar" sequence="12" />
+    <menuitem name="Reports" id="menu_reports" parent="calendar.mail_menu_calendar" sequence="13" />
     <menuitem name="Administration" id="menu_admin" parent="calendar.mail_menu_calendar" sequence="20" />
 </odoo>

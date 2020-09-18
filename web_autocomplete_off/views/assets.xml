@@ -3,7 +3,7 @@
 <odoo>
     <data>
 		<template id="assets_backend" name="Auto Complete Off" inherit_id="web.assets_backend">
-			<xpath expr=".">
+			<xpath expr="//script[@src='/web/static/src/js/fields/abstract_field.js']" position="after">
                 <script type="text/javascript" src="/web_autocomplete_off/static/src/js/abstract_fields.js"/>
 			</xpath>
 		</template>

@@ -512,14 +512,14 @@ class ResPartner(models.Model):
         if 'state_id' in row:
             if row['state_id'] != '0':
                 if len(row['state_id']) == 3:
-                    state_xmlid = "base.state_se_0%s" % row['state_id']
+                    state_xmlid = "partner_view_360.state_se_0%s" % row['state_id']
                 else:
-                    state_xmlid = "base.state_se_%s" % row['state_id']
+                    state_xmlid = "partner_view_360.state_se_%s" % row['state_id']
                 state_id = self.env['ir.model.data'].xmlid_to_res_id(state_xmlid)
                 if state_id != False:
                     row.update({'state_id' : state_id})
                 else:
-                    _logger.warning("state_id base.state_se_%s not found, leaving state_id for %s empty" %(row['state_id'],row['external_id']))
+                    _logger.warning("state_id partner_view_360.state_se_%s not found, leaving state_id for %s empty" %(row['state_id'],row['external_id']))
                     row.pop('state_id', None)
             else:
                 _logger.warning("state_id is 0 for %s, leaving empty" % row['external_id'])
