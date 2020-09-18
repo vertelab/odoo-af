@@ -36,6 +36,7 @@ unused_occasions.unlink()</field>
         <field name='interval_number'>1</field>
         <field name='interval_type'>days</field>
         <field name="numbercall">-1</field>
+        <field name="nextcall">2020-09-19 20:00:00</field>
         <field name="active" eval="True" />
         <field name="doall" eval="False" />
         <field name="code">model.autovacuum_additional_occasion()</field>
