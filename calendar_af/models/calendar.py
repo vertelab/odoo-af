@@ -830,3 +830,9 @@ class CalendarOccasion(models.Model):
             res = False
 
         return res
+
+    @api.model
+    def autovacuum_additional_occasion(self):
+        del_occ = self.env['calendar.occasion'].sudo().search([('additional_booking', '=', True), ('appointment_id', '=', False)])
+        _logger.debug("Removing the following additional occasions: %s" % del_occ)
+        del_occ.unlink()

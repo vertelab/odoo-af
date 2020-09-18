@@ -31,6 +31,19 @@ reservation = env['calendar.occasion'].reserve_occasion(occasions[0])</field>
 unused_occasions.unlink()</field>
     </record>
 
+    <record id="ir_cron_additional_times_autovacuum" model="ir.cron">
+        <field name='name'>Auto-vacuum additional times</field>
+        <field name='interval_number'>1</field>
+        <field name='interval_type'>days</field>
+        <field name="numbercall">-1</field>
+        <field name="active" eval="True" />
+        <field name="doall" eval="False" />
+        <field name="code">model.autovacuum_additional_occasion()</field>
+        <field name="state">code</field>
+        <field name="model_id" ref="model_calendar_occasion" />
+    </record>
+
+
     <record id="action_occasion_publish" model="ir.actions.server">
         <field name="name">AF Publish occasion</field>
         <field name="model_id" ref="calendar_af.model_calendar_occasion"/>
