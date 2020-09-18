@@ -45,7 +45,7 @@ class CreateLocalOccasion(models.TransientModel):
     type_id = fields.Many2one(comodel_name='calendar.appointment.type', string='Type', required=True, domain="[('channel', '=', 'Local')]")
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel', related='type_id.channel')
     channel_name = fields.Char(string='Channel', related='channel.name')
-    user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker", required=True)
+    user_ids = fields.Many2many(string='Case worker', comodel_name='res.users', help="Booked case worker", required=True)
     office = fields.Many2one(comodel_name='res.partner', string="Office", domain="[('type', '=', 'af office')]")
     # fields describing how to create occasions:
     create_type = fields.Selection(string='Type', selection=[('single', 'Single'), ('repeating', 'Repeating'),], default='single', required=True)
@@ -56,10 +56,12 @@ class CreateLocalOccasion(models.TransientModel):
     repeat_wed = fields.Boolean(string='Wednesday')
     repeat_thu = fields.Boolean(string='Thursday')
     repeat_fri = fields.Boolean(string='Friday')
-
+    
     @api.onchange('type_id')
     def set_duration_selection(self):
-        self.name = self.type_id.name
+        self.name = self.type_id.name,
+        self.duration = self.type_id.duration / 60.0
+
         if self.duration == 0.5:
             self.duration_selection = '30 minutes'
         elif self.duration == 1.0:
@@ -79,12 +81,14 @@ class CreateLocalOccasion(models.TransientModel):
             self.stop = self.start + timedelta(minutes=int(self.duration * 60)) 
 
     def action_create_occasions(self):
+        if not ((self.start.minute in [0,30] and self.stop.second == 0) and (self.stop.minute in [0,30] and self.stop.second == 0)):
+            raise Warning('Start or stop time is not and exacly an hour or halfhour.')
         # Check how many 30min occasions we need
-        if self.duration > 0.5:
-            no_occ = int(self.duration / 0.5)
+        no_occ = int(self.duration / 0.5)
         if self.create_type == 'single':
-            for curr_occ in range(no_occ):
-                occ = self.env['calendar.occasion']._force_create_occasion(30, self.start + timedelta(minutes=curr_occ*30), self.type_id.id, self.channel.id, 'draft', self.user_id, self.office, True)
+            for user_id in self.user_ids:
+                for curr_occ in range(no_occ):
+                    occ = self.env['calendar.occasion']._force_create_occasion(30, self.start + timedelta(minutes=curr_occ*30), self.type_id.id, self.channel.id, 'draft', user_id, self.office, True)
             return True
         elif self.create_type == 'repeating':
             # create list of weekday values allowed:
@@ -108,7 +112,8 @@ class CreateLocalOccasion(models.TransientModel):
                 # check if date is an allowed weekday
                 if start_date.weekday() in repeat_list:
                     # create only 30 min occasions (if duration is longer, create several occasions):
-                    for curr_occ in range(no_occ): 
-                        occ = self.env['calendar.occasion']._force_create_occasion(30, start_date + timedelta(minutes=curr_occ*30), self.type_id.id, self.channel.id, 'draft', self.user_id, self.office, True)
+                    for user_id in self.user_ids:
+                        for curr_occ in range(no_occ): 
+                            occ = self.env['calendar.occasion']._force_create_occasion(30, start_date + timedelta(minutes=curr_occ*30), self.type_id.id, self.channel.id, 'request', user_id, self.office, True)
             return True
         return False
