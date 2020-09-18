@@ -239,7 +239,7 @@ class CalendarAppointment(models.Model):
     location_code = fields.Char(string='Location')
     location = fields.Char(string="Location", compute="compute_location")
     office = fields.Many2one(comodel_name='res.partner', string="Office")
-#    office_code = fields.Char(string='Office code', related="office.office_code")
+    # office_code = fields.Char(string='Office code', related="office.office_code")
     occasion_ids = fields.One2many(comodel_name='calendar.occasion', inverse_name='appointment_id', string="Occasion")
     type_id = fields.Many2one(string='Type', required=True, comodel_name='calendar.appointment.type')
     channel =  fields.Many2one(string='Channel', required=True, comodel_name='calendar.channel', related='type_id.channel', readonly=True)
@@ -426,7 +426,7 @@ class CalendarAppointment(models.Model):
                     "administrative_officer": self.user_id.id,
                     "note": _("%sm meeting on %s cancelled with reason: %s") % (self.duration * 30, self.start, cancel_reason.name),
                     "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
-                    "office": self.partner_id.office.id,
+                    "office": self.office.id,
                     "note_date": datetime.now(),
                 }
                 appointment.partner_id.sudo().notes_ids = [(0, 0, vals)]
@@ -447,7 +447,7 @@ class CalendarAppointment(models.Model):
                     "administrative_officer": self.user_id.id,
                     "note": "%sm meeting on %s confirmed." % (self.duration * 30, self.start),
                     "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
-                    "office": self.partner_id.office.id,
+                    "office": self.office.id,
                     "note_date": datetime.now(),
                 }
                 appointment.partner_id.notes_ids = [(0, 0, vals)]
@@ -467,7 +467,7 @@ class CalendarAppointment(models.Model):
             "administrative_officer": self.user_id.id,
             "note": _("%sm meeting on %s deleted.") % (self.duration * 30, self.start),
             "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
-            "office": self.partner_id.office.id,
+            "office": self.office.id,
             "note_date": datetime.now(),
         }
         self.partner_id.notes_ids = [(0, 0, vals)]
@@ -486,7 +486,7 @@ class CalendarAppointment(models.Model):
                 "administrative_officer": res.user_id.id,
                 "note": _("%sm meeting on %s created.") % (res.duration * 30, res.start),
                 "note_type": res.env.ref('partner_daily_notes.note_type_as_02').id,
-                "office": res.partner_id.office.id,
+                "office": res.office.id,
                 "note_date": datetime.now(),
             }
             res.sudo().partner_id.notes_ids = [(0, 0, vals)]
@@ -518,7 +518,7 @@ class CalendarAppointment(models.Model):
                 "administrative_officer": self.user_id.id,
                 "note": _("Meeting on %s moved") % self.start + (_(" because of reason: %s.") % reason.name) if reason else ".",
                 "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
-                "office": self.partner_id.office.id,
+                "office": self.office.id,
             }
             self.partner_id.sudo().notes_ids = [(0, 0, vals)]
             res = True

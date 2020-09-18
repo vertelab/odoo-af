@@ -11,15 +11,16 @@
     'author': 'Vertel AB',
     'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
-    'depends': ['hr', 
-		'partner_view_360', 
-		'partner_af_case', 
-		'partner_daily_notes',
-	        'hr_employee_firstname_extension'],
+    'depends': [
+      'hr', 
+      'partner_view_360', 
+      'partner_af_case', 
+      'partner_daily_notes',
+      'hr_employee_firstname_extension'],
     'data': [
-        #'views/menu.xml',
-        'views/hr_view.xml',
-        'wizard/hr_employee_search_wizard.xml'
+      #'views/menu.xml',
+      'views/hr_view.xml',
+      'wizard/hr_employee_search_wizard.xml'
     ],
     'installable': True,
 }
