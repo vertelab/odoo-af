@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_partner_form_calendar_af_inherited" model="ir.ui.view">
+    <field name="name">res.partner.form.calendar_af.inherited</field>
+    <field name="model">res.partner</field>
+    <field name="inherit_id" ref="base.view_partner_form" />
+    <field name="arch" type="xml">
+      <div name="button_box" position="inside">
+        <button class="oe_stat_button" type="object" name="view_appointments" icon="fa-calendar" groups="base.group_user">
+          <field string="Booked meetings" name="appointment_count" widget="statinfo" />
+        </button>
+      </div>
+    </field>
+  </record>
+  <record id="view_jobseeker_form_calendar_af_inherited" model="ir.ui.view">
+    <field name="name">res.partner.form.jobseeker.calendar_af.inherited</field>
+    <field name="model">res.partner</field>
+    <field name="inherit_id" ref="partner_view_360.view_jobseeker_form" />
+    <field name="arch" type="xml">
+      <div name="button_box" position="inside">
+        <button name="open_partner_calendar" type="object" class="oe_stat_button" icon="fa-calendar">Calendar</button>
+      </div>
+    </field>
+  </record>
+  <record id="view_jobseeker_form_calendar_af_inherited" model="ir.ui.view">
+    <field name="name">res.partner.form.jobseeker.calendar_af.inherited</field>
+    <field name="model">res.partner</field>
+    <field name="inherit_id" ref="partner_view_360.view_jobseeker_form" />
+    <field name="arch" type="xml">
+      <div name="button_box" position="inside">
+        <button name="open_partner_calendar" type="object" class="oe_stat_button" icon="fa-calendar">Calendar</button>
+      </div>
+      <page name="apply_for_jobs" position="after">
+        <page string="Upcoming meetings" name="upcoming_meetings">
+          <group>
+            <button name="create_appointment" type="object" string="New appointment" icon="fa-calendar" />
+          </group>
+          <field name="appointment_ids_ahead" mode="tree" nolabel="1">
+            <tree editable="bottom" default_order="start asc">
+              <field name="type_id" options="{'no_create_edit': True}" />
+              <field name="start" options="{'format':'%Y-%m-%d %H:%M'}" />
+              <field name="duration" widget="float_time" />
+              <field name="case_worker_name" />
+              <field name="channel_name" />
+              <field name="location" />
+              <button name="cancel_meeting_action" type="object" string="Cancel" icon="fa-times" context="{'active_id': id}" />
+              <button name="move_meeting_action" type="object" string="Move" icon="fa-repeat" context="{'active_id': id}" />
+            </tree>
+          </field>
+        </page>
+        <page string="Previous meetings" name="previous_meetings">
+          <field name="appointment_ids_past" mode="tree" nolabel="1">
+            <tree editable="bottom" default_order="start desc">
+              <field name="type_id" options="{'no_create_edit': True}" />
+              <field name="start" options="{'format':'%Y-%m-%d %H:%M'}" />
+              <field name="duration" widget="float_time" />
+              <field name="case_worker_name" />
+              <field name="channel_name" />
+              <field name="location" />
+            </tree>
+          </field>
+        </page>
+      </page>
+    </field>
+  </record>
+</odoo>

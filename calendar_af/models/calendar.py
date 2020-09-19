@@ -36,6 +36,7 @@ BASE_DURATION = 30.0
 # BASE_DAY_START, BASE_DAY_STOP: The hours between which we normally accept appointments
 BASE_DAY_START = pytz.timezone(LOCAL_TZ).localize(datetime.now().replace(hour=9, minute=0, second=0, microsecond=0)).astimezone(pytz.utc)
 BASE_DAY_STOP = pytz.timezone(LOCAL_TZ).localize(datetime.now().replace(hour=16, minute=0, second=0, microsecond=0)).astimezone(pytz.utc)
+BASE_DAY_LUNCH = pytz.timezone(LOCAL_TZ).localize(datetime.now().replace(hour=12, minute=0, second=0, microsecond=0)).astimezone(pytz.utc)
 # RESERVED_TIMEOUT is the default time before a reservation times out.
 RESERVED_TIMEOUT = 300.0
 
@@ -56,6 +57,7 @@ class CalendarSchedule(models.Model):
     forecasted_agents = fields.Integer(string='Forecasted agents', help="Number of forecasted agents")
     type_id = fields.Many2one(string='Meeting type', comodel_name='calendar.appointment.type', help="Related meeting type")
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
+    active = fields.Boolean(string='Active', default=True)
 
     @api.one
     def inactivate(self, b = True):
@@ -132,13 +134,31 @@ class CalendarAppointmentSuggestion(models.Model):
     occasion_ids = fields.Many2many(comodel_name='calendar.occasion', string="Occasions")
     type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type')
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
+<<<<<<< HEAD
     office_id = fields.Many2one(comodel_name='hr.department', string="Office")
+=======
+    office = fields.Many2one(comodel_name='res.partner', string="Office")
+    user_id = fields.Many2one(comodel_name='res.users', string="Case worker")
+    weekday = fields.Char(string='Weekday', compute="_compute_weekday")
+>>>>>>> Dev-12.0
     
+    @api.one
+    def _compute_weekday(self):
+        if self.start:
+            daynum2dayname = {
+                0: _("Monday"),
+                1: _("Tuesday"),
+                2: _("Wednesday"),
+                3: _("Thursday"),
+                4: _("Friday"),
+                5: _("Saturday"),
+                6: _("Sunday"),
+            }
+            self.weekday = daynum2dayname[self.start.weekday()]
 
     @api.multi
     def select_suggestion(self):
-        # Check that occasion_ids still are free
-        # Write data to appointment_id
+        # check state of appointment
         if self.appointment_id.state in ['reserved', 'confirmed']:
             raise Warning(_("This appointment is already booked."))
 
@@ -159,6 +179,7 @@ class CalendarAppointmentSuggestion(models.Model):
 
                 occasions |= free_occasion
         
+        # Write data to appointment_id
         occasions.write({'appointment_id': self.appointment_id.id})
         self.appointment_id.write({
             'state': 'confirmed',
@@ -221,8 +242,13 @@ class CalendarAppointment(models.Model):
     cancel_reason = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason', help="Cancellation reason")
     location_code = fields.Char(string='Location')
     location = fields.Char(string="Location", compute="compute_location")
+<<<<<<< HEAD
     office_id = fields.Many2one(comodel_name='hr.department', string="Office")
     office_code = fields.Char(string='office_id code', related="office_id.office_code")
+=======
+    office = fields.Many2one(comodel_name='res.partner', string="Office")
+#    office_code = fields.Char(string='Office code', related="office.office_code")
+>>>>>>> Dev-12.0
     occasion_ids = fields.One2many(comodel_name='calendar.occasion', inverse_name='appointment_id', string="Occasion")
     type_id = fields.Many2one(string='Type', required=True, comodel_name='calendar.appointment.type')
     channel =  fields.Many2one(string='Channel', required=True, comodel_name='calendar.channel', related='type_id.channel', readonly=True)
@@ -232,13 +258,14 @@ class CalendarAppointment(models.Model):
     description = fields.Text(string='Description')
     suggestion_ids = fields.One2many(comodel_name='calendar.appointment.suggestion', inverse_name='appointment_id', string='Suggested Dates')
     case_worker_name = fields.Char(string="Case worker", compute="compute_case_worker_name")
-
+    active = fields.Boolean(string='Active', default=True)
+    
     @api.one
     def compute_location(self):
         if self.channel_name == "PDM":
             self.location = _("Distance")
         else:
-            self.location = self.office_code
+            self.location = None #self.office_code
 
     @api.one
     def compute_case_worker_name(self):
@@ -257,7 +284,7 @@ class CalendarAppointment(models.Model):
             'view_type': 'form',
             'view_mode': 'form',
             'view_id': self.env.ref('calendar_af.view_calendar_appointment_move_form').id,
-            'target': 'new',
+            'target': 'current',
             'type': 'ir.actions.act_window',
         }
 
@@ -322,7 +349,12 @@ class CalendarAppointment(models.Model):
                         'duration': len(occasion)*30,
                         'type_id': occasion[0].type_id.id,
                         'channel': occasion[0].channel.id,
+<<<<<<< HEAD
                         'office': occasion[0].office_id.id,
+=======
+                        'office': occasion[0].office.id,
+                        'user_id': occasion[0].user_id,
+>>>>>>> Dev-12.0
                         'occasion_ids': [(6, 0, occasion._ids)],
                     }))
         self.suggestion_ids = suggestion_ids
@@ -356,15 +388,39 @@ class CalendarAppointment(models.Model):
 
     def start_meeting_search(self, type_id):
         days_first = self.type_id.days_first if self.type_id.days_first else 3
-        start = datetime.now() + timedelta(days=days_first)
+        start = loop_start = datetime.now()
+        j = 0
+        for i in range(days_first):
+            loop_start = loop_start + timedelta(days=1)
+            if loop_start.weekday() in [5,6]:
+                j += 1
+        days_first = days_first + j
+        start = start + timedelta(days=days_first)
         start.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute, second=0, microsecond=0)
         return start
 
     def stop_meeting_search(self, start_meeting_search, type_id):
         days_last = self.type_id.days_last if self.type_id.days_last else 15
-        stop = start_meeting_search + timedelta(days=days_last)
+        stop = loop_start = start_meeting_search
+
+        j = 0
+        for i in range(days_last):
+            loop_start = loop_start + timedelta(days=1)
+            if loop_start.weekday() in [5,6]:
+                j += 1
+        days_last = days_last + j
+        stop = stop + timedelta(days=days_last)
         stop.replace(hour=BASE_DAY_STOP.hour, minute=BASE_DAY_STOP.minute, second=0, microsecond=0)
         return stop
+
+    @api.one
+    def inactivate(self, b = True):
+        """Inactivates self. Used as a workaround to inactivate from server actions."""
+        if b:
+            self.active = False
+        else:
+            self.active = True
+        return self.active
 
     def cancel(self, cancel_reason):
         """Cancels a planned meeting"""
@@ -451,7 +507,7 @@ class CalendarAppointment(models.Model):
         return res
 
     @api.one
-    def move_appointment(self, occasions, reason):
+    def move_appointment(self, occasions, reason=False):
         """"Intended to be used to move appointments from one bookable occasion to another. 
         :param occasions: a recordset of odoo occasions to move the meeting to."""
         res = False
@@ -461,7 +517,7 @@ class CalendarAppointment(models.Model):
             vals = {
                 'start': occasions[0].start,
                 'stop': occasions[-1].stop,
-                'duration': len(occasions) * BASE_DURATION,
+                'duration': len(occasions) * BASE_DURATION/60,
                 'type_id': occasions[0].type_id.id,
                 'additional_booking': False,
                 'occasion_ids': [(6, 0, occasions._ids)],
@@ -473,7 +529,7 @@ class CalendarAppointment(models.Model):
                 "name": _("Meeting moved"),
                 "partner_id": self.partner_id.id,
                 "administrative_officer": self.user_id.id,
-                "note": _("Meeting on %s created.") % self.start,
+                "note": _("Meeting on %s moved") % self.start + (_(" because of reason: %s.") % reason.name) if reason else ".",
                 "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
                 "office_id": self.partner_id.office_id.id,
             }
@@ -520,10 +576,16 @@ class CalendarOccasion(models.Model):
                                         ('ok', 'Accepted'),
                                         ('fail', 'Rejected')],
                                         string='Occasion state', 
-                                        default='draft', 
+                                        default='request', 
                                         help="Status of the meeting")
+<<<<<<< HEAD
     office_id = fields.Many2one(comodel_name='hr.department', string="Office")
     office_code = fields.Char(string='office_id code', related="office_id.office_code")
+=======
+    office = fields.Many2one(comodel_name='res.partner', string="Office", domain="[('type', '=', 'af office')]")
+    #office_code = fields.Char(string='Office code', related="office.office_code", readonly=True)
+    app_partner_pnr = fields.Char(string='Attendee SSN', related="appointment_id.partner_id.company_registry", readonly=True)
+>>>>>>> Dev-12.0
 
     @api.onchange('type_id')
     def set_duration_selection(self):
@@ -570,11 +632,14 @@ class CalendarOccasion(models.Model):
         """Returns the timeslot (as a start date, DateTime) with the least 
         amount of occurances for a specific timeframe"""
         date_start = date_start or copy.copy(BASE_DAY_START)
+        # Additional occasions should not be created after 15:00
         date_stop = date_stop or copy.copy(BASE_DAY_STOP)
         loop_date = date_start
         occ_time = {}
         while loop_date < date_stop:
-            occ_time[loop_date.strftime("%Y-%m-%dT%H:%M:%S")] = self.env['calendar.occasion'].search_count([('start', '=', loop_date),('type_id', '=', type_id.id)])
+            # make sure we don't book meetings during lunch
+            if loop_date.hour != BASE_DAY_LUNCH.hour:
+                occ_time[loop_date.strftime("%Y-%m-%dT%H:%M:%S")] = self.env['calendar.occasion'].search_count([('start', '=', loop_date),('type_id', '=', type_id.id)])
             loop_date = loop_date + timedelta(minutes=BASE_DURATION)
         occ_time_min_key = min(occ_time, key=occ_time.get)
         res = datetime.strptime(occ_time_min_key, "%Y-%m-%dT%H:%M:%S")
@@ -597,14 +662,14 @@ class CalendarOccasion(models.Model):
         # Check if overbooking is allowed on this meeting type
         if not type_id.additional_booking:
             # TODO: Throw error instead?
-            _logger.warn(_("Overbooking not allowed on %s" % type_id.name))
+            _logger.debug(_("Overbooking not allowed on %s" % type_id.name))
             return False
         # Replace date with mapped date if we have one
         date = self._check_date_mapping(date)
         date_list = date.strftime("%Y-%-m-%-d").split("-")
         # Copy to make sure we dont overwrite BASE_DAY_START or BASE_DAY_STOP
         day_start = copy.copy(BASE_DAY_START)
-        day_stop = copy.copy(BASE_DAY_STOP)
+        day_stop = copy.copy(BASE_DAY_STOP) - timedelta(hours=1)
         # Ugly, ugly code..
         day_start = day_start.replace(year=int(date_list[0]), month=int(date_list[1]), day=int(date_list[2]))
         day_stop = day_stop.replace(year=int(date_list[0]), month=int(date_list[1]), day=int(date_list[2]))
@@ -619,7 +684,7 @@ class CalendarOccasion(models.Model):
                 'name': '%sm @ %s' % (duration, start_date),
                 'start': start_date,
                 'stop': start_date + timedelta(minutes=BASE_DURATION),
-                'duration': BASE_DURATION,
+                'duration': BASE_DURATION/60,
                 'appointment_id': False,
                 'type_id': type_id.id,
                 'channel': type_id.channel.id,
@@ -656,7 +721,7 @@ class CalendarOccasion(models.Model):
     @api.multi
     def reject_occasion(self):
         """User rejects suggested occasion"""
-        if self.state == 'request':
+        if self.state in ['request','ok']:
             self.state = 'fail'
             ret = True
         else:
@@ -665,7 +730,7 @@ class CalendarOccasion(models.Model):
         return ret
 
     @api.model
-    def get_bookable_occasions(self, start, stop, duration, type_id, office=False, max_depth = 1):
+    def get_bookable_occasions(self, start, stop, duration, type_id, office=False, max_depth=1):
         """Returns a list of occasions matching the defined parameters of the appointment. Creates additional 
         occasions if allowed.
         :param start: Start search as this time.
@@ -680,9 +745,16 @@ class CalendarOccasion(models.Model):
         td_base_duration = timedelta(minutes=BASE_DURATION)
         def get_occasions(start_dt):
             start_dt = start_dt.replace(second=0, microsecond=0)
-            domain = [('start', '=', start_dt), ('type_id', '=', type_id.id), ('appointment_id', '=', False)]
+            domain = [('start', '=', start_dt), ('type_id', '=', type_id.id), ('appointment_id', '=', False), ('additional_booking', '=', False)]
             if office:
+<<<<<<< HEAD
                 domain.append(('office', '=', office_id.id))
+=======
+                domain.append(('office', '=', office.id))
+            # TODO: This if can and should probably be removed but I don't want to break anything right now
+            if type_id.channel == self.env.ref('calendar_channel.channel_local'):
+                domain.append(('state', '=', 'ok'))
+>>>>>>> Dev-12.0
             return self.env['calendar.occasion'].search(domain, limit=max_depth)
         #[[[], []], dag[tidsslot[ocassions]]]
 
@@ -736,7 +808,7 @@ class CalendarOccasion(models.Model):
         # free occasions, create new ones:
         if type_id.additional_booking and all( not l for l in occ_lists):
             # Changed this line to create over bookings on the LAST allowed date.
-            occ_lists[-1].append(self._get_additional_booking(stop, duration, type_id, office))
+            occ_lists[-1].append([self._get_additional_booking(stop, duration, type_id, office)])
 
         return occ_lists
 

@@ -58,7 +58,7 @@ unused_occasions.unlink()</field>
         <field name="model_id" ref="calendar_af.model_calendar_occasion"/>
         <field name="state">code</field>
         <field name="code">for rec in records:
-  if rec.state == 'request':
+  if rec.state in ['request', 'ok']:
     res = rec.reject_occasion()
     if not res:
       raise Warning("One of your occasions is not a request.")</field>
@@ -67,5 +67,6 @@ unused_occasions.unlink()</field>
     <menuitem name="Distans Meeting" id="menu_book_distans_meeting" parent="calendar.mail_menu_calendar" sequence="10" />
     <menuitem name="PDM" id="menu_pdm" parent="calendar.mail_menu_calendar" sequence="11" />
     <menuitem name="Local" id="menu_local" parent="calendar.mail_menu_calendar" sequence="12" />
+    <menuitem name="Reports" id="menu_reports" parent="calendar.mail_menu_calendar" sequence="13" />
     <menuitem name="Administration" id="menu_admin" parent="calendar.mail_menu_calendar" sequence="20" />
 </odoo>

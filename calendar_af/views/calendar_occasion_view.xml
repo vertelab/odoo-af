@@ -45,6 +45,7 @@
                         <page name="page_details" string="Occasion Details"> -->
                     <group string="Create occasion">
                         <group>
+                            <field name="name" invisible="1"/>
                             <field name="start"/>
                             <field name="stop" invisible="0"/>
                             <field name="duration_selection" widget="radio" invisible="1"/>
@@ -132,15 +133,46 @@
         <field name="model">calendar.occasion</field>
         <field name="priority" eval="2" />
         <field name="arch" type="xml">
-            <tree string="Occasions">
-                <field name="name" />
-                <field name="start" />
-                <field name="stop" />
-                <field name="type_id" />
-                <field name="office_id" />
-                <field name="state" />
-                <field name="appointment_id" />
+            <tree string="Occasions" create="false" delete="false">
+                <field name="name" invisible="1"/>
+                <field name="type_id"/>
+                <field name="start"/>
+                <field name="stop"/>
+                <field name="office_id"/>
+                <field name="state"/>
+                <field name="user_id"/>
+                <field name="app_partner_pnr"/>
             </tree>
+        </field>
+    </record>
+
+    <record id="calendar_occasion_local_search" model="ir.ui.view">
+        <field name="name">calendar.occasion.local.search</field>
+        <field name="model">calendar.occasion</field>
+        <field name="arch" type="xml">
+            <search string="Rules">
+                <field name="state" />
+                <field name="type_id" />
+                <filter
+                    name="state_ok_req"
+                    domain="['|',['state','=','request'],['state','=','ok']]"
+                    string="Published or Accepted"
+                />
+                <group expand="0" string="Group By...">
+                    <filter
+                        name="group_by_type"
+                        string="Type"
+                        domain="[]"
+                        context="{'group_by':'type_id'}"
+                    />
+                    <filter
+                        name="group_by_office"
+                        string="Office"
+                        domain="[]"
+                        context="{'group_by':'office'}"
+                    />
+                </group>
+            </search>
         </field>
     </record>
 
@@ -158,6 +190,7 @@
         <field name="view_id" ref="view_calendar_occasion_local_tree" />
         <!-- This should be a reference to the external id instead. -->
         <field name="domain">[('channel', '=', 'Local')]</field>
+        <field name="search_view_id" ref="calendar_occasion_local_search" />
     </record>
     <record id="action_view_calendar_occasion_tree" model="ir.actions.act_window.view">
         <field name="act_window_id" ref="action_calendar_occasion" />
