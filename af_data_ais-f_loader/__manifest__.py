@@ -27,7 +27,7 @@ v12.0.1.3  - removed state-partner.csv\n
         "partner_kpi_data", 
         "res_drivers_license", 
 		#"partner_daily_notes", 
-		"partner_desired_jobs",
+		#"partner_desired_jobs",
         ],
     
     "data": [

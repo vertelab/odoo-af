@@ -58,7 +58,7 @@ class ResPartner(models.Model):
         path_jobs = os.path.join(config.options.get('data_dir'), 'AIS-F/SOK_SOKTYRKE.csv')
         path_jobs = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/SOK_SOKTYRKE.csv" #testing purposes only
         header_path_jobs = "/usr/share/odoo-af/af_data_ais-f_loader/data/SOK_SOKTYRKE_mapping.csv"
-        self.create_partners(headers_header_jobs, path_jobs, header_path_jobs)
+        # self.create_partners(headers_header_jobs, path_jobs, header_path_jobs)
 
     @api.model
     def create_offices(self):
