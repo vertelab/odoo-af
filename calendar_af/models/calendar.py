@@ -349,12 +349,8 @@ class CalendarAppointment(models.Model):
                         'duration': len(occasion)*30,
                         'type_id': occasion[0].type_id.id,
                         'channel': occasion[0].channel.id,
-<<<<<<< HEAD
                         'office': occasion[0].office_id.id,
-=======
-                        'office': occasion[0].office.id,
                         'user_id': occasion[0].user_id,
->>>>>>> Dev-12.0
                         'occasion_ids': [(6, 0, occasion._ids)],
                     }))
         self.suggestion_ids = suggestion_ids
@@ -578,14 +574,9 @@ class CalendarOccasion(models.Model):
                                         string='Occasion state', 
                                         default='request', 
                                         help="Status of the meeting")
-<<<<<<< HEAD
-    office_id = fields.Many2one(comodel_name='hr.department', string="Office")
-    office_code = fields.Char(string='office_id code', related="office_id.office_code")
-=======
-    office = fields.Many2one(comodel_name='res.partner', string="Office", domain="[('type', '=', 'af office')]")
+    office_id = fields.Many2one(comodel_name='res.partner', string="Office", domain="[('type', '=', 'af office')]")
     #office_code = fields.Char(string='Office code', related="office.office_code", readonly=True)
     app_partner_pnr = fields.Char(string='Attendee SSN', related="appointment_id.partner_id.company_registry", readonly=True)
->>>>>>> Dev-12.0
 
     @api.onchange('type_id')
     def set_duration_selection(self):
@@ -747,14 +738,10 @@ class CalendarOccasion(models.Model):
             start_dt = start_dt.replace(second=0, microsecond=0)
             domain = [('start', '=', start_dt), ('type_id', '=', type_id.id), ('appointment_id', '=', False), ('additional_booking', '=', False)]
             if office:
-<<<<<<< HEAD
                 domain.append(('office', '=', office_id.id))
-=======
-                domain.append(('office', '=', office.id))
             # TODO: This if can and should probably be removed but I don't want to break anything right now
             if type_id.channel == self.env.ref('calendar_channel.channel_local'):
                 domain.append(('state', '=', 'ok'))
->>>>>>> Dev-12.0
             return self.env['calendar.occasion'].search(domain, limit=max_depth)
         #[[[], []], dag[tidsslot[ocassions]]]
 
