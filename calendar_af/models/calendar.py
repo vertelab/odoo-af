@@ -135,12 +135,18 @@ class CalendarAppointmentSuggestion(models.Model):
     type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type')
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
 <<<<<<< HEAD
+<<<<<<< HEAD
     office_id = fields.Many2one(comodel_name='hr.department', string="Office")
 =======
     office = fields.Many2one(comodel_name='res.partner', string="Office")
     user_id = fields.Many2one(comodel_name='res.users', string="Case worker")
     weekday = fields.Char(string='Weekday', compute="_compute_weekday")
 >>>>>>> Dev-12.0
+=======
+    office_id = fields.Many2one(comodel_name='hr.department', string="Office")
+    user_id = fields.Many2one(comodel_name='res.users', string="Case worker")
+    weekday = fields.Char(string='Weekday', compute="_compute_weekday")
+>>>>>>> 396c1fc260d20125dec53dac582a6f593027bad1
     
     @api.one
     def _compute_weekday(self):
@@ -243,12 +249,17 @@ class CalendarAppointment(models.Model):
     location_code = fields.Char(string='Location')
     location = fields.Char(string="Location", compute="compute_location")
 <<<<<<< HEAD
+<<<<<<< HEAD
     office_id = fields.Many2one(comodel_name='hr.department', string="Office")
     office_code = fields.Char(string='office_id code', related="office_id.office_code")
 =======
     office = fields.Many2one(comodel_name='res.partner', string="Office")
 #    office_code = fields.Char(string='Office code', related="office.office_code")
 >>>>>>> Dev-12.0
+=======
+    office_id = fields.Many2one(comodel_name='hr.department', string="Office")
+    # office_code = fields.Char(string='Office code', related="office.office_code")
+>>>>>>> 396c1fc260d20125dec53dac582a6f593027bad1
     occasion_ids = fields.One2many(comodel_name='calendar.occasion', inverse_name='appointment_id', string="Occasion")
     type_id = fields.Many2one(string='Type', required=True, comodel_name='calendar.appointment.type')
     channel =  fields.Many2one(string='Channel', required=True, comodel_name='calendar.channel', related='type_id.channel', readonly=True)
@@ -574,7 +585,11 @@ class CalendarOccasion(models.Model):
                                         string='Occasion state', 
                                         default='request', 
                                         help="Status of the meeting")
+<<<<<<< HEAD
     office_id = fields.Many2one(comodel_name='res.partner', string="Office", domain="[('type', '=', 'af office')]")
+=======
+    office_id = fields.Many2one(comodel_name='hr.department', string="Office")
+>>>>>>> 396c1fc260d20125dec53dac582a6f593027bad1
     #office_code = fields.Char(string='Office code', related="office.office_code", readonly=True)
     app_partner_pnr = fields.Char(string='Attendee SSN', related="appointment_id.partner_id.company_registry", readonly=True)
 
@@ -839,3 +854,9 @@ class CalendarOccasion(models.Model):
             res = False
 
         return res
+
+    @api.model
+    def autovacuum_additional_occasion(self):
+        del_occ = self.env['calendar.occasion'].sudo().search([('additional_booking', '=', True), ('appointment_id', '=', False)])
+        _logger.debug("Removing the following additional occasions: %s" % del_occ)
+        del_occ.unlink()

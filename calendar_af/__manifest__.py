@@ -23,7 +23,6 @@
         "security/ir.model.access.csv",
         "views/res_partner_view.xml",
         "views/res_users_view.xml",
-        #"views/hr_employee_view.xml",
         "views/calendar_af_view.xml",
         "views/calendar_schedule_view.xml",
         "views/calendar_appointment_view.xml",
