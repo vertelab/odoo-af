@@ -250,7 +250,8 @@ class CalendarAppointment(models.Model):
     suggestion_ids = fields.One2many(comodel_name='calendar.appointment.suggestion', inverse_name='appointment_id', string='Suggested Dates')
     case_worker_name = fields.Char(string="Case worker", compute="compute_case_worker_name")
     active = fields.Boolean(string='Active', default=True)
-    
+    show_suggestion_ids = fields.Boolean(string="Show suggestions", default=False)
+
     @api.one
     def compute_location(self):
         if self.channel_name == "PDM":
@@ -325,7 +326,7 @@ class CalendarAppointment(models.Model):
             return
         start = self.start_meeting_search(self.type_id)
         stop = self.stop_meeting_search(start, self.type_id)
-        
+        self.show_suggestion_ids = True
         suggestion_ids = []
         if self.suggestion_ids:
             suggestion_ids.append((5,))
