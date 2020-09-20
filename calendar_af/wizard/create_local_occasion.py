@@ -46,7 +46,7 @@ class CreateLocalOccasion(models.TransientModel):
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel', related='type_id.channel')
     channel_name = fields.Char(string='Channel', related='channel.name')
     user_ids = fields.Many2many(string='Case worker', comodel_name='res.users', help="Booked case worker", required=True)
-    office = fields.Many2one(comodel_name='res.partner', string="Office", domain="[('type', '=', 'af office')]")
+    office = fields.Many2one(comodel_name='hr.department', string="Office")
     # fields describing how to create occasions:
     create_type = fields.Selection(string='Type', selection=[('single', 'Single'), ('repeating', 'Repeating'),], default='single', required=True)
     start_range = fields.Date(string='Start of repeat')

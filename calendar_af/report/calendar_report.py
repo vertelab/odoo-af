@@ -54,7 +54,7 @@ class CalendarAppointmentReport(models.Model):
                                         help="Status of the meeting",
                                         readonly=True)
     location_code = fields.Char(string='Location code', readonly=True)
-    office = fields.Many2one(comodel_name='res.partner', string="Office", readonly=True)
+    office_id = fields.Many2one(comodel_name='hr.department', string="Office", readonly=True)
     type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type', readonly=True)
     additional_booking = fields.Boolean(String='Over booking', readonly=True)
     occ_start = fields.Datetime(string='Occasion start', readonly=True)
@@ -84,7 +84,7 @@ class CalendarAppointmentReport(models.Model):
                     co.state as occ_state,
                     ca.state as app_state,
                     ca.location_code as location_code,
-                    co.office as office,
+                    co.office_id as office_id,
                     co.type_id as type_id,
                     co.additional_booking as additional_booking,
                     ca.start as app_start,
@@ -108,7 +108,7 @@ class CalendarAppointmentReport(models.Model):
                     co.state,
                     ca.state,
                     ca.location_code,
-                    co.office,
+                    co.office_id,
                     co.type_id,
                     co.additional_booking,
                     ca.start,

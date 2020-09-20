@@ -134,7 +134,7 @@ class CalendarAppointmentSuggestion(models.Model):
     occasion_ids = fields.Many2many(comodel_name='calendar.occasion', string="Occasions")
     type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type')
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
-    office = fields.Many2one(comodel_name='res.partner', string="Office")
+    office_id = fields.Many2one(comodel_name='hr.department', string="Office")
     user_id = fields.Many2one(comodel_name='res.users', string="Case worker")
     weekday = fields.Char(string='Weekday', compute="_compute_weekday")
     
@@ -211,7 +211,7 @@ class CalendarAppointment(models.Model):
     def _local_user_domain(self):
         if self.partner_id:
             res = []
-            res.append(('partner_id.office.id', '=', self.env.user.office.id))
+            res.append(('partner_id.office_id.id', '=', self.env.user.office_id.id))
             # TODO: add hr.skill check ('type_id.skills_ids', 'in', self.env.user.skill_ids)
             # TODO: add check if case worker has occasions and that these are free. Maybe use a computed field on res.users?
         else:
@@ -238,8 +238,8 @@ class CalendarAppointment(models.Model):
     cancel_reason = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason', help="Cancellation reason")
     location_code = fields.Char(string='Location')
     location = fields.Char(string="Location", compute="compute_location")
-    office = fields.Many2one(comodel_name='res.partner', string="Office")
-    # office_code = fields.Char(string='Office code', related="office.office_code")
+    office_id = fields.Many2one(comodel_name='hr.department', string="Office")
+#    office_code = fields.Char(string='Office code', related="office.office_code")
     occasion_ids = fields.One2many(comodel_name='calendar.occasion', inverse_name='appointment_id', string="Occasion")
     type_id = fields.Many2one(string='Type', required=True, comodel_name='calendar.appointment.type')
     channel =  fields.Many2one(string='Channel', required=True, comodel_name='calendar.channel', related='type_id.channel', readonly=True)
@@ -356,7 +356,7 @@ class CalendarAppointment(models.Model):
                         'duration': len(occasion)*30,
                         'type_id': occasion[0].type_id.id,
                         'channel': occasion[0].channel.id,
-                        'office': occasion[0].office.id,
+                        'office': occasion[0].office_id.id,
                         'user_id': occasion[0].user_id,
                         'occasion_ids': [(6, 0, occasion._ids)],
                     }))
@@ -442,7 +442,7 @@ class CalendarAppointment(models.Model):
                     "administrative_officer": self.user_id.id,
                     "note": _("%sm meeting on %s cancelled with reason: %s") % (self.duration * 30, self.start, cancel_reason.name),
                     "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
-                    "office": self.office.id,
+                    "office_id": self.partner_id.office_id.id,
                     "note_date": datetime.now(),
                 }
                 appointment.partner_id.sudo().notes_ids = [(0, 0, vals)]
@@ -463,7 +463,7 @@ class CalendarAppointment(models.Model):
                     "administrative_officer": self.user_id.id,
                     "note": "%sm meeting on %s confirmed." % (self.duration * 30, self.start),
                     "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
-                    "office": self.office.id,
+                    "office_id": self.partner_id.office_id.id,
                     "note_date": datetime.now(),
                 }
                 appointment.partner_id.notes_ids = [(0, 0, vals)]
@@ -483,7 +483,7 @@ class CalendarAppointment(models.Model):
             "administrative_officer": self.user_id.id,
             "note": _("%sm meeting on %s deleted.") % (self.duration * 30, self.start),
             "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
-            "office": self.office.id,
+            "office_id": self.partner_id.office_id.id,
             "note_date": datetime.now(),
         }
         self.partner_id.notes_ids = [(0, 0, vals)]
@@ -502,7 +502,7 @@ class CalendarAppointment(models.Model):
                 "administrative_officer": res.user_id.id,
                 "note": _("%sm meeting on %s created.") % (res.duration * 30, res.start),
                 "note_type": res.env.ref('partner_daily_notes.note_type_as_02').id,
-                "office": res.office.id,
+                "office_id": res.partner_id.office_id.id,
                 "note_date": datetime.now(),
             }
             res.sudo().partner_id.notes_ids = [(0, 0, vals)]
@@ -534,7 +534,7 @@ class CalendarAppointment(models.Model):
                 "administrative_officer": self.user_id.id,
                 "note": _("Meeting on %s moved") % self.start + (_(" because of reason: %s.") % reason.name) if reason else ".",
                 "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
-                "office": self.office.id,
+                "office_id": self.partner_id.office_id.id,
             }
             self.partner_id.sudo().notes_ids = [(0, 0, vals)]
             res = True
@@ -581,7 +581,8 @@ class CalendarOccasion(models.Model):
                                         string='Occasion state', 
                                         default='request', 
                                         help="Status of the meeting")
-    office = fields.Many2one(comodel_name='res.partner', string="Office", domain="[('type', '=', 'af office')]")
+
+    office_id = fields.Many2one(comodel_name='hr.department', string="Office")
     #office_code = fields.Char(string='Office code', related="office.office_code", readonly=True)
     app_partner_pnr = fields.Char(string='Attendee SSN', related="appointment_id.partner_id.company_registry", readonly=True)
 
@@ -617,7 +618,7 @@ class CalendarOccasion(models.Model):
             'appointment_id': False,
             'type_id': type_id,
             'channel': channel,
-            'office': office.id if office else False,
+            'office': office_id.id if office_id else False,
             'user_id': user.id if user else False,
             'additional_booking': additional_booking,
             'state': state,
@@ -686,7 +687,7 @@ class CalendarOccasion(models.Model):
                 'appointment_id': False,
                 'type_id': type_id.id,
                 'channel': type_id.channel.id,
-                'office': office.id if office else False,
+                'office': office_id.id if office_id else False,
                 'additional_booking': True,
                 'state': 'ok',
             }
@@ -745,7 +746,7 @@ class CalendarOccasion(models.Model):
             start_dt = start_dt.replace(second=0, microsecond=0)
             domain = [('start', '=', start_dt), ('type_id', '=', type_id.id), ('appointment_id', '=', False), ('additional_booking', '=', False)]
             if office:
-                domain.append(('office', '=', office.id))
+                domain.append(('office', '=', office_id.id))
             # TODO: This if can and should probably be removed but I don't want to break anything right now
             if type_id.channel == self.env.ref('calendar_channel.channel_local'):
                 domain.append(('state', '=', 'ok'))
