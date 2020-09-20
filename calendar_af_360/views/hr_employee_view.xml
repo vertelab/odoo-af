@@ -8,6 +8,7 @@
       <page name="jobseekers" position="before">
         <page string="Upcoming meetings" name="upcoming_meetings">
           <field name="appointment_ids_ahead" mode="tree" nolabel="1" default_order="start">
+                  <field name="weekday"/>
                   <field name="type_id" options="{'no_create_edit': True}"/>
                   <field name="start" t-options="{'format': 'dd / MM / yyyy HH / mm'}"/>
                   <field name="duration" widget="float_time"/>
@@ -20,6 +21,7 @@
         </page>
         <page string="Upcoming meetings for others" >
           <field name="appointment_ids_all" mode="tree" nolabel="1" default_order="start">
+                  <field name="weekday"/>
                   <field name="type_id" options="{'no_create_edit': True}"/>
                   <field name="start"/>
                   <field name="duration" widget="float_time"/>
