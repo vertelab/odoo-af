@@ -251,6 +251,21 @@ class CalendarAppointment(models.Model):
     case_worker_name = fields.Char(string="Case worker", compute="compute_case_worker_name")
     active = fields.Boolean(string='Active', default=True)
     show_suggestion_ids = fields.Boolean(string="Show suggestions", default=False)
+    weekday = fields.Char(string="Weekday", compute="_compute_weekday")
+
+    @api.one
+    def _compute_weekday(self):
+        if self.start:
+            daynum2dayname = {
+                0: _("Monday"),
+                1: _("Tuesday"),
+                2: _("Wednesday"),
+                3: _("Thursday"),
+                4: _("Friday"),
+                5: _("Saturday"),
+                6: _("Sunday"),
+            }
+            self.weekday = daynum2dayname[self.start.weekday()]
 
     @api.one
     def compute_location(self):

@@ -36,7 +36,7 @@ class HrEmployee(models.Model):
     @api.one
     def compute_show_dates_ahead(self):
         self.appointment_ids = self.env['calendar.appointment'].search([('user_id', '=', self.env.user.id)])
-        self.appointment_ids_ahead = self.appointment_ids.filtered(lambda a: a.start > datetime.now() and a.state == 'confirmed')
+        self.appointment_ids_ahead = self.appointment_ids.filtered(lambda a: a.start > a.get_now() and a.state == 'confirmed')
     
     @api.depends('user_id')
     def _get_records(self):
@@ -47,7 +47,11 @@ class HrEmployee(models.Model):
             # TODO: re-add office once we know how.
             # appointment_record = rec.env['calendar.appointment'].search([('user_id', '!=', self.env.user.id), ('office', '=', self.env.user.office.id)])
             appointment_record = rec.env['calendar.appointment'].search([('user_id', '!=', self.env.user.id)])
-            rec.appointment_ids_all = appointment_record.filtered(lambda a: a.start > datetime.now() and a.state == 'confirmed')
+            rec.appointment_ids_all = appointment_record.filtered(lambda a: a.start > a.get_now() and a.state == 'confirmed')
+
+    @api.multi
+    def get_now(self):
+        return datetime.now()
     
 
 class HrEmployeeJobseekerSearchWizard(models.TransientModel):
@@ -68,4 +72,17 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             'view_mode': 'form', 
             'type': 'ir.actions.act_window',
         }
+    
+    @api.multi
+    def open_others_appointments_ahead(self):
+        return{
+            'name': _('Calendar'),
+            'domain':[('start','>',datetime.now()), ('user_id','!=',self.env.user.id)], 
+            'view_type': 'form',
+            'res_model': 'calendar.appointment',
+            'view_id':  False,
+            'view_mode': 'tree,calendar,form',
+            'type': 'ir.actions.act_window',
+        }
+
     

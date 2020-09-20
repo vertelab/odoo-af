@@ -20,6 +20,7 @@
               </field>
         </page>
         <page string="Upcoming meetings for others" >
+          <button name="open_others_appointments_ahead" type="object" class="oe_stat_button" icon="fa-calendar">Show all appointments</button>
           <field name="appointment_ids_all" mode="tree" nolabel="1" default_order="start">
                   <field name="weekday"/>
                   <field name="type_id" options="{'no_create_edit': True}"/>
