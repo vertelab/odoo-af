@@ -243,10 +243,10 @@
                         context="{'group_by':'state'}"
                     />
                     <filter
-                        name="group_by_office"
+                        name="group_by_office_id"
                         string="office_id"
                         domain="[]"
-                        context="{'group_by':'office'}"
+                        context="{'group_by':'office_id'}"
                     />
                     <filter
                         name="group_by_type_id"
@@ -286,10 +286,10 @@
                         context="{'group_by':'state'}"
                     />
                     <filter
-                        name="group_by_office"
+                        name="group_by_office_id"
                         string="office_id"
                         domain="[]"
-                        context="{'group_by':'office'}"
+                        context="{'group_by':'office_id'}"
                     />
                     <filter
                         name="group_by_type_id"

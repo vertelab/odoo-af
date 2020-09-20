@@ -219,7 +219,7 @@ class CalendarAppointment(models.Model):
         return res
 
     name = fields.Char(string='Name', required=True)
-    start = fields.Datetime(string='Start', required=True, help="Start date of an appointment", default=datetime.now())
+    start = fields.Datetime(string='Start', required=True, help="Start date of an appointment", default=datetime.now)
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an appointment")
     duration_selection = fields.Selection(string="Duration", selection=[('30 minutes','30 minutes'), ('1 hour','1 hour')])
     duration = fields.Float('Duration')
@@ -345,7 +345,7 @@ class CalendarAppointment(models.Model):
         suggestion_ids = []
         if self.suggestion_ids:
             suggestion_ids.append((5,))
-        occasions = self.env['calendar.occasion'].get_bookable_occasions(start, stop, self.duration * 60, self.type_id, self.office, max_depth = 1)
+        occasions = self.env['calendar.occasion'].get_bookable_occasions(start, stop, self.duration * 60, self.type_id, self.office_id, max_depth = 1)
         for day in occasions:
             for day_occasions in day:
                 for occasion in day_occasions:
