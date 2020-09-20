@@ -260,6 +260,24 @@ class ResPartner(models.Model):
             _logger.info("desired job external_id already in database, skipping")
 
     @api.model
+    def create_office_from_row(self, row):
+        external_xmlid = '%s.%s' % (self.xmlid_module, row['external_id'])
+        row.pop('external_id', None)
+        id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
+        if id_check == False:
+            office = self.env['hr.department'].create(row)
+
+            self.env['ir.model.data'].create({
+                                'name': external_xmlid.split('.')[1],
+                                'module': external_xmlid.split('.')[0],
+                                'model': office._name,
+                                'res_id': office.id
+                                })
+        else:
+            _logger.info("desired job external_id already in database, skipping")
+
+
+    @api.model
     def transform(self, row, transformations):
         create = True
         external_xmlid = ""
@@ -282,8 +300,7 @@ class ResPartner(models.Model):
 
         if 'type' not in row: #new
             row['type'] = 'contact'
-        if 'office_code' in row:
-            row['type'] = 'af office'
+        
 
         for key in row.keys():
             if key in transformations:
@@ -302,6 +319,15 @@ class ResPartner(models.Model):
                         create = False
                         _logger.warning("Skipping partner, contains J in RADERAD" )
                         break
+                if key == 'office_code': # if missing in AIS-F in existing record, replace
+                    vals = {
+                        "name": row['name'],
+                        "office_code": row["office_code"],
+                        "external_id": "%s%s" % (transformations['external_id'],row['external_id'])
+                    }
+                    self.create_office_from_row(vals)
+                    create = False
+
                 if key == 'partner_id':
                     if 'fiscal_year' in row:
                         
