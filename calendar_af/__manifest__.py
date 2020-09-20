@@ -13,6 +13,7 @@
         "partner_daily_notes",
         "af_security",
         "hr_skill",
+        'hr',
     ],
     "external_dependencies": [
     ],
