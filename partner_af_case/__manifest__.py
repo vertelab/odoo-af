@@ -38,6 +38,7 @@ v12.0.1.2 Lagt till översättningar som saknades.
     'depends': [
         'base_map',
         'partner_view_360'
+        'hr_360_view'
     ],
     'data': [
 	    'views/res_partner_view.xml',

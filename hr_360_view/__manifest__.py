@@ -14,7 +14,7 @@
     'depends': [
       'hr', 
       'partner_view_360', 
-      'partner_af_case', 
+      #'partner_af_case', 
       'partner_daily_notes',
       'hr_employee_firstname_extension'],
     'data': [
