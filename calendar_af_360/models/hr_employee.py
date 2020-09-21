@@ -77,7 +77,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     def open_others_appointments_ahead(self):
         return{
             'name': _('Calendar'),
-            'domain':[('start','>',datetime.now()), ('user_id','!=',self.env.user.id)], 
+            'domain':[('start','>',datetime.now()), ('user_id','!=',self.env.user.id), ('location','=', self.env.user.location_id)], 
             'view_type': 'form',
             'res_model': 'calendar.appointment',
             'view_id':  False,
