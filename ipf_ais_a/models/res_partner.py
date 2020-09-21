@@ -28,8 +28,6 @@ from odoo.exceptions import Warning
 
 _logger = logging.getLogger(__name__)
 
-LOCAL_TZ = 'Europe/Stockholm'
-
 class Partner(models.Model):
     _inherit = 'res.partner'
     
@@ -44,17 +42,13 @@ class Partner(models.Model):
             personnummer = self.get_ais_a_pnr()
             if all((personnummer, client_id, client_secret)):
                 jwt = self.get_af_jwt_token()
-                _logger.warn('peronnummer: %s' % personnummer)
                 headers = self._get_ipf_headers()
                 headers['x-jwt-assertion'] = jwt
-                _logger.warn('headers: %s' % headers)
                 url = url.format(personnummer=personnummer, client_id=client_id, client_secret=client_secret)
                 response = requests.get(
                     url,
                     headers=headers, verify=False)
-                _logger.warn('url: %s' % url)
                 res = response.json()
-                _logger.warn('res: %s' % res)
                 self.ais_a_ids = self.env['res.partner.ais_a']
                 for arende in res.get('arenden', []):
                     self.ais_a_ids |= self.env['res.partner.ais_a'].create_arende(arende, self.id)
