@@ -20,11 +20,11 @@
 ##############################################################################
 
 {
-    'name': 'Cases',
+    'name': 'Depreciated Af Cases',
     'version': '12.0.1.2',
     'category': '',
     'description': """
-Cases
+Depreciated Af Cases
 ===============================================================================
 v12.0.1.1 AFC-185, 199
 This module adds cases to a partner.
@@ -37,8 +37,8 @@ v12.0.1.2 Lagt till översättningar som saknades.
     'website': 'http://www.vertel.se',
     'depends': [
         'base_map',
-        'partner_view_360'
-        'hr_360_view'
+        'partner_view_360',
+        'hr_360_view',
     ],
     'data': [
 	    'views/res_partner_view.xml',
