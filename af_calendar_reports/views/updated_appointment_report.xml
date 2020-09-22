@@ -12,7 +12,7 @@
                             <div class="col-12">
                                 <p>
                                     Date: <span t-esc="o.start.strftime('%A %d %B %Y')"/> <br/>
-                                    Place: <span t-esc="o.office.name"/> <br/>
+                                    Place: <span t-esc="o.office_id.name"/> <br/>
                                     Time: <span t-esc="o.start.strftime('%I')"/> <br/>
                                 </p>
                             </div>
