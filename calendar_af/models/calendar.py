@@ -219,7 +219,7 @@ class CalendarAppointment(models.Model):
         return res
 
     name = fields.Char(string='Name', required=True)
-    start = fields.Datetime(string='Start', required=True, help="Start date of an appointment", default=datetime.now)
+    start = fields.Datetime(string='Start', required=True, help="Start date of an appointment", default=lambda self: datetime.now())
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an appointment")
     duration_selection = fields.Selection(string="Duration", selection=[('30 minutes','30 minutes'), ('1 hour','1 hour')])
     duration = fields.Float('Duration')
@@ -335,13 +335,17 @@ class CalendarAppointment(models.Model):
         if self.duration_selection == "1 hour":
             self.duration = 1.0
 
-    @api.onchange('duration', 'type_id')
+    @api.onchange('partner_id', 'user_id', 'start', 'duration', 'type_id', 'channel')
+    def hide_suggestion_ids(self):
+        self.show_suggestion_ids = False
+
+    @api.one
     def compute_suggestion_ids(self):
         if not all((self.duration, self.type_id, self.channel)):
             return
         start = self.start_meeting_search(self.type_id)
         stop = self.stop_meeting_search(start, self.type_id)
-        self.show_suggestion_ids = True
+        self.show_suggestion_ids = True 
         suggestion_ids = []
         if self.suggestion_ids:
             suggestion_ids.append((5,))
@@ -356,7 +360,7 @@ class CalendarAppointment(models.Model):
                         'duration': len(occasion)*30,
                         'type_id': occasion[0].type_id.id,
                         'channel': occasion[0].channel.id,
-                        'office': occasion[0].office_id.id,
+                        'office_id': occasion[0].office_id.id,
                         'user_id': occasion[0].user_id,
                         'occasion_ids': [(6, 0, occasion._ids)],
                     }))
@@ -608,7 +612,7 @@ class CalendarOccasion(models.Model):
             self.stop = self.start + timedelta(minutes=int(self.duration * 60)) 
 
     @api.model
-    def _force_create_occasion(self, duration, start, type_id, channel, state, user=False, office=False, additional_booking=True):
+    def _force_create_occasion(self, duration, start, type_id, channel, state, user=False, office_id=False, additional_booking=True):
         """In case we need to force through a new occasion for some reason"""
         vals = {
             'name': _('%sm @ %s') % (duration, pytz.timezone(LOCAL_TZ).localize(start)),
@@ -618,7 +622,7 @@ class CalendarOccasion(models.Model):
             'appointment_id': False,
             'type_id': type_id,
             'channel': channel,
-            'office': office_id.id if office_id else False,
+            'office_id': office_id.id if office_id else False,
             'user_id': user.id if user else False,
             'additional_booking': additional_booking,
             'state': state,
@@ -656,7 +660,7 @@ class CalendarOccasion(models.Model):
         return res
 
     @api.model
-    def _get_additional_booking(self, date, duration, type_id, office=False):
+    def _get_additional_booking(self, date, duration, type_id, office_id=False):
         """"Creates extra, additional, occasions. Iff overbooking is allowed. """
         # Check if overbooking is allowed on this meeting type
         if not type_id.additional_booking:
@@ -687,7 +691,7 @@ class CalendarOccasion(models.Model):
                 'appointment_id': False,
                 'type_id': type_id.id,
                 'channel': type_id.channel.id,
-                'office': office_id.id if office_id else False,
+                'office_id': office_id.id if office_id else False,
                 'additional_booking': True,
                 'state': 'ok',
             }
@@ -729,7 +733,7 @@ class CalendarOccasion(models.Model):
         return ret
 
     @api.model
-    def get_bookable_occasions(self, start, stop, duration, type_id, office=False, max_depth=1):
+    def get_bookable_occasions(self, start, stop, duration, type_id, office_id=False, max_depth=1):
         """Returns a list of occasions matching the defined parameters of the appointment. Creates additional 
         occasions if allowed.
         :param start: Start search as this time.
@@ -745,8 +749,8 @@ class CalendarOccasion(models.Model):
         def get_occasions(start_dt):
             start_dt = start_dt.replace(second=0, microsecond=0)
             domain = [('start', '=', start_dt), ('type_id', '=', type_id.id), ('appointment_id', '=', False), ('additional_booking', '=', False)]
-            if office:
-                domain.append(('office', '=', office_id.id))
+            if office_id:
+                domain.append(('office_id', '=', office_id.id))
             # TODO: This if can and should probably be removed but I don't want to break anything right now
             if type_id.channel == self.env.ref('calendar_channel.channel_local'):
                 domain.append(('state', '=', 'ok'))
@@ -803,7 +807,7 @@ class CalendarOccasion(models.Model):
         # free occasions, create new ones:
         if type_id.additional_booking and all( not l for l in occ_lists):
             # Changed this line to create over bookings on the LAST allowed date.
-            occ_lists[-1].append([self._get_additional_booking(stop, duration, type_id, office)])
+            occ_lists[-1].append([self._get_additional_booking(stop, duration, type_id, office_id)])
 
         return occ_lists
 
@@ -832,7 +836,7 @@ class CalendarOccasion(models.Model):
                 'partner_id': False,
                 'state': 'reserved',
                 'location_code': False,
-                'office': False,
+                'office_id': False,
                 'occasion_ids': occasion_ids, # I dont think this does anything?
                 'reserved': datetime.now(),
             }

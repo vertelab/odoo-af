@@ -38,7 +38,7 @@ class CreateLocalOccasion(models.TransientModel):
     #     return self.env['calendar.appointment'].browse(self._context.get('active_ids'))
 
     name = fields.Char(string='Name', required=True)
-    start = fields.Datetime(string='Start', required=True, help="Start date of an occasion")
+    start = fields.Datetime(string='Start', required=True, help="Start date of an occasion", default=lambda self: datetime.now().replace(minute=0,second=0,microsecond=0))
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an occasion")
     duration_selection = fields.Selection(string="Duration", selection=[('30 minutes','30 minutes'), ('1 hour','1 hour')])
     duration = fields.Float('Duration', required=True)

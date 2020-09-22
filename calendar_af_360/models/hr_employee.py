@@ -47,7 +47,7 @@ class HrEmployee(models.Model):
             # TODO: re-add office once we know how.
             # appointment_record = rec.env['calendar.appointment'].search([('user_id', '!=', self.env.user.id), ('office', '=', self.env.user.office.id)])
             appointment_record = rec.env['calendar.appointment'].search([('user_id', '!=', self.env.user.id)])
-            rec.appointment_ids_all = appointment_record.filtered(lambda a: a.start > a.get_now() and a.state == 'confirmed' and a.user_id.location == self.env.user.location_id)
+            rec.appointment_ids_all = appointment_record.filtered(lambda a: a.start > datetime.now() and a.state == 'confirmed' and a.user_id.location_id == self.env.user.location_id)
 
     @api.multi
     def get_now(self):
