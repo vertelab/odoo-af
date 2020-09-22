@@ -48,6 +48,8 @@ unused_occasions.unlink()</field>
     <record id="action_occasion_publish" model="ir.actions.server">
         <field name="name">AF Publish occasion</field>
         <field name="model_id" ref="calendar_af.model_calendar_occasion"/>
+        <field name="binding_model_id" ref="calendar_af.model_calendar_occasion"/>
+        <field name="binding_type">action</field>
         <field name="state">code</field>
         <field name="code">for rec in records:
   if rec.state == 'draft':
@@ -59,6 +61,8 @@ unused_occasions.unlink()</field>
     <record id="action_occasion_accept" model="ir.actions.server">
         <field name="name">AF Accept occasion</field>
         <field name="model_id" ref="calendar_af.model_calendar_occasion"/>
+        <field name="binding_model_id" ref="calendar_af.model_calendar_occasion"/>
+        <field name="binding_type">action</field>
         <field name="state">code</field>
         <field name="code">for rec in records:
   if rec.state == 'request':
@@ -70,6 +74,8 @@ unused_occasions.unlink()</field>
     <record id="action_occasion_reject" model="ir.actions.server">
         <field name="name">AF Reject occasion</field>
         <field name="model_id" ref="calendar_af.model_calendar_occasion"/>
+        <field name="binding_model_id" ref="calendar_af.model_calendar_occasion"/>
+        <field name="binding_type">action</field>
         <field name="state">code</field>
         <field name="code">for rec in records:
   if rec.state in ['request', 'ok']:
