@@ -403,8 +403,7 @@ class CalendarAppointment(models.Model):
                 j += 1
         days_first = days_first + j
         start = start + timedelta(days=days_first)
-        start.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute, second=0, microsecond=0)
-        return start
+        return start.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute, second=0, microsecond=0)
 
     def stop_meeting_search(self, start_meeting_search, type_id):
         days_last = self.type_id.days_last if self.type_id.days_last else 15
@@ -417,8 +416,7 @@ class CalendarAppointment(models.Model):
                 j += 1
         days_last = days_last + j
         stop = stop + timedelta(days=days_last)
-        stop.replace(hour=BASE_DAY_STOP.hour, minute=BASE_DAY_STOP.minute, second=0, microsecond=0)
-        return stop
+        return stop.replace(hour=BASE_DAY_STOP.hour, minute=BASE_DAY_STOP.minute, second=0, microsecond=0)
 
     @api.one
     def inactivate(self, b = True):
