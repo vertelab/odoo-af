@@ -47,3 +47,12 @@ class ResPartner(models.Model):
         """ Placeholder. The real function is implemented in af_security_rules."""
         return OrderedDict()
 
+class User(models.Model):
+    _inherit = 'res.users'
+
+    af_signature = fields.Char(string='AF signature', compute='_compute_af_signature', store=True)
+
+    @api.depends('login')
+    def _compute_af_signature(self):
+        for record in self:
+            record.af_signature = record.login
