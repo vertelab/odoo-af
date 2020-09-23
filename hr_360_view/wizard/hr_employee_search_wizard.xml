@@ -50,12 +50,13 @@
                                 <field name="customer_id"/>
                                 <field name="name"/>
                                 <field name="city"/>
-                                <field name="office_id"/>
+                                <field name="office"/>
                             </tree>
                         </field>
 
                     </page>
-
+<!-- Commented out for now, will return in the future -->                    
+<!--
                     <page string="Case" name="case">
                         <field name="case_ids">
                             <tree>
@@ -73,6 +74,7 @@
                         </field>
 
                     </page>
+ -->                   
 <!-- Commented out for now, will return in the future -->                    
 <!--
                     <page string="History">

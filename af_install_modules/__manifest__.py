@@ -32,7 +32,7 @@
         #"res_sun",
         "partner_daily_notes",
         "partner_desired_jobs",
-        "partner_af_case", 
+        #"partner_af_case", #remove
         "test_data_demo_sv",
         "edi_af_appointment",
         #"calendar_af",
