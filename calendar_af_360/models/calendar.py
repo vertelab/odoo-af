@@ -35,10 +35,10 @@ class CalendarAppointmentSuggestion(models.Model):
         super(CalendarAppointmentSuggestion, self).select_suggestion()
         
         return{
-            'name': _("Search Jobseekers"),
-            'view_type': 'form',
-            'res_model': "hr.employee.jobseeker.search.wizard",
-            'view_id': False, 
+            'name': _("Jobseekers"),
+            'res_id': self.appointment_id.partner_id.id,
+            'res_model': "res.partner",
+            'view_id': self.env.ref("partner_view_360.view_jobseeker_form").id, 
             'view_mode':"form",
             'type': 'ir.actions.act_window',
         }
