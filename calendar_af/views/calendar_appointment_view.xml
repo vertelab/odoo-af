@@ -273,7 +273,6 @@
                 <field name="name" />
                 <field name="state" />
                 <field name="type_id" />
-                <field name="user_id"/>
                 <filter
                     name="state_confirmed"
                     domain="[('state','=','confirmed')]"
