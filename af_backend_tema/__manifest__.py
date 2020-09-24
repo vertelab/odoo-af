@@ -4,18 +4,24 @@
 {
     "name": "AF Backend Tema V12",
     "summary": "AF Backend Theme V12	",
-    "version": "12.0.0.2",
+    "version": "12.0.0.4",
     "category": "Theme/Backend",
     "description": """
 		AF Backend tema för Odoo 12.0 community edition.
+		v12.0.0.3 Added dependancy for the web-module.
     """,
     "author": "Vertel AB",
     "license": "LGPL-3",
     "installable": True,
     "depends": [
-        'base',
+        'base', 'portal', 'web'
+    ],
+    'qweb': [
+        'static/src/xml/web.xml',
     ],
     "data": [
         'views/assets.xml',
+        'views/template.xml',
+        'views/webclient_template.xml'
     ]
 }

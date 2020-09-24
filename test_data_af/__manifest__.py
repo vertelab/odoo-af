@@ -1,12 +1,16 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 {
-    "name": "Test Data AF",
-    "version": "12.0.1.0.1",
+    "name": "AF Testdata from AIS-F",
+    "version": "12.0.1.0.2",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
+	 "description": """
+		AF Testdata from AIS-F imports test-data from AIS-F plus new testdata.
+		v12.0.1.2 Added description in Manifest.
+    """,
     "depends": [
         "contacts", 
         "hr", 
@@ -34,7 +38,7 @@
 		#"data/arbetsg_utl_adr/res.partner.csv", #--> mapp finns inte
 		"data/arbetsg_cct/res.partner.csv",
 		"data/user_cct/res.partner.csv", #--> fungerar inte med mer än ~10st av någon anledning
-		"data/arbetsg/res.partner.kpi.csv",
+		#"data/arbetsg/res.partner.kpi.csv", #läsning av data till KPI modulen är trasig
 		"data/arbetsg_sni1/res.sni.csv",
 		#"data/arbetsg_sni2/res_sni.csv",
         "data/arbetsg/res.ssyk.csv",

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="view_calendar_report_pivot" model="ir.ui.view">
+            <field name="name">report.calendar.appointment.pivot</field>
+            <field name="model">report.calendar.appointment</field>
+            <field name="arch" type="xml">
+                <pivot string="Calendar appointment report" display_quantity="true" disable_linking="True">
+                    <field name="occ_start" type="row"/>
+                    <field name="type_id" type="col"/>
+                    <field name="occ_count" type="measure"/>
+                    <field name="app_count" type="measure"/>
+                    <field name="add_book_count" type="measure"/>
+                    <field name="booked_from_cal" type="measure"/>
+                    <field name="free_occ" type="measure"/>
+                    <field name="no_overbooked" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- <record id="view_task_project_user_graph" model="ir.ui.view">
+            <field name="name">report.project.task.user.graph</field>
+            <field name="model">report.project.task.user</field>
+            <field name="arch" type="xml">
+                <graph string="Tasks Analysis" type="bar">
+                     <field name="project_id" type="row"/>
+                     <field name="user_id" type="col"/>
+                     <field name="nbr" type="measure"/>
+                 </graph>
+             </field>
+        </record> -->
+
+        <!-- Custom reports (aka filters) -->
+        <record id="filter_task_report_task_pipe" model="ir.filters">
+            <field name="name">Overview PDM</field>
+            <field name="model_id">report.calendar.appointment</field>
+            <field name="user_id" eval="False"/>
+            <field name="is_default" eval="True"/>
+            <field name="domain">[('app_state', '=', 'confirmed'), ('occ_state', '=', 'ok')]</field>
+            <field name="context">{'pivot_measures': ['occ_count', 'app_count', 'add_book_count', 'booked_from_cal', 'free_occ', 'no_overbooked'], 'pivot_column_groupby': ['type_id'], 'pivot_row_groupby': ['occ_start', 'occ_start:week', 'occ_start:day', 'occ_start_time']}</field>
+        </record>
+
+        <record id="view_calendar_report_search" model="ir.ui.view">
+            <field name="name">report.calendar.appointment.search</field>
+            <field name="model">report.calendar.appointment</field>
+            <field name="arch" type="xml">
+                <search string="Calendar report">
+                    <field name="type_id"/>
+                    <field name="occ_start"/>
+                    <field name="occ_stop"/>
+                    <field name="app_start"/>
+                    <field name="app_stop"/>
+                    <field name="occ_start_time"/>
+                    <field name="app_start_time"/>
+                    <!-- <field name="partner_id" filter_domain="[('partner_id', 'child_of', self)]"/> -->
+                    <filter string="Unassigned" name="unassigned" domain="[('user_id','=',False)]"/>
+                    <separator/>
+                    <filter string="Confirmed appointment" name="confirmed_appointment" domain="[('app_state', '=', 'confirmed')]"/>
+                    <!-- <group expand="0" string="Extended Filters">
+                        <field name="priority"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </group> -->
+                    <group expand="1" string="Group By">
+                        <filter string="Type" name="type" context="{'group_by':'type_id'}"/>
+                        <filter string="Additional bookings" name="additional_bookings" context="{'group_by':'additional_booking'}"/>
+                        <filter string="Case worker" name="User" context="{'group_by':'user_id'}"/>
+                        <filter string="Occasion state" name="occ_state" context="{'group_by':'occ_state'}"/>
+                        <filter string="Appointment state" name="app_state" context="{'group_by':'app_state'}"/>
+                        <!-- <separator/> -->
+                        <!-- <filter string="Assignation Date" name="assignation_month" context="{'group_by':'date_start:month'}"/> -->
+                    </group>
+                </search>
+            </field>
+        </record>
+
+       <record id="action_calendar_report_tree" model="ir.actions.act_window">
+            <field name="name">Calendar appointment report</field>
+            <field name="res_model">report.calendar.appointment</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">pivot,graph</field>
+            <field name="search_view_id" ref="view_calendar_report_search"/>
+            <field name="context">{'group_by_no_leaf':1,'group_by':[]}</field>
+            <field name="help">This report allows you to analyse planned meetings, free occasions, etc.</field>
+        </record>
+
+        <menuitem action="action_calendar_report_tree" id="menu_action_calendar_report" parent="menu_reports" sequence="10" groups="af_security.af_employers_editor,af_security.af_jobseekers_editor" />
+
+</odoo>

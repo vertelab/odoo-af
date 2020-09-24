@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="search_jobseeker_form" model="ir.ui.view">
+        <field name="name">search.jobseeker.wizard</field>
+        <field name="model">hr.employee.jobseeker.search.wizard</field>
+        <field name="arch" type="xml"> 
+            <form string="Search Partner" create="false">
+            <h1>Search Jobseekers</h1>
+            <notebook>
+                <page string="When in contact">
+                    <group>
+                    <group>
+                        <field name="identification" />
+                        <!-- <field name="search_domain" widget="domain" options="{'model' : 'res.partner'}"> </field> -->
+                        <field name="social_sec_nr_search"/>
+                        <!-- <field name="customer_id_search"/>
+                        <field name="email_search"/> -->
+                    </group>
+                </group>
+                <group></group>
+                <button name="search_jobseeker" string="search" type="object" class="btn-primary"/>
+                <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </page>
+                <page string="Based on the needs of the authority">
+                    <group>
+                        <group>
+                            <field name="search_reason"/> <!--widget="radio" options="{'horizontal': true}"-->
+                            <field name="other_reason" attrs="{'invisible': [('search_reason','!=','other reason')]}"/>
+                            <field name="social_sec_nr_search"/>
+                            <field name="customer_id_search"/>
+                            <field name="email_search"/>     
+                        </group>           
+                    </group>
+                <group></group>
+                <button name="search_jobseeker1" string="search" type="object" class="btn-primary"/>
+                <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </page>
+            </notebook>
+                
+                
+           
+            <notebook>
+            <field name="employee_id" invisible="1"/>
+                    <page name="jobseekers" string="My Jobseekers" groups="base.group_no_one">
+                        <!-- <field name="user_id" invisible="1"/> -->
+
+                        <field name="jobseekers_ids">
+                            <tree>
+                                <field name="social_sec_nr"/>
+                                <field name="customer_id"/>
+                                <field name="name"/>
+                                <field name="city"/>
+                                <field name="office_id"/>
+                            </tree>
+                        </field>
+
+                    </page>
+<!-- Commented out for now, will return in the future -->                    
+<!--
+                    <page string="Case" name="case">
+                        <field name="case_ids">
+                            <tree>
+                                <field name="case_id"/>
+                                <field name="name"/>
+                                <field name="case_description"/>
+                                <field name="administrative_officer"/>
+                                <field name="case_type"/>
+                                <field name="created_date"/>
+                                <field name="changed_date"/>
+                                <field name="due_date"/>
+                                <field name="closed_date"/>
+                                <field name="case_url"/>
+                            </tree>
+                        </field>
+
+                    </page>
+ -->                   
+<!-- Commented out for now, will return in the future -->                    
+<!--
+                    <page string="History">
+                        <field name="daily_note_ids">
+                            <tree>
+                                <field name="name"/>
+                                <field name="note"/>
+                                <field name="note_date"/>
+                                <field name="note_type"/>
+                                <field name="note_number"/>
+                                <field name="office_id"/>
+                            </tree>
+                        </field>
+                    </page>
+-->
+                </notebook>
+                 </form>
+        </field>
+    </record>      
+
+    <act_window id="search_jobseeker_wizard"
+            name="Search Partner"
+            src_model="hr.employee"
+            res_model="hr.employee.jobseeker.search.wizard"
+            view_mode="form"
+            target="inline"
+            key2="client_action_multi"/>       
+
+   <menuitem id="res_partner_jobseeker_search_wizard_menu"
+        name="My Administrative Officer Area"
+        action="search_jobseeker_wizard" 
+        sequence="3"/> 
+
+<!--
+Menu hidden since the form is accessed in the main menu_hr_employee_360
+     <menuitem
+            id="menu_hr_employee_360"
+            name="HR 360"
+            parent="res_partner_jobseeker_search_wizard_menu"
+            groups="hr.group_hr_manager,base.group_no_one"
+            action="open_view_employee_360_list"
+            sequence="99"/>
+-->
+
+</odoo>

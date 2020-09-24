@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<record id="view_employee_360_form_calendar_af_inherited" model="ir.ui.view"> 
+    <field name="name">hr.employee.form.jobseeker.calendar_af.inherited</field>
+    <field name="model">hr.employee.jobseeker.search.wizard</field> 
+    <field name="inherit_id" ref="hr_360_view.search_jobseeker_form" /> 
+    <field name="arch" type="xml"> 
+      <page name="jobseekers" position="before">
+        <page string="Upcoming meetings" name="upcoming_meetings">
+          <field name="appointment_ids_ahead" mode="tree" nolabel="1" default_order="start">
+                  <field name="weekday"/>
+                  <field name="type_id" options="{'no_create_edit': True}"/>
+                  <field name="start" t-options="{'format': 'dd / MM / yyyy HH / mm'}"/>
+                  <field name="duration" widget="float_time"/>
+                  <field name="case_worker_name"/>
+                  <field name="partner_id"/>
+                  <field name="location"/>
+                  <button name="cancel_meeting_action" type="object" string="Cancel" icon="fa-times" context="{'active_id': id}"/>
+                  <button name="move_meeting_action" type="object" string="Move" icon="fa-repeat" context="{'active_id': id}"/>
+              </field>
+        </page>
+        <page string="Upcoming meetings for others" >
+          <button name="open_others_appointments_ahead" type="object" class="oe_stat_button" icon="fa-calendar">Show all appointments</button>
+          <field name="appointment_ids_all" mode="tree" nolabel="1" default_order="start">
+                  <field name="weekday"/>
+                  <field name="type_id" options="{'no_create_edit': True}"/>
+                  <field name="start"/>
+                  <field name="duration" widget="float_time"/>
+                  <field name="case_worker_name"/>
+                  <field name="partner_id"/>
+                  <field name="location"/>
+              </field>
+        </page>
+      </page>
+    </field>
+  </record> 
+</odoo>

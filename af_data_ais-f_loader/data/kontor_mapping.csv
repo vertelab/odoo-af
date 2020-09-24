@@ -1,3 +1,25 @@
-"kontor arbetsgivardata_2020-03-20l.xlsx","KONTOR_ID","KONTOR_KOD","TMSTAMP","NAMN","BESOKSADRESS","UTDELNINGSADRESS","POSTNR","POSTORT","TELNR","FAXNR","EXTERN_EPOST","INTERN_EPOST","KONTAKTPERSON_1","KONTAKTPERSON_2","KOMMUN_KOD","UPPDAT_DATUM","UPPDAT_SIGN","ANMARKNING","KONTAKTPERSON_ANNONSDIREKT","RADERAD","LOGGMARKERING","SERVICEDIREKT","BEHORIGHETSTJANST"
-"Notering",,,,,,,,,,,,,,,"behöver transformation",,,,,,,,
-"Odoo res.partner (office)","external_id","office_code",,"name","street","street2","zip","city","phone","fax ","email","vad borde den mappas mot?","vad är det?","?","state_id/id",,,,,,,,
+"kontor.csv","Notering","Trans","Odoo"
+"KONTOR_ID",,,
+"KONTOR_KOD",,"external_id,dptmnt_office_","external_id"
+"KONTOR_KOD",,"office_code,office_code","office_code"
+"TMSTAMP",,,
+"NAMN",,,"name"
+"BESOKSADRESS",,,
+"UTDELNINGSADRESS",,,
+"POSTNR",,,
+"POSTORT",,,
+"TELNR",,,
+"FAXNR",,,
+"EXTERN_EPOST",,,
+"INTERN_EPOST",,,
+"KONTAKTPERSON_1",,,
+"KONTAKTPERSON_2",,,
+"KOMMUN_KOD",,,
+"UPPDAT_DATUM",,,
+"UPPDAT_SIGN",,,
+"ANMARKNING",,,
+"KONTAKTPERSON_ANNONSDIREKT",,,
+"RADERAD","probably not working as of 2020-09-13 rewrite to hr.department","skip_if_j,skip","skip_if_j"
+"LOGGMARKERING",,,
+"SERVICEDIREKT",,,
+"BEHORIGHETSTJANST",,,

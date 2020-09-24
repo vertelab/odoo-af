@@ -1,3 +1,67 @@
+// Increase width and change color of line divider
+.o_cp_switch_buttons .btn-secondary:not(:disabled):not(.disabled):active, .o_cp_switch_buttons .btn-secondary:not(:disabled):not(.disabled).active, .show > .btn-secondary.dropdown-toggle {
+    color: white !important;
+    background-color: #00005a !important;
+}
+
+.o_form_view .o_group .o_td_label {
+    border-right: 1.5px solid #00005a;
+}
+
+// Increase width and change color of tab(Page) line
+.nav-tabs .nav-link {
+    border: 1.5px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+    color: #00005a;
+    background-color: #fff;
+    border-color: #00005a #00005a #00005a;
+}
+
+.nav-tabs {
+    border-bottom: 1.5px solid #00005a;
+}
+
+// Increase width and change color of kanban record border
+
+.o_kanban_view .o_kanban_record {
+    position: relative;
+    display: inline-block;
+    border-color: #00005a;
+    min-width: 150px;
+    margin: 0 0 -1px;
+}
+.o_kanban_view .o_kanban_record, .o_kanban_view .o_kanban_quick_create {
+    padding: 8px 8px;
+    border: 1.5px solid #00005a;
+    background-color: white;
+}
+
+// Increase width of white area
+
+.o_form_view .o_form_sheet_bg > .o_form_sheet {
+    max-width: 1240px;
+}
+
+// Increase width of field label column
+.o_form_view .o_group.o_inner_group > tbody > tr > td.o_td_label {
+    min-width: 200px;
+}
+
+// Increase height between fields 
+
+.o_form_view .o_form_label {
+    margin-bottom: 10px;
+}
+
+.o_form_view.o_form_editable .o_row > .o_field_widget, .o_form_view.o_form_editable .o_row > div {
+    margin-bottom: 10px;
+}
+
+
 // Font
 //------------------------
 
@@ -8,7 +72,7 @@
 
 //------------------------
 
-// AF färger
+// AF Colors
 //------------------------
 
 $brand-primary: #00005a; // Färgytor, infografik, diagram, primär knapp, nyhetspuff, skjutreglage , grafik
@@ -23,7 +87,7 @@ $brand-pink: #d43372; // Kampanjyta, grafiska element
 $brand-pink-40: #eeadc7;
 $brand-white: #ffffff; // Bakgrundsfärg
 $brand-black: #000000;
-$brand-grey-90: #333333;
+$brand-grey-90: #000000;  // bytt från #333333;  för att Mira säger att vi behöver högre kontrast.
 $brand-grey-70: #666666;
 $brand-grey-50: #999999;
 $brand-grey-30: #d1d1d1;

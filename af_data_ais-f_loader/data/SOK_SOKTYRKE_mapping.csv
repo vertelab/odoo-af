@@ -1,0 +1,8 @@
+SOK_SOKTYRKE.csv,Notering,Trans,Odoo
+ID,,"external_id,desired_jobs_",external_id
+SOKANDE_ID,,"partner_id,part_jbskr_",partner_id
+ORDNINGSNR,,,
+YRKE_ID,??,,
+SSYK,,"job_id,ssyk_",job_id
+UTBILDNING,,,education
+ERFARENHET,,,experience
