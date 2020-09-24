@@ -132,9 +132,9 @@
                                     <field name="stop" invisible="1" />
                                     <field name="duration_selection" widget="radio"/>
                                     <field name="duration" invisible="1" />
-                                </group>
+                                </group> 
                                 <group>
-                                    <field name="office_id"  attrs="{'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}" />
+                                    <field name="office_id"  attrs="{'required':[('channel_name','!=','PDM')], 'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}" />
                                     <field string="Description" name="description" invisible="1"/>
                                     <field name="occasion_ids" invisible="1" widget="many2many_tags" />
                                     <field name="show_suggestion_ids" invisible="1" />

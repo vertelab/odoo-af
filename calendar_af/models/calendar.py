@@ -343,6 +343,8 @@ class CalendarAppointment(models.Model):
     def compute_suggestion_ids(self):
         if not all((self.duration, self.type_id, self.channel)):
             return
+        if self.channel_name != "PDM" and not self.office_id:
+            return
         start = self.start_meeting_search(self.type_id)
         stop = self.stop_meeting_search(start, self.type_id)
         self.show_suggestion_ids = True 
