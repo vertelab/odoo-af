@@ -19,8 +19,8 @@
 #
 ##############################################################################
 {
-    'name': 'AF Vertel Demodata converter - depreciated',
-    'version': '12.0.1.1',
+    'name': 'Depreciated AF Vertel Demodata converter',
+    'version': '12.0.1.2',
     'license': 'AGPL-3',
     'description': """
 CSV File Creator -- dokumentation
