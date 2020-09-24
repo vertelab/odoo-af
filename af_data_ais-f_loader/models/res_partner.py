@@ -320,7 +320,6 @@ class ResPartner(models.Model):
                         _logger.warning("Skipping partner, contains J in RADERAD" )
                         break
                 if key == 'office_code': # if missing in AIS-F in existing record, replace
-                    _logger.info("what the fuck")
                     partner_vals = {
                         'name': row['name'],
                         'email': row['email'] if 'email' in row else False,
