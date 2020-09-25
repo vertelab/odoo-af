@@ -88,7 +88,7 @@ class CreateLocalOccasion(models.TransientModel):
         if self.create_type == 'single':
             for user_id in self.user_ids:
                 for curr_occ in range(no_occ):
-                    occ = self.env['calendar.occasion']._force_create_occasion(30, self.start + timedelta(minutes=curr_occ*30), self.type_id.id, self.channel.id, 'draft', user_id, self.office_id, False)
+                    occ = self.env['calendar.occasion']._force_create_occasion(30, self.start + timedelta(minutes=curr_occ*30), self.type_id.id, self.channel.id, 'request', user_id, self.office_id, False)
             return True
         elif self.create_type == 'repeating':
             # create list of weekday values allowed:

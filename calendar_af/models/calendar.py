@@ -496,8 +496,8 @@ class CalendarAppointment(models.Model):
     @api.model
     def create(self, values):
         res = super(CalendarAppointment, self).create(values)
-        if res.sudo().channel == res.env.ref('calendar_channel.channel_local'):
-            res._check_remaining_occasions()
+        # if (res.sudo().occasion_ids != False) and (res.sudo().channel == res.env.ref('calendar_channel.channel_local')):
+        #     res._check_remaining_occasions()
 
         if res.sudo().partner_id:
             #create daily note
@@ -516,7 +516,7 @@ class CalendarAppointment(models.Model):
 
     @api.multi
     def write(self, vals):
-        if (self.channel == self.env.ref('calendar_channel.channel_local')) and (vals.get('start') or vals.get('stop') or vals.get('type_id')):
+        if (self.occasion_ids != False) and (self.channel == self.env.ref('calendar_channel.channel_local')) and (vals.get('start') or vals.get('stop') or vals.get('type_id')):
             self._check_remaining_occasions()
         return super(CalendarAppointment, self).write(vals)
 
@@ -535,10 +535,7 @@ class CalendarAppointment(models.Model):
             ('state', 'in', ['free', 'confirmed']),
             ('office_id', '=', self.office_id.id)])
 
-        if occ_num <= min_num:
-            # self.type_id
-            # self.office_ids
-            # TODO: send alert
+        if self.office_id.partner_id and self.office_id.partner_id.email and occ_num <= min_num:
             template = self.env.ref('calendar_af.email_template_low_occasion_warning')
             template.send_mail(self.id, force_send=True)
 
