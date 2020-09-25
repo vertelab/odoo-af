@@ -90,8 +90,7 @@ class CreateLocalOccasion(models.TransientModel):
     def action_create_occasions(self):
         if not ((self.start.minute in [0,30] and self.stop.second == 0) and (self.stop.minute in [0,30] and self.stop.second == 0)):
             raise Warning('Start or stop time is not and exacly an hour or halfhour.')
-        # populate a list of holidays
-        
+
         # Check how many 30min occasions we need
         no_occ = int(self.duration / 0.5)
         if self.create_type == 'single':
