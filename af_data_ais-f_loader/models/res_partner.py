@@ -320,9 +320,16 @@ class ResPartner(models.Model):
                         _logger.warning("Skipping partner, contains J in RADERAD" )
                         break
                 if key == 'office_code': # if missing in AIS-F in existing record, replace
+                    partner_vals = {
+                        'name': row['name'],
+                        'email': row['email'] if 'email' in row else False,
+                        'phone': row['phone'] if 'phone' in row else False,
+                    }
+                    partner = self.env['res.partner'].create(partner_vals)
                     vals = {
                         "name": row['name'],
                         "office_code": row["office_code"],
+                        "partner_id": partner.id,
                         "external_id": "%s%s" % (transformations['external_id'],row['external_id'])
                     }
                     self.create_office_from_row(vals)
