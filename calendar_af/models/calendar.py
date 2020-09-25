@@ -318,7 +318,13 @@ class CalendarAppointment(models.Model):
             if active_id not in partners.ids:
                 partners |= self.env['res.partner'].browse(active_id)
         return partners
-    
+
+    @api.onchange('type_id', 'partner_id')
+    def check_partner_match_area(self):
+        if self.type_id and not self.partner_id.match_area and 'KROM' in self.type_id.name:
+            self.type_id = False
+            raise Warning('Jobseeker not KROM classified')
+
     @api.onchange('type_id')
     def set_duration_selection(self):
         self.name = self.type_id.name
