@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0-20200508\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-25 08:37+0000\n"
-"PO-Revision-Date: 2020-09-25 10:42+0200\n"
+"PO-Revision-Date: 2020-09-25 15:19+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -33,13 +33,13 @@ msgstr "Bokade möten"
 #: model:ir.model.fields,field_description:calendar_af_360.field_hr_employee__appointment_ids_ahead
 #: model:ir.model.fields,field_description:calendar_af_360.field_hr_employee_jobseeker_search_wizard__appointment_ids_ahead
 msgid "Booked meetings ahead"
-msgstr "Bokade möten framöver"
+msgstr "Framtida möten"
 
 #. module: calendar_af_360
 #: model:ir.model.fields,field_description:calendar_af_360.field_hr_employee__appointment_ids_all
 #: model:ir.model.fields,field_description:calendar_af_360.field_hr_employee_jobseeker_search_wizard__appointment_ids_all
 msgid "Booked meetings ahead for everyone"
-msgstr "Bokade möten framöver för alla"
+msgstr "Allas framtida bokade möten"
 
 #. module: calendar_af_360
 #: code:addons/calendar_af_360/models/hr_employee.py:79
@@ -56,7 +56,7 @@ msgstr "Avbryt"
 #. module: calendar_af_360
 #: model:ir.model,name:calendar_af_360.model_hr_employee
 msgid "Employee"
-msgstr "Anställd"
+msgstr "Medarbetare"
 
 #. module: calendar_af_360
 #: code:addons/calendar_af_360/models/calendar.py:38
@@ -73,7 +73,7 @@ msgstr "Omboka"
 #. module: calendar_af_360
 #: model_terms:ir.ui.view,arch_db:calendar_af_360.view_jobseeker_form_calendar_af_inherited
 msgid "New appointment"
-msgstr "Ny mötestillfälle"
+msgstr "Nytt möte"
 
 #. module: calendar_af_360
 #: model_terms:ir.ui.view,arch_db:calendar_af_360.view_jobseeker_form_calendar_af_inherited
@@ -94,7 +94,7 @@ msgstr "Framtida möten"
 #. module: calendar_af_360
 #: model_terms:ir.ui.view,arch_db:calendar_af_360.view_employee_360_form_calendar_af_inherited
 msgid "Upcoming meetings for others"
-msgstr "Framtida möten för andra"
+msgstr "Mina kollegors möten"
 
 #. module: calendar_af_360
 #: model:ir.model,name:calendar_af_360.model_hr_employee_jobseeker_search_wizard
