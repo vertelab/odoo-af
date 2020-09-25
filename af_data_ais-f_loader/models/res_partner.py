@@ -319,7 +319,14 @@ class ResPartner(models.Model):
                         create = False
                         _logger.warning("Skipping partner, contains J in RADERAD" )
                         break
-                if key == 'office_code': # if missing in AIS-F in existing record, replace
+                elif transform == 'registered_through':
+                    translation_dict = {
+                        'SJALVSERVICE':'self service',
+                        'LOKAL':'local office',
+                        'PDM':'pdm',
+                        }
+                    row['registered_through'] = translation_dict[row['registered_through']]
+                elif key == 'office_code': # if missing in AIS-F in existing record, replace
                     partner_vals = {
                         'name': row['name'],
                         'email': row['email'] if 'email' in row else False,
@@ -335,7 +342,7 @@ class ResPartner(models.Model):
                     self.create_office_from_row(vals)
                     create = False
 
-                if key == 'partner_id':
+                elif key == 'partner_id':
                     if 'fiscal_year' in row:
                         
                         fiscal_year_date = "%s-%s-01" % (row['fiscal_year'][:4], row['fiscal_year'][4:6])
@@ -438,7 +445,7 @@ class ResPartner(models.Model):
                                 _logger.warning("foreign address on jobseeker, skipping")
                             create = False
                             keys_to_delete.append('type')
-                if key == 'parent_id': 
+                elif key == 'parent_id': 
                     parent_xmlid_name = "%s%s" % (transform, row[key])
                     parent_xmlid = "%s.%s" % (self.xmlid_module, parent_xmlid_name)
                     #_logger.info("parent xmlid: %s" % parent_xmlid)
