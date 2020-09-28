@@ -622,7 +622,8 @@ class CalendarOccasion(models.Model):
     state = fields.Selection(selection=[('draft', 'Draft'),
                                         ('request', 'Published'),
                                         ('ok', 'Accepted'),
-                                        ('fail', 'Rejected')],
+                                        ('fail', 'Rejected'),
+                                        ('deleted', 'Deleted')],
                                         string='Occasion state', 
                                         default='request', 
                                         help="Status of the meeting")
@@ -769,6 +770,17 @@ class CalendarOccasion(models.Model):
         """User rejects suggested occasion"""
         if self.state in ['request','ok']:
             self.state = 'fail'
+            ret = True
+        else:
+            ret = False
+
+        return ret
+
+    @api.multi
+    def delete_occasion(self):
+        """User deletes an occasion"""
+        if not self.appointment_id:
+            self.state = 'deleted'
             ret = True
         else:
             ret = False

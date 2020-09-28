@@ -84,6 +84,19 @@ unused_occasions.unlink()</field>
       raise Warning("One of your occasions is not a request.")</field>
     </record>
 
+    <record id="action_occasion_delete" model="ir.actions.server">
+        <field name="name">AF Delete occasion</field>
+        <field name="model_id" ref="calendar_af.model_calendar_occasion"/>
+        <field name="binding_model_id" ref="calendar_af.model_calendar_occasion"/>
+        <field name="binding_type">action</field>
+        <field name="state">code</field>
+        <field name="code">for rec in records:
+  if not rec.appointment_id:
+    res = rec.delete_occasion()
+    if not res:
+      raise Warning("One of your occasions is already booked")</field>
+    </record>
+
     <menuitem name="Distans Meeting" id="menu_book_distans_meeting" parent="calendar.mail_menu_calendar" sequence="10" />
     <menuitem name="PDM" id="menu_pdm" parent="calendar.mail_menu_calendar" sequence="11" />
     <menuitem name="Local" id="menu_local" parent="calendar.mail_menu_calendar" sequence="12" />
