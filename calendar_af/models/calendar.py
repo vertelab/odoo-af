@@ -137,7 +137,7 @@ class CalendarAppointmentSuggestion(models.Model):
     office_id = fields.Many2one(comodel_name='hr.department', string="Office")
     user_id = fields.Many2one(comodel_name='res.users', string="Case worker")
     weekday = fields.Char(string='Weekday', compute="_compute_weekday")
-    
+
     @api.one
     def _compute_weekday(self):
         if self.start:
@@ -174,7 +174,7 @@ class CalendarAppointmentSuggestion(models.Model):
                     raise Warning(_("No free occasions. This shouldn't happen. Please contact the system administrator."))
 
                 occasions |= free_occasion
-        
+
         # Write data to appointment_id
         occasions.write({'appointment_id': self.appointment_id.id})
         self.appointment_id.write({
@@ -318,7 +318,7 @@ class CalendarAppointment(models.Model):
             if active_id not in partners.ids:
                 partners |= self.env['res.partner'].browse(active_id)
         return partners
-    
+
     @api.onchange('type_id')
     def set_duration_selection(self):
         self.name = self.type_id.name
@@ -326,8 +326,7 @@ class CalendarAppointment(models.Model):
             self.duration_selection = '30 minutes'
         elif self.duration == 1.0:
             self.duration_selection = '1 hour'
-        
-    
+
     @api.onchange('duration_selection')
     def set_duration(self):
         if self.duration_selection == "30 minutes":
@@ -393,30 +392,36 @@ class CalendarAppointment(models.Model):
             else:
                 raise Warning(_("Case worker has no free occasions at that time."))
 
+    def _check_resource_calendar_date(self, check_date):
+        """Checks if a date is overlapping with a holiday from resource.calender.leaves """
+        res = self.env['resource.calendar.leaves'].sudo().search_read([('date_from', '<', check_date), ('date_to', '>', check_date)])
+        if res:
+            return False
+        return True
+
     def start_meeting_search(self, type_id):
         days_first = self.type_id.days_first if self.type_id.days_first else 3
-        start = loop_start = datetime.now()
-        j = 0
-        for i in range(days_first):
-            loop_start = loop_start + timedelta(days=1)
-            if loop_start.weekday() in [5,6]:
-                j += 1
-        days_first = days_first + j
-        start = start + timedelta(days=days_first)
-        return start.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute, second=0, microsecond=0)
+        loop_start = datetime.now()
+        i = 0
+
+        while i <= days_first:
+            if (loop_start.weekday() in [5,6]) or self._check_resource_calendar_date(loop_start):
+                i +=1
+            loop_start = loop_start + timedelta(days=1) 
+
+        return loop_start.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute, second=0, microsecond=0)
 
     def stop_meeting_search(self, start_meeting_search, type_id):
         days_last = self.type_id.days_last if self.type_id.days_last else 15
-        stop = loop_start = start_meeting_search
+        loop_start = start_meeting_search
+        i = 0
 
-        j = 0
-        for i in range(days_last):
+        while i <= days_last:
+            if (loop_start.weekday() in [5,6]) or self._check_resource_calendar_date(loop_start):
+                i +=1
             loop_start = loop_start + timedelta(days=1)
-            if loop_start.weekday() in [5,6]:
-                j += 1
-        days_last = days_last + j
-        stop = stop + timedelta(days=days_last)
-        return stop.replace(hour=BASE_DAY_STOP.hour, minute=BASE_DAY_STOP.minute, second=0, microsecond=0)
+
+        return loop_start.replace(hour=BASE_DAY_STOP.hour, minute=BASE_DAY_STOP.minute, second=0, microsecond=0)
 
     @api.one
     def inactivate(self, b = True):
@@ -436,7 +441,7 @@ class CalendarAppointment(models.Model):
             if appointment.state == 'confirmed':
                 appointment.state = 'canceled'
                 appointment.cancel_reason = cancel_reason.id
-                
+
                 #create daily note
                 vals = {
                     "name": _("Meeting cancelled"),
