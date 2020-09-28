@@ -36,7 +36,7 @@ BASE_DURATION = 30.0
 # BASE_DAY_START, BASE_DAY_STOP: The hours between which we normally accept appointments
 BASE_DAY_START = pytz.timezone(LOCAL_TZ).localize(datetime.now().replace(hour=9, minute=0, second=0, microsecond=0)).astimezone(pytz.utc)
 BASE_DAY_STOP = pytz.timezone(LOCAL_TZ).localize(datetime.now().replace(hour=16, minute=0, second=0, microsecond=0)).astimezone(pytz.utc)
-BASE_DAY_LUNCH = pytz.timezone(LOCAL_TZ).localize(datetime.now().replace(hour=12, minute=0, second=0, microsecond=0)).astimezone(pytz.utc)
+BASE_DAY_LUNCH = pytz.timezone(LOCAL_TZ).localize(datetime.now().replace(hour=11, minute=0, second=0, microsecond=0)).astimezone(pytz.utc)
 # RESERVED_TIMEOUT is the default time before a reservation times out.
 RESERVED_TIMEOUT = 300.0
 
@@ -511,6 +511,9 @@ class CalendarAppointment(models.Model):
     @api.model
     def create(self, values):
         res = super(CalendarAppointment, self).create(values)
+        # if (res.sudo().occasion_ids != False) and (res.sudo().channel == res.env.ref('calendar_channel.channel_local')):
+        #     res._check_remaining_occasions()
+
         if res.sudo().partner_id:
             #create daily note
             vals = {
@@ -525,6 +528,31 @@ class CalendarAppointment(models.Model):
             res.sudo().partner_id.notes_ids = [(0, 0, vals)]
 
         return res
+
+    @api.multi
+    def write(self, vals):
+        if (self.occasion_ids != False) and (self.channel == self.env.ref('calendar_channel.channel_local')) and (vals.get('start') or vals.get('stop') or vals.get('type_id')):
+            self._check_remaining_occasions()
+        return super(CalendarAppointment, self).write(vals)
+
+    @api.multi
+    def _check_remaining_occasions(self):
+        start_check = datetime.now() + timedelta(days=self.type_id.days_first)
+        stop_check = datetime.now() + timedelta(days=self.type_id.days_last)
+        min_num = int(self.env['ir.config_parameter'].sudo().get_param('calendar_af.occasion_alert_number', '3'))
+
+        occ_num = self.env['calendar.occasion'].search_count([
+            ('start', '>', start_check),
+            ('start', '<', stop_check),
+            ('type_id', '=', self.type_id.id),
+            ('additional_booking', '=', False),
+            ('appointment_id', '=', False),
+            ('state', 'in', ['free', 'confirmed']),
+            ('office_id', '=', self.office_id.id)])
+
+        if self.office_id.partner_id and self.office_id.partner_id.email and occ_num <= min_num:
+            template = self.env.ref('calendar_af.email_template_low_occasion_warning')
+            template.send_mail(self.id, force_send=True)
 
     @api.one
     def move_appointment(self, occasions, reason=False):
@@ -653,8 +681,10 @@ class CalendarOccasion(models.Model):
         loop_date = date_start
         occ_time = {}
         while loop_date < date_stop:
-            # make sure we don't book meetings during lunch
-            if loop_date.hour != BASE_DAY_LUNCH.hour:
+        # do not check saturday or sunday
+        # if loop_date.weekday() not in [5,6]:
+            # make sure we don't book meetings during lunch (11:00-12:30)
+            if (loop_date.hour != BASE_DAY_LUNCH.hour) and ((loop_date.hour != BASE_DAY_LUNCH.hour + 1) and (loop_date.minute == 0)):
                 occ_time[loop_date.strftime("%Y-%m-%dT%H:%M:%S")] = self.env['calendar.occasion'].search_count([('start', '=', loop_date),('type_id', '=', type_id.id)])
             loop_date = loop_date + timedelta(minutes=BASE_DURATION)
         occ_time_min_key = min(occ_time, key=occ_time.get)
