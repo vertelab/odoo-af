@@ -37,7 +37,7 @@ class CalendarAppointmentReport(models.Model):
     no_overbooked = fields.Integer(string='Overbooked occasions', readonly=True)
     app_id = fields.Integer(string='Occasion id', readonly=True)
     user_id = fields.Many2one(comodel_name='res.users', string='Case worker', readonly=True)
-    partner_id = fields.Many2one(comodel_name='res.users', string='Case worker', readonly=True)
+    partner_id = fields.Many2one(comodel_name='res.partner', string='Jobseeker', readonly=True)
     app_state = fields.Selection(selection=[('free', 'Draft'),
                                         ('reserved', 'Reserved'),
                                         ('confirmed', 'Confirmed'),

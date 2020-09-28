@@ -101,7 +101,7 @@ msgstr "Länk Admin"
 #: model_terms:ir.ui.view,arch_db:contact_links.view_partner_form_for_links
 #: model_terms:ir.ui.view,arch_db:contact_links.view_partner_jobseeker_form_for_links
 msgid "Links"
-msgstr "Länkar"
+msgstr "Snabblänkar"
 
 #. module: contact_links
 #: model:ir.ui.menu,name:contact_links.menu_partner_links

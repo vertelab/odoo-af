@@ -51,7 +51,7 @@ msgstr "Kalender"
 #: model_terms:ir.ui.view,arch_db:calendar_af_360.view_employee_360_form_calendar_af_inherited
 #: model_terms:ir.ui.view,arch_db:calendar_af_360.view_jobseeker_form_calendar_af_inherited
 msgid "Cancel"
-msgstr "Avbryt"
+msgstr "Avboka"
 
 #. module: calendar_af_360
 #: model:ir.model,name:calendar_af_360.model_hr_employee
@@ -73,7 +73,7 @@ msgstr "Omboka"
 #. module: calendar_af_360
 #: model_terms:ir.ui.view,arch_db:calendar_af_360.view_jobseeker_form_calendar_af_inherited
 msgid "New appointment"
-msgstr "Ny mötestillfälle"
+msgstr "Boka nytt möte"
 
 #. module: calendar_af_360
 #: model_terms:ir.ui.view,arch_db:calendar_af_360.view_jobseeker_form_calendar_af_inherited
@@ -83,18 +83,18 @@ msgstr "Tidigare möten"
 #. module: calendar_af_360
 #: model_terms:ir.ui.view,arch_db:calendar_af_360.view_employee_360_form_calendar_af_inherited
 msgid "Show all appointments"
-msgstr "Visa alla möten"
+msgstr "Visa kollegors möten"
 
 #. module: calendar_af_360
 #: model_terms:ir.ui.view,arch_db:calendar_af_360.view_employee_360_form_calendar_af_inherited
 #: model_terms:ir.ui.view,arch_db:calendar_af_360.view_jobseeker_form_calendar_af_inherited
 msgid "Upcoming meetings"
-msgstr "Framtida möten"
+msgstr "Kommande möten"
 
 #. module: calendar_af_360
 #: model_terms:ir.ui.view,arch_db:calendar_af_360.view_employee_360_form_calendar_af_inherited
 msgid "Upcoming meetings for others"
-msgstr "Framtida möten för andra"
+msgstr "Kollegors kommande möten"
 
 #. module: calendar_af_360
 #: model:ir.model,name:calendar_af_360.model_hr_employee_jobseeker_search_wizard
