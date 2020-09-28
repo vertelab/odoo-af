@@ -36,7 +36,7 @@ BASE_DURATION = 30.0
 # BASE_DAY_START, BASE_DAY_STOP: The hours between which we normally accept appointments
 BASE_DAY_START = pytz.timezone(LOCAL_TZ).localize(datetime.now().replace(hour=9, minute=0, second=0, microsecond=0)).astimezone(pytz.utc)
 BASE_DAY_STOP = pytz.timezone(LOCAL_TZ).localize(datetime.now().replace(hour=16, minute=0, second=0, microsecond=0)).astimezone(pytz.utc)
-BASE_DAY_LUNCH = pytz.timezone(LOCAL_TZ).localize(datetime.now().replace(hour=12, minute=0, second=0, microsecond=0)).astimezone(pytz.utc)
+BASE_DAY_LUNCH = pytz.timezone(LOCAL_TZ).localize(datetime.now().replace(hour=11, minute=0, second=0, microsecond=0)).astimezone(pytz.utc)
 # RESERVED_TIMEOUT is the default time before a reservation times out.
 RESERVED_TIMEOUT = 300.0
 
@@ -137,7 +137,7 @@ class CalendarAppointmentSuggestion(models.Model):
     office_id = fields.Many2one(comodel_name='hr.department', string="Office")
     user_id = fields.Many2one(comodel_name='res.users', string="Case worker")
     weekday = fields.Char(string='Weekday', compute="_compute_weekday")
-    
+
     @api.one
     def _compute_weekday(self):
         if self.start:
@@ -174,7 +174,7 @@ class CalendarAppointmentSuggestion(models.Model):
                     raise Warning(_("No free occasions. This shouldn't happen. Please contact the system administrator."))
 
                 occasions |= free_occasion
-        
+
         # Write data to appointment_id
         occasions.write({'appointment_id': self.appointment_id.id})
         self.appointment_id.write({
@@ -318,7 +318,13 @@ class CalendarAppointment(models.Model):
             if active_id not in partners.ids:
                 partners |= self.env['res.partner'].browse(active_id)
         return partners
-    
+
+    @api.onchange('type_id', 'partner_id')
+    def check_partner_match_area(self):
+        if self.type_id and not self.partner_id.match_area and 'KROM' in self.type_id.name:
+            self.type_id = False
+            raise Warning('Jobseeker not KROM classified')
+
     @api.onchange('type_id')
     def set_duration_selection(self):
         self.name = self.type_id.name
@@ -326,8 +332,7 @@ class CalendarAppointment(models.Model):
             self.duration_selection = '30 minutes'
         elif self.duration == 1.0:
             self.duration_selection = '1 hour'
-        
-    
+
     @api.onchange('duration_selection')
     def set_duration(self):
         if self.duration_selection == "30 minutes":
@@ -342,6 +347,8 @@ class CalendarAppointment(models.Model):
     @api.one
     def compute_suggestion_ids(self):
         if not all((self.duration, self.type_id, self.channel)):
+            return
+        if self.channel_name != "PDM" and not self.office_id:
             return
         start = self.start_meeting_search(self.type_id)
         stop = self.stop_meeting_search(start, self.type_id)
@@ -393,30 +400,38 @@ class CalendarAppointment(models.Model):
             else:
                 raise Warning(_("Case worker has no free occasions at that time."))
 
+    def _check_resource_calendar_date(self, check_date):
+        """Checks if a date is overlapping with a holiday from resource.calender.leaves """
+        res = self.env['resource.calendar.leaves'].sudo().search_read([('date_from', '<=', check_date), ('date_to', '>=', check_date)])
+        if res:
+            return False
+        return True
+
     def start_meeting_search(self, type_id):
         days_first = self.type_id.days_first if self.type_id.days_first else 3
-        start = loop_start = datetime.now()
-        j = 0
-        for i in range(days_first):
+        # remove one day from start date since we add a day at the start of each loop.
+        loop_start = datetime.now() - timedelta(days=1)
+        i = 0
+
+        while i < days_first:
             loop_start = loop_start + timedelta(days=1)
-            if loop_start.weekday() in [5,6]:
-                j += 1
-        days_first = days_first + j
-        start = start + timedelta(days=days_first)
-        return start.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute, second=0, microsecond=0)
+            if (loop_start.weekday() in [0,1,2,3,4]) and self._check_resource_calendar_date(loop_start):
+                i +=1
+
+        return loop_start.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute, second=0, microsecond=0)
 
     def stop_meeting_search(self, start_meeting_search, type_id):
         days_last = self.type_id.days_last if self.type_id.days_last else 15
-        stop = loop_start = start_meeting_search
+        # remove one day from start date since we add a day at the start of each loop.
+        loop_start = start_meeting_search - timedelta(days=1)
+        i = 0
 
-        j = 0
-        for i in range(days_last):
+        while i < days_last:
             loop_start = loop_start + timedelta(days=1)
-            if loop_start.weekday() in [5,6]:
-                j += 1
-        days_last = days_last + j
-        stop = stop + timedelta(days=days_last)
-        return stop.replace(hour=BASE_DAY_STOP.hour, minute=BASE_DAY_STOP.minute, second=0, microsecond=0)
+            if (loop_start.weekday() in [0,1,2,3,4]) and self._check_resource_calendar_date(loop_start):
+                i +=1
+
+        return loop_start.replace(hour=BASE_DAY_STOP.hour, minute=BASE_DAY_STOP.minute, second=0, microsecond=0)
 
     @api.one
     def inactivate(self, b = True):
@@ -436,7 +451,7 @@ class CalendarAppointment(models.Model):
             if appointment.state == 'confirmed':
                 appointment.state = 'canceled'
                 appointment.cancel_reason = cancel_reason.id
-                
+
                 #create daily note
                 vals = {
                     "name": _("Meeting cancelled"),
@@ -496,6 +511,9 @@ class CalendarAppointment(models.Model):
     @api.model
     def create(self, values):
         res = super(CalendarAppointment, self).create(values)
+        # if (res.sudo().occasion_ids != False) and (res.sudo().channel == res.env.ref('calendar_channel.channel_local')):
+        #     res._check_remaining_occasions()
+
         if res.sudo().partner_id:
             #create daily note
             vals = {
@@ -510,6 +528,31 @@ class CalendarAppointment(models.Model):
             res.sudo().partner_id.notes_ids = [(0, 0, vals)]
 
         return res
+
+    @api.multi
+    def write(self, vals):
+        if (self.occasion_ids != False) and (self.channel == self.env.ref('calendar_channel.channel_local')) and (vals.get('start') or vals.get('stop') or vals.get('type_id')):
+            self._check_remaining_occasions()
+        return super(CalendarAppointment, self).write(vals)
+
+    @api.multi
+    def _check_remaining_occasions(self):
+        start_check = datetime.now() + timedelta(days=self.type_id.days_first)
+        stop_check = datetime.now() + timedelta(days=self.type_id.days_last)
+        min_num = int(self.env['ir.config_parameter'].sudo().get_param('calendar_af.occasion_alert_number', '3'))
+
+        occ_num = self.env['calendar.occasion'].search_count([
+            ('start', '>', start_check),
+            ('start', '<', stop_check),
+            ('type_id', '=', self.type_id.id),
+            ('additional_booking', '=', False),
+            ('appointment_id', '=', False),
+            ('state', 'in', ['free', 'confirmed']),
+            ('office_id', '=', self.office_id.id)])
+
+        if self.office_id.partner_id and self.office_id.partner_id.email and occ_num <= min_num:
+            template = self.env.ref('calendar_af.email_template_low_occasion_warning')
+            template.send_mail(self.id, force_send=True)
 
     @api.one
     def move_appointment(self, occasions, reason=False):
@@ -638,8 +681,10 @@ class CalendarOccasion(models.Model):
         loop_date = date_start
         occ_time = {}
         while loop_date < date_stop:
-            # make sure we don't book meetings during lunch
-            if loop_date.hour != BASE_DAY_LUNCH.hour:
+        # do not check saturday or sunday
+        # if loop_date.weekday() not in [5,6]:
+            # make sure we don't book meetings during lunch (11:00-12:30)
+            if (loop_date.hour != BASE_DAY_LUNCH.hour) and ((loop_date.hour != BASE_DAY_LUNCH.hour + 1) and (loop_date.minute == 0)):
                 occ_time[loop_date.strftime("%Y-%m-%dT%H:%M:%S")] = self.env['calendar.occasion'].search_count([('start', '=', loop_date),('type_id', '=', type_id.id)])
             loop_date = loop_date + timedelta(minutes=BASE_DURATION)
         occ_time_min_key = min(occ_time, key=occ_time.get)

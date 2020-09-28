@@ -83,12 +83,17 @@ class CreateLocalOccasion(models.TransientModel):
     def action_create_occasions(self):
         if not ((self.start.minute in [0,30] and self.stop.second == 0) and (self.stop.minute in [0,30] and self.stop.second == 0)):
             raise Warning('Start or stop time is not and exacly an hour or halfhour.')
+
         # Check how many 30min occasions we need
         no_occ = int(self.duration / 0.5)
         if self.create_type == 'single':
+            # check if date is a holiday
+            if not self.env['calendar.appointment']._check_resource_calendar_date(self.start):
+                raise Warning('This day is a holiday.')
+
             for user_id in self.user_ids:
                 for curr_occ in range(no_occ):
-                    occ = self.env['calendar.occasion']._force_create_occasion(30, self.start + timedelta(minutes=curr_occ*30), self.type_id.id, self.channel.id, 'draft', user_id, self.office_id, False)
+                    occ = self.env['calendar.occasion']._force_create_occasion(30, self.start + timedelta(minutes=curr_occ*30), self.type_id.id, self.channel.id, 'request', user_id, self.office_id, False)
             return True
         elif self.create_type == 'repeating':
             # create list of weekday values allowed:
@@ -110,7 +115,7 @@ class CreateLocalOccasion(models.TransientModel):
                 # update date, keep start time.
                 start_date = self.start.replace(year=date.year, month=date.month, day=date.day)
                 # check if date is an allowed weekday
-                if start_date.weekday() in repeat_list:
+                if start_date.weekday() in repeat_list and self.env['calendar.appointment']._check_resource_calendar_date(start_date):
                     # create only 30 min occasions (if duration is longer, create several occasions):
                     for user_id in self.user_ids:
                         for curr_occ in range(no_occ): 
