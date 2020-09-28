@@ -36,13 +36,6 @@
                     <field name="state" nolabel="1" widget="statusbar" statusbar_visible="draft,request,ok,fail"/>
                 </header>
                 <sheet>
-                    <!-- <group string="Create occasion">
-                        <group>
-                            <field name="name" placeholder="e.g. Business Lunch" />
-                        </group>
-                    </group> -->
-                    <!-- <notebook>
-                        <page name="page_details" string="Occasion Details"> -->
                     <group string="Create occasion">
                         <group>
                             <field name="name" invisible="1"/>
@@ -57,8 +50,6 @@
                             <field name="user_id" string="Case worker" widget="many2oneattendee" placeholder="Select case worker..." required="1" />
                         </group>
                     </group>
-                        <!-- </page>
-                    </notebook> -->
                 </sheet>
             </form>
         </field>
@@ -133,7 +124,7 @@
         <field name="model">calendar.occasion</field>
         <field name="priority" eval="2" />
         <field name="arch" type="xml">
-            <tree string="Occasions" create="false" delete="false">
+            <tree string="Occasions" create="false" delete="true">
                 <field name="name" invisible="1"/>
                 <field name="type_id"/>
                 <field name="start"/>
