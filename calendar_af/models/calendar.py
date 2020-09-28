@@ -319,6 +319,12 @@ class CalendarAppointment(models.Model):
                 partners |= self.env['res.partner'].browse(active_id)
         return partners
 
+    @api.onchange('type_id', 'partner_id')
+    def check_partner_match_area(self):
+        if self.type_id and not self.partner_id.match_area and 'KROM' in self.type_id.name:
+            self.type_id = False
+            raise Warning('Jobseeker not KROM classified')
+
     @api.onchange('type_id')
     def set_duration_selection(self):
         self.name = self.type_id.name
@@ -341,6 +347,8 @@ class CalendarAppointment(models.Model):
     @api.one
     def compute_suggestion_ids(self):
         if not all((self.duration, self.type_id, self.channel)):
+            return
+        if self.channel_name != "PDM" and not self.office_id:
             return
         start = self.start_meeting_search(self.type_id)
         stop = self.stop_meeting_search(start, self.type_id)

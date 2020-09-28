@@ -25,7 +25,7 @@ class HrEmployee(models.Model):
     _inherit = "hr.employee"
 
     office_id = fields.Many2one('hr.department', string='Office')
-    office_ids = fields.Many2many('hr.department', relation='res_partner_office_partner_rel', column1='partner_id', column2='office_id', string='Offices')
+    office_ids = fields.Many2many('hr.department', relation='res_partner_office_hr_department_rel', column1='partner_id', column2='department_id', string='Offices')
 
     @api.one
     # @api.onchange('office_id')
