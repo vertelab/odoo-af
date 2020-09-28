@@ -8,7 +8,7 @@
             <form string="Cancel appointment">
                     <group>
                         <field name="cancel_reason" required="1"/>
-                        <field name="appointment_ids"/>
+                        <field name="appointment_ids" options="{'no_create_edit':True}"/>
                     </group>
                 <footer>
                     <group>
