@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0-20200508\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-28 06:36+0000\n"
-"PO-Revision-Date: 2020-09-28 10:59+0200\n"
+"PO-Revision-Date: 2020-09-28 16:09+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,17 +21,17 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:ipf_ais_a.view_ais_a_tree
 #: model_terms:ir.ui.view,arch_db:ipf_ais_a.view_jobseeker_form
 msgid "AIS-Å"
-msgstr ""
+msgstr "AIS-Å"
 
 #. module: ipf_ais_a
 #: model:ir.model,name:ipf_ais_a.model_res_partner_ais_a
 msgid "AIS-Å Beslut Om Stod"
-msgstr ""
+msgstr "AIS-Å Beslut om Stöd"
 
 #. module: ipf_ais_a
 #: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__dec_office
 msgid "Beslutande Kontor"
-msgstr ""
+msgstr "Beslutande kontor"
 
 #. module: ipf_ais_a
 #: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__name
@@ -67,12 +67,12 @@ msgstr "Visningsnamn"
 #. module: ipf_ais_a
 #: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__res_officer
 msgid "Handlaggare"
-msgstr ""
+msgstr "Handläggare"
 
 #. module: ipf_ais_a
 #: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: ipf_ais_a
 #: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__partner_id
@@ -82,7 +82,7 @@ msgstr "Arbetssökande"
 #. module: ipf_ais_a
 #: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__res_office
 msgid "Kontor"
-msgstr ""
+msgstr "Kontor"
 
 #. module: ipf_ais_a
 #: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a____last_update
@@ -102,14 +102,14 @@ msgstr "Senast uppdaterad"
 #. module: ipf_ais_a
 #: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__status_change
 msgid "Senaste Status Ändring"
-msgstr ""
+msgstr "Senaste statusändring"
 
 #. module: ipf_ais_a
 #: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__status
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #. module: ipf_ais_a
 #: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__atgard
 msgid "Åtgärd"
-msgstr ""
+msgstr "Åtgärd"
