@@ -180,7 +180,7 @@
         <field name="view_mode">calendar,tree,form,pivot,kanban</field>
         <field name="view_id" ref="view_calendar_occasion_local_tree" />
         <!-- This should be a reference to the external id instead. -->
-        <field name="domain">[('channel', '=', 'Local')]</field>
+        <field name="domain">[('channel', '=', 'Local'), ('state', '!=', 'deleted')]</field>
         <field name="search_view_id" ref="calendar_occasion_local_search" />
     </record>
     <record id="action_view_calendar_occasion_tree" model="ir.actions.act_window.view">
