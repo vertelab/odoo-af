@@ -394,32 +394,34 @@ class CalendarAppointment(models.Model):
 
     def _check_resource_calendar_date(self, check_date):
         """Checks if a date is overlapping with a holiday from resource.calender.leaves """
-        res = self.env['resource.calendar.leaves'].sudo().search_read([('date_from', '<', check_date), ('date_to', '>', check_date)])
+        res = self.env['resource.calendar.leaves'].sudo().search_read([('date_from', '<=', check_date), ('date_to', '>=', check_date)])
         if res:
             return False
         return True
 
     def start_meeting_search(self, type_id):
         days_first = self.type_id.days_first if self.type_id.days_first else 3
-        loop_start = datetime.now()
+        # remove one day from start date since we add a day at the start of each loop.
+        loop_start = datetime.now() - timedelta(days=1)
         i = 0
 
-        while i <= days_first:
-            if (loop_start.weekday() in [5,6]) or self._check_resource_calendar_date(loop_start):
+        while i < days_first:
+            loop_start = loop_start + timedelta(days=1)
+            if (loop_start.weekday() in [0,1,2,3,4]) and self._check_resource_calendar_date(loop_start):
                 i +=1
-            loop_start = loop_start + timedelta(days=1) 
 
         return loop_start.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute, second=0, microsecond=0)
 
     def stop_meeting_search(self, start_meeting_search, type_id):
         days_last = self.type_id.days_last if self.type_id.days_last else 15
-        loop_start = start_meeting_search
+        # remove one day from start date since we add a day at the start of each loop.
+        loop_start = start_meeting_search - timedelta(days=1)
         i = 0
 
-        while i <= days_last:
-            if (loop_start.weekday() in [5,6]) or self._check_resource_calendar_date(loop_start):
-                i +=1
+        while i < days_last:
             loop_start = loop_start + timedelta(days=1)
+            if (loop_start.weekday() in [0,1,2,3,4]) and self._check_resource_calendar_date(loop_start):
+                i +=1
 
         return loop_start.replace(hour=BASE_DAY_STOP.hour, minute=BASE_DAY_STOP.minute, second=0, microsecond=0)
 
