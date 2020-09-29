@@ -250,6 +250,13 @@ class CalendarAppointment(models.Model):
     active = fields.Boolean(string='Active', default=True)
     show_suggestion_ids = fields.Boolean(string="Show suggestions", default=False)
     weekday = fields.Char(string="Weekday", compute="_compute_weekday")
+    start_time = fields.Char(string='Appointment start time', readonly=True, compute='_app_start_time_calc', store=True)
+
+    @api.depends('start')
+    def _app_start_time_calc(self):
+        offset = int(self[0].start.astimezone(pytz.timezone(LOCAL_TZ)).utcoffset().total_seconds()/60/60)
+        for app in self:
+            app.start_time = "%s:%s" % (str(app.start.hour + offset).rjust(2,'0'), str(app.start.minute).ljust(2,'0'))
 
     @api.one
     def _compute_weekday(self):
@@ -628,9 +635,15 @@ class CalendarOccasion(models.Model):
                                         string='Occasion state', 
                                         default='request', 
                                         help="Status of the meeting")
-
     office_id = fields.Many2one(comodel_name='hr.department', string="Office")
     app_partner_pnr = fields.Char(string='Attendee SSN', related="appointment_id.partner_id.company_registry", readonly=True)
+    start_time = fields.Char(string='Occasion start time', readonly=True, compute='_occ_start_time_calc', store=True)
+
+    @api.depends('start')
+    def _occ_start_time_calc(self):
+        offset = int(self[0].start.astimezone(pytz.timezone(LOCAL_TZ)).utcoffset().total_seconds()/60/60)
+        for occ in self:
+            occ.start_time = "%s:%s" % (str(occ.start.hour + offset).rjust(2,'0'), str(occ.start.minute).ljust(2,'0'))
 
     @api.onchange('type_id')
     def set_duration_selection(self):

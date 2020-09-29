@@ -89,9 +89,10 @@ class CalendarAppointmentReport(models.Model):
                     co.additional_booking as additional_booking,
                     ca.start as app_start,
                     ca.stop as app_stop,
-                    CONCAT(LPAD(CAST(EXTRACT(HOUR FROM co.start) AS varchar),2,'0'),':',RPAD(CAST(EXTRACT(MINUTE FROM co.start) AS varchar),2,'0')) as occ_start_time,
-                    CONCAT(LPAD(CAST(EXTRACT(HOUR FROM ca.start) AS varchar),2,'0'),':',RPAD(CAST(EXTRACT(MINUTE FROM ca.start) AS varchar),2,'0')) as app_start_time
+                    ca.start_time as app_start_time,
+                    co.start_time as occ_start_time
         """
+
         return select_str
 
     def _group_by(self):
@@ -112,7 +113,9 @@ class CalendarAppointmentReport(models.Model):
                     co.type_id,
                     co.additional_booking,
                     ca.start,
-                    ca.stop
+                    ca.stop,
+                    ca.start_time,
+                    co.start_time
         """
         return group_by_str
 
