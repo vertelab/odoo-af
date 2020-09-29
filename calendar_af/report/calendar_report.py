@@ -50,6 +50,7 @@ class CalendarAppointmentReport(models.Model):
                                         ('request', 'Published'),
                                         ('ok', 'Accepted'),
                                         ('fail', 'Rejected')],
+                                        ('deleted', 'Deleted')],
                                         string='Occasion state', 
                                         help="Status of the meeting",
                                         readonly=True)
