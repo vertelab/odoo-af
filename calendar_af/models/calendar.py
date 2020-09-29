@@ -223,7 +223,7 @@ class CalendarAppointment(models.Model):
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an appointment")
     duration_selection = fields.Selection(string="Duration", selection=[('30 minutes','30 minutes'), ('1 hour','1 hour')])
     duration = fields.Float('Duration')
-    #administrative_officer = fields.Many2one(comodel_name='hr.employee', string="Case worker")
+    # administrative_officer = fields.Many2one(comodel_name='hr.employee', string="Case worker")
     user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
     user_id_local = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker", domain=_local_user_domain)
     partner_id = fields.Many2one(string='Customer', comodel_name='res.partner', help="Booked customer", default=lambda self: self.default_partners())
@@ -236,10 +236,11 @@ class CalendarAppointment(models.Model):
                                         default='free', 
                                         help="Status of the meeting")
     cancel_reason = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason', help="Cancellation reason")
-    location_code = fields.Char(string='Location')
+    # location_code = fields.Char(string='Location')
     location = fields.Char(string="Location", compute="compute_location")
+    location_id = fields.Many2one(string='Location', comodel_name='hr.location', related='user_id.partner_id.location_id', readonly=True)
     office_id = fields.Many2one(comodel_name='hr.department', string="Office")
-#    office_code = fields.Char(string='Office code', related="office.office_code")
+    # office_code = fields.Char(string='Office code', related="office.office_code")
     occasion_ids = fields.One2many(comodel_name='calendar.occasion', inverse_name='appointment_id', string="Occasion")
     type_id = fields.Many2one(string='Type', required=True, comodel_name='calendar.appointment.type')
     channel =  fields.Many2one(string='Channel', required=True, comodel_name='calendar.channel', related='type_id.channel', readonly=True)
@@ -272,7 +273,7 @@ class CalendarAppointment(models.Model):
         if self.channel_name == "PDM":
             self.location = _("Distance")
         else:
-            self.location = None #self.office_code
+            self.location = self.location_id.name
 
     @api.one
     def compute_case_worker_name(self):
@@ -890,7 +891,6 @@ class CalendarOccasion(models.Model):
                 'user_id': False,
                 'partner_id': False,
                 'state': 'reserved',
-                'location_code': False,
                 'office_id': False,
                 'occasion_ids': occasion_ids, # I dont think this does anything?
                 'reserved': datetime.now(),
