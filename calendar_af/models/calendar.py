@@ -223,7 +223,6 @@ class CalendarAppointment(models.Model):
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an appointment")
     duration_selection = fields.Selection(string="Duration", selection=[('30 minutes','30 minutes'), ('1 hour','1 hour')])
     duration = fields.Float('Duration')
-    # administrative_officer = fields.Many2one(comodel_name='hr.employee', string="Case worker")
     user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
     user_id_local = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker", domain=_local_user_domain)
     partner_id = fields.Many2one(string='Customer', comodel_name='res.partner', help="Booked customer", default=lambda self: self.default_partners())
@@ -236,11 +235,9 @@ class CalendarAppointment(models.Model):
                                         default='free', 
                                         help="Status of the meeting")
     cancel_reason = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason', help="Cancellation reason")
-    # location_code = fields.Char(string='Location')
     location = fields.Char(string='Location', compute='compute_location', store=True)
     location_id = fields.Many2one(string='Location', comodel_name='hr.location', related='user_id.partner_id.location_id', readonly=True)
     office_id = fields.Many2one(comodel_name='hr.department', string="Office")
-    # office_code = fields.Char(string='Office code', related="office.office_code")
     occasion_ids = fields.One2many(comodel_name='calendar.occasion', inverse_name='appointment_id', string="Occasion")
     type_id = fields.Many2one(string='Type', required=True, comodel_name='calendar.appointment.type')
     channel =  fields.Many2one(string='Channel', required=True, comodel_name='calendar.channel', related='type_id.channel', readonly=True)
@@ -633,7 +630,6 @@ class CalendarOccasion(models.Model):
                                         help="Status of the meeting")
 
     office_id = fields.Many2one(comodel_name='hr.department', string="Office")
-    #office_code = fields.Char(string='Office code', related="office.office_code", readonly=True)
     app_partner_pnr = fields.Char(string='Attendee SSN', related="appointment_id.partner_id.company_registry", readonly=True)
 
     @api.onchange('type_id')
