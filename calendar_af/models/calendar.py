@@ -237,7 +237,7 @@ class CalendarAppointment(models.Model):
                                         help="Status of the meeting")
     cancel_reason = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason', help="Cancellation reason")
     # location_code = fields.Char(string='Location')
-    location = fields.Char(string="Location", compute="compute_location")
+    location = fields.Char(string='Location', compute='compute_location', store=True)
     location_id = fields.Many2one(string='Location', comodel_name='hr.location', related='user_id.partner_id.location_id', readonly=True)
     office_id = fields.Many2one(comodel_name='hr.department', string="Office")
     # office_code = fields.Char(string='Office code', related="office.office_code")
@@ -268,12 +268,15 @@ class CalendarAppointment(models.Model):
             }
             self.weekday = daynum2dayname[self.start.weekday()]
 
-    @api.one
+    @api.depends('user_id')
     def compute_location(self):
-        if self.channel_name == "PDM":
-            self.location = _("Distance")
-        else:
-            self.location = self.location_id.name
+        for app in self:
+            if app.channel_name == "PDM":
+                app.location = _("Distance")
+            elif app.location_id:
+                app.location = app.location_id.name
+            else:
+                app.location = ''
 
     @api.one
     def compute_case_worker_name(self):
