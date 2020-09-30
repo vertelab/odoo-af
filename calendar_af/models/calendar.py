@@ -223,7 +223,6 @@ class CalendarAppointment(models.Model):
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an appointment")
     duration_selection = fields.Selection(string="Duration", selection=[('30 minutes','30 minutes'), ('1 hour','1 hour')])
     duration = fields.Float('Duration')
-    #administrative_officer = fields.Many2one(comodel_name='hr.employee', string="Case worker")
     user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
     user_id_local = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker", domain=_local_user_domain)
     partner_id = fields.Many2one(string='Customer', comodel_name='res.partner', help="Booked customer", default=lambda self: self.default_partners())
@@ -236,10 +235,9 @@ class CalendarAppointment(models.Model):
                                         default='free', 
                                         help="Status of the meeting")
     cancel_reason = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason', help="Cancellation reason")
-    location_code = fields.Char(string='Location')
-    location = fields.Char(string="Location", compute="compute_location")
+    location = fields.Char(string='Location', compute='compute_location', store=True)
+    location_id = fields.Many2one(string='Location', comodel_name='hr.location', related='user_id.partner_id.location_id', readonly=True)
     office_id = fields.Many2one(comodel_name='hr.department', string="Office")
-#    office_code = fields.Char(string='Office code', related="office.office_code")
     occasion_ids = fields.One2many(comodel_name='calendar.occasion', inverse_name='appointment_id', string="Occasion")
     type_id = fields.Many2one(string='Type', required=True, comodel_name='calendar.appointment.type')
     channel =  fields.Many2one(string='Channel', required=True, comodel_name='calendar.channel', related='type_id.channel', readonly=True)
@@ -252,6 +250,13 @@ class CalendarAppointment(models.Model):
     active = fields.Boolean(string='Active', default=True)
     show_suggestion_ids = fields.Boolean(string="Show suggestions", default=False)
     weekday = fields.Char(string="Weekday", compute="_compute_weekday")
+    start_time = fields.Char(string='Appointment start time', readonly=True, compute='_app_start_time_calc', store=True)
+
+    @api.depends('start')
+    def _app_start_time_calc(self):
+        offset = int(self[0].start.astimezone(pytz.timezone(LOCAL_TZ)).utcoffset().total_seconds()/60/60)
+        for app in self:
+            app.start_time = "%s:%s" % (str(app.start.hour + offset).rjust(2,'0'), str(app.start.minute).ljust(2,'0'))
 
     @api.one
     def _compute_weekday(self):
@@ -267,12 +272,15 @@ class CalendarAppointment(models.Model):
             }
             self.weekday = daynum2dayname[self.start.weekday()]
 
-    @api.one
+    @api.depends('user_id')
     def compute_location(self):
-        if self.channel_name == "PDM":
-            self.location = _("Distance")
-        else:
-            self.location = None #self.office_code
+        for app in self:
+            if app.channel_name == "PDM":
+                app.location = _("Distance")
+            elif app.location_id:
+                app.location = app.location_id.name
+            else:
+                app.location = ''
 
     @api.one
     def compute_case_worker_name(self):
@@ -622,14 +630,20 @@ class CalendarOccasion(models.Model):
     state = fields.Selection(selection=[('draft', 'Draft'),
                                         ('request', 'Published'),
                                         ('ok', 'Accepted'),
-                                        ('fail', 'Rejected')],
+                                        ('fail', 'Rejected'),
+                                        ('deleted', 'Deleted')],
                                         string='Occasion state', 
                                         default='request', 
                                         help="Status of the meeting")
-
     office_id = fields.Many2one(comodel_name='hr.department', string="Office")
-    #office_code = fields.Char(string='Office code', related="office.office_code", readonly=True)
     app_partner_pnr = fields.Char(string='Attendee SSN', related="appointment_id.partner_id.company_registry", readonly=True)
+    start_time = fields.Char(string='Occasion start time', readonly=True, compute='_occ_start_time_calc', store=True)
+
+    @api.depends('start')
+    def _occ_start_time_calc(self):
+        offset = int(self[0].start.astimezone(pytz.timezone(LOCAL_TZ)).utcoffset().total_seconds()/60/60)
+        for occ in self:
+            occ.start_time = "%s:%s" % (str(occ.start.hour + offset).rjust(2,'0'), str(occ.start.minute).ljust(2,'0'))
 
     @api.onchange('type_id')
     def set_duration_selection(self):
@@ -775,6 +789,17 @@ class CalendarOccasion(models.Model):
 
         return ret
 
+    @api.multi
+    def delete_occasion(self):
+        """User deletes an occasion"""
+        if not self.appointment_id:
+            self.state = 'deleted'
+            ret = True
+        else:
+            ret = False
+
+        return ret
+
     @api.model
     def get_bookable_occasions(self, start, stop, duration, type_id, office_id=False, max_depth=1):
         """Returns a list of occasions matching the defined parameters of the appointment. Creates additional 
@@ -878,7 +903,6 @@ class CalendarOccasion(models.Model):
                 'user_id': False,
                 'partner_id': False,
                 'state': 'reserved',
-                'location_code': False,
                 'office_id': False,
                 'occasion_ids': occasion_ids, # I dont think this does anything?
                 'reserved': datetime.now(),

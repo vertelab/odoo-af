@@ -53,7 +53,7 @@ class CalendarAppointmentReport(models.Model):
                                         string='Occasion state', 
                                         help="Status of the meeting",
                                         readonly=True)
-    location_code = fields.Char(string='Location code', readonly=True)
+    location = fields.Char(string='Location code', readonly=True)
     office_id = fields.Many2one(comodel_name='hr.department', string="Office", readonly=True)
     type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type', readonly=True)
     additional_booking = fields.Boolean(String='Over booking', readonly=True)
@@ -83,15 +83,16 @@ class CalendarAppointmentReport(models.Model):
                     co.name as name,
                     co.state as occ_state,
                     ca.state as app_state,
-                    ca.location_code as location_code,
+                    ca.location as location,
                     co.office_id as office_id,
                     co.type_id as type_id,
                     co.additional_booking as additional_booking,
                     ca.start as app_start,
                     ca.stop as app_stop,
-                    CONCAT(LPAD(CAST(EXTRACT(HOUR FROM co.start) AS varchar),2,'0'),':',RPAD(CAST(EXTRACT(MINUTE FROM co.start) AS varchar),2,'0')) as occ_start_time,
-                    CONCAT(LPAD(CAST(EXTRACT(HOUR FROM ca.start) AS varchar),2,'0'),':',RPAD(CAST(EXTRACT(MINUTE FROM ca.start) AS varchar),2,'0')) as app_start_time
+                    ca.start_time as app_start_time,
+                    co.start_time as occ_start_time
         """
+
         return select_str
 
     def _group_by(self):
@@ -107,12 +108,14 @@ class CalendarAppointmentReport(models.Model):
                     co.name,
                     co.state,
                     ca.state,
-                    ca.location_code,
+                    ca.location,
                     co.office_id,
                     co.type_id,
                     co.additional_booking,
                     ca.start,
-                    ca.stop
+                    ca.stop,
+                    ca.start_time,
+                    co.start_time
         """
         return group_by_str
 

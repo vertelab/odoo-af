@@ -7,7 +7,7 @@
 			<field name="model">res.partner</field>
 			<field name="inherit_id" ref="partner_view_360.view_jobseeker_form" />
 			<field name="arch" type="xml">
-				<field name="deparuser_idtment_id" position="after">
+				<field name="office_id" position="after">
 					<field name="jobseeker_access" />
 				</field>
 			</field>

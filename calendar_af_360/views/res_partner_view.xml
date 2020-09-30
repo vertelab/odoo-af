@@ -34,8 +34,7 @@
            <button name="open_partner_calendar" type="object" class="oe_stat_button" icon="fa-calendar">Calendar</button>
            </div>
       -->
-      <page name="contacts_addresses" position="before">
-        <page string="Upcoming meetings" name="upcoming_meetings">
+      <page name="upcoming_meetings" position="inside">
           <group>
             <button name="create_appointment" type="object" string="New appointment" icon="fa-calendar" />
           </group>
@@ -53,7 +52,7 @@
             </tree>
           </field>
         </page>
-        <page string="Previous meetings" name="previous_meetings">
+        <page name="previous_meetings" position="inside">
           <field name="appointment_ids_past" mode="tree" nolabel="1">
             <tree editable="bottom" default_order="start desc">
               <field name="weekday"/>
@@ -65,7 +64,6 @@
               <field name="location" />
             </tree>
           </field>
-        </page>
       </page>
     </field>
   </record>
