@@ -7,7 +7,7 @@
 	 v12.0.0.1 AFC-86  Add Mass mailing template for AF newsletters.
     """,
     "license": "AGPL-3",
-    "author": "Vertel",
+    "author": "Vertel AB",
     "depends": [
         "mass_mailing"
     ],
