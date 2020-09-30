@@ -30,7 +30,6 @@
                                 <field name="user_id"/>
                                 <field name="channel"/>
                                 <field name="location"/>
-                                <field name="office"/>
                             </tree>
                         </field>
                     </page>
@@ -60,7 +59,9 @@
                                 <field name="note_date"/>
                                 <field name="note_type"/>
                                 <field name="note_number"/>
+<!--
                                 <field name="office"/>
+-->
                             </tree>
                         </field>
 
