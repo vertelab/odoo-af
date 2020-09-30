@@ -49,7 +49,7 @@ class CalendarAppointmentReport(models.Model):
     occ_state = fields.Selection(selection=[('draft', 'Draft'),
                                         ('request', 'Published'),
                                         ('ok', 'Accepted'),
-                                        ('fail', 'Rejected')],
+                                        ('fail', 'Rejected'),
                                         ('deleted', 'Deleted')],
                                         string='Occasion state', 
                                         help="Status of the meeting",
