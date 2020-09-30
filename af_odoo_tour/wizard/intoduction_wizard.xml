@@ -30,7 +30,7 @@
                                 <field name="user_id"/>
                                 <field name="channel"/>
                                 <field name="location"/>
-                                <field name="office"/>
+                                <field name="office_id"/>
                             </tree>
                         </field>
                     </page>
