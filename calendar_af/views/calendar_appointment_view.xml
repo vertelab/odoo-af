@@ -119,7 +119,7 @@
                             <field string="Meeting subject" name="name" placeholder="e.g. Business Lunch" invisible="1" />
                         </group>
                         <group>
-                            <field string="Attendees" name="partner_id" widget="many2oneattendee" placeholder="Select attendees..." attrs="{'readonly':[('state', '!=', 'free')]}"/>
+                            <field string="Attendees" name="partner_id" widget="many2oneattendee" placeholder="Select attendees..."  invisible="1"/>
                             <field string="Case worker" name="user_id" widget="many2oneattendee" placeholder="Select case worker..." 
                                 attrs="{'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}" />
                         </group>
@@ -273,6 +273,7 @@
                 <field name="name" />
                 <field name="state" />
                 <field name="type_id" />
+                <field name="user_id"/>
                 <filter
                     name="state_confirmed"
                     domain="[('state','=','confirmed')]"
