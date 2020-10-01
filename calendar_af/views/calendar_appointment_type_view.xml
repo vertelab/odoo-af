@@ -28,5 +28,23 @@
         <field name="view_id" ref="view_calendar_appointment_type_tree"/>
     </record>
 
+    <record id="view_calendar_appointment_cancel_reason_tree" model="ir.ui.view">
+        <field name="name">calendar.appointment.cancel.reason.tree</field>
+        <field name="model">calendar.appointment.cancel_reason</field>
+        <field name="arch" type="xml">
+            <tree string="Meeting cancel reasons" editable="bottom">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_cancel_reason" model="ir.actions.act_window">
+        <field name="name">Meeting cancel reasons</field>
+        <field name="res_model">calendar.appointment.cancel_reason</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="view_calendar_appointment_cancel_reason_tree"/>
+    </record>
+
     <menuitem action="action_type" id="menu_action_type" parent="menu_admin" sequence="10" groups="af_security.af_employers_editor,af_security.af_jobseekers_editor" />
+    <menuitem action="action_cancel_reason" id="menu_action_cancel_reason" parent="menu_admin" sequence="15" groups="af_security.af_employers_editor,af_security.af_jobseekers_editor" />
 </odoo>

@@ -23,6 +23,7 @@
         "data/calendar.appointment.cancel_reason.csv",
         "data/resource.calendar.leaves.csv",
         "data/mail_template.xml",
+        "data/calendar_schedule_cron.xml",
         "security/ir.model.access.csv",
         "views/res_partner_view.xml",
         "views/res_users_view.xml",

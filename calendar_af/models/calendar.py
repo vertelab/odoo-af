@@ -91,6 +91,53 @@ class CalendarSchedule(models.Model):
                 # TODO: handle this case better
                 pass
 
+    @api.model
+    def cron_get_schedules(self, type_ids, days):
+
+        route = self.env.ref('edi_af_appointment.schedule')
+        cal_schedule_ids = self.env['calendar.schedule']
+
+        def _create_message(mes_start, mes_stop):
+            vals = {
+                'name': "IPF request",
+                'start': mes_start,
+                'stop': mes_stop,
+                'type_id': type_id.id,
+            }
+            cal_schedule = self.env['calendar.schedule'].create(vals)
+            
+            vals = {
+                'name': 'Schedule request',
+                'edi_type': self.env.ref('edi_af_appointment.appointment_schedules').id,
+                'model': cal_schedule._name,
+                'res_id': cal_schedule.id,
+                'route_id': route.id,
+                'route_type': 'edi_af_schedules',
+            }
+            msg = self.env['edi.message'].create(vals)
+            msg.pack()
+            return cal_schedule
+
+        for type_id in type_ids:
+            start = datetime.now()
+            # if we request more than 30 days, split the requests
+            if days <= 30:
+                cal_schedule_ids |= _create_message(start, start + timedelta(days=days))
+            else:
+                i = 0
+                loop_times = days/30
+                while i < loop_times:
+                    # handle last loop different
+                    if i == loop_times:
+                        cal_schedule_ids |= _create_message(start + timedelta(days=(30 * i)), start + timedelta(days=days))
+                    else:
+                        cal_schedule_ids |= _create_message(start + timedelta(days=(30 * i)), start + timedelta(days=(30 * (i+1))))
+                    
+                    i += 1
+
+        route.run()
+        cal_schedule_ids.inactivate()        
+        
 class CalendarAppointmentType(models.Model):
     _name = 'calendar.appointment.type'
     _description = "Meeting type"
