@@ -169,6 +169,7 @@ class CalendarMappedDates(models.Model):
     name = fields.Char(string="Name")
     from_date = fields.Date(string='From Date', required=True)
     to_date = fields.Date(string='To Date', required=True)
+    office_id = fields.Many2one(comodel_name='hr.department', string='Office')
 
 class CalendarAppointmentSuggestion(models.Model):
     _name = 'calendar.appointment.suggestion'
@@ -594,20 +595,28 @@ class CalendarAppointment(models.Model):
     def _check_remaining_occasions(self):
         start_check = datetime.now() + timedelta(days=self.type_id.days_first)
         stop_check = datetime.now() + timedelta(days=self.type_id.days_last)
-        min_num = int(self.env['ir.config_parameter'].sudo().get_param('calendar_af.occasion_alert_number', '3'))
+        min_num = self.env['calendar.appointment.type.department'].sudo().search([('office_id', '=', self.office_id.id), ('type_id', '=', self.type_id.id)], limit=1).warning_threshold
 
-        occ_num = self.env['calendar.occasion'].search_count([
-            ('start', '>', start_check),
-            ('start', '<', stop_check),
-            ('type_id', '=', self.type_id.id),
-            ('additional_booking', '=', False),
-            ('appointment_id', '=', False),
-            ('state', 'in', ['free', 'confirmed']),
-            ('office_id', '=', self.office_id.id)])
+        if min_num:
+            occ_num = self.env['calendar.occasion'].search_count([
+                ('start', '>', start_check),
+                ('start', '<', stop_check),
+                ('type_id', '=', self.type_id.id),
+                ('additional_booking', '=', False),
+                ('appointment_id', '=', False),
+                ('state', 'in', ['free', 'confirmed']),
+                ('office_id', '=', self.office_id.id)])
 
-        if self.office_id.partner_id and self.office_id.partner_id.email and occ_num <= min_num:
-            template = self.env.ref('calendar_af.email_template_low_occasion_warning')
-            template.send_mail(self.id, force_send=True)
+            if occ_num < min_num:
+                if self.office_id.app_warn_user_ids:
+                    for user in self.office_id.app_warn_user_ids:
+                        template = self.env.ref('calendar_af.email_template_low_occasion_warning')
+                        template.email_to = user.work_email
+                        template.send_mail(self.id, force_send=True)
+                else:
+                    _logger.debug(_("No threshold users setup for office %s") % self.office_id.name)
+        else:
+            _logger.debug(_("No threshold set for office %s and meeting type %s") % (self.office_id.name, self.type_id.name))
 
     @api.one
     def move_appointment(self, occasions, reason=False):
@@ -678,6 +687,7 @@ class CalendarOccasion(models.Model):
                                         ('request', 'Published'),
                                         ('ok', 'Accepted'),
                                         ('fail', 'Rejected'),
+                                        ('booked', 'Booked'),
                                         ('deleted', 'Deleted')],
                                         string='Occasion state', 
                                         default='request', 
@@ -685,6 +695,21 @@ class CalendarOccasion(models.Model):
     office_id = fields.Many2one(comodel_name='hr.department', string="Office")
     app_partner_pnr = fields.Char(string='Attendee SSN', related="appointment_id.partner_id.company_registry", readonly=True)
     start_time = fields.Char(string='Occasion start time', readonly=True, compute='_occ_start_time_calc', store=True)
+    weekday = fields.Char(string='Weekday', compute="_compute_weekday")
+
+    @api.one
+    def _compute_weekday(self):
+        if self.start:
+            daynum2dayname = {
+                0: _("Monday"),
+                1: _("Tuesday"),
+                2: _("Wednesday"),
+                3: _("Thursday"),
+                4: _("Friday"),
+                5: _("Saturday"),
+                6: _("Sunday"),
+            }
+            self.weekday = daynum2dayname[self.start.weekday()]
 
     @api.depends('start')
     def _occ_start_time_calc(self):
@@ -753,10 +778,10 @@ class CalendarOccasion(models.Model):
         return res
 
     @api.model
-    def _check_date_mapping(self, date):
+    def _check_date_mapping(self, date, office_id):
         """Checks if a date has a mapped date, and returns the mapped date 
         if it exists """
-        mapped_date = self.env['calendar.mapped_dates'].search([('from_date', '=', date)])
+        mapped_date = self.env['calendar.mapped_dates'].search([('from_date', '=', date), ('office_id', '=', office_id.id)])
         if mapped_date:
             res = mapped_date.to_date 
         else:
@@ -772,7 +797,7 @@ class CalendarOccasion(models.Model):
             _logger.debug(_("Overbooking not allowed on %s" % type_id.name))
             return False
         # Replace date with mapped date if we have one
-        date = self._check_date_mapping(date)
+        date = self._check_date_mapping(date, office_id)
         date_list = date.strftime("%Y-%-m-%-d").split("-")
         # Copy to make sure we dont overwrite BASE_DAY_START or BASE_DAY_STOP
         day_start = copy.copy(BASE_DAY_START)
