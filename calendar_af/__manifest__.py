@@ -2,11 +2,19 @@
 
 {
     "name": "Calendar management - AF",
-    "version": "12.0.1.0.2",
+    "version": "12.0.1.0.3",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
+    "summary": "12.0.1.0.3 -AFC-1046 - Lägg till Helger och röda dagar i Resource Leaves.",
+	"description": """
+Description
+================================================================================================
+Asök booking management \n
+12.0.1.0.3 - AFC-1046 - Lägg till Helger och röda dagar i Resource Leaves.\n
+\n
+    """,
     "depends": [
         "calendar",
         "contacts",
@@ -34,6 +42,7 @@
         "views/calendar_channel_view.xml",
         "views/calendar_appointment_type_view.xml",
         "views/calendar_mapped_dates_view.xml",
+        "views/hr_department_view.xml",
         "wizard/cancel_appointment.xml",
         "wizard/create_local_occasion.xml",
         "report/calendar_report_views.xml",
