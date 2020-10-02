@@ -94,6 +94,7 @@ class CalendarSchedule(models.Model):
     @api.model
     def cron_get_schedules(self, type_ids, days):
 
+        _logger.debug("Starting cron_get_schedules for meeting types: %s at %s" % (type_ids, datetime.now()))
         route = self.env.ref('edi_af_appointment.schedule')
         cal_schedule_ids = self.env['calendar.schedule']
 
@@ -136,7 +137,8 @@ class CalendarSchedule(models.Model):
                     i += 1
 
         route.run()
-        cal_schedule_ids.inactivate()        
+        cal_schedule_ids.inactivate()    
+        _logger.debug("Completed cron_get_schedules for meeting types: %s at %s" % (type_ids, datetime.now()))    
         
 class CalendarAppointmentType(models.Model):
     _name = 'calendar.appointment.type'
@@ -294,6 +296,7 @@ class CalendarAppointment(models.Model):
     description = fields.Text(string='Description')
     suggestion_ids = fields.One2many(comodel_name='calendar.appointment.suggestion', inverse_name='appointment_id', string='Suggested Dates')
     case_worker_name = fields.Char(string="Case worker", compute="compute_case_worker_name")
+    partner_pnr = fields.Char(string='Attendee SSN', related="partner_id.company_registry", readonly=True)
     active = fields.Boolean(string='Active', default=True)
     show_suggestion_ids = fields.Boolean(string="Show suggestions", default=False)
     weekday = fields.Char(string="Weekday", compute="_compute_weekday")
