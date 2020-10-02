@@ -33,7 +33,7 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <field name="state" nolabel="1" widget="statusbar" statusbar_visible="draft,request,ok,fail"/>
+                    <field name="state" nolabel="1" widget="statusbar" statusbar_visible="draft,request,ok,booked,fail"/>
                 </header>
                 <sheet>
                     <group string="Create occasion">
@@ -127,6 +127,7 @@
             <tree string="Occasions" create="false" delete="true">
                 <field name="name" invisible="1"/>
                 <field name="type_id"/>
+                <field name="weekday"/>
                 <field name="start"/>
                 <field name="stop"/>
                 <field name="office_id"/>
