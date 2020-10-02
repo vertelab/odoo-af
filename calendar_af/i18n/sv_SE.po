@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0-20200508\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-02 11:34+0000\n"
-"PO-Revision-Date: 2020-10-02 13:57+0200\n"
+"PO-Revision-Date: 2020-10-02 14:06+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1221,7 +1221,7 @@ msgstr "Torsdag"
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_mapped_dates__to_date
 msgid "To Date"
-msgstr "Tilldatum"
+msgstr "Till datum"
 
 #. module: calendar_af
 #: code:addons/calendar_af/models/calendar.py:193
