@@ -200,17 +200,17 @@ class ResPartner(models.Model):
                             'res_id': partner.id
                             }) #creates an external id in the system for the partner.
         
-        else:
-            _logger.warning("Did not create row %s" % row)
+        #else:
+            #_logger.warning("Did not create row %s" % row)
          
     @api.model
     def create_kpi_from_row(self, row):
         external_xmlid = '%s.%s' % (self.xmlid_module, row['external_id'])
         row.pop('external_id', None)
         id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
-        _logger.info("id_check: %s" % id_check)
+      #_logger.info("id_check: %s" % id_check)
         if id_check == False:
-            _logger.info("creating kpi: %s" % row)
+          #_logger.info("creating kpi: %s" % row)
             kpi = self.env['res.partner.kpi'].create(row)
 
             self.env['ir.model.data'].create({
@@ -219,8 +219,8 @@ class ResPartner(models.Model):
                                 'model': kpi._name,
                                 'res_id': kpi.id
                                 })
-        else:
-            _logger.info("kpi external_id already in database, skipping")
+        #else:
+          #_logger.info("kpi external_id already in database, skipping")
     
         
     # @api.model #ska använda api istället, om det inte blir api, flytta till separat modul som körs efteråt
@@ -241,12 +241,12 @@ class ResPartner(models.Model):
 
     @api.model
     def create_desired_jobs_from_row(self, row):
-        _logger.info("got to create jobs")
+      #_logger.info("got to create jobs")
         external_xmlid = '%s.%s' % (self.xmlid_module, row['external_id'])
         row.pop('external_id', None)
         id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
         if id_check == False:
-            _logger.info("creating desired job: %s" % row)
+          #_logger.info("creating desired job: %s" % row)
 
             job = self.env['res.partner.jobs'].create(row)
 
@@ -256,8 +256,8 @@ class ResPartner(models.Model):
                                 'model': job._name,
                                 'res_id': job.id
                                 })
-        else:
-            _logger.info("desired job external_id already in database, skipping")
+        #else:
+          #_logger.info("desired job external_id already in database, skipping")
 
     @api.model
     def create_office_from_row(self, row):
@@ -273,8 +273,8 @@ class ResPartner(models.Model):
                                 'model': office._name,
                                 'res_id': office.id
                                 })
-        else:
-            _logger.info("desired job external_id already in database, skipping")
+        #else:
+          #_logger.info("desired job external_id already in database, skipping")
 
 
     @api.model
@@ -325,7 +325,10 @@ class ResPartner(models.Model):
                         'LOKAL':'local office',
                         'PDM':'pdm',
                         }
-                    row['registered_through'] = translation_dict[row['registered_through']]
+                    if row[transform] in translation_dict:
+                        row[transform] = translation_dict[row[transform]]
+                    else:
+                        keys_to_delete.append(transform)
                 elif key == 'office_code': # if missing in AIS-F in existing record, replace
                     partner_vals = {
                         'name': row['name'],
@@ -550,14 +553,14 @@ class ResPartner(models.Model):
                     row.pop('sun_ids', None)
                           
         if 'education_level' in row:
-            _logger.info("education_level: %s" % row['education_level'])
+          #_logger.info("education_level: %s" % row['education_level'])
             if row['education_level'] != '0':
                 education_level_xmlid = "res_sun.education_level_%s" % row['education_level']
-                _logger.info("education_level_xmlid: %s" % education_level_xmlid)
+              #_logger.info("education_level_xmlid: %s" % education_level_xmlid)
                 education_level = self.env['ir.model.data'].xmlid_to_res_id(education_level_xmlid)
                 if education_level != False:
                     row.update({'education_level' : education_level})
-                    _logger.info("adding education level to row %s" % row)
+                  #_logger.info("adding education level to row %s" % row)
                 else:
                     _logger.warning("education_level res_sun.education_level_%s not found, leaving education_level for %s empty" %(row['education_level'],row['external_id']))
                     row.pop('education_level', None)
@@ -574,7 +577,7 @@ class ResPartner(models.Model):
         id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
         if id_check != False:
             create = False
-            _logger.warning("external id already in database, skipping")
+            #_logger.warning("external id already in database, skipping")
         
        #_loger.info('create?: %s' % create)
         if create:
