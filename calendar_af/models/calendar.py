@@ -259,7 +259,7 @@ class CalendarAppointment(models.Model):
     def name_get(self):
         result = []
         for app in self:
-            name = 'Meeting with %s at %s' % (app.partner_id.company_registry, app.start)
+            name = _('Meeting with %s at %s') % (app.partner_id.company_registry, app.start)
             result.append((app.id, name))
         return result
 
