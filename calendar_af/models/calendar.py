@@ -257,6 +257,15 @@ class CalendarAppointment(models.Model):
     _name = 'calendar.appointment'
     _description = "Appointment"
 
+    @api.multi
+    @api.depends('partner_id', 'start')
+    def name_get(self):
+        result = []
+        for app in self:
+            name = _('Meeting with %s at %s') % (app.partner_id.company_registry, app.start)
+            result.append((app.id, name))
+        return result
+
     @api.model
     def _local_user_domain(self):
         if self.partner_id:
