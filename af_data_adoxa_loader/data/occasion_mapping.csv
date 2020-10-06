@@ -1,14 +1,14 @@
 occasions.csv,Notering,Trans,Odoo
-Bookingoccasion ID,,"external_id,occ_",external_id
-PDM,,,
-Occasion date,,,date
-Start tid,,"start,_",start
-Stopp tid,,,stop
-längd,,,duration
-mötestypsid,,"type_id,_",type_id
-occasion status,,"state,_",state
-created,,,
-created by,,,
-Lokalkontor,,"location_id,_",location_id
-Lokalkontor namn,,,
+Bokningstillfällesid,,"external_id,occ_",external_id
+Datum,,,date
+Starttid,,"start,_",start
+Sluttid,,"stop,_",stop
+Längd,,,duration
+Mötestypsid,,"type_id,_",type_id
+Mötestypsid,,,name
+Bokningsstatus,,"state,_",!state
+Skapad,,,
+Skapad av,,,
+Kontorskod,,"location_id,_",location_id
+Kontorsnamn,,,
 Möteshandläggare,,"user_id,_",user_id

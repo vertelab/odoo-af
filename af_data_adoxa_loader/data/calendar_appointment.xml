@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <odoo>
     <data>
-        <function name="create_occasions" model="calendar.occasion">
+        <function name="create_occasions" model="calendar.appointment">
         </function>
         <function name="create_appointments" model="calendar.appointment">
         </function>

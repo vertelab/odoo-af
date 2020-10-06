@@ -1,20 +1,21 @@
 appointments.csv,Notering,Trans,Odoo
 Bokningsid,,"external_id,apmnt_",external_id
-Bookingoccasion ID,,"occasion_id,occ_",occasion_id
+Bokningstillfällesid,,"occasion_id,occ_",occasion_id
 Kundnummer,,"partner_id,_",partner_id
 PDM,,,
+Datum från,,,
+Datum till,,,
 Datum,,,date
-Occasion date,,,
-Start tid,,"start,_",start
-Stopp tid,,,
-längd,,,duration
-mötestypsid,,"type_id,_",type_id
-boooking status,,,
-occasion status,,,
-created,,,
-created by,,,
-Lokalkontor,,"location_id,_",location_id
-Lokalkontor namn,,,
+Starttid,,"start,_",start
+Sluttid,,"stop,_",stop
+Längd,,,duration
+Mötestypsid,,"type_id,_",type_id
+Mötestypsid,,,name
+Bokningsstatus,,"state,_",state
+Skapad,,,
+Skapad av,,,
+Kontorskod,,"location_id,_",location_id
+Kontorsnamn,,,
 Möteshandläggare,,"user_id,_",user_id
 Skapad överbokningstid,,,
-ACE sändning lyckad/misslyckad,,,
+Skickad till ACE,,,

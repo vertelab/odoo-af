@@ -43,17 +43,17 @@ class CalendarOccasion(models.Model):
     @api.model
     def create_occasions(self):     
         headers_header = ['occasions.csv', 'Notering',  'Trans', 'Odoo']
-        path = os.path.join(config.options.get('data_dir'), 'Adoxa/occasions.csv')
-        path = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/occasions.csv" #testing purposes only
-        header_path = "/usr/share/odoo-af/af_data_ais-f_loader/data/occasion_mapping.csv"
+        #path = os.path.join(config.options.get('data_dir'), 'Adoxa/occasions.csv')
+        path = "/usr/share/odoo-af/af_data_adoxa_loader/data/test_dumps/occasions.csv" #testing purposes only
+        header_path = "/usr/share/odoo-af/af_data_adoxa_loader/data/occasion_mapping.csv"
         self.create_calendar_objs(headers_header, path, header_path)
 
     @api.model
     def create_appointments(self):     
         headers_header = ['appointments.csv', 'Notering',  'Trans', 'Odoo']
-        path = os.path.join(config.options.get('data_dir'), 'Adoxa/appointments.csv')
-        path = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/appointments.csv" #testing purposes only
-        header_path = "/usr/share/odoo-af/af_data_ais-f_loader/data/appointment_mapping.csv"
+        #path = os.path.join(config.options.get('data_dir'), 'Adoxa/appointments.csv')
+        path = "/usr/share/odoo-af/af_data_adoxa_loader/data/test_dumps/appointments.csv" #testing purposes only
+        header_path = "/usr/share/odoo-af/af_data_adoxa_loader/data/appointment_mapping.csv"
         self.create_calendar_objs(headers_header, path, header_path)
 
     def create_calendar_objs(self, headers_header, path, header_path):
@@ -74,7 +74,7 @@ class CalendarOccasion(models.Model):
                 key = row['Trans'].split(",")[0]
                 value = row['Trans'].split(",")[1]
                 transformations.update({key: value})
-            old_header.append(row[headers_header[0]]) #AIS-F fields
+            old_header.append(row[headers_header[0]]) #adoxa fields
         #_logger.info("old_header: %s" % old_header)
         reader = ReadCSV(path, old_header)
         iterations = 0
@@ -140,7 +140,7 @@ class CalendarOccasion(models.Model):
         for i in range(len(keys_to_delete)):
             row.pop(keys_to_delete[i], None)
         keys_to_delete = []
-        
+
         for key in row.keys():
             if key in transformations:
                 transform = transformations[key]
@@ -155,13 +155,15 @@ class CalendarOccasion(models.Model):
                 elif key == 'occasion_id':
                     xmlid = "%s.%s%s" % (self.xmlid_module, transform, row[key])
                     occasion = self.env['ir.model.data'].xmlid_to_res_id(xmlid)
-                elif key == 'start':
-                    row['start'] = "%s%s" %(row['date'], row['start'])
+                elif key == 'start' or key == 'stop':
+                    row[key] = "%s %s" %(row['date'].split(' ')[0], row[key])
                 elif key == 'type_id':
-                    row[key] = self.env['calendar.appointment.type'].search([('ipf_num', '=', row[key])]).id
+                    type_id = self.env['calendar.appointment.type'].search([('ipf_num', '=', row[key])])
+                    row[key] = type_id.id
+                    row['name'] = type_id.name
                 elif key == 'state':
                     translation_dict = {
-                        #'0':'',
+                        'NULL':'free',
                         '1':'done',
                         '2':'free',
                         '6':'confirmed',
@@ -169,9 +171,9 @@ class CalendarOccasion(models.Model):
                     }
                     row[key] = translation_dict[row[key]]
                 elif key == 'location_id':
-                    row[key] = self.env['calendar.appointment.type'].search([('location_code', '=', row[key])]).id
+                    row[key] = self.env['hr.location'].search([('location_code', '=', row[key])]).id
                 elif key == 'user_id':
-                    row[key] = self.env['calendar.appointment.type'].search([('login', '=', row[key])]).id
+                    row[key] = self.env['res.users'].search([('login', '=', row[key])]).id
 
 
 
