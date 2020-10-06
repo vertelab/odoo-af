@@ -295,7 +295,7 @@ class CalendarAppointment(models.Model):
                                         help="Status of the meeting")
     cancel_reason = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason', help="Cancellation reason")
     location = fields.Char(string='Location', compute='compute_location', store=True)
-    location_id = fields.Many2one(string='Location', comodel_name='hr.location', related='user_id.partner_id.location_id', readonly=True)
+    location_id = fields.Many2one(string='Location', comodel_name='hr.location', related='user_id.location_id', readonly=True)
     office_id = fields.Many2one(comodel_name='hr.department', string="Office")
     occasion_ids = fields.One2many(comodel_name='calendar.occasion', inverse_name='appointment_id', string="Occasion")
     type_id = fields.Many2one(string='Type', required=True, comodel_name='calendar.appointment.type')
@@ -338,7 +338,7 @@ class CalendarAppointment(models.Model):
             if app.channel_name == "PDM":
                 app.location = _("Distance")
             elif app.location_id:
-                app.location = app.location_id.name
+                app.location = app.location_id.location_code
             else:
                 app.location = ''
 
