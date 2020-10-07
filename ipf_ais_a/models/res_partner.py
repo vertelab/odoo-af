@@ -33,7 +33,9 @@ class Partner(models.Model):
     _inherit = 'res.partner'
     
     ais_a_ids = fields.One2many(comodel_name='res.partner.ais_a', 
-                                 string='Cases', inverse_name="partner_id", compute='compute_ais_a_ids')
+                                 string='Cases', 
+                                 inverse_name="partner_id", 
+                                 compute='compute_ais_a_ids')
     
     @api.multi
     def compute_ais_a_ids(self):
@@ -102,6 +104,7 @@ class Partner(models.Model):
         return {
             'AF-SystemId': 'AFCRM',
             'AF-Environment': param.get_param('ipf_ais_a.ipf_environment', 'T2'),
+       
             'AF-TrackingId': '%s' % uuid4(),
             'AF-EndUserId': user.af_signature,
         }
