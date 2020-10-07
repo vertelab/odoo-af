@@ -128,8 +128,18 @@ class CalendarOccasion(models.Model):
                     external_xmlid = "%s.%s" % (self.xmlid_module, xmlid_name)
                     keys_to_delete.append(key)
                 elif key == 'partner_id':
-                    social_sec_nr = '' #replace with api call
-                    row[key] = self.env['res.partner'].search([('social_sec_nr', '=', social_sec_nr)]).id
+                    ipf = self.env.ref('af_ipf.ipf_endpoint_customer').sudo()
+                    res = ipf.call(customer_id = self.customer_id_search)
+                    pnr = None
+                    if res:
+                        pnr = res.get('ids', {}).get('pnr')
+                        if pnr:
+                            pnr = '%s-%s' % (pnr[:8], pnr[8:12])
+                    if pnr:
+                        row[key] = self.env['res.partner'].search([('social_sec_nr', '=', pnr)]).id
+                    else:
+                        _logger.warn("could not find person corresponding to %s, skipping" % row[key])
+                        create = False
                 elif key == 'occasion_id':
                     xmlid = "%s.%s%s" % (self.xmlid_module, transform, row[key])
                     occasion_id = self.env['ir.model.data'].xmlid_to_res_id(xmlid)
