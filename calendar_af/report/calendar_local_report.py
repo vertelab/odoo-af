@@ -21,20 +21,17 @@
 
 from odoo import models, fields, api, _, tools
 
-class CalendarAppointmentReport(models.Model):
-    _name = 'report.calendar.appointment'
-    _description = "Appointment report"
+class CalendarAppointmentLocalReport(models.Model):
+    _name = 'report.calendar.appointment.local'
+    _description = "Appointment report local"
     _order = 'name'
     _auto = False
 
     name = fields.Char(string='Name', readonly=True)
     duration = fields.Float(string='Duration', readonly=True)
     app_count = fields.Integer(string='Booked appointments', readonly=True)
-    occ_count = fields.Integer(string='Possible appointments', readonly=True)
-    add_book_count = fields.Integer(string='No. additional occasions', readonly=True)
-    booked_from_cal = fields.Integer(string='Booked from calendar', readonly=True)
-    free_occ = fields.Integer(string='Free occasions', readonly=True)
-    no_overbooked = fields.Integer(string='Overbooked occasions', readonly=True)
+    occ_req_count = fields.Integer(string='Published occasions', readonly=True)
+    occ_ok_count = fields.Integer(string='Accepted occasions', readonly=True)
     app_id = fields.Integer(string='Occasion id', readonly=True)
     user_id = fields.Many2one(comodel_name='res.users', string='Case worker', readonly=True)
     partner_id = fields.Many2one(comodel_name='res.partner', string='Jobseeker', readonly=True)
@@ -69,11 +66,8 @@ class CalendarAppointmentReport(models.Model):
         select_str = """
              SELECT
                     COUNT(DISTINCT ca.id) as app_count,
-                    COUNT(case co.additional_booking when 'f' then 1 else null end) as occ_count,
-                    COUNT(case co.additional_booking when 't' then 1 else null end) as add_book_count,
-                    COUNT(DISTINCT ca.id) - COUNT(case co.additional_booking when 't' then 1 else null end) as booked_from_cal,
-                    COUNT(DISTINCT co.id) - COUNT(ca.id) as free_occ,
-                    case when COUNT(case co.additional_booking when 'f' then 1 else null end) - COUNT(ca.id) > 0 then 0 else -(COUNT(case co.additional_booking when 'f' then 1 else null end) - COUNT(ca.id)) end as no_overbooked,
+                    COUNT(case co.state when 'request' then 1 else null end) as occ_req_count,
+                    COUNT(case co.state when 'ok' then 1 else null end) as occ_ok_count,
                     co.id as id,
                     ca.id as app_id,
                     co.start as occ_start,

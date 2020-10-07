@@ -60,7 +60,7 @@ $ sudo chmod 774 -R data
 - Toma flikar. En flik som heter något.bra.namn.csv får inte vara helt tom.
 
 """,
-    'author': ' Vertel AB',
+    'author': 'Vertel AB',
     'website': 'http://vertel.se',
     'category': 'Extra Tools',
     'depends': ['base'],
