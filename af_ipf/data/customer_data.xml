@@ -5,7 +5,7 @@
 		<record id="ipf_customer" model="af.ipf">
 			<field name="name">Customer</field>
 			<field name="environment">T2</field>
-			<field name="systemid">AFCRM</field>
+			<field name="systemid">CRM</field>
 			<field name="url">https://ipfapi.arbetsformedlingen.se</field>
 			<field name="port">443</field>
 		</record>
