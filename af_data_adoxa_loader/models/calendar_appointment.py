@@ -31,10 +31,6 @@ import tempfile
 import gc
 
 
-# TODO:
-# Läs given address först, gör så att det går att läsa en rad i taget men båda tillsammans
-# 
-
 class CalendarOccasion(models.Model):
     _inherit = "calendar.appointment"
 
@@ -43,7 +39,7 @@ class CalendarOccasion(models.Model):
     @api.model
     def create_occasions(self):     
         headers_header = ['occasions.csv', 'Notering',  'Trans', 'Odoo']
-        #path = os.path.join(config.options.get('data_dir'), 'Adoxa/occasions.csv')
+        path = os.path.join(config.options.get('data_dir'), 'Adoxa/occasions.csv')
         path = "/usr/share/odoo-af/af_data_adoxa_loader/data/test_dumps/occasions.csv" #testing purposes only
         header_path = "/usr/share/odoo-af/af_data_adoxa_loader/data/occasion_mapping.csv"
         self.create_calendar_objs(headers_header, path, header_path)
@@ -51,7 +47,7 @@ class CalendarOccasion(models.Model):
     @api.model
     def create_appointments(self):     
         headers_header = ['appointments.csv', 'Notering',  'Trans', 'Odoo']
-        #path = os.path.join(config.options.get('data_dir'), 'Adoxa/appointments.csv')
+        path = os.path.join(config.options.get('data_dir'), 'Adoxa/appointments.csv')
         path = "/usr/share/odoo-af/af_data_adoxa_loader/data/test_dumps/appointments.csv" #testing purposes only
         header_path = "/usr/share/odoo-af/af_data_adoxa_loader/data/appointment_mapping.csv"
         self.create_calendar_objs(headers_header, path, header_path)
@@ -64,60 +60,42 @@ class CalendarOccasion(models.Model):
         transformations = {}
         for row in header_rows:
             
-            #_logger.info("header_rows row processing: %s" % row)
             if row['Odoo'] != '' and "!" not in row['Odoo']:
                 field_map.update({row['Odoo']: row[headers_header[0]]})
-            # if row['Odoo2'] != '' and "!" not in row['Odoo2']:
-            #     field_map.update({row['Odoo2']: row[headers_header[0]]}) 
             if row['Trans'] != '':
-                #_logger.info("transformations %s"%row['Trans'])
                 key = row['Trans'].split(",")[0]
                 value = row['Trans'].split(",")[1]
                 transformations.update({key: value})
             old_header.append(row[headers_header[0]]) #adoxa fields
-        #_logger.info("old_header: %s" % old_header)
         reader = ReadCSV(path, old_header)
         iterations = 0
-        #_logger.info("get_data: %s" % next(reader.get_data()))
-        #reader.seek_zero()
         for row in reader.get_data():
-            #_logger.info("row: %s" % row)
             r = {}
             header = list(field_map.keys())
-            #_logger.info("header: %s" % header)
             for i in range(len(header)):
                 if header[i] in field_map:
-                    #_logger.info("header %s: %s" % (i, row[field_map[header[i]]]))
                     r.update({header[i] : row[field_map[header[i]]]})
-            #_logger.info("creating row %s" %r)
             self.create_occasion_from_row(r, transformations)
             iterations += 1
             if iterations > 500:
                 self.env.cr.commit()
-               #_loger.info("commit")
                 iterations = 0
         reader.close()
         
     
     @api.model
     def create_occasion_from_row(self, row, transformations):
-        #TODO: läs given address först, skapa den och sen lägg på fältet given_address_id = xmlid_to_res_id
-                
-        #_logger.info("row: %s" % row)
         transformed_row_and_id = self.transform(row, transformations)
         if transformed_row_and_id != {}:
-            #_logger.info('transformed_row_and_id: %s' % transformed_row_and_id)
             external_xmlid = transformed_row_and_id['external_xmlid']
             transformed_row = transformed_row_and_id['row']                
-            
-           #_logger.info("creating partner: %s" % transformed_row)
+
             if 'occasion_id' in transformed_row:
                 obj = self.env['calendar.appointment'].create(transformed_row)
 
             else:
                 obj = self.env['calendar.occasion'].create(transformed_row)
 
-            #self.env['calendar.occasion'].update() #add visitation_address id to partner
             self.env['ir.model.data'].create({
                             'name': external_xmlid.split('.')[1],
                             'module': external_xmlid.split('.')[0],
@@ -170,7 +148,6 @@ class CalendarOccasion(models.Model):
                         row['name'] = type_id.name
                     else: 
                         create = False
-                    #_logger.info("name: %s" % row['name'])
                 elif key == 'state':
                     if 'occasion_id' in row:
                         translation_dict = {
@@ -200,7 +177,6 @@ class CalendarOccasion(models.Model):
 
         for i in range(len(keys_to_update)):
             row.update(keys_to_update[i])
-            #_logger.info("row updated with %s, now %s" % (keys_to_update[i], row) )
         
         for key in row.keys():
             if "skip" in key:
@@ -212,7 +188,6 @@ class CalendarOccasion(models.Model):
             create = False
             _logger.warning("external id already in database, skipping")
         
-       #_loger.info('create?: %s' % create)
         if create:
             return {'row': row, 
                     'external_xmlid': external_xmlid 
@@ -225,14 +200,9 @@ class ReadCSV(object):
     def __init__(self, path, header): 
         self.header = header
         try:
-            #rows = []
             self.f = open(path)
             self.f.seek(0)
-            reader = csv.DictReader(self.f,delimiter=",")
-            #for row in reader:
-            #    rows.append(row)
-            
-            
+            reader = csv.DictReader(self.f,delimiter=",")           
             self.data = reader
         except IOError as e:
             _logger.error(u'Could not read CSV file at path %s' % path)
@@ -260,7 +230,6 @@ class ReadCSV(object):
         csvIter = CSVIterator(self.data,len(self.data), list(field_map.keys()), field_map)
         pairs = []
         while csvIter.hasNext():
-            #_logger.info("appending row %s" % csvIter.getRow())
             pairs.append(csvIter.getRow())
             csvIter.next()
         return pairs
@@ -278,7 +247,6 @@ class ReadCSV(object):
         pairs = []
         while csvIter.hasNext():
             csvIter.next()
-            #_logger.info("appending header row %s" % csvIter.getRow())
             pairs.append(csvIter.getRow())
             
         return pairs
@@ -303,7 +271,6 @@ class CSVIterator(object):
         r = {}
         for i in range(len(self.header)):
             if self.header[i] in self.field_map:
-                #_logger.info("Updating row nr %s of %s %s : %s" % (self.row, self.rows, self.header[i], self.data[self.row][self.field_map[self.header[i]]]))
                 r.update({self.header[i] : self.data[self.row][self.field_map[self.header[i]]]})
 
         return r
