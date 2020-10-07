@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0-20200508\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-25 07:33+0000\n"
-"PO-Revision-Date: 2020-09-25 11:47+0200\n"
+"PO-Revision-Date: 2020-10-07 15:14+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,32 +21,32 @@ msgstr ""
 #: code:addons/calendar_af/models/calendar.py:537
 #, python-format
 msgid " because of reason: %s."
-msgstr ""
+msgstr "på grund av orsak: %s."
 
 #. module: calendar_af
 #: code:addons/calendar_af/models/calendar.py:78
 #: code:addons/calendar_af/models/calendar.py:616
 #, python-format
 msgid "%sm @ %s"
-msgstr ""
+msgstr "%sm @ %s"
 
 #. module: calendar_af
 #: code:addons/calendar_af/models/calendar.py:445
 #, python-format
 msgid "%sm meeting on %s cancelled with reason: %s"
-msgstr ""
+msgstr "%sm mötet den %s är avbokat med orsaken %s"
 
 #. module: calendar_af
 #: code:addons/calendar_af/models/calendar.py:505
 #, python-format
 msgid "%sm meeting on %s created."
-msgstr ""
+msgstr "%sm möte den %s skapat."
 
 #. module: calendar_af
 #: code:addons/calendar_af/models/calendar.py:486
 #, python-format
 msgid "%sm meeting on %s deleted."
-msgstr ""
+msgstr "%sm möte den %s raderat."
 
 #. module: calendar_af
 #: selection:calendar.appointment,duration_selection:0
@@ -65,38 +65,38 @@ msgstr "30 minuter"
 #. module: calendar_af
 #: model:ir.actions.server,name:calendar_af.action_occasion_accept
 msgid "AF Accept occasion"
-msgstr "AF Godkänn tillfället"
+msgstr "Acceptera"
 
 #. module: calendar_af
 #: model:ir.actions.server,name:calendar_af.af_calendar_cleanup
 msgid "AF Calendar Cleanup"
-msgstr "AF Rensning av kalender"
+msgstr "Rensning av kalender"
 
 #. module: calendar_af
 #: model:ir.actions.server,name:calendar_af.af_generate_occasions
 msgid "AF Generate Occasions"
-msgstr "AF Skapa händelser"
+msgstr "Skapa händelser"
 
 #. module: calendar_af
 #: model:ir.actions.server,name:calendar_af.af_get_bookable_occasions
 msgid "AF Get Bookable Occasion"
-msgstr "AF Hämta bokningsbar händelse"
+msgstr "Hämta bokningsbar händelse"
 
 #. module: calendar_af
 #: model:ir.actions.server,name:calendar_af.action_occasion_publish
 msgid "AF Publish occasion"
-msgstr "AF Publicering av tillfälle"
+msgstr "Publicera"
 
 #. module: calendar_af
 #: model:ir.actions.server,name:calendar_af.action_occasion_reject
 msgid "AF Reject occasion"
-msgstr "AF Avvisat tillfälle"
+msgstr "Avböj"
 
 #. module: calendar_af
 #: selection:calendar.occasion,state:0
 #: selection:report.calendar.appointment,occ_state:0
 msgid "Accepted"
-msgstr "Accepterad"
+msgstr "Accepterat"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment__active
@@ -119,7 +119,7 @@ msgstr "Ytterligare bokningar"
 #. module: calendar_af
 #: model:ir.ui.menu,name:calendar_af.menu_admin
 msgid "Administration"
-msgstr ""
+msgstr "Administration"
 
 #. module: calendar_af
 #: model:ir.model,name:calendar_af.model_calendar_appointment
@@ -148,12 +148,12 @@ msgstr "Mötesstart"
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_report_calendar_appointment__app_start_time
 msgid "Appointment start time"
-msgstr "Mötesstart tid"
+msgstr "Mötesstarttid"
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_report_search
 msgid "Appointment state"
-msgstr "Mötes status"
+msgstr "Mötesstatus"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_report_calendar_appointment__app_stop
@@ -197,7 +197,7 @@ msgstr "Deltagare"
 #: model:ir.cron,cron_name:calendar_af.ir_cron_additional_times_autovacuum
 #: model:ir.cron,name:calendar_af.ir_cron_additional_times_autovacuum
 msgid "Auto-vacuum additional times"
-msgstr "Auto-vacuum ytterligare tider"
+msgstr "Autorensning av ytterligare tider"
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_appointment_form
@@ -269,12 +269,12 @@ msgstr "Kalender"
 #: model:ir.ui.menu,name:calendar_af.menu_action_calendar_report
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_report_pivot
 msgid "Calendar appointment report"
-msgstr "Kalender mötes rapport"
+msgstr "Kalender mötesrapport"
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_report_search
 msgid "Calendar report"
-msgstr "Kalender rapport"
+msgstr "Kalenderrapport"
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.cancel_appointment_view_form
@@ -294,7 +294,7 @@ msgstr "Avboka mötet"
 #: code:addons/calendar_af/models/calendar.py:302
 #, python-format
 msgid "Cancel meeting for %s - %s"
-msgstr ""
+msgstr "Avboka möte för %s - %s"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment__cancel_reason
@@ -305,7 +305,7 @@ msgstr "Avbokningsorsak"
 #: selection:calendar.appointment,state:0
 #: selection:report.calendar.appointment,app_state:0
 msgid "Canceled"
-msgstr "Avbokad"
+msgstr "Avbokat"
 
 #. module: calendar_af
 #: model:ir.model.fields,help:calendar_af.field_calendar_appointment__cancel_reason
@@ -374,12 +374,12 @@ msgstr "Kommentar"
 #: model_terms:ir.ui.view,arch_db:calendar_af.calendar_appointment_search
 #: selection:report.calendar.appointment,app_state:0
 msgid "Confirmed"
-msgstr "Bekräftad"
+msgstr "Bekräftat"
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_report_search
 msgid "Confirmed appointment"
-msgstr "Bekräftad möte"
+msgstr "Bekräftat möte"
 
 #. module: calendar_af
 #: model:ir.model,name:calendar_af.model_res_partner
@@ -398,12 +398,12 @@ msgstr "Skapa"
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_create_local_occasion_form
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_occasion_form
 msgid "Create occasion"
-msgstr "Skapa tillfälle"
+msgstr "Skapa bokningsbar tid"
 
 #. module: calendar_af
 #: model:ir.actions.act_window,name:calendar_af.create_local_occasion_form_action
 msgid "Create occasions"
-msgstr "Skapa tillfällen"
+msgstr "Skapa bokningsbara tider"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment__create_uid
@@ -475,7 +475,7 @@ msgstr "Distansmöte"
 #: selection:calendar.appointment,state:0
 #: selection:report.calendar.appointment,app_state:0
 msgid "Done"
-msgstr "Avslutad"
+msgstr "Avslutat"
 
 #. module: calendar_af
 #: selection:calendar.appointment,state:0 selection:calendar.occasion,state:0
@@ -563,7 +563,7 @@ msgstr "Gruppera efter..."
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_schedule__id
 #: model:ir.model.fields,field_description:calendar_af.field_report_calendar_appointment__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment____last_update
@@ -622,13 +622,13 @@ msgstr "Lokalkontor"
 #: model:ir.actions.act_window,name:calendar_af.action_local_appointment
 #: model:ir.ui.menu,name:calendar_af.menu_action_local_appointment
 msgid "Local appointments"
-msgstr "Lokalakontorsmöten"
+msgstr "Lokalkontorsmöten"
 
 #. module: calendar_af
 #: model:ir.actions.act_window,name:calendar_af.action_calendar_local_occasion
 #: model:ir.ui.menu,name:calendar_af.menu_action_local_occasion
 msgid "Local occasions"
-msgstr "Lokalkontorstillfällen"
+msgstr "Bokningsbara tider"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment__location
@@ -639,7 +639,7 @@ msgstr "Plats"
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_report_calendar_appointment__location_code
 msgid "Location code"
-msgstr "Plats kod"
+msgstr "Platskod"
 
 #. module: calendar_af
 #: model:ir.actions.act_window,name:calendar_af.action_mapped_dates
@@ -694,7 +694,7 @@ msgstr "Mötet är flyttat"
 #: code:addons/calendar_af/models/calendar.py:537
 #, python-format
 msgid "Meeting on %s moved"
-msgstr ""
+msgstr "Möte på %s flyttat"
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_appointment_form
@@ -716,12 +716,12 @@ msgstr "Mötestyp"
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment_type__ipf_num
 msgid "Meeting type id"
-msgstr "Mötes typ id"
+msgstr "MötestypId"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment_type__name
 msgid "Meeting type name"
-msgstr "Mötes typ namn"
+msgstr "Mötestyp namn"
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_schedule_kanban
@@ -757,7 +757,7 @@ msgstr "Omboka mötet"
 #: code:addons/calendar_af/models/calendar.py:288
 #, python-format
 msgid "Move meeting for %s - %s"
-msgstr ""
+msgstr "Flytta möte för %s -%s"
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_appointment_move_form
@@ -806,7 +806,7 @@ msgstr "Antal schemalagda handläggare"
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.cancel_appointment_view_form
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #. module: calendar_af
 #: model:ir.model,name:calendar_af.model_calendar_occasion
@@ -817,22 +817,22 @@ msgstr "Möte"
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_create_local_occasion_form
 msgid "Occasion Details"
-msgstr "Mötes specifikationer"
+msgstr "Mötesspecifikationer"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_report_calendar_appointment__app_id
 msgid "Occasion id"
-msgstr "Mötes id"
+msgstr "MötesId"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_report_calendar_appointment__occ_start
 msgid "Occasion start"
-msgstr "Mötes start"
+msgstr "Mötesstart"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_report_calendar_appointment__occ_start_time
 msgid "Occasion start time"
-msgstr "Mötes start tid"
+msgstr "Mötesstart tid"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_occasion__state
@@ -844,7 +844,7 @@ msgstr "Mötesstatus"
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_report_calendar_appointment__occ_stop
 msgid "Occasion stop"
-msgstr "Mötes slut"
+msgstr "Mötesslut"
 
 #. module: calendar_af
 #: model:ir.actions.act_window,name:calendar_af.action_calendar_occasion
@@ -899,7 +899,7 @@ msgstr "Översikt PDM"
 #. module: calendar_af
 #: model:ir.ui.menu,name:calendar_af.menu_pdm
 msgid "PDM"
-msgstr ""
+msgstr "PDM"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_report_calendar_appointment__occ_count
@@ -926,7 +926,7 @@ msgstr "Anledning för avbokning"
 #: selection:calendar.occasion,state:0
 #: selection:report.calendar.appointment,occ_state:0
 msgid "Rejected"
-msgstr "Avböjd"
+msgstr "Avböjt"
 
 #. module: calendar_af
 #: model:ir.model.fields,help:calendar_af.field_calendar_schedule__type_id
@@ -948,7 +948,7 @@ msgstr "Rapporter"
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment__reserved
 #: selection:report.calendar.appointment,app_state:0
 msgid "Reserved"
-msgstr "Reserverad"
+msgstr "Reserverat"
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.calendar_appointment_local_search
@@ -1017,7 +1017,7 @@ msgstr "Meriter"
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_occasion__start
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_schedule__start
 msgid "Start"
-msgstr ""
+msgstr "Start"
 
 #. module: calendar_af
 #: model:ir.model.fields,help:calendar_af.field_calendar_schedule__start
@@ -1045,7 +1045,7 @@ msgstr "Start för repetition"
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_occasion_kanban
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_schedule_kanban
 msgid "Start:"
-msgstr ""
+msgstr "Start:"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment__state
@@ -1098,7 +1098,7 @@ msgstr "Slut:"
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment__suggestion_ids
 msgid "Suggested Dates"
-msgstr "Föreslagna Datum"
+msgstr "Föreslagna datum"
 
 #. module: calendar_af
 #: code:addons/calendar_af/models/calendar.py:151
@@ -1110,12 +1110,12 @@ msgstr "Söndag"
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment_type__ipf_id
 msgid "Teleopti competence id"
-msgstr "Teleopti kompetens id"
+msgstr "Teleopti kompetensId"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment_type__ipf_name
 msgid "Teleopti competence name"
-msgstr "Teleopti kompetens namn"
+msgstr "Teleopti kompetensnamn"
 
 #. module: calendar_af
 #: model:ir.model.fields,help:calendar_af.field_calendar_appointment_type__ipf_id
@@ -1144,7 +1144,7 @@ msgstr "Torsdag"
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_mapped_dates__to_date
 msgid "To Date"
-msgstr "Tilldatum"
+msgstr "Till datum"
 
 #. module: calendar_af
 #: code:addons/calendar_af/models/calendar.py:146
@@ -1169,7 +1169,7 @@ msgstr "Typ"
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_report_search
 msgid "Unassigned"
-msgstr "Inte tilldelad"
+msgstr "Inte tilldelat"
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_appointment_move_form
