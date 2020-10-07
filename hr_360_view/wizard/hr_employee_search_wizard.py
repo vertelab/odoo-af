@@ -134,7 +134,17 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             else:
                 raise Warning(_("Incorrectly formated social security number: %s" % self.social_sec_nr_search))
         if self.customer_id_search:
-            domain.append(("customer_id", "=", self.customer_id_search))
+            ipf = self.env.ref('af_ipf.ipf_endpoint_customer').sudo()
+            res = ipf.call(customer_id = self.customer_id_search)
+            pnr = None
+            if res:
+                pnr = res.get('ids', {}).get('pnr')
+                if pnr:
+                    pnr = '%s-%s' % (pnr[:8], pnr[8:12])
+            if pnr:
+                domain.append(("social_sec_nr", "=", pnr))
+            else:
+                domain.append(("social_sec_nr", 'in', []))
         if self.email_search:
             domain.append(("email", "=", self.email_search))
         domain = ['|' for x in range(len(domain) - 1)] + domain
