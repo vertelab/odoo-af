@@ -112,7 +112,7 @@ class CalendarOccasion(models.Model):
             
            #_logger.info("creating partner: %s" % transformed_row)
             if 'occasion_id' in transformed_row:
-                obj = self.env['calendar.appointmet'].create(transformed_row)
+                obj = self.env['calendar.appointment'].create(transformed_row)
 
             else:
                 obj = self.env['calendar.occasion'].create(transformed_row)
@@ -154,26 +154,42 @@ class CalendarOccasion(models.Model):
                     row[key] = self.env['res.partner'].search([('social_sec_nr', '=', social_sec_nr)]).id
                 elif key == 'occasion_id':
                     xmlid = "%s.%s%s" % (self.xmlid_module, transform, row[key])
-                    occasion = self.env['ir.model.data'].xmlid_to_res_id(xmlid)
+                    occasion_id = self.env['ir.model.data'].xmlid_to_res_id(xmlid)
+                    row[key] = occasion_id
                 elif key == 'start' or key == 'stop':
                     row[key] = "%s %s" %(row['date'].split(' ')[0], row[key])
                 elif key == 'type_id':
                     type_id = self.env['calendar.appointment.type'].search([('ipf_num', '=', row[key])])
-                    row[key] = type_id.id
-                    row['name'] = type_id.name
+                    if type_id:
+                        row[key] = type_id.id
+                        row['name'] = type_id.name
+                    else: 
+                        create = False
+                    #_logger.info("name: %s" % row['name'])
                 elif key == 'state':
-                    translation_dict = {
-                        'NULL':'free',
-                        '1':'done',
-                        '2':'free',
-                        '6':'confirmed',
-                        '7':'cancelled',
-                    }
+                    if 'occasion_id' in row:
+                        translation_dict = {
+                            'NULL':'free',
+                            '1':'done',
+                            '2':'free',
+                            '6':'confirmed',
+                            '7':'cancelled',
+                        }
+                    else:
+                        translation_dict = {
+                            'NULL':'draft',
+                            '1':'booked',
+                            '2':'booked',
+                            '6':'ok',
+                            '7':'fail',
+                        }
                     row[key] = translation_dict[row[key]]
                 elif key == 'location_id':
                     row[key] = self.env['hr.location'].search([('location_code', '=', row[key])]).id
+                    keys_to_delete.append(key)
                 elif key == 'user_id':
                     row[key] = self.env['res.users'].search([('login', '=', row[key])]).id
+                keys_to_delete.append("date")
 
 
 

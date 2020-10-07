@@ -6,7 +6,7 @@ Sluttid,,"stop,_",stop
 Längd,,,duration
 Mötestypsid,,"type_id,_",type_id
 Mötestypsid,,,name
-Bokningsstatus,,"state,_",!state
+Bokningsstatus,,"state,_",state
 Skapad,,,
 Skapad av,,,
 Kontorskod,,"location_id,_",location_id
