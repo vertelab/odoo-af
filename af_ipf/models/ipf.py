@@ -37,7 +37,7 @@ class AfIpf(models.Model):
     client_secret = fields.Char()
     auth_user = fields.Char()
     auth_password = fields.Char()
-    systemid = fields.Char(default='AFCRM')
+    systemid = fields.Char(default='CRM')
     environment = fields.Selection(selection=[
         ('U1', 'U1'),
         ('I1', 'I1'),
