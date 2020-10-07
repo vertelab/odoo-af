@@ -9,6 +9,7 @@ Datum,,,date
 Starttid,,"start,_",start
 Sluttid,,"stop,_",stop
 Längd,,,duration
+Längd,,"duration_selection,_",duration_selection
 Mötestypsid,,"type_id,_",type_id
 Mötestypsid,,,name
 Bokningsstatus,,"state,_",state

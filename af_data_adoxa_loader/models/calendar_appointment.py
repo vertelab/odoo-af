@@ -158,6 +158,11 @@ class CalendarOccasion(models.Model):
                     row[key] = occasion_id
                 elif key == 'start' or key == 'stop':
                     row[key] = "%s %s" %(row['date'].split(' ')[0], row[key])
+                elif key == 'duration_selection':
+                    if row['duration'] == "60":
+                        row[key] = "1 hour"
+                    else:
+                        row[key] = "30 minutes"
                 elif key == 'type_id':
                     type_id = self.env['calendar.appointment.type'].search([('ipf_num', '=', row[key])])
                     if type_id:
