@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="view_ipf_tree" model="ir.ui.view">
+        <field name="name">af.ipf.tree</field>
+        <field name="model">af.ipf</field>
+        <field name="arch" type="xml">
+            <tree string="IPF Integrations">
+                <field name="name"/>
+                <field name="environment"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_ipf_form" model="ir.ui.view">
+        <field name="name">af.ipf.form</field>
+        <field name="model">af.ipf</field>
+        <field name="arch" type="xml">
+            <form string="IPF Integrations">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="clientid"/>
+                        <field name="client_secret"/>
+                        <field name="auth_user"/>
+                        <field name="auth_password"/>
+                        <field name="environment"/>
+                        <field name="systemid"/>
+                        <field name="url"/>
+                        <field name="port"/>
+                        <field name="ssl_verify"/>
+                        <field name="ssl_cert"/>
+                        <field name="ssl_key"/>
+                    </group>
+                    <label for="endpoint_ids"/>
+                    <field name="endpoint_ids"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_ipf_endpoint_tree" model="ir.ui.view">
+        <field name="name">af.ipf.endpoint.tree</field>
+        <field name="model">af.ipf.endpoint</field>
+        <field name="arch" type="xml">
+            <tree string="IPF Integrations">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_ipf_endpoint_form" model="ir.ui.view">
+        <field name="name">af.ipf.endpoint.form</field>
+        <field name="model">af.ipf.endpoint</field>
+        <field name="arch" type="xml">
+            <form string="IPF Integrations">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_ipf" model="ir.actions.act_window">
+        <field name="name">IPF Integrations</field>
+        <field name="res_model">af.ipf</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem name="IPF" id="menu_ipf" parent="base.menu_custom" sequence="10" />
+    <menuitem name="IPF Settings" id="menu_ipf_settings" action="action_ipf" parent="menu_ipf" sequence="10" />
+</odoo>
