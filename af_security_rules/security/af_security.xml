@@ -81,7 +81,7 @@
             <field ref="base.model_res_partner" name="model_id"/>
             <field name="domain_force">[
     ('is_employer', '=', True),
-    ('office', 'in', user.mapped('employee_ids.office_ids.id'))]</field>
+    ('office_id', 'in', user.mapped('employee_ids.office_ids.id'))]</field>
             <field name="groups" eval="[(4, ref('af_security.af_employers_officer'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="False"/>
