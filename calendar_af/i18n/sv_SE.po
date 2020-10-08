@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0-20200508\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-25 07:33+0000\n"
-"PO-Revision-Date: 2020-10-07 15:14+0200\n"
+"PO-Revision-Date: 2020-10-08 12:49+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -75,12 +75,12 @@ msgstr "Rensning av kalender"
 #. module: calendar_af
 #: model:ir.actions.server,name:calendar_af.af_generate_occasions
 msgid "AF Generate Occasions"
-msgstr "Skapa händelser"
+msgstr "Skapa bokningsbara tider"
 
 #. module: calendar_af
 #: model:ir.actions.server,name:calendar_af.af_get_bookable_occasions
 msgid "AF Get Bookable Occasion"
-msgstr "Hämta bokningsbar händelse"
+msgstr "Hämta bokningsbara tider"
 
 #. module: calendar_af
 #: model:ir.actions.server,name:calendar_af.action_occasion_publish
@@ -694,7 +694,7 @@ msgstr "Mötet är flyttat"
 #: code:addons/calendar_af/models/calendar.py:537
 #, python-format
 msgid "Meeting on %s moved"
-msgstr "Möte på %s flyttat"
+msgstr "Möte den %s flyttat"
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_appointment_form
@@ -757,7 +757,7 @@ msgstr "Omboka mötet"
 #: code:addons/calendar_af/models/calendar.py:288
 #, python-format
 msgid "Move meeting for %s - %s"
-msgstr "Flytta möte för %s -%s"
+msgstr "Flytta möte för %s - %s"
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_appointment_move_form
@@ -832,7 +832,7 @@ msgstr "Mötesstart"
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_report_calendar_appointment__occ_start_time
 msgid "Occasion start time"
-msgstr "Mötesstart tid"
+msgstr "Mötesstarttid"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_occasion__state
