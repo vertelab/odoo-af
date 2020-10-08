@@ -129,7 +129,7 @@ class CalendarOccasion(models.Model):
                     keys_to_delete.append(key)
                 elif key == 'partner_id':
                     ipf = self.env.ref('af_ipf.ipf_endpoint_customer').sudo()
-                    res = ipf.call(customer_id = self.customer_id_search)
+                    res = ipf.call(customer_id = row[key])
                     pnr = None
                     if res:
                         pnr = res.get('ids', {}).get('pnr')
