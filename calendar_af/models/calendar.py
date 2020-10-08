@@ -579,8 +579,6 @@ class CalendarAppointment(models.Model):
     @api.model
     def create(self, values):
         res = super(CalendarAppointment, self).create(values)
-        # if (res.sudo().occasion_ids != False) and (res.sudo().channel == res.env.ref('calendar_channel.channel_local')):
-        #     res._check_remaining_occasions()
 
         if res.sudo().partner_id:
             #create daily note
