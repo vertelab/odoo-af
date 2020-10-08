@@ -25,6 +25,7 @@ from datetime import date
 _logger = logging.getLogger(__name__)
 from odoo.exceptions import Warning
 from odoo.tools.safe_eval import safe_eval
+import json
 
 class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     _name = "hr.employee.jobseeker.search.wizard"
@@ -106,7 +107,20 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             raise Warning(_("No id found"))
         # TODO: Set correct access level. Probably varies with the reason for the search.
         partners._grant_jobseeker_access('MYCKET_STARK', user=self.env.user, reason=self.search_reason or self.identification)
-            
+        
+        for partner in partners:
+
+            vals = {
+            'logged_in_user': self.env.user.name,
+            'identification': self.identification,
+            'searched_partner': partners.name,
+            'social_sec_num': partners.social_sec_nr,
+            'office': partners.office.name
+
+            }
+
+            _logger.info(json.dumps(vals))
+
         action = {
             'name': _('Jobseekers'),
             'domain': [('id', '=', partners._ids), ('is_jobseeker', '=', True)],
@@ -161,7 +175,20 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             raise Warning(_("No id found"))
         # TODO: Set correct access level. Probably varies with the reason for the search.
         partners._grant_jobseeker_access('MYCKET_STARK', user=self.env.user, reason=self.search_reason or self.identification)
-            
+
+        for partner in partners:
+
+            vals = {
+            'logged_in_user': self.env.user.name,
+            'identification': self.identification,
+            'searched_partner': partners.name,
+            'social_sec_num': partners.social_sec_nr,
+            'office': partners.office.name
+
+            }
+
+            _logger.info(json.dumps(vals))
+
         action = {
             'name': _('Jobseekers'),
             'domain': [('id', '=', partners._ids), ('is_jobseeker', '=', True)],
@@ -175,5 +202,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             action['view_id'] = self.env.ref("partner_view_360.view_jobseeker_form").id
             action['res_id'] = partners.id
             action['view_mode'] = 'form'
+            
+
         return action
 
