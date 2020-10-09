@@ -169,9 +169,7 @@ class CalendarOccasion(models.Model):
                         }
                     else:
                         translation_dict = {
-                            'NULL':'draft',
-                            '1':'booked',
-                            '2':'booked',
+                            'NULL':'request',
                             '6':'ok',
                             '7':'fail',
                         }
