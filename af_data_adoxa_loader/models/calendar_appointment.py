@@ -154,6 +154,8 @@ class CalendarOccasion(models.Model):
                     else:
                         create = False
                 elif key == 'type_id':
+                    if row[key] == "23":
+                        row[key] == "26"
                     type_id = self.env['calendar.appointment.type'].search([('ipf_num', '=', row[key])])
                     if type_id:
                         row[key] = type_id.id
@@ -165,6 +167,7 @@ class CalendarOccasion(models.Model):
                         translation_dict = {
                             'NULL':'confirmed',
                             '1':'done',
+                            '2':'done',
                         }
                     else:
                         translation_dict = {
@@ -178,6 +181,12 @@ class CalendarOccasion(models.Model):
                     keys_to_delete.append(key)
                 elif key == 'user_id':
                     row[key] = self.env['res.users'].search([('login', '=', row[key])]).id
+                elif key == 'additional_booking':
+                    if row[key] == "Ja":
+                        row[key] == True
+                    else:
+                        row[key] == False
+
                 keys_to_delete.append("date")
 
 

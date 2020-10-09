@@ -18,5 +18,5 @@ Skapad av,,,
 Kontorskod,,"location_id,_",location_id
 Kontorsnamn,,,
 Möteshandläggare,,"user_id,_",user_id
-Skapad överbokningstid,,,
+Skapad överbokningstid,,"additional_booking,_",additional_booking
 Skickad till ACE,,,
