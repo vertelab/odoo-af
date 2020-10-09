@@ -149,8 +149,10 @@ class CalendarOccasion(models.Model):
                 elif key == 'duration_selection':
                     if row['duration'] == "60":
                         row[key] = "1 hour"
-                    else:
+                    elif row['duration'] == "30":
                         row[key] = "30 minutes"
+                    else:
+                        create = False
                 elif key == 'type_id':
                     type_id = self.env['calendar.appointment.type'].search([('ipf_num', '=', row[key])])
                     if type_id:
@@ -161,11 +163,8 @@ class CalendarOccasion(models.Model):
                 elif key == 'state':
                     if 'occasion_id' in row:
                         translation_dict = {
-                            'NULL':'free',
+                            'NULL':'confirmed',
                             '1':'done',
-                            '2':'free',
-                            '6':'confirmed',
-                            '7':'cancelled',
                         }
                     else:
                         translation_dict = {
@@ -197,7 +196,8 @@ class CalendarOccasion(models.Model):
             _logger.warning("external id already in database, skipping")
         
         if create:
-            return {'row': row, 
+            return {
+                    'row': row, 
                     'external_xmlid': external_xmlid 
                     }
         else:
