@@ -145,6 +145,8 @@
             <search string="Rules">
                 <field name="state" />
                 <field name="type_id" />
+                <field name="office_id"/>
+                <field name="user_id"/>
                 <filter
                     name="state_ok_req"
                     domain="['|',['state','=','request'],['state','=','ok']]"
