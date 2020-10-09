@@ -20,6 +20,7 @@
 ##############################################################################
 
 from odoo import models, fields, api, _
+from odoo.tools import config
 from pytz import timezone
 from datetime import timedelta
 from zeep.client import CachingClient
@@ -32,8 +33,8 @@ import logging
 _logger = logging.getLogger(__name__)
 
 LOCAL_TZ = timezone('Europe/Stockholm')
-WSDL_NYCKELTJANST = 'http://bhtj.arbetsformedlingen.se/KeyService/ws/nyckeltjanst?wsdl'
-WSDL_INITIERANDE_NYCKELTJANST = 'http://bhtj.arbetsformedlingen.se/KeyService/ws/initierandenyckeltjanst?wsdl'
+WSDL_NYCKELTJANST = config.get('bhtj_nyckeltjanst', 'https://bhtj.arbetsformedlingen.se/KeyService/ws/nyckeltjanst?wsdl')
+WSDL_INITIERANDE_NYCKELTJANST = config.get('bhtj_initierande_nyckeltjanst', 'https://bhtj.arbetsformedlingen.se/KeyService/ws/initierandenyckeltjanst?wsdl')
 NYCKELTJANST = None
 INITIERANDE_NYCKELTJANST = None
 INIT_HEADER_SYSTEM_ID = 'CRM'
