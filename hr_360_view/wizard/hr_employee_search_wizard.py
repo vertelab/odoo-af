@@ -113,9 +113,9 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             vals = {
             'logged_in_user': self.env.user.name,
             'identification': self.identification,
-            'searched_partner': partners.name,
-            'social_sec_num': partners.social_sec_nr,
-            'office': partners.office.name
+            'searched_partner': partner.name,
+            'social_sec_num': partner.social_sec_nr,
+            'office': partner.office.name
 
             }
 
@@ -181,9 +181,9 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             vals = {
             'logged_in_user': self.env.user.name,
             'identification': self.identification,
-            'searched_partner': partners.name,
-            'social_sec_num': partners.social_sec_nr,
-            'office': partners.office.name
+            'searched_partner': partner.name,
+            'social_sec_num': partner.social_sec_nr,
+            'office': partner.office.name
 
             }
 
