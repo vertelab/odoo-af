@@ -115,7 +115,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             'identification': self.identification,
             'searched_partner': partner.name,
             'social_sec_num': partner.social_sec_nr,
-            'office': partner.office.name
+            'office': partner.office_id.name
 
             }
 
@@ -183,7 +183,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             'identification': self.identification,
             'searched_partner': partner.name,
             'social_sec_num': partner.social_sec_nr,
-            'office': partner.office.name
+            'office': partner.office_id.name
 
             }
 
