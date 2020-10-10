@@ -2,7 +2,7 @@
 
 {
     "name": "Calendar management - AF",
-    "version": "12.0.1.0.3",
+    "version": "12.0.1.0.4",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
@@ -13,7 +13,7 @@ Description
 ================================================================================================
 Asök booking management \n
 12.0.1.0.3 - AFC-1046 - Lägg till Helger och röda dagar i Resource Leaves.\n
-\n
+12.0.1.0.4 - KPD-562 - Disable "the clickability" of the lines in a treeview\n
     """,
     "depends": [
         "calendar",
