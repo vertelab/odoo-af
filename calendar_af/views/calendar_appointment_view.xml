@@ -115,7 +115,10 @@
                             <field name="name" invisible="1"/>
                             <field string="Meeting channel" name="channel" readonly="0" />
                             <field string="Meeting channel" name="channel_name" invisible="1" />
-                            <field string="Meeting type" name="type_id" domain="[('channel', '=', channel)]" context="{ 'default_channel': %(calendar_channel.channel_pdm)d }"/>
+                            <field string="Meeting type" name="type_id"
+                                   domain="[('channel', '=', channel)]"
+                                   options="{'no_quick_create':True,'no_create_edit':True,'no_create':True,'no_edit':True}"
+                                   context="{ 'default_channel': %(calendar_channel.channel_pdm)d }"/>
                             <field string="Meeting subject" name="name" placeholder="e.g. Business Lunch" invisible="1" />
                         </group>
                         <group>
@@ -145,7 +148,7 @@
                     <span aria-atomic="true" class="btn-group oe-right oe_button_box">
                         <button name="compute_suggestion_ids" type="object" string="Next" />
                     </span>
-                    <field name="suggestion_ids" attrs="{'invisible':[('show_suggestion_ids','=',False)]}">
+                    <field name="suggestion_ids" readonly="1" attrs="{'invisible':[('show_suggestion_ids','=',False)]}">
                         <tree string="Bookable Occasions" limit="10" >
                             <field name="weekday" />
                             <field name="start" />

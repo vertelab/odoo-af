@@ -1,5 +1,5 @@
 id,ipf_num,name,duration,duration_default,days_first,days_last,additional_booking,channel/id,ipf_id,text
-calendar_meeting_type.type_00,00,"Reservation",30,False,0,0,False,calendar_channel.channel_none,"n/a",""
+calendar_meeting_type.type_00,00,"Reservation",30,False,0,0,False,calendar_channel.channel_pdm,"n/a",""
 calendar_meeting_type.type_21,21,"Första planeringssamtal PDM",30,True,3,15,True,calendar_channel.channel_pdm,ded72445-e5d3-4e21-a356-aad200dac83d,"F.n. förkortat från 60 min"
 calendar_meeting_type.type_22,22,"Uppföljande planeringssamtal PDM",60,True,3,90,False,calendar_channel.channel_pdm,f203b91b-bdbe-46e8-b6ae-aad200df9884,""
 calendar_meeting_type.type_23,23,"Fördjupat planeringssamtal PDM",60,False,3,15,False,calendar_channel.channel_pdm,93557f15-d25a-4f40-8a6b-aad200e1d2a0,""
