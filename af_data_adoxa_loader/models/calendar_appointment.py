@@ -176,9 +176,9 @@ class CalendarOccasion(models.Model):
                             '7':'fail',
                         }
                     row[key] = translation_dict[row[key]]
-                elif key == 'location_id':
-                    row[key] = self.env['hr.location'].search([('location_code', '=', row[key])]).id
-                    keys_to_delete.append(key)
+                # elif key == 'location_id': #location is found through user_id.location_id
+                #     row[key] = self.env['hr.location'].search([('location_code', '=', row[key])]).id
+                #     keys_to_delete.append(key)
                 elif key == 'user_id':
                     row[key] = self.env['res.users'].search([('login', '=', row[key])]).id
                 elif key == 'additional_booking':
