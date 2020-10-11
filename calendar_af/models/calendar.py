@@ -522,10 +522,10 @@ class CalendarAppointment(models.Model):
 
                 #create daily note
                 vals = {
-                    "name": _("Meeting cancelled"),
+                    "name": _("Cancelled %s. Reason: %s" % (self.type_id.name, cancel_reason.name)),
                     "partner_id": self.partner_id.id,
                     "administrative_officer": self.user_id.id,
-                    "note": _("%sm meeting on %s cancelled with reason: %s") % (self.duration * 30, self.start, cancel_reason.name),
+                    "note": _("Cancelled %s: %s. Reason: %s" % (self.type_id.name, self.start, cancel_reason.name)) if self.channel_name == "PDM" else _("Cancelled %s: %s, %s %s. Reason: %s" % (self.type_id.name, self.start, self.office_id.office_code, self.user_id.login, cancel_reason.name)),
                     "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
                     "office_id": self.partner_id.office_id.id,
                     "note_date": datetime.now(),
@@ -541,40 +541,28 @@ class CalendarAppointment(models.Model):
             if appointment.state == 'reserved':
                 appointment.state = 'confirmed'
 
-                #create daily note
-                vals = {
-                    "name": _("Meeting confirmed"),
-                    "partner_id": self.partner_id.id,
-                    "administrative_officer": self.user_id.id,
-                    "note": "%sm meeting on %s confirmed." % (self.duration * 30, self.start),
-                    "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
-                    "office_id": self.partner_id.office_id.id,
-                    "note_date": datetime.now(),
-                }
-                appointment.partner_id.notes_ids = [(0, 0, vals)]
-
                 res = True
             else: 
                 res = False
 
             return res
 
-    def unlink(self):
-        """Delete the record"""
-        #create daily note
-        vals = {
-            "name": _("Meeting deleted"),
-            "partner_id": self.partner_id.id,
-            "administrative_officer": self.user_id.id,
-            "note": _("%sm meeting on %s deleted.") % (self.duration * 30, self.start),
-            "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
-            "office_id": self.partner_id.office_id.id,
-            "note_date": datetime.now(),
-        }
-        self.partner_id.notes_ids = [(0, 0, vals)]
+    # def unlink(self):
+    #     """Delete the record"""
+    #     #create daily note
+    #     vals = {
+    #         "name": _("Meeting deleted"),
+    #         "partner_id": self.partner_id.id,
+    #         "administrative_officer": self.user_id.id,
+    #         "note": _("%sm meeting on %s deleted.") % (self.duration * 30, self.start),
+    #         "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
+    #         "office_id": self.partner_id.office_id.id,
+    #         "note_date": datetime.now(),
+    #     }
+    #     self.partner_id.notes_ids = [(0, 0, vals)]
 
-        res = super(CalendarAppointment, self).unlink()
-        return res
+    #     res = super(CalendarAppointment, self).unlink()
+    #     return res
 
     @api.model
     def create(self, values):
@@ -583,14 +571,14 @@ class CalendarAppointment(models.Model):
         if res.sudo().partner_id:
             #create daily note
             vals = {
-                "name": _("Meeting created"),
-                "partner_id": res.partner_id.id,
-                "administrative_officer": res.user_id.id,
-                "note": _("%sm meeting on %s created.") % (res.duration * 30, res.start),
-                "note_type": res.env.ref('partner_daily_notes.note_type_as_02').id,
-                "office_id": res.partner_id.office_id.id,
-                "note_date": datetime.now(),
-            }
+                    "name": _("Booked %s" % self.type_id.name),
+                    "partner_id": self.partner_id.id,
+                    "administrative_officer": self.user_id.id,
+                    "note":_("Booked %s: %s." % (self.type_id.name, self.start)) if self.channel_name == "PDM" else _("Booked %s: %s, %s %s." % (self.type_id.name, self.start, self.office_id.office_code, self.user_id.login)),
+                    "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
+                    "office_id": self.partner_id.office_id.id,
+                    "note_date": datetime.now(),
+                }
             res.sudo().partner_id.notes_ids = [(0, 0, vals)]
 
         return res
@@ -599,7 +587,8 @@ class CalendarAppointment(models.Model):
     def write(self, vals):
         if (self.occasion_ids != False) and (self.channel == self.env.ref('calendar_channel.channel_local')) and (vals.get('start') or vals.get('stop') or vals.get('type_id')):
             self._check_remaining_occasions()
-        return super(CalendarAppointment, self).write(vals)
+        res = super(CalendarAppointment, self).write(vals)
+        return res
 
     @api.multi
     def _check_remaining_occasions(self):
@@ -648,10 +637,10 @@ class CalendarAppointment(models.Model):
 
             #create daily note
             vals = {
-                "name": _("Meeting moved"),
+                "name": _("Meeting moved %s. Reason: %s" % (self.type_id.name, reason.name)),
                 "partner_id": self.partner_id.id,
                 "administrative_officer": self.user_id.id,
-                "note": _("Meeting on %s moved") % self.start + (_(" because of reason: %s.") % reason.name) if reason else ".",
+                "note": _("Meeting moved %s: %s. Reason: %s" % (self.type_id.name, self.start, reason.name)) if self.channel_name == "PDM" else _("Meeting moved %s: %s, %s %s. Reason: %s" % (self.type_id.name, self.start, self.office_id.office_code, self.user_id.login, reason.name)),
                 "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
                 "office_id": self.partner_id.office_id.id,
             }
