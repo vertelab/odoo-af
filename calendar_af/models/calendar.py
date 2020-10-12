@@ -262,7 +262,10 @@ class CalendarAppointment(models.Model):
     def name_get(self):
         result = []
         for app in self:
-            name = _('Meeting with %s at %s') % (app.partner_id.company_registry, app.start)
+            try:
+                name = _('Meeting with %s at %s') % (app.partner_id.company_registry, app.start)
+            except:
+                name = _('Meeting at %s') % app.start
             result.append((app.id, name))
         return result
 
@@ -284,7 +287,7 @@ class CalendarAppointment(models.Model):
     duration = fields.Float('Duration')
     user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
     user_id_local = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker", domain=_local_user_domain)
-    partner_id = fields.Many2one(string='Customer', comodel_name='res.partner', help="Booked customer", default=lambda self: self.default_partners())
+    partner_id = fields.Many2one(string='Customer', comodel_name='res.partner', help="Booked customer", default=lambda self: self.default_partners(), groups="af_security.af_jobseekers_officer")
     state = fields.Selection(selection=[('free', 'Draft'),
                                         ('reserved', 'Reserved'),
                                         ('confirmed', 'Confirmed'),
@@ -306,7 +309,7 @@ class CalendarAppointment(models.Model):
     description = fields.Text(string='Description')
     suggestion_ids = fields.One2many(comodel_name='calendar.appointment.suggestion', inverse_name='appointment_id', string='Suggested Dates')
     case_worker_name = fields.Char(string="Case worker", compute="compute_case_worker_name")
-    partner_pnr = fields.Char(string='Attendee SSN', related="partner_id.company_registry", readonly=True)
+    partner_pnr = fields.Char(string='Attendee SSN', related="partner_id.company_registry", readonly=True, groups="af_security.af_jobseekers_officer")
     active = fields.Boolean(string='Active', default=True)
     show_suggestion_ids = fields.Boolean(string="Show suggestions", default=False)
     weekday = fields.Char(string="Weekday", compute="_compute_weekday")

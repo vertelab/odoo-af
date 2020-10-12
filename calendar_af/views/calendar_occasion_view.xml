@@ -216,5 +216,5 @@
     </record>
 
 
-    <menuitem action="action_calendar_local_occasion" id="menu_action_local_occasion" parent="menu_local" sequence="11" groups="af_security.af_employers_editor,af_security.af_jobseekers_editor"/>
+    <menuitem action="action_calendar_local_occasion" id="menu_action_local_occasion" parent="menu_local" sequence="11" groups="af_security.af_meeting_planner"/>
 </odoo>

@@ -256,6 +256,7 @@ class ResPartner(models.Model):
     def af_security_install_rules(self):
         """Update existing rules that can't be changed through XML."""
         self.env.ref('base.res_partner_rule_private_employee').active = False
+        
 
 class User(models.Model):
     _inherit = 'res.users'
