@@ -375,5 +375,5 @@
     </record>
 
     <menuitem action="action_appointment" id="menu_action_appointment" parent="menu_pdm" sequence="12" />
-    <menuitem action="action_local_appointment" id="menu_action_local_appointment" parent="menu_local" sequence="13" groups="af_security.af_employers_editor,af_security.af_jobseekers_editor"/>
+    <menuitem action="action_local_appointment" id="menu_action_local_appointment" parent="menu_local" sequence="13" groups="af_security.af_meeting_planner"/>
 </odoo>
