@@ -75,7 +75,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
         """
         result = []
         for record in self:
-            result.append((record.id, _('Handläggaryta')))
+            result.append((record.id, _('Jobseekers')))
         return result
 
     @api.multi
