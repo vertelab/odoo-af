@@ -4,11 +4,12 @@
 {
     "name": "AF Backend Tema V12",
     "summary": "AF Backend Theme V12	",
-    "version": "12.0.0.4",
+    "version": "12.0.0.5",
     "category": "Theme/Backend",
     "description": """
 		AF Backend tema för Odoo 12.0 community edition.
-		v12.0.0.3 Added dependancy for the web-module.
+		v12.0.0.3 Added dependancy for the web-module.\n
+		v12.0.0.5 KPD-684 - Increased width of smart-buttons\n
     """,
     "author": "Vertel AB",
     "license": "LGPL-3",
