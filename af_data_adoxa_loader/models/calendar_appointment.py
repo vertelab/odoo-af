@@ -154,7 +154,9 @@ class CalendarOccasion(models.Model):
                     else:
                         create = False
                 elif key == 'type_id':
-                    if row[key] == "23":
+                    # Meeting type 23 is deprecated and replaced with meeting type 26, 
+                    # see calendar_af/data/calendar.appointment.type.csv for descriptions of the meeting types
+                    if row[key] == "23": 
                         row[key] == "26"
                     type_id = self.env['calendar.appointment.type'].search([('ipf_num', '=', row[key])])
                     if type_id:
@@ -176,7 +178,7 @@ class CalendarOccasion(models.Model):
                             '7':'fail',
                         }
                     row[key] = translation_dict[row[key]]
-                # elif key == 'location_id': #location is found through user_id.location_id
+                # elif key == 'location_id': #location is found through user_id.location_id, this might be needed in the future
                 #     row[key] = self.env['hr.location'].search([('location_code', '=', row[key])]).id
                 #     keys_to_delete.append(key)
                 elif key == 'user_id':
