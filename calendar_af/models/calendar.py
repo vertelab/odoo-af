@@ -529,6 +529,7 @@ class CalendarAppointment(models.Model):
                     "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
                     "office_id": self.partner_id.office_id.id,
                     "note_date": datetime.now(),
+                    "appointment_id": self.id,
                 }
                 appointment.partner_id.sudo().notes_ids = [(0, 0, vals)]
                 appointment.occasion_ids = [(5, 0, 0)]
@@ -578,6 +579,7 @@ class CalendarAppointment(models.Model):
                     "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
                     "office_id": self.partner_id.office_id.id,
                     "note_date": datetime.now(),
+                    "appointment_id": self.id,
                 }
             res.sudo().partner_id.notes_ids = [(0, 0, vals)]
 
@@ -643,6 +645,7 @@ class CalendarAppointment(models.Model):
                 "note": _("Meeting moved %s: %s. Reason: %s" % (self.type_id.name, self.start, reason.name)) if self.channel_name == "PDM" else _("Meeting moved %s: %s, %s %s. Reason: %s" % (self.type_id.name, self.start, self.office_id.office_code, self.user_id.login, reason.name)),
                 "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
                 "office_id": self.partner_id.office_id.id,
+                "appointment_id": self.id,
             }
             self.partner_id.sudo().notes_ids = [(0, 0, vals)]
             res = True
