@@ -548,22 +548,6 @@ class CalendarAppointment(models.Model):
 
             return res
 
-    # def unlink(self):
-    #     """Delete the record"""
-    #     #create daily note
-    #     vals = {
-    #         "name": _("Meeting deleted"),
-    #         "partner_id": self.partner_id.id,
-    #         "administrative_officer": self.user_id.id,
-    #         "note": _("%sm meeting on %s deleted.") % (self.duration * 30, self.start),
-    #         "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
-    #         "office_id": self.partner_id.office_id.id,
-    #         "note_date": datetime.now(),
-    #     }
-    #     self.partner_id.notes_ids = [(0, 0, vals)]
-
-    #     res = super(CalendarAppointment, self).unlink()
-    #     return res
 
     @api.model
     def create(self, values):
