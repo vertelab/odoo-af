@@ -238,6 +238,19 @@ class CalendarAppointmentSuggestion(models.Model):
             'stop': self.stop,
         })
 
+        #create daily note
+        vals = {
+                "name": _("Booked %s" % self.appointment_id.type_id.name),
+                "partner_id": self.appointment_id.partner_id.id,
+                "administrative_officer": self.appointment_id.user_id.id,
+                "note":_("Booked %s: %s." % (self.appointment_id.type_id.name, self.appointment_id.start)) if self.appointment_id.channel_name == "PDM" else _("Booked %s: %s, %s %s." % (self.appointment_id.type_id.name, self.appointment_id.start, self.appointment_id.office_id.office_code, self.appointment_id.user_id.login)),
+                "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
+                "office_id": self.appointment_id.partner_id.office_id.id,
+                "note_date": self.appointment_id.start,
+                "appointment_id": self.appointment_id.id,
+            }
+        self.appointment_id.sudo().partner_id.notes_ids = [(0, 0, vals)]
+
     @api.multi
     def select_suggestion_move(self):
         occasions = self.env['calendar.occasion']
@@ -536,7 +549,7 @@ class CalendarAppointment(models.Model):
                     "note": _("Cancelled %s: %s. Reason: %s" % (self.type_id.name, self.start, cancel_reason.name)) if self.channel_name == "PDM" else _("Cancelled %s: %s, %s %s. Reason: %s" % (self.type_id.name, self.start, self.office_id.office_code, self.user_id.login, cancel_reason.name)),
                     "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
                     "office_id": self.partner_id.office_id.id,
-                    "note_date": datetime.now(),
+                    "note_date": self.start,
                     "appointment_id": self.id,
                 }
                 appointment.partner_id.sudo().notes_ids = [(0, 0, vals)]
@@ -561,7 +574,7 @@ class CalendarAppointment(models.Model):
     def create(self, values):
         res = super(CalendarAppointment, self).create(values)
 
-        if res.sudo().partner_id:
+        if res.sudo().partner_id and res.state == 'confirmed':
             #create daily note
             vals = {
                     "name": _("Booked %s" % self.type_id.name),
@@ -570,7 +583,7 @@ class CalendarAppointment(models.Model):
                     "note":_("Booked %s: %s." % (self.type_id.name, self.start)) if self.channel_name == "PDM" else _("Booked %s: %s, %s %s." % (self.type_id.name, self.start, self.office_id.office_code, self.user_id.login)),
                     "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
                     "office_id": self.partner_id.office_id.id,
-                    "note_date": datetime.now(),
+                    "note_date": self.start,
                     "appointment_id": self.id,
                 }
             res.sudo().partner_id.notes_ids = [(0, 0, vals)]
