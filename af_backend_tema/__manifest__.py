@@ -8,8 +8,6 @@
     "category": "Theme/Backend",
     "description": """
 		AF Backend tema för Odoo 12.0 community edition.
-		v12.0.0.3 Added dependancy for the web-module.
-		v12.0.0.5 Reverted Odoo Waffle and favicon icon to normal.
     """,
     "author": "Vertel AB",
     "license": "LGPL-3",

@@ -180,7 +180,7 @@
     <record id="action_calendar_local_occasion" model="ir.actions.act_window">
         <field name="name">Local occasions</field>
         <field name="res_model">calendar.occasion</field>
-        <field name="view_mode">calendar,tree,form,pivot,kanban</field>
+        <field name="view_mode">calendar,tree,pivot,kanban</field>
         <field name="view_id" ref="view_calendar_occasion_local_tree" />
         <!-- This should be a reference to the external id instead. -->
         <field name="domain">[('channel', '=', 'Local'), ('state', '!=', 'deleted')]</field>
@@ -216,5 +216,5 @@
     </record>
 
 
-    <menuitem action="action_calendar_local_occasion" id="menu_action_local_occasion" parent="menu_local" sequence="11" groups="af_security.af_employers_editor,af_security.af_jobseekers_editor"/>
+    <menuitem action="action_calendar_local_occasion" id="menu_action_local_occasion" parent="menu_local" sequence="11" groups="af_security.af_meeting_planner"/>
 </odoo>

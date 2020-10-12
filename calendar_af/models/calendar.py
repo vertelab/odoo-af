@@ -149,14 +149,19 @@ class CalendarAppointmentType(models.Model):
     ipf_id = fields.Char('Teleopti competence id', required=True, help="The IPF type id, if this is wrong the integration won't work")
     ipf_name = fields.Char('Teleopti competence name')
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
-    duration = fields.Float(string='Duration')
-    duration_default = fields.Boolean(string='Use default')
+    duration = fields.Float(string='Duration', compute='_comp_duration', store=True)
+    duration_30 = fields.Boolean(string='30 min')
+    duration_60 = fields.Boolean(string='60 min')
     days_first = fields.Integer(string='First allowed day for type')
     days_last = fields.Integer(string='Last allowed day for type')
     ipf_num = fields.Integer(string='Meeting type id')
     additional_booking = fields.Boolean(string='Over booking')
     text = fields.Text(string='Comment')
     skill_ids = fields.Many2many(comodel_name='hr.skill', string='Skills')
+
+    @api.depends('duration_30', 'duration_60')
+    def _comp_duration(self):
+        self.duration = 30.0 if self.duration_30 else 60.0
 
 class CalendarChannel(models.Model):
     _name = 'calendar.channel'
@@ -262,7 +267,10 @@ class CalendarAppointment(models.Model):
     def name_get(self):
         result = []
         for app in self:
-            name = _('Meeting with %s at %s') % (app.partner_id.company_registry, app.start)
+            try:
+                name = _('Meeting with %s at %s') % (app.partner_id.company_registry, app.start)
+            except:
+                name = _('Meeting at %s') % app.start
             result.append((app.id, name))
         return result
 
@@ -284,7 +292,7 @@ class CalendarAppointment(models.Model):
     duration = fields.Float('Duration')
     user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
     user_id_local = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker", domain=_local_user_domain)
-    partner_id = fields.Many2one(string='Customer', comodel_name='res.partner', help="Booked customer", default=lambda self: self.default_partners())
+    partner_id = fields.Many2one(string='Customer', comodel_name='res.partner', help="Booked customer", default=lambda self: self.default_partners(), groups="af_security.af_jobseekers_officer")
     state = fields.Selection(selection=[('free', 'Draft'),
                                         ('reserved', 'Reserved'),
                                         ('confirmed', 'Confirmed'),
@@ -306,7 +314,7 @@ class CalendarAppointment(models.Model):
     description = fields.Text(string='Description')
     suggestion_ids = fields.One2many(comodel_name='calendar.appointment.suggestion', inverse_name='appointment_id', string='Suggested Dates')
     case_worker_name = fields.Char(string="Case worker", compute="compute_case_worker_name")
-    partner_pnr = fields.Char(string='Attendee SSN', related="partner_id.company_registry", readonly=True)
+    partner_pnr = fields.Char(string='Attendee SSN', related="partner_id.company_registry", readonly=True, groups="af_security.af_jobseekers_officer")
     active = fields.Boolean(string='Active', default=True)
     show_suggestion_ids = fields.Boolean(string="Show suggestions", default=False)
     weekday = fields.Char(string="Weekday", compute="_compute_weekday")
@@ -522,13 +530,14 @@ class CalendarAppointment(models.Model):
 
                 #create daily note
                 vals = {
-                    "name": _("Meeting cancelled"),
+                    "name": _("Cancelled %s. Reason: %s" % (self.type_id.name, cancel_reason.name)),
                     "partner_id": self.partner_id.id,
                     "administrative_officer": self.user_id.id,
-                    "note": _("%sm meeting on %s cancelled with reason: %s") % (self.duration * 30, self.start, cancel_reason.name),
+                    "note": _("Cancelled %s: %s. Reason: %s" % (self.type_id.name, self.start, cancel_reason.name)) if self.channel_name == "PDM" else _("Cancelled %s: %s, %s %s. Reason: %s" % (self.type_id.name, self.start, self.office_id.office_code, self.user_id.login, cancel_reason.name)),
                     "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
                     "office_id": self.partner_id.office_id.id,
                     "note_date": datetime.now(),
+                    "appointment_id": self.id,
                 }
                 appointment.partner_id.sudo().notes_ids = [(0, 0, vals)]
                 appointment.occasion_ids = [(5, 0, 0)]
@@ -541,40 +550,12 @@ class CalendarAppointment(models.Model):
             if appointment.state == 'reserved':
                 appointment.state = 'confirmed'
 
-                #create daily note
-                vals = {
-                    "name": _("Meeting confirmed"),
-                    "partner_id": self.partner_id.id,
-                    "administrative_officer": self.user_id.id,
-                    "note": "%sm meeting on %s confirmed." % (self.duration * 30, self.start),
-                    "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
-                    "office_id": self.partner_id.office_id.id,
-                    "note_date": datetime.now(),
-                }
-                appointment.partner_id.notes_ids = [(0, 0, vals)]
-
                 res = True
             else: 
                 res = False
 
             return res
 
-    def unlink(self):
-        """Delete the record"""
-        #create daily note
-        vals = {
-            "name": _("Meeting deleted"),
-            "partner_id": self.partner_id.id,
-            "administrative_officer": self.user_id.id,
-            "note": _("%sm meeting on %s deleted.") % (self.duration * 30, self.start),
-            "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
-            "office_id": self.partner_id.office_id.id,
-            "note_date": datetime.now(),
-        }
-        self.partner_id.notes_ids = [(0, 0, vals)]
-
-        res = super(CalendarAppointment, self).unlink()
-        return res
 
     @api.model
     def create(self, values):
@@ -583,14 +564,15 @@ class CalendarAppointment(models.Model):
         if res.sudo().partner_id:
             #create daily note
             vals = {
-                "name": _("Meeting created"),
-                "partner_id": res.partner_id.id,
-                "administrative_officer": res.user_id.id,
-                "note": _("%sm meeting on %s created.") % (res.duration * 30, res.start),
-                "note_type": res.env.ref('partner_daily_notes.note_type_as_02').id,
-                "office_id": res.partner_id.office_id.id,
-                "note_date": datetime.now(),
-            }
+                    "name": _("Booked %s" % self.type_id.name),
+                    "partner_id": self.partner_id.id,
+                    "administrative_officer": self.user_id.id,
+                    "note":_("Booked %s: %s." % (self.type_id.name, self.start)) if self.channel_name == "PDM" else _("Booked %s: %s, %s %s." % (self.type_id.name, self.start, self.office_id.office_code, self.user_id.login)),
+                    "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
+                    "office_id": self.partner_id.office_id.id,
+                    "note_date": datetime.now(),
+                    "appointment_id": self.id,
+                }
             res.sudo().partner_id.notes_ids = [(0, 0, vals)]
 
         return res
@@ -599,7 +581,8 @@ class CalendarAppointment(models.Model):
     def write(self, vals):
         if (self.occasion_ids != False) and (self.channel == self.env.ref('calendar_channel.channel_local')) and (vals.get('start') or vals.get('stop') or vals.get('type_id')):
             self._check_remaining_occasions()
-        return super(CalendarAppointment, self).write(vals)
+        res = super(CalendarAppointment, self).write(vals)
+        return res
 
     @api.multi
     def _check_remaining_occasions(self):
@@ -648,12 +631,13 @@ class CalendarAppointment(models.Model):
 
             #create daily note
             vals = {
-                "name": _("Meeting moved"),
+                "name": _("Meeting moved %s. Reason: %s" % (self.type_id.name, reason.name)),
                 "partner_id": self.partner_id.id,
                 "administrative_officer": self.user_id.id,
-                "note": _("Meeting on %s moved") % self.start + (_(" because of reason: %s.") % reason.name) if reason else ".",
+                "note": _("Meeting moved %s: %s. Reason: %s" % (self.type_id.name, self.start, reason.name)) if self.channel_name == "PDM" else _("Meeting moved %s: %s, %s %s. Reason: %s" % (self.type_id.name, self.start, self.office_id.office_code, self.user_id.login, reason.name)),
                 "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
                 "office_id": self.partner_id.office_id.id,
+                "appointment_id": self.id,
             }
             self.partner_id.sudo().notes_ids = [(0, 0, vals)]
             res = True
@@ -896,27 +880,39 @@ class CalendarOccasion(models.Model):
         no_occasions = int(duration / BASE_DURATION)
         date_delta = (stop - start)
         td_base_duration = timedelta(minutes=BASE_DURATION)
-        def get_occasions(start_dt):
-            start_dt = start_dt.replace(second=0, microsecond=0)
-            domain = [('start', '=', start_dt), ('type_id', '=', type_id.id), ('appointment_id', '=', False), ('additional_booking', '=', False)]
-            if office_id:
-                domain.append(('office_id', '=', office_id.id))
-            # TODO: This if can and should probably be removed but I don't want to break anything right now
-            if type_id.channel == self.env.ref('calendar_channel.channel_local'):
-                domain.append(('state', '=', 'ok'))
-            return self.env['calendar.occasion'].search(domain, limit=max_depth)
-        #[[[], []], dag[tidsslot[ocassions]]]
+
+        def get_occasions(start, occ_list, i):
+            # check if we still need to do recursive calls
+            if i > 0:
+                # get occasions
+                res = self.env['calendar.occasion'].search(domain + [('start', '=', start)], limit=limit)
+                # append to result list
+                occ_list.append(res)
+                # recursive call to get following occasions
+                occ_list = get_occasions(start+td_base_duration, occ_list, i-1)
+            return occ_list
+
+        def check_available_depth(occasions):
+            available_depth = min([len(o) for o in occasions] or [0])
+            return available_depth
 
         occ_lists = []
         # declare lists for each day
         for i in range(date_delta.days + 1):
             occ_lists.append([])
-        
+
+        # define our domain since this part of it 
+        # will be the same throughout all loops
+        domain = [('type_id', '=', type_id.id), ('appointment_id', '=', False), ('additional_booking', '=', False)]
+        if office_id:
+            domain.append(('office_id', '=', office_id.id))
+        # TODO: This if can and should probably be removed 
+        # but I don't want to break anything right now
+        if type_id.channel == self.env.ref('calendar_channel.channel_local'):
+            domain.append(('state', '=', 'ok'))
+
         # find occasions for each day, starting with last day
-        # Changes made below this line to make the code loop over dates in reverse order.
-        # for day in range(date_delta.days + 1):
         for day in reversed(range(date_delta.days + 1)):
-            occasions = []
             # find 'max_depth' number of free occasions for each timeslot
             if day == date_delta.days:
                 start_dt = copy.copy(stop)
@@ -929,28 +925,31 @@ class CalendarOccasion(models.Model):
                 start_dt = start_dt - timedelta(days=1)
                 start_dt = start_dt.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute)
                 last_slot = last_slot - timedelta(days=1)
+            
+            count_prev_starts = 0
+            # loop within the day to find slots
             while start_dt <= last_slot:
-                if not occasions:
-                    for i in range(no_occasions):
-                        dt_start = start_dt + td_base_duration * i
-                        occasions.append(get_occasions(dt_start))
-                else:
-                    # Remove first record in list and add a new occasion at the end
-                    # This way we shift the bookable occasion 30 min forward every iteration
-                    del occasions[0]
-                    # The line below causes a bug that returns bookable occasions 
-                    # with 30 min (1 occasion) gaps before the last 30 min (1 occasion).
-                    # I fixed this with (no_occasions - 1). I have not investigated it further. 
-                    occasions.append(get_occasions(start_dt + td_base_duration * (no_occasions - 1)))
-                available_depth = min([len(o) for o in occasions] or [0])
-                slot = []
-                for i in range(available_depth):
-                    slot_occasion = self.env['calendar.occasion']
-                    for occ in occasions:
-                        slot_occasion |= occ[i]
-                    slot.append(slot_occasion)
-                if slot:
-                    occ_lists[day].append(slot)
+                # get number of possbile meeting starts at start_dt
+                count_current_starts = self.env['calendar.occasion'].search_count(domain + [('start', '=', start_dt)])
+                # compare to previous meeting starts
+                count_prev_starts = max(count_current_starts-count_prev_starts,0)
+                # limit depth depending on this number
+                limit = min(count_prev_starts, max_depth)
+                # no need to do this if the depth is 0
+                if limit != 0:
+                    occasions = []
+                    # search for specific occasions
+                    occasions = get_occasions(start_dt, occasions, no_occasions)
+                    # check the available depth of our result
+                    available_depth = check_available_depth(occasions)
+                    slot = []
+                    for i in range(available_depth):
+                        slot_occasion = self.env['calendar.occasion']
+                        for occ in occasions:
+                            slot_occasion |= occ[i]
+                        slot.append(slot_occasion)
+                    if slot:
+                        occ_lists[day].append(slot)
                 start_dt += td_base_duration
 
         # if type allows additional bookings and we didn't find any

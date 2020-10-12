@@ -27,9 +27,7 @@
     ('is_jobseeker', '=', False),
     '&amp;',
         ('is_jobseeker', '=', True),
-        '|',
-            ('jobseeker_access', 'in', ('STARK', 'MYCKET_STARK')),
-            ('user_id', '=', user.id)]</field>
+        ('jobseeker_access', 'in', ('STARK', 'MYCKET_STARK'))]</field>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="False"/>
@@ -62,9 +60,10 @@
         <record id="af_rule_offices" model="ir.rule">
             <field name="name">res.partner - AF Offices / Employees - Internal User</field>
             <field ref="base.model_res_partner" name="model_id"/>
-            <field name="domain_force">['|', '|',
+            <field name="domain_force">['|', '|', '|',
     ('type', '=', 'af office'),
     ('employee', '=', True),
+    ('is_jobseeker', '=', True),
     ('user_ids', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('base.group_user'))]"/>
             <field name="perm_read" eval="True"/>
@@ -292,6 +291,19 @@
             <field name="domain_force">[('partner_id.employee', '=', True)]</field>
             <field name="groups" eval="[(4, ref('af_security.af_jobseekers_editor'))]"/>
             <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- =====Planeringshandläggare mötesbokning===== -->
+
+        <!-- =====Bemanningshandläggare mötesbokning===== -->
+
+        <!-- =====Overwritten rules===== -->
+        <!-- Resource leaves access rights -->
+        <record id="resource.access_resource_calendar_leaves_user" model="ir.model.access">
+            <field name="active" eval="True"/>
             <field name="perm_write" eval="False"/>
             <field name="perm_create" eval="False"/>
             <field name="perm_unlink" eval="False"/>
