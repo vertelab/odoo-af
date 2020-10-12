@@ -13,7 +13,6 @@ Description
 ================================================================================================
 Asök booking management \n
 12.0.1.0.3 - AFC-1046 - Lägg till Helger och röda dagar i Resource Leaves.\n
-12.0.1.0.4 - KPD-562 - Disable "the clickability" of the lines in a treeview\n
     """,
     "depends": [
         "calendar",
