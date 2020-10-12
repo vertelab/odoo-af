@@ -37,7 +37,7 @@ class AfIpf(models.Model):
     client_secret = fields.Char()
     auth_user = fields.Char()
     auth_password = fields.Char()
-    systemid = fields.Char(default='CRM')
+    systemid = fields.Char(default='AFCRM')
     environment = fields.Selection(selection=[
         ('U1', 'U1'),
         ('I1', 'I1'),
@@ -114,3 +114,10 @@ class AfIpfEndpoint(models.Model):
         if response.status_code == 204:
             return
         return response.json()
+
+    @api.model
+    def get_pnr(self, customer_id):
+        ipf = self.env.ref('af_ipf.ipf_endpoint_customer')
+        res = ipf.call(customer_id = customer_id)
+        pnr = res.get('ids', {}).get('pnr')
+        return pnr
