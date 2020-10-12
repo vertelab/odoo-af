@@ -9,7 +9,7 @@
     "description": """
 		AF Backend tema för Odoo 12.0 community edition.
 		v12.0.0.3 Added dependancy for the web-module.\n
-		v12.0.0.4 KPD-684 - Increased width of smart-buttons\n
+		v12.0.0.5 KPD-684 - Increased width of smart-buttons\n
     """,
     "author": "Vertel AB",
     "license": "LGPL-3",
