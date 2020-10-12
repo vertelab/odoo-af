@@ -128,8 +128,18 @@ class CalendarOccasion(models.Model):
                     external_xmlid = "%s.%s" % (self.xmlid_module, xmlid_name)
                     keys_to_delete.append(key)
                 elif key == 'partner_id':
-                    social_sec_nr = '' #replace with api call
-                    row[key] = self.env['res.partner'].search([('social_sec_nr', '=', social_sec_nr)]).id
+                    ipf = self.env.ref('af_ipf.ipf_endpoint_customer').sudo()
+                    res = ipf.call(customer_id = row[key])
+                    pnr = None
+                    if res:
+                        pnr = res.get('ids', {}).get('pnr')
+                        if pnr:
+                            pnr = '%s-%s' % (pnr[:8], pnr[8:12])
+                    if pnr:
+                        row[key] = self.env['res.partner'].search([('social_sec_nr', '=', pnr)]).id
+                    else:
+                        _logger.warn("could not find person corresponding to %s, skipping" % row[key])
+                        create = False
                 elif key == 'occasion_id':
                     xmlid = "%s.%s%s" % (self.xmlid_module, transform, row[key])
                     occasion_id = self.env['ir.model.data'].xmlid_to_res_id(xmlid)
@@ -139,9 +149,15 @@ class CalendarOccasion(models.Model):
                 elif key == 'duration_selection':
                     if row['duration'] == "60":
                         row[key] = "1 hour"
-                    else:
+                    elif row['duration'] == "30":
                         row[key] = "30 minutes"
+                    else:
+                        create = False
                 elif key == 'type_id':
+                    # Meeting type 23 is deprecated and replaced with meeting type 26, 
+                    # see calendar_af/data/calendar.appointment.type.csv for descriptions of the meeting types
+                    if row[key] == "23": 
+                        row[key] == "26"
                     type_id = self.env['calendar.appointment.type'].search([('ipf_num', '=', row[key])])
                     if type_id:
                         row[key] = type_id.id
@@ -151,26 +167,28 @@ class CalendarOccasion(models.Model):
                 elif key == 'state':
                     if 'occasion_id' in row:
                         translation_dict = {
-                            'NULL':'free',
+                            'NULL':'confirmed',
                             '1':'done',
-                            '2':'free',
-                            '6':'confirmed',
-                            '7':'cancelled',
+                            '2':'done',
                         }
                     else:
                         translation_dict = {
-                            'NULL':'draft',
-                            '1':'booked',
-                            '2':'booked',
+                            'NULL':'request',
                             '6':'ok',
                             '7':'fail',
                         }
                     row[key] = translation_dict[row[key]]
-                elif key == 'location_id':
-                    row[key] = self.env['hr.location'].search([('location_code', '=', row[key])]).id
-                    keys_to_delete.append(key)
+                # elif key == 'location_id': #location is found through user_id.location_id, this might be needed in the future
+                #     row[key] = self.env['hr.location'].search([('location_code', '=', row[key])]).id
+                #     keys_to_delete.append(key)
                 elif key == 'user_id':
                     row[key] = self.env['res.users'].search([('login', '=', row[key])]).id
+                elif key == 'additional_booking':
+                    if row[key] == "Ja":
+                        row[key] == True
+                    else:
+                        row[key] == False
+
                 keys_to_delete.append("date")
 
 
@@ -189,7 +207,8 @@ class CalendarOccasion(models.Model):
             _logger.warning("external id already in database, skipping")
         
         if create:
-            return {'row': row, 
+            return {
+                    'row': row, 
                     'external_xmlid': external_xmlid 
                     }
         else:
