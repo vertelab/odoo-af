@@ -129,6 +129,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             'view_ids':  [self.env.ref("partner_view_360.view_jobseeker_kanban").id, self.env.ref("partner_view_360.view_jobseeker_form").id, self.env.ref("partner_view_360.view_jobseeker_tree").id], 
             'view_mode': 'kanban,tree,form',
             'type': 'ir.actions.act_window',
+            'target': 'main'
         }
         if len(partners) == 1:
             action['view_id'] = self.env.ref("partner_view_360.view_jobseeker_form").id
