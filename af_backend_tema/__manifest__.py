@@ -17,12 +17,8 @@
     "depends": [
         'base', 'portal', 'web'
     ],
-    # 'qweb': [
-    #     'static/src/xml/web.xml',
-    # ],
     "data": [
         'views/assets.xml',
         'views/template.xml',
-        # 'views/webclient_template.xml'
     ]
 }
