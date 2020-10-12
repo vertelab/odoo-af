@@ -948,9 +948,9 @@ class CalendarOccasion(models.Model):
                 start_dt = start_dt - timedelta(days=1)
                 start_dt = start_dt.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute)
                 last_slot = last_slot - timedelta(days=1)
-            # loop within the day to find slots
             
             count_prev_starts = 0
+            # loop within the day to find slots
             while start_dt <= last_slot:
                 # get number of possbile meeting starts at start_dt
                 count_current_starts = self.env['calendar.occasion'].search_count(domain + [('start', '=', start_dt)])
@@ -973,83 +973,6 @@ class CalendarOccasion(models.Model):
                         slot.append(slot_occasion)
                     if slot:
                         occ_lists[day].append(slot)
-                start_dt += td_base_duration
-
-        # if type allows additional bookings and we didn't find any
-        # free occasions, create new ones:
-        if type_id.additional_booking and all( not l for l in occ_lists):
-            # Changed this line to create over bookings on the LAST allowed date.
-            occ_lists[-1].append([self._get_additional_booking(stop, duration, type_id, office_id)])
-
-        return occ_lists
-
-    @api.model
-    def get_bookable_occasions_old(self, start, stop, duration, type_id, office_id=False, max_depth=1):
-        """Returns a list of occasions matching the defined parameters of the appointment. Creates additional 
-        occasions if allowed.
-        :param start: Start search as this time.
-        :param stop: Stop search as this time.
-        :param duration: Meeting length.
-        :param type_id: Meeting type.
-        :param max_depth: Number of bookable occasions per time slot.
-        """
-        # Calculate number of occasions needed to match booking duration
-        no_occasions = int(duration / BASE_DURATION)
-        date_delta = (stop - start)
-        td_base_duration = timedelta(minutes=BASE_DURATION)
-        def get_occasions(start_dt):
-            start_dt = start_dt.replace(second=0, microsecond=0)
-            domain = [('start', '=', start_dt), ('type_id', '=', type_id.id), ('appointment_id', '=', False), ('additional_booking', '=', False)]
-            if office_id:
-                domain.append(('office_id', '=', office_id.id))
-            # TODO: This if can and should probably be removed but I don't want to break anything right now
-            if type_id.channel == self.env.ref('calendar_channel.channel_local'):
-                domain.append(('state', '=', 'ok'))
-            return self.env['calendar.occasion'].search(domain, limit=max_depth)
-        #[[[], []], dag[tidsslot[ocassions]]]
-
-        occ_lists = []
-        # declare lists for each day
-        for i in range(date_delta.days + 1):
-            occ_lists.append([])
-
-        # find occasions for each day, starting with last day
-        for day in reversed(range(date_delta.days + 1)):
-            occasions = []
-            # find 'max_depth' number of free occasions for each timeslot
-            if day == date_delta.days:
-                start_dt = copy.copy(stop)
-                start_dt = start_dt.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute)
-                last_slot = copy.copy(stop)
-                last_slot = last_slot.replace(hour=BASE_DAY_STOP.hour, minute=BASE_DAY_STOP.minute)
-                last_slot -= timedelta(minutes=duration)
-            else:
-                # This will break given certain times and timezones. Should work for us.
-                start_dt = start_dt - timedelta(days=1)
-                start_dt = start_dt.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute)
-                last_slot = last_slot - timedelta(days=1)
-            # loop within the day to find slots
-            while start_dt <= last_slot:
-                if not occasions:
-                    # fetch occasions
-                    for i in range(no_occasions):
-                        dt_start = start_dt + td_base_duration * i
-                        occasions.append(get_occasions(dt_start))
-                else:
-                    # Remove first record in list and add a new occasion at the end
-                    # This way we shift the bookable occasion 30 min forward every iteration
-                    del occasions[0]
-                    occasions.append(get_occasions(start_dt + td_base_duration * (no_occasions - 1)))
-                _logger.warn("DAER: occasions: %s" % occasions)
-                available_depth = min([len(o) for o in occasions] or [0])
-                slot = []
-                for i in range(available_depth):
-                    slot_occasion = self.env['calendar.occasion']
-                    for occ in occasions:
-                        slot_occasion |= occ[i]
-                    slot.append(slot_occasion)
-                if slot:
-                    occ_lists[day].append(slot)
                 start_dt += td_base_duration
 
         # if type allows additional bookings and we didn't find any
