@@ -3,11 +3,12 @@
     'summary': """
         A dashboard for employees to search for job seekers.
         """,
-    'version': '12.0.0.5',
+    'version': '12.0.0.6',
     'category': 'Human resources',
     'description': """
 Jiras
 ===============================================================================
+v12.0.0.6 AFC-1247 - change from Handläggaryta to Jobbsekers in Breadcrumbs\n
 v12.0.0.5 AFC-1197 - Anslut mot API:et för att fråga med personnummer och få tillbaka ett kundnr. Byt så att "Sökning vid Myndighetens behov" använder "Mitt kontos Kundnr" istället för "SökandID" 
 v12.0.0.4 AFC-0715 - Lade till beroende på Firstname Extension som döljer förnamn-efternamn-fälten i visningsläge. \n
 v12.0.0.3 AFC-0715 - Lagt till rubrik på vyn för Arbetsyta.\n
