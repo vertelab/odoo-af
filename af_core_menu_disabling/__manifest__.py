@@ -6,7 +6,7 @@
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
-    'category': 'Student Extension',
+    'category': 'Tools',
     'version': '12.0.1.0',
     'depends': ['calendar','website','contacts'],
     'data': [
