@@ -250,6 +250,8 @@ class CalendarAppointmentSuggestion(models.Model):
                 "appointment_id": self.appointment_id.id,
             }
         self.appointment_id.sudo().partner_id.notes_ids = [(0, 0, vals)]
+        # create edi message
+        self.appointment_id.sudo().partner_id._create_next_last_msg()
 
     @api.multi
     def select_suggestion_move(self):
@@ -553,6 +555,8 @@ class CalendarAppointment(models.Model):
                     "appointment_id": self.id,
                 }
                 appointment.partner_id.sudo().notes_ids = [(0, 0, vals)]
+                # create edi message
+                self.appointment_id.sudo().partner_id._create_next_last_msg()
                 appointment.occasion_ids = [(5, 0, 0)]
                 
                 return True
@@ -587,6 +591,8 @@ class CalendarAppointment(models.Model):
                     "appointment_id": self.id,
                 }
             res.sudo().partner_id.notes_ids = [(0, 0, vals)]
+            # create edi message
+            self.appointment_id.sudo().partner_id._create_next_last_msg()
 
         return res
 
@@ -653,6 +659,8 @@ class CalendarAppointment(models.Model):
                 "appointment_id": self.id,
             }
             self.partner_id.sudo().notes_ids = [(0, 0, vals)]
+            # create edi message
+            self.appointment_id.sudo().partner_id._create_next_last_msg()
             res = True
 
         return res
