@@ -33,11 +33,11 @@ class AfIpf(models.Model):
     _description = 'IPF Integration'
 
     name = fields.Char(required=True)
-    clientid = fields.Char()
-    client_secret = fields.Char()
+    clientid = fields.Char(string='Client Id',help="Found in IPF portal")
+    client_secret = fields.Char(string='Client Secret',help="Found in IPF portal")
     auth_user = fields.Char()
     auth_password = fields.Char()
-    systemid = fields.Char(default='CRM')
+    systemid = fields.Char(default='AFCRM')
     environment = fields.Selection(selection=[
         ('U1', 'U1'),
         ('I1', 'I1'),
@@ -49,8 +49,8 @@ class AfIpf(models.Model):
         required=True)
     enduserid = fields.Boolean()
     endpoint_ids = fields.One2many(comodel_name='af.ipf.endpoint', inverse_name='ipf_id')
-    url = fields.Char(default='https://ipfapi.arbetsformedlingen.se', required=True)
-    port = fields.Integer(default=443, required=True)
+    url = fields.Char(string='IPF url',help="AF's web address", default='https://ipfapi.arbetsformedlingen.se', required=True)
+    port = fields.Integer(string='IPF port',help="Af's port, default 443", default=443, required=True)
     ssl_verify = fields.Char()
     ssl_cert = fields.Char()
     ssl_key = fields.Char()
@@ -72,6 +72,7 @@ class AfIpf(models.Model):
         if self.enduserid:
             user = self._context.get('uid')
             user = user and self.env['res.users'].browse(user) or self.env.user
+            _logger.info("ln75 res: %s" % user)
             headers['AF-EndUserId'] = user.af_signature
         return headers
     
@@ -95,22 +96,45 @@ class AfIpfEndpoint(models.Model):
     ipf_id = fields.Many2one(comodel_name='af.ipf', required=True, ondelete='cascade')
 
     @api.multi
-    def call(self, **kw):
+    def build_error_msg(self, response, data):
+        """Build error message from JSON response."""
+        return "%s: %s [%s] %s" % (self.ipf_id.name, self.name, response.status_code, data)
+
+    @api.multi
+    def call(self, raise_on_error=False, **kw):
+        self.ensure_one()
+        headers = self.ipf_id.get_headers()
+        if 'AF-EndUserId' in headers and not headers['AF-EndUserId']:
+            # This integration requires a signature, but user doesn't have one.
+            return
         kw.update({
             'clientid': self.ipf_id.clientid,
             'client_secret': self.ipf_id.client_secret,
         })
-        self.ensure_one()
         url = '%s:%s/%s' % (
             self.ipf_id.url,
             self.ipf_id.port,
             self.name.format(**kw))
+        _logger.debug("Unpack url: %s" % url)
         response = requests.get(
             url,
-            headers=self.ipf_id.get_headers(),
+            headers=headers,
             auth=self.ipf_id.get_auth(),
             **self.ipf_id.get_ssl_params()
         )
-        if response.status_code == 204:
-            return
-        return response.json()
+        _logger.debug("Unpack response: %s" % response)
+        res = None
+        try:
+            res = response.json()
+        except:
+            pass
+        if response.status_code != 200:
+            error_msg = self.build_error_msg(response, res)
+            _logger.warn(error_msg)
+            if raise_on_error:
+                raise Warning(error_msg)
+        # Undocumented response from Customer. No data returned in body.
+        #if response.status_code == 204:
+        #    return
+        _logger.debug("Unpack body: %s" % res)
+        return res

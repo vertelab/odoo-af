@@ -18,17 +18,18 @@
                 <sheet>
                     <group>
                         <field name="name"/>
-                        <field name="clientid"/>
-                        <field name="client_secret"/>
-                        <field name="auth_user"/>
-                        <field name="auth_password"/>
-                        <field name="environment"/>
-                        <field name="systemid"/>
                         <field name="url"/>
                         <field name="port"/>
+                        <field name="clientid"/>
+                        <field name="client_secret" password="True"/>
+                        <field name="auth_user"/>
+                        <field name="auth_password" password="True"/>
+                        <field name="environment"/>
+                        <field name="systemid"/>
+                        <field name="enduserid"/>
                         <field name="ssl_verify"/>
                         <field name="ssl_cert"/>
-                        <field name="ssl_key"/>
+                        <field name="ssl_key" password="True"/>
                     </group>
                     <label for="endpoint_ids"/>
                     <field name="endpoint_ids"/>
