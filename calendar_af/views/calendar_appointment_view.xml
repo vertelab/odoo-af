@@ -114,18 +114,21 @@
                         <group>
                             <field name="name" invisible="1"/>
                             <field string="Meeting channel" name="channel" readonly="0"
-                                domain="[('name', '!=', 'None')]"/>
-                            <field string="Meeting channel" name="channel_name" invisible="1" />
+                                domain="[('name', '!=', 'None')]" options="{'no_open': True}"/>
+                            <field string="Meeting channel" name="channel_name" invisible="1"
+                                   options="{'no_open': True}"/>
                             <field string="Meeting type" name="type_id"
                                    domain="[('channel', '=', channel)]"
-                               options="{'no_quick_create':True,'no_create_edit':True,'no_create':True,'no_edit':True}"
+                               options="{'no_quick_create':True,'no_create_edit':True,'no_create':True,'no_edit':True,
+                               'no_open':True}"
                                context="{ 'default_channel': %(calendar_channel.channel_pdm)d }"/>
                             <field string="Meeting subject" name="name" placeholder="e.g. Business Lunch" invisible="1" />
                         </group>
                         <group>
                             <field string="Attendees" name="partner_id" widget="many2oneattendee" placeholder="Select attendees..."  invisible="1"/>
                             <field string="Case worker" name="user_id" widget="many2oneattendee" placeholder="Select case worker..." 
-                                attrs="{'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}" />
+                                attrs="{'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}"
+                                options="{'no_open': True}"/>
                         </group>
                     </group>
                     <notebook>
@@ -138,7 +141,9 @@
                                     <field name="duration" invisible="1" />
                                 </group> 
                                 <group>
-                                    <field name="office_id"  attrs="{'required':[('channel_name','!=','PDM')], 'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}" />
+                                    <field name="office_id"  options="{'no_open': True}"
+                                      attrs="{'required':[('channel_name','!=','PDM')],
+                                      'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}" />
                                     <field string="Description" name="description" invisible="1"/>
                                     <field name="occasion_ids" invisible="1" widget="many2many_tags" />
                                     <field name="show_suggestion_ids" invisible="1" />
