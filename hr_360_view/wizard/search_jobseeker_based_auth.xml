@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="based_on_auth_search_jobseeker_form" model="ir.ui.view">
+        <field name="name">based.on.auth.search.jobseeker.wizard</field>
+        <field name="model">auth.jobseeker.search.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Search Partner" create="false">
+                <h1>Search Jobseekers Based on need of Authority</h1>
+                <notebook>
+                    <page string="Based on the needs of the authority">
+                        <group>
+                            <group>
+                                <field name="search_reason"/>
+                                <field name="other_reason"
+                                       attrs="{'invisible': [('search_reason','!=','other reason')]}"/>
+                                <field name="social_sec_nr_search"/>
+                                <field name="customer_id_search"/>
+                                <field name="email_search"/>
+                            </group>
+                        </group>
+                        <group></group>
+                        <button name="search_jobseeker1" string="search" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </page>
+                </notebook>
+                <notebook>
+                    <field name="employee_id" invisible="1"/>
+                    <page name="jobseekers" string="My Jobseekers" groups="base.group_no_one">
+                        <field name="jobseekers_ids">
+                            <tree>
+                                <field name="social_sec_nr"/>
+                                <field name="customer_id"/>
+                                <field name="name"/>
+                                <field name="city"/>
+                                <field name="office_id"/>
+                            </tree>
+                        </field>
+
+                    </page>
+                </notebook>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="based_on_auth_search_jobseeker_wizard"
+                name="Search Partner"
+                src_model="hr.employee"
+                res_model="auth.jobseeker.search.wizard"
+                view_mode="form"
+                target="inline"
+                key2="client_action_multi"/>
+
+    <menuitem id="based_on_auth_jobseeker_search_wizard_menu"
+              name="Based on the needs of the auth"
+              parent="res_partner_jobseeker_search_wizard_menu"
+              action="based_on_auth_search_jobseeker_wizard"
+              sequence="5"/>
+
+</odoo>

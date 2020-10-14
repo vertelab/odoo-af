@@ -1,0 +1,128 @@
+# -*- coding: utf-8 -*-
+##############################################################################
+#
+#    Odoo, Open Source Management Solution, third party addon
+#    Copyright (C) 2004-2019 Vertel AB (<http://vertel.se>).
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as
+#    published by the Free Software Foundation, either version 3 of the
+#    License, or (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+##############################################################################
+
+from odoo import models, fields, api, _
+import logging
+from datetime import date
+
+_logger = logging.getLogger(__name__)
+from odoo.exceptions import Warning
+from odoo.tools.safe_eval import safe_eval
+import json
+
+
+class ContactJobseekerSearchWizard(models.TransientModel):
+    _name = "contact.jobseeker.search.wizard"
+
+    employee_id = fields.Many2one(comodel_name='hr.employee', default=lambda self: self._default_hr_employee())
+    jobseekers_ids = fields.One2many('res.partner', compute='_get_records')
+    identification = fields.Selection(string="Identification",
+                                      selection=[('id document', 'ID document'), ('Digital ID', 'Digital ID'), (
+                                      'id document-card/residence permit card',
+                                      'ID document-card/Residence permit card'),
+                                                 ('known (previously identified)', 'Known (previously identified)'),
+                                                 ('identified by certifier', 'Identified by certifier')])  #
+
+    social_sec_nr_search = fields.Char(string="Social security number")
+    search_domain = fields.Char(string="Search Filter")
+    other_reason = fields.Char(string="Other reason")
+
+    @api.depends('employee_id')
+    def _get_records(self):
+        _logger.warn('hepp!')
+        for rec in self:
+            if rec.employee_id.user_id:
+                rec.jobseekers_ids = rec.env['res.partner'].search([('user_id', '=', rec.employee_id.user_id.id)])
+
+    def _default_hr_employee(self):
+        return self.env.user.employee_ids
+
+    @api.multi
+    def name_get(self):
+        """ name_get() -> [(id, name), ...]
+
+        Returns a textual representation for the records in ``self``.
+        By default this is the value of the ``display_name`` field.
+
+        :return: list of pairs ``(id, text_repr)`` for each records
+        :rtype: list(tuple)
+        """
+        result = []
+        for record in self:
+            result.append((record.id, _('Jobseekers')))
+        return result
+
+    @api.multi
+    def search_jobseeker(self):
+        # TODO: This should be made into two separate functions so it's 100% clear what the user is trying to do.
+        domain = []
+        if self.social_sec_nr_search:
+            if len(self.social_sec_nr_search) == 13 and self.social_sec_nr_search[8] == "-":
+                domain.append(("social_sec_nr", "=", self.social_sec_nr_search))
+            elif len(self.social_sec_nr_search) == 12:
+                domain.append(
+                    ("social_sec_nr", "=", "%s-%s" % (self.social_sec_nr_search[:8], self.social_sec_nr_search[8:12])))
+            else:
+                raise Warning(_("Incorrectly formated social security number: %s" % self.social_sec_nr_search))
+
+        domain = ['|' for x in range(len(domain) - 1)] + domain
+        domain.insert(0, ('is_jobseeker', '=', True))
+        _logger.info("domain: %s" % domain)
+
+        if self.identification == False:
+            raise Warning(_("Identification must be set before searching"))
+
+        partners = self.env['res.partner'].sudo().search(domain)
+        if not partners:
+            raise Warning(_("No id found"))
+        # TODO: Set correct access level. Probably varies with the reason for the search.
+        partners._grant_jobseeker_access('MYCKET_STARK', user=self.env.user,
+                                         reason=self.identification)
+
+        for partner in partners:
+            vals = {
+                'logged_in_user': self.env.user.name,
+                'identification': self.identification,
+                'searched_partner': partner.name,
+                'social_sec_num': partner.social_sec_nr,
+                'office': partner.office_id.name
+
+            }
+
+            _logger.info(json.dumps(vals))
+
+        action = {
+            'name': _('Jobseekers'),
+            'domain': [('id', '=', partners._ids), ('is_jobseeker', '=', True)],
+            # 'view_type': 'tree',
+            'res_model': 'res.partner',
+            'view_ids': [self.env.ref("partner_view_360.view_jobseeker_kanban").id,
+                         self.env.ref("partner_view_360.view_jobseeker_form").id,
+                         self.env.ref("partner_view_360.view_jobseeker_tree").id],
+            'view_mode': 'kanban,tree,form',
+            'type': 'ir.actions.act_window',
+            'target': 'main'
+        }
+        if len(partners) == 1:
+            action['view_id'] = self.env.ref("partner_view_360.view_jobseeker_form").id
+            action['res_id'] = partners.id
+            action['view_mode'] = 'form'
+        return action

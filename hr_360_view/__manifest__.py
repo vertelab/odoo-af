@@ -3,7 +3,7 @@
     'summary': """
         A dashboard for employees to search for job seekers.
         """,
-    'version': '12.0.0.8',
+    'version': '12.0.0.9',
     'category': 'Human resources',
     'description': """
 Jiras
@@ -32,7 +32,9 @@ v12.0.1.1 AFC-0185, 199 \n
     'data': [
       #'views/menu.xml',
       'views/hr_view.xml',
-      'wizard/hr_employee_search_wizard.xml'
+      'wizard/hr_employee_search_wizard.xml',
+      'wizard/search_jobseeker_when_in_contact.xml',
+      'wizard/search_jobseeker_based_auth.xml'
     ],
     'installable': True,
 }
