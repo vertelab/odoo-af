@@ -20,6 +20,7 @@ Asök booking management \n
     "data": [
         "views/ipf_views.xml",
         "data/customer_data.xml",
+        "data/ais_a_data.xml",
     ],
     "application": True,
     "installable": True,
