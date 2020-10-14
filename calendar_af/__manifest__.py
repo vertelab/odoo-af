@@ -7,7 +7,7 @@
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
-    "summary": "12.0.1.0.3 -AFC-1046 - Lägg till Helger och röda dagar i Resource Leaves.",
+    "summary": "12.0.1.0.3 -AFC-1031 - Lägg till Helger och röda dagar i Resource Leaves.",
 	"description": """
 Description
 ================================================================================================
