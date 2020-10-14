@@ -1,0 +1,15 @@
+occasions.csv,Notering,Trans,Odoo
+Bokningstillfällesid,,"external_id,occ_",external_id
+Datum,,,date
+Starttid,,"start,_",start
+Sluttid,,"stop,_",stop
+Längd,,,duration
+Längd,,"duration_selection,_",duration_selection
+Mötestypsid,,"type_id,_",type_id
+Mötestypsid,,,name
+Bokningsstatus,,"state,_",state
+Skapad,,,
+Skapad av,,,
+Kontorskod,,"location_id,_",!location_id
+Kontorsnamn,,,
+Möteshandläggare,,"user_id,_",user_id

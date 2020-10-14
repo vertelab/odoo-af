@@ -25,6 +25,7 @@ from datetime import date
 _logger = logging.getLogger(__name__)
 from odoo.exceptions import Warning
 from odoo.tools.safe_eval import safe_eval
+import json
 
 class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     _name = "hr.employee.jobseeker.search.wizard"
@@ -74,7 +75,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
         """
         result = []
         for record in self:
-            result.append((record.id, _('Handläggaryta')))
+            result.append((record.id, _('Jobseekers')))
         return result
 
     @api.multi
@@ -106,7 +107,20 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             raise Warning(_("No id found"))
         # TODO: Set correct access level. Probably varies with the reason for the search.
         partners._grant_jobseeker_access('MYCKET_STARK', user=self.env.user, reason=self.search_reason or self.identification)
-            
+        
+        for partner in partners:
+
+            vals = {
+            'logged_in_user': self.env.user.name,
+            'identification': self.identification,
+            'searched_partner': partner.name,
+            'social_sec_num': partner.social_sec_nr,
+            'office': partner.office_id.name
+
+            }
+
+            _logger.info(json.dumps(vals))
+
         action = {
             'name': _('Jobseekers'),
             'domain': [('id', '=', partners._ids), ('is_jobseeker', '=', True)],
@@ -115,6 +129,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             'view_ids':  [self.env.ref("partner_view_360.view_jobseeker_kanban").id, self.env.ref("partner_view_360.view_jobseeker_form").id, self.env.ref("partner_view_360.view_jobseeker_tree").id], 
             'view_mode': 'kanban,tree,form',
             'type': 'ir.actions.act_window',
+            'target': 'main'
         }
         if len(partners) == 1:
             action['view_id'] = self.env.ref("partner_view_360.view_jobseeker_form").id
@@ -134,7 +149,17 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             else:
                 raise Warning(_("Incorrectly formated social security number: %s" % self.social_sec_nr_search))
         if self.customer_id_search:
-            domain.append(("customer_id", "=", self.customer_id_search))
+            ipf = self.env.ref('af_ipf.ipf_endpoint_customer').sudo()
+            res = ipf.call(customer_id = self.customer_id_search)
+            pnr = None
+            if res:
+                pnr = res.get('ids', {}).get('pnr')
+                if pnr:
+                    pnr = '%s-%s' % (pnr[:8], pnr[8:12])
+            if pnr:
+                domain.append(("social_sec_nr", "=", pnr))
+            else:
+                domain.append(("social_sec_nr", 'in', []))
         if self.email_search:
             domain.append(("email", "=", self.email_search))
         domain = ['|' for x in range(len(domain) - 1)] + domain
@@ -151,7 +176,20 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             raise Warning(_("No id found"))
         # TODO: Set correct access level. Probably varies with the reason for the search.
         partners._grant_jobseeker_access('MYCKET_STARK', user=self.env.user, reason=self.search_reason or self.identification)
-            
+
+        for partner in partners:
+
+            vals = {
+            'logged_in_user': self.env.user.name,
+            'identification': self.identification,
+            'searched_partner': partner.name,
+            'social_sec_num': partner.social_sec_nr,
+            'office': partner.office_id.name
+
+            }
+
+            _logger.info(json.dumps(vals))
+
         action = {
             'name': _('Jobseekers'),
             'domain': [('id', '=', partners._ids), ('is_jobseeker', '=', True)],
@@ -160,10 +198,13 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             'view_ids':  [self.env.ref("partner_view_360.view_jobseeker_kanban").id, self.env.ref("partner_view_360.view_jobseeker_form").id, self.env.ref("partner_view_360.view_jobseeker_tree").id], 
             'view_mode': 'kanban,tree,form',
             'type': 'ir.actions.act_window',
+            'target': 'main'
         }
         if len(partners) == 1:
             action['view_id'] = self.env.ref("partner_view_360.view_jobseeker_form").id
             action['res_id'] = partners.id
             action['view_mode'] = 'form'
+            
+
         return action
 

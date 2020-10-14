@@ -10,7 +10,7 @@
           <field name="reserve_admin_ids" widget="many2many_tags" domain="[('id', 'in', member_ids)]"/>
           <field name="app_warn_user_ids" widget="many2many_tags" domain="[('id', 'in', member_ids)]"/>
         </group>
-        <field name="member_ids" invisible="0"/>
+        <field name="member_ids" invisible="1"/>
         <notebook>
           <page name="type_department" string="Appointment warning thresholds">
             <field name="type_department_ids" mode="tree" nolabel="1">

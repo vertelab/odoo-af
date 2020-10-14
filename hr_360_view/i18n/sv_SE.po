@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0-20200508\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-05 14:10+0000\n"
-"PO-Revision-Date: 2020-10-14 13:06+0200\n"
+"POT-Creation-Date: 2020-09-02 12:42+0000\n"
+"PO-Revision-Date: 2020-10-07 14:48+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -256,8 +256,8 @@ msgstr "Sökorsak"
 #. module: hr_360_view
 #: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:145
 #, python-format
-msgid "Search reason must be set before searching"
-msgstr "Sökorsak måste fyllas i innan sökning"
+msgid "Search reason or identification must be set before searching"
+msgstr "Du måste välja sökorsak eller identifieringsmetod före sökning"
 
 #. module: hr_360_view
 #: model:ir.model.fields,field_description:hr_360_view.field_hr_employee_jobseeker_search_wizard__social_sec_nr_search

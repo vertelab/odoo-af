@@ -145,6 +145,8 @@
             <search string="Rules">
                 <field name="state" />
                 <field name="type_id" />
+                <field name="office_id"/>
+                <field name="user_id"/>
                 <filter
                     name="state_ok_req"
                     domain="['|',['state','=','request'],['state','=','ok']]"
@@ -178,12 +180,13 @@
     <record id="action_calendar_local_occasion" model="ir.actions.act_window">
         <field name="name">Local occasions</field>
         <field name="res_model">calendar.occasion</field>
-        <field name="view_mode">calendar,tree,form,pivot,kanban</field>
+        <field name="view_mode">calendar,tree,pivot,kanban</field>
         <field name="view_id" ref="view_calendar_occasion_local_tree" />
         <!-- This should be a reference to the external id instead. -->
         <field name="domain">[('channel', '=', 'Local'), ('state', '!=', 'deleted')]</field>
         <field name="search_view_id" ref="calendar_occasion_local_search" />
     </record>
+    
     <record id="action_view_calendar_occasion_tree" model="ir.actions.act_window.view">
         <field name="act_window_id" ref="action_calendar_occasion" />
         <field name="sequence" eval="1" />
@@ -205,13 +208,6 @@
         <field name="view_id" ref="view_calendar_occasion_form" />
     </record>
 
-    <!-- <record id="action_view_calendar_occasion_pivot" model="ir.actions.act_window.view">
-        <field name="act_window_id" ref="action_calendar_occasion" />
-        <field name="sequence" eval="4" />
-        <field name="view_mode">pivot</field>
-        <field name="view_id" ref="view_calendar_occasion_pivot" />
-    </record> -->
-
     <record id="action_view_calendar_occasion_kanban" model="ir.actions.act_window.view">
         <field name="act_window_id" ref="action_calendar_occasion" />
         <field name="sequence" eval="5" />
@@ -220,6 +216,5 @@
     </record>
 
 
-    <!-- <menuitem action="action_calendar_occasion" id="menu_action_occasion" parent="menu_pdm" sequence="11" groups="af_security.group_af_employers_editor,af_security.group_af_jobseekers_editor"/> -->
-    <menuitem action="action_calendar_local_occasion" id="menu_action_local_occasion" parent="menu_local" sequence="11" groups="af_security.af_employers_editor,af_security.af_jobseekers_editor"/>
+    <menuitem action="action_calendar_local_occasion" id="menu_action_local_occasion" parent="menu_local" sequence="11" groups="af_security.af_meeting_planner"/>
 </odoo>
