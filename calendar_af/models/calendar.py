@@ -797,7 +797,10 @@ class CalendarOccasion(models.Model):
     def _check_date_mapping(self, date, office_id):
         """Checks if a date has a mapped date, and returns the mapped date 
         if it exists """
-        mapped_date = self.env['calendar.mapped_dates'].search([('from_date', '=', date), ('office_id', '=', office_id.id)])
+        if office_id:
+            mapped_date = self.env['calendar.mapped_dates'].search([('from_date', '=', date), ('office_id', '=', office_id.id)])
+        else:
+            mapped_date = self.env['calendar.mapped_dates'].search([('from_date', '=', date), ('office_id', '=', False)])
         if mapped_date:
             res = mapped_date.to_date 
         else:
