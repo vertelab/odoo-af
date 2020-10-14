@@ -161,7 +161,8 @@ class CalendarAppointmentType(models.Model):
 
     @api.depends('duration_30', 'duration_60')
     def _comp_duration(self):
-        self.duration = 30.0 if self.duration_30 else 60.0
+        for channel in self:
+            channel.duration = 30.0 if channel.duration_30 else 60.0
 
 class CalendarChannel(models.Model):
     _name = 'calendar.channel'
