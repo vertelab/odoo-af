@@ -92,7 +92,7 @@
     <record id="action_calendar_schedule" model="ir.actions.act_window">
         <field name="name">Schedules</field>
         <field name="res_model">calendar.schedule</field>
-        <field name="view_mode">calendar,tree,form,kanban</field>
+        <field name="view_mode">calendar,tree,kanban</field>
         <field name="view_id" ref="view_calendar_schedule_calendar"/>
         <field name="domain">[('name', '!=', 'IPF request')]</field>
     </record>

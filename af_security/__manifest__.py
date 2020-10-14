@@ -17,6 +17,7 @@
         "security/af_security.xml",
         "views/hr_views.xml",
         "views/res_users.xml",
+        "views/ir_actions.xml",
     ],
     "application": True,
     "installable": True,

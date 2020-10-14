@@ -21,7 +21,8 @@ v12.0.1.3  - removed state-partner.csv\n
     "website": "https://vertel.se/",
     "category": "Tools",
     "depends": [ 
-        'calendar_af'		
+        'calendar_af',
+        'af_ipf'	
         ],
     
     "data": [
