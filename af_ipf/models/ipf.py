@@ -72,7 +72,6 @@ class AfIpf(models.Model):
         if self.enduserid:
             user = self._context.get('uid')
             user = user and self.env['res.users'].browse(user) or self.env.user
-            _logger.info("ln75 res: %s" % user)
             headers['AF-EndUserId'] = user.af_signature
         return headers
     

@@ -75,7 +75,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
         """
         result = []
         for record in self:
-            result.append((record.id, _('Handläggaryta')))
+            result.append((record.id, _('Jobseekers')))
         return result
 
     @api.multi
@@ -113,9 +113,9 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             vals = {
             'logged_in_user': self.env.user.name,
             'identification': self.identification,
-            'searched_partner': partners.name,
-            'social_sec_num': partners.social_sec_nr,
-            'office': partners.office.name
+            'searched_partner': partner.name,
+            'social_sec_num': partner.social_sec_nr,
+            'office': partner.office_id.name
 
             }
 
@@ -129,6 +129,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             'view_ids':  [self.env.ref("partner_view_360.view_jobseeker_kanban").id, self.env.ref("partner_view_360.view_jobseeker_form").id, self.env.ref("partner_view_360.view_jobseeker_tree").id], 
             'view_mode': 'kanban,tree,form',
             'type': 'ir.actions.act_window',
+            'target': 'main'
         }
         if len(partners) == 1:
             action['view_id'] = self.env.ref("partner_view_360.view_jobseeker_form").id
@@ -181,9 +182,9 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             vals = {
             'logged_in_user': self.env.user.name,
             'identification': self.identification,
-            'searched_partner': partners.name,
-            'social_sec_num': partners.social_sec_nr,
-            'office': partners.office.name
+            'searched_partner': partner.name,
+            'social_sec_num': partner.social_sec_nr,
+            'office': partner.office_id.name
 
             }
 
@@ -197,6 +198,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             'view_ids':  [self.env.ref("partner_view_360.view_jobseeker_kanban").id, self.env.ref("partner_view_360.view_jobseeker_form").id, self.env.ref("partner_view_360.view_jobseeker_tree").id], 
             'view_mode': 'kanban,tree,form',
             'type': 'ir.actions.act_window',
+            'target': 'main'
         }
         if len(partners) == 1:
             action['view_id'] = self.env.ref("partner_view_360.view_jobseeker_form").id
