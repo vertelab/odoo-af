@@ -1,18 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <odoo>
-    <data>
-		<template id="assets_backend" name="AF Backend Tema" inherit_id="web.assets_backend">
-			<xpath expr=".">
-						<link rel="stylesheet" href="/af_backend_tema/static/src/scss/style.scss"/>
-			</xpath>
-		</template>
+	<data>
+	
+	<template id="assets_backend" name="AF Statistics" inherit_id="web.assets_backend">
+		<xpath expr=".">
 
-		<template id="assets_common" name="AF Common Tema" inherit_id="web.assets_common">
-			<xpath expr=".">
-						<link rel="stylesheet" href="/af_backend_tema/static/src/scss/web_style.scss"/>
-			</xpath>
-		</template>
+			<script src="af_statistics/static/src/js/matomo.js"
+							type="text/javascript"></script>
 
-    </data>
+  		<!-- <script src="https://af-staging.analytics.elx.cloud/js/container_ew8X7e8B.js"
+							type="text/javascript"
+							async=""
+							defer=""></script> -->
+
+  		<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+							type="text/javascript"
+							async=""
+							defer=""></script> -->
+			
+		</xpath>
+	</template>
+
+	<template id="assets_matomo" name="Matomo" inherit_id="web.webclient_bootstrap">
+		<xpath expr="//t[@t-call-assets='web.assets_common']" position="before">
+
+		<script src="https://af-staging.analytics.elx.cloud/js/container_ew8X7e8B.js"
+		        type="text/javascript"
+						async=""
+						defer=""></script>
+
+		</xpath>
+	</template>
+	
+	</data>
 </odoo>
