@@ -18,7 +18,7 @@ AFC-734 Integration till AIS-Å (V12.0.2.0.0)
     "data": [
         "views/ipf_views.xml",
         "data/customer_data.xml",
-        "data/ais_a_data.xml",
+        "data/customer_data.xml",
     ],
     "application": True,
     "installable": True,
