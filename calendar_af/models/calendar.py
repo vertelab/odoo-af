@@ -318,6 +318,7 @@ class CalendarAppointment(models.Model):
                                         default='free', 
                                         help="Status of the meeting")
     cancel_reason = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason', help="Cancellation reason")
+    cancel_reason_temp = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason', store=False, help="Cancellation reason")
     location = fields.Char(string='Location', compute='compute_location', store=True)
     location_id = fields.Many2one(string='Location', comodel_name='hr.location', related='user_id.location_id', readonly=True)
     office_id = fields.Many2one(comodel_name='hr.department', string="Office")
@@ -557,7 +558,7 @@ class CalendarAppointment(models.Model):
                 }
                 appointment.partner_id.sudo().notes_ids = [(0, 0, vals)]
                 # create edi message
-                self.appointment_id.sudo().partner_id._create_next_last_msg()
+                self.sudo().partner_id._create_next_last_msg()
                 appointment.occasion_ids = [(5, 0, 0)]
                 
                 return True
@@ -601,6 +602,8 @@ class CalendarAppointment(models.Model):
     def write(self, vals):
         if (self.occasion_ids != False) and (self.channel == self.env.ref('calendar_channel.channel_local')) and (vals.get('start') or vals.get('stop') or vals.get('type_id')):
             self._check_remaining_occasions()
+        if vals.get('cancel_reason_temp'):
+           vals['cancel_reason'] = vals.pop('cancel_reason_temp') 
         res = super(CalendarAppointment, self).write(vals)
         return res
 
@@ -661,7 +664,7 @@ class CalendarAppointment(models.Model):
             }
             self.partner_id.sudo().notes_ids = [(0, 0, vals)]
             # create edi message
-            self.appointment_id.sudo().partner_id._create_next_last_msg()
+            self.sudo().partner_id._create_next_last_msg()
             res = True
 
         return res
