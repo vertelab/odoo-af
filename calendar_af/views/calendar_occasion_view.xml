@@ -46,7 +46,7 @@
                         </group>
                         <group>
                             <field name="type_id" domain="[('channel', '=', %(calendar_channel.channel_local)d)]" required="1" />
-                            <field name="location_id" required="1" />
+                            <field name="office_id" required="1" />
                             <field name="user_id" string="Case worker" widget="many2oneattendee" placeholder="Select case worker..." required="1" />
                         </group>
                     </group>
@@ -113,7 +113,7 @@
         <field name="model">calendar.occasion</field>
         <field name="priority" eval="2" />
         <field name="arch" type="xml">
-            <calendar string="Occasions" date_start="start" date_stop="stop" date_delay="duration" color="location_id">
+            <calendar string="Occasions" date_start="start" date_stop="stop" date_delay="duration" color="office_id">
                 <field name="name" />
             </calendar>
         </field>
@@ -130,7 +130,7 @@
                 <field name="weekday"/>
                 <field name="start"/>
                 <field name="stop"/>
-                <field name="location_id"/>
+                <field name="office_id"/>
                 <field name="state"/>
                 <field name="user_id"/>
                 <field name="app_partner_pnr"/>
@@ -145,7 +145,7 @@
             <search string="Rules">
                 <field name="state" />
                 <field name="type_id" />
-                <field name="location_id"/>
+                <field name="office_id"/>
                 <field name="user_id"/>
                 <filter
                     name="state_ok_req"
@@ -160,10 +160,10 @@
                         context="{'group_by':'type_id'}"
                     />
                     <filter
-                        name="group_by_location_id"
-                        string="location_id"
+                        name="group_by_office_id"
+                        string="office_id"
                         domain="[]"
-                        context="{'group_by':'location_id'}"
+                        context="{'group_by':'office_id'}"
                     />
                 </group>
             </search>

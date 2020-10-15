@@ -24,7 +24,6 @@
                 <field name="stop" />
                 <field name="user_id" />
                 <field name="partner_id" />
-                <field name="location" />
                 <field name="location_id" />
             </tree>
         </field>
@@ -94,7 +93,6 @@
                 <field name="stop" />
                 <field name="user_id" />
                 <field name="partner_id" />
-                <field name="location" />
                 <field name="location_id" />
             </tree>
         </field>
