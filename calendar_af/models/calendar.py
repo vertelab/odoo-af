@@ -603,7 +603,7 @@ class CalendarAppointment(models.Model):
         if (self.occasion_ids != False) and (self.channel == self.env.ref('calendar_channel.channel_local')) and (vals.get('start') or vals.get('stop') or vals.get('type_id')):
             self._check_remaining_occasions()
         if vals.get('cancel_reason_temp'):
-           self.cancel_reason = vals.pop('cancel_reason_temp') 
+           vals['cancel_reason'] = vals.pop('cancel_reason_temp') 
         res = super(CalendarAppointment, self).write(vals)
         return res
 
