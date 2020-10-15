@@ -344,7 +344,8 @@ class ResPartner(models.Model):
                     }
                     self.create_office_from_row(vals)
                     create = False
-
+                elif key == 'office_id':
+                    row[key] = self.env['hr.department'].search([('office_code','=', row[key])]).id
                 elif key == 'partner_id':
                     if 'fiscal_year' in row:
                         
@@ -365,7 +366,7 @@ class ResPartner(models.Model):
                         partner_id = self.env['ir.model.data'].xmlid_to_res_id(partner_xmlid)
                         
                         partner = self.env['res.partner'].search_read([('id', '=', partner_id)], ['street', 'street2', 'city', 'zip'])[0]
-        
+
                         if 'job_id' in row:
                             ssyk_xmlid = "res_ssyk.ssyk_%s" % row['job_id']
                             ssyk_id = self.env['ir.model.data'].xmlid_to_res_id(ssyk_xmlid)
@@ -411,7 +412,7 @@ class ResPartner(models.Model):
                             create = False
 
                         if 'type' in row:
-                            if row['type'].lower() == 'egen_angiven':
+                            if row['type'].lower() == 'egen_angiven' or row['type'].lower() == 'egen_utlandsk':
                                 if 'street' in row:
                                     partner['street'] = row['street']
                                 if 'street2' in row:
@@ -444,8 +445,6 @@ class ResPartner(models.Model):
                                         'zip': partner['zip'],
                                         'city': partner['city']
                                         })  
-                            elif row['type'].lower() == 'egen_utlandsk':
-                                _logger.warning("foreign address on jobseeker, skipping")
                             create = False
                             keys_to_delete.append('type')
                 elif key == 'parent_id': 
