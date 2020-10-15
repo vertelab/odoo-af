@@ -39,21 +39,43 @@ class Partner(models.Model):
     
     @api.multi
     def compute_ais_a_ids(self):
+        user = self._context.get('uid')
+        user = user and self.env['res.users'].browse(user) or self.env.user
+        client_id, client_secret, auth_user, auth_password = self._get_ipf_credentials()
+        if not all((user.af_signature, client_id, client_secret, auth_user, auth_password)):
+            return
+        param = self.env['ir.config_parameter'].sudo()
+        ssl_params = {
+        }
+        verify = param.get_param('ipf_ais_a.ssl_verify', None)
+        ssl_cert = param.get_param('ipf_ais_a.ssl_cert', None)
+        ssl_key = param.get_param('ipf_ais_a.ssl_key', None)
+        if verify == '0':
+            ssl_params['verify'] = False
+        elif verify:
+            ssl_params['verify'] = verify
+        if ssl_cert and ssl_key:
+            ssl_params['cert'] = (ssl_cert, ssl_key)
         for record in self:
-            _logger.info("ln152 ipf: %s" % record)
             if record.is_jobseeker:
+                url="https://ipfapi.arbetsformedlingen.se:443/ais-beslut-om-stod-read/v1/arenden/sokande/{personnummer}?client_id={client_id}&client_secret={client_secret}"
                 personnummer = record.get_ais_a_pnr()
-                _logger.info("ln152 ipf: %s" % personnummer)
                 if personnummer:
-                    try:
-                        ipf = self.env.ref('af_ipf.ipf_endpoint_ais_a').sudo()
-                        _logger.info("ln152 ipf: %s" % ipf)
-                        res = ipf.call(personnummer = self.company_registry)
-                        record.ais_a_ids = record.env['res.partner.ais_a']
-                        for arende in res.get('arenden', []):
-                            record.ais_a_ids |= record.env['res.partner.ais_a'].create_arende(arende, record.id)
-                    except:
-                        record.ais_a_ids = None
+                    headers = record._get_ipf_headers()
+                    url = url.format(
+                        personnummer=personnummer,
+                        client_id=client_id,
+                        client_secret=client_secret)
+                    response = requests.get(
+                        url,
+                        headers=headers,
+                        auth=HTTPBasicAuth(auth_user, auth_password),
+                        **ssl_params
+                    )
+                    res = response.json()
+                    record.ais_a_ids = record.env['res.partner.ais_a']
+                    for arende in res.get('arenden', []):
+                        record.ais_a_ids |= record.env['res.partner.ais_a'].create_arende(arende, record.id)
 
     @api.multi
     def get_ais_a_pnr(self):
@@ -63,6 +85,29 @@ class Partner(models.Model):
                 return pnr
         except:
             _logger.warn("Invalid personal identification number: %s" % self.company_registry)
+
+    @api.model
+    def _get_ipf_credentials(self):
+        param = self.env['ir.config_parameter'].sudo()
+        return (
+            param.get_param('ipf_client_id', None),
+            param.get_param('ipf_client_secret', None),
+            param.get_param('ipf_ais_a.auth_user', None),
+            param.get_param('ipf_ais_a.auth_password', None),
+        )
+
+    @api.model
+    def _get_ipf_headers(self):
+        user = self._context.get('uid')
+        user = user and self.env['res.users'].browse(user) or self.env.user
+        param = self.env['ir.config_parameter'].sudo()
+        return {
+            'AF-SystemId': 'AFCRM',
+            'AF-Environment': param.get_param('ipf_ais_a.ipf_environment', 'T2'),
+       
+            'AF-TrackingId': '%s' % uuid4(),
+            'AF-EndUserId': user.af_signature,
+        }
 
 class PartnerAisA(models.TransientModel):
     _name ='res.partner.ais_a'
