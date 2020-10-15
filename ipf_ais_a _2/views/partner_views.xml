@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="view_ais_a_tree" model="ir.ui.view">
+        <field name="name">res.partner.ais_a.tree</field>
+        <field name="model">res.partner.ais_a</field>
+        <field name="arch" type="xml">
+            <tree string="AIS-Å">
+                <field name="name"/>
+                <field name="res_officer"/>
+                <field name="res_office"/> 
+                <field name="dec_office"/>
+                <field name="status"/>
+                <field name="status_change"/>
+                <field name="atgard" />
+            
+            </tree>
+        </field>
+    </record>
+    <record id="view_jobseeker_form" model="ir.ui.view">
+        <field name="name">res.partner.form.jobseeker.ais_a</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="partner_view_360.view_jobseeker_form" />
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page name="ais_a" string="AIS-Å">
+                    <div class="af-ais-a" />
+                    <field name="ais_a_ids" />
+                </page>
+            </notebook>
+        </field>
+    </record>
+    <template id="assets_backend" name="Ais-Å assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/ipf_ais_a _2/static/src/js/ais_a.js"></script>
+                <script type="text/javascript" src="/ipf_ais_a _2/static/src/js/form_renderer.js"></script>
+            </xpath>
+        </template>
+</odoo>

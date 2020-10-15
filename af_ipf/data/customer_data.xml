@@ -10,6 +10,8 @@
 			<field name="port">443</field>
 			<field name="ssl_verify">True</field>
 		</record>
+	</data>
+	<data>
 		<record id="ipf_endpoint_customer" model="af.ipf.endpoint">
 			<field name="name">customer/v1/customers/ids?customer_id={customer_id}&amp;client_id={clientid}&amp;client_secret={client_secret}</field>
 			<field name="ipf_id" ref="ipf_customer"/>
