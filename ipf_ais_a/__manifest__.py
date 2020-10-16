@@ -2,7 +2,7 @@
 
 {
     "name": "IPF AIS-Å ",
-    'summary': """Integration till AIS-Å""",
+    "summary": "AF to IPF AIS Beslut Om Stod Read integration",
     "version": "12.0.1.0.0",
     "author": "Vertel AB",
     "license": "AGPL-3",

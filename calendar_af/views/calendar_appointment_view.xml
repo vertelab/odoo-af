@@ -193,7 +193,7 @@
                             <field string="Attendees" name="partner_id" widget="many2oneattendee" placeholder="Select attendees..." attrs="{'readonly':[('state', '!=', 'free')]}"/>
                             <field string="Case worker" name="user_id" widget="many2oneattendee" placeholder="Select case worker..." 
                                 attrs="{'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}" />
-                            <field string="Move reason" name="cancel_reason" required="1"/>
+                            <field string="Move reason" name="cancel_reason_temp" required="1"/>
                         </group>
                     </group>
                     <notebook>

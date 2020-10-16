@@ -8,12 +8,11 @@
     "website": "https://vertel.se/",
     "category": "Tools",
     "summary": "Module for synchronous integrations to IPF",
-	"description": """
-Description
-===================================================================================
-12.0.1.0.1 - AFC-1197 - Lagt till data för planning.\n
-\n
-    """,
+    'description': """
+Jira
+===========================================
+AFC-734 Integration till AIS-Å (V12.0.2.0.0)
+""",
     "depends": ["af_security"],
     "external_dependencies": {'python': ['requests']},
     "data": [

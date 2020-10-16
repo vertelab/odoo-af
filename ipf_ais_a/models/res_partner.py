@@ -40,19 +40,17 @@ class Partner(models.Model):
     @api.multi
     def compute_ais_a_ids(self):
         for record in self:
-            _logger.info("ln152 ipf: %s" % record)
             if record.is_jobseeker:
                 personnummer = record.get_ais_a_pnr()
-                _logger.info("ln152 ipf: %s" % personnummer)
                 if personnummer:
                     try:
                         ipf = self.env.ref('af_ipf.ipf_endpoint_ais_a').sudo()
-                        _logger.info("ln152 ipf: %s" % ipf)
                         res = ipf.call(personnummer = self.company_registry)
                         record.ais_a_ids = record.env['res.partner.ais_a']
                         for arende in res.get('arenden', []):
                             record.ais_a_ids |= record.env['res.partner.ais_a'].create_arende(arende, record.id)
-                    except:
+                    except Exception as e:
+                        _logger.warn('Error in IPF AIS-Å integration.', exc_info=e)
                         record.ais_a_ids = None
 
     @api.multi
