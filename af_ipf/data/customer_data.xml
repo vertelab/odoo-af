@@ -3,7 +3,10 @@
 <odoo>
     <data noupdate="1">
 		<record id="ipf_customer" model="af.ipf">
-			<field name="name">Customer</field>
+			<field name="name">IPF 
+			
+			
+			Customer</field>
 			<field name="environment">T2</field>
 			<field name="systemid">AFCRM</field>
 			<field name="url">https://ipfapi.arbetsformedlingen.se</field>
