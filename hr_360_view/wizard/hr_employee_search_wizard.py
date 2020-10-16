@@ -53,7 +53,6 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
 
     @api.depends('employee_id')
     def _get_records(self):
-        _logger.warn('hepp!')
         for rec in self:
             if rec.employee_id.user_id:
                 rec.jobseekers_ids = rec.env['res.partner'].search([('user_id', '=', rec.employee_id.user_id.id)])
