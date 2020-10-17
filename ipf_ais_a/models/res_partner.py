@@ -19,24 +19,26 @@
 #
 ##############################################################################
 
-from odoo import models, fields, api, _
-import requests
-from requests.auth import HTTPBasicAuth
 import json
-from uuid import uuid4
 import logging
+import requests
 from odoo.exceptions import Warning
+from requests.auth import HTTPBasicAuth
+from uuid import uuid4
+
+from odoo import models, fields, api, _
 
 _logger = logging.getLogger(__name__)
 
+
 class Partner(models.Model):
     _inherit = 'res.partner'
-    
-    ais_a_ids = fields.One2many(comodel_name='res.partner.ais_a', 
-                                 string='Cases', 
-                                 inverse_name="partner_id", 
-                                 compute='compute_ais_a_ids')
-    
+
+    ais_a_ids = fields.One2many(comodel_name='res.partner.ais_a',
+                                string='Cases',
+                                inverse_name="partner_id",
+                                compute='compute_ais_a_ids')
+
     @api.multi
     def compute_ais_a_ids(self):
         for record in self:
@@ -45,7 +47,7 @@ class Partner(models.Model):
                 if personnummer:
                     try:
                         ipf = self.env.ref('af_ipf.ipf_endpoint_ais_a').sudo()
-                        res = ipf.call(personnummer = self.company_registry)
+                        res = ipf.call(personnummer=self.company_registry)
                         record.ais_a_ids = record.env['res.partner.ais_a']
                         for arende in res.get('arenden', []):
                             record.ais_a_ids |= record.env['res.partner.ais_a'].create_arende(arende, record.id)
@@ -62,8 +64,9 @@ class Partner(models.Model):
         except:
             _logger.warn("Invalid personal identification number: %s" % self.company_registry)
 
+
 class PartnerAisA(models.TransientModel):
-    _name ='res.partner.ais_a'
+    _name = 'res.partner.ais_a'
     _description = 'AIS-Å Beslut Om Stod'
 
     name = fields.Integer(string="Case nr")
@@ -81,15 +84,11 @@ class PartnerAisA(models.TransientModel):
         return self.create({
             'partner_id': partner_id,
             'name': vals['arendenummer'],
-            'res_officer' : vals.get('ansvarigHandlaggare', {}).get('signatur'),
-            'res_office' : vals.get('ansvarigtKontor', {}).get('namn'),
-            'dec_office' : vals.get('beslutandeKontor', {}).get('namn'),
-            'status' : vals.get('status', {}).get('benamning'),           
-            'status_change' : vals['senasteStatusAndring'],
-            'atgard' : vals.get('atgard', {}).get('benamning'),
-
-
+            'res_officer': vals.get('ansvarigHandlaggare', {}).get('signatur'),
+            'res_office': vals.get('ansvarigtKontor', {}).get('namn'),
+            'dec_office': vals.get('beslutandeKontor', {}).get('namn'),
+            'status': vals.get('status', {}).get('benamning'),
+            'status_change': vals['senasteStatusAndring'],
+            'atgard': vals.get('atgard', {}).get('benamning'),
 
         })
-
-
