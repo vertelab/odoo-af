@@ -22,17 +22,17 @@ v12.0.1.1 AFC-0185, 199 \n
     'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
     'depends': [
-      'hr', 
-      'partner_view_360', 
-      #'partner_af_case', 
-      'partner_daily_notes',
-      'hr_employee_firstname_extension',
-      'af_ipf',
-      ],
+        'hr',
+        'partner_view_360',
+        # 'partner_af_case',
+        'partner_daily_notes',
+        'hr_employee_firstname_extension',
+        'af_ipf',
+    ],
     'data': [
-      #'views/menu.xml',
-      'views/hr_view.xml',
-      'wizard/hr_employee_search_wizard.xml'
+        # 'views/menu.xml',
+        'views/hr_view.xml',
+        'wizard/hr_employee_search_wizard.xml'
     ],
     'installable': True,
 }
