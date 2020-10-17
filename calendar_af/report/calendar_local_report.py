@@ -21,6 +21,7 @@
 
 from odoo import models, fields, api, _, tools
 
+
 class CalendarAppointmentLocalReport(models.Model):
     _name = 'report.calendar.appointment.local'
     _description = "Appointment report local"
@@ -36,21 +37,21 @@ class CalendarAppointmentLocalReport(models.Model):
     user_id = fields.Many2one(comodel_name='res.users', string='Case worker', readonly=True)
     partner_id = fields.Many2one(comodel_name='res.partner', string='Jobseeker', readonly=True)
     app_state = fields.Selection(selection=[('free', 'Draft'),
-                                        ('reserved', 'Reserved'),
-                                        ('confirmed', 'Confirmed'),
-                                        ('done', 'Done'),
-                                        ('canceled', 'Canceled')],
-                                        string='State', 
-                                        help="Status of the meeting",
-                                        readonly=True)
+                                            ('reserved', 'Reserved'),
+                                            ('confirmed', 'Confirmed'),
+                                            ('done', 'Done'),
+                                            ('canceled', 'Canceled')],
+                                 string='State',
+                                 help="Status of the meeting",
+                                 readonly=True)
     occ_state = fields.Selection(selection=[('draft', 'Draft'),
-                                        ('request', 'Published'),
-                                        ('ok', 'Accepted'),
-                                        ('fail', 'Rejected'),
-                                        ('deleted', 'Deleted')],
-                                        string='Occasion state', 
-                                        help="Status of the meeting",
-                                        readonly=True)
+                                            ('request', 'Published'),
+                                            ('ok', 'Accepted'),
+                                            ('fail', 'Rejected'),
+                                            ('deleted', 'Deleted')],
+                                 string='Occasion state',
+                                 help="Status of the meeting",
+                                 readonly=True)
     location = fields.Char(string='Location code', readonly=True)
     office_id = fields.Many2one(comodel_name='hr.department', string="Office", readonly=True)
     type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type', readonly=True)

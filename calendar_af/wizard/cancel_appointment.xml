@@ -6,15 +6,15 @@
         <field name="model">calendar.cancel_appointment</field>
         <field name="arch" type="xml">
             <form string="Cancel appointment">
-                    <group>
-                        <field name="cancel_reason" required="1"/>
-                        <field name="appointment_ids" options="{'no_create_edit':True}"/>
-                    </group>
+                <group>
+                    <field name="cancel_reason" required="1"/>
+                    <field name="appointment_ids" options="{'no_create_edit':True}"/>
+                </group>
                 <footer>
                     <group>
                         <span>
                             <button string="OK" type="object" class="oe_highlight" name="action_cancel_appointment"/>
-                            <button string="Cancel" class="oe_link" special="cancel" />
+                            <button string="Cancel" class="oe_link" special="cancel"/>
                         </span>
                     </group>
                 </footer>
@@ -31,12 +31,12 @@
     </record>
 
     <act_window id="cancel_appointment_action"
-        name="Cancel appointment"
-        src_model="calendar.appointment"
-        res_model="calendar.cancel_appointment"
-        view_type="form"
-        view_mode="form"
-        key2="client_action_multi"
-        target="new"/>
+                name="Cancel appointment"
+                src_model="calendar.appointment"
+                res_model="calendar.cancel_appointment"
+                view_type="form"
+                view_mode="form"
+                key2="client_action_multi"
+                target="new"/>
 
 </odoo>

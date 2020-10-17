@@ -21,5 +21,6 @@
         <!-- <field name="domain">[('office_id', '=', '')]</field> -->
     </record>
 
-    <menuitem action="action_mapped_dates" id="menu_mapped_dates" parent="menu_admin" sequence="10" groups="af_security.af_meeting_admin" />
+    <menuitem action="action_mapped_dates" id="menu_mapped_dates" parent="menu_admin" sequence="10"
+              groups="af_security.af_meeting_admin"/>
 </odoo>

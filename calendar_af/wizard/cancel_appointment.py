@@ -19,15 +19,16 @@
 #
 ##############################################################################
 
-import logging
-from odoo import api, fields, models, _
-from odoo.exceptions import UserError
-from datetime import datetime, timedelta
-
-import pytz
 import copy
+import logging
+import pytz
+from datetime import datetime, timedelta
+from odoo.exceptions import UserError
+
+from odoo import api, fields, models, _
 
 _logger = logging.getLogger(__name__)
+
 
 class CancelAppointment(models.TransientModel):
     _name = 'calendar.cancel_appointment'
@@ -37,7 +38,8 @@ class CancelAppointment(models.TransientModel):
     def _get_appointments(self):
         return self.env['calendar.appointment'].browse(self._context.get('active_ids'))
 
-    appointment_ids = fields.Many2many(string='Appointments to be cancelled', comodel_name='calendar.appointment', default=_get_appointments)
+    appointment_ids = fields.Many2many(string='Appointments to be cancelled', comodel_name='calendar.appointment',
+                                       default=_get_appointments)
     cancel_reason = fields.Many2one(string='Reason for cancellation', comodel_name='calendar.appointment.cancel_reason')
 
     def action_cancel_appointment(self):

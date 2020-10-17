@@ -19,15 +19,18 @@
 #
 ##############################################################################
 
-from odoo import models, fields, api, _
 import logging
 
+from odoo import models, fields, api, _
+
 _logger = logging.getLogger(__name__)
+
 
 class ResUsers(models.Model):
     _inherit = 'res.users'
 
-    appointment_ids = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings', inverse_name="user_id")
+    appointment_ids = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings',
+                                      inverse_name="user_id")
 
     @api.one
     def _compute_appointment_count(self):
@@ -38,20 +41,21 @@ class ResUsers(models.Model):
 
     @api.multi
     def view_appointments(self):
-        return{
+        return {
             'name': _('Booked meetings'),
-            'domain':[('user_id', '=', self.ids)],
+            'domain': [('user_id', '=', self.ids)],
             'view_type': 'form',
             'res_model': 'calendar.appointment',
             'view_id': self.env.ref('calendar_af.view_calendar_appointment_tree').id,
-            'view_mode': 'tree', 
+            'view_mode': 'tree',
             'type': 'ir.actions.act_window',
         }
 
     def _compute_free_occasions(self):
         return self.env['calendar.occasion'].search([('user_id', '=', self.id), ('appointment_id', '=', False)])
 
-    free_occ = fields.Many2one(comodel_name='calendar.occasion', string='Free occasions', compute=_compute_free_occasions)
+    free_occ = fields.Many2one(comodel_name='calendar.occasion', string='Free occasions',
+                               compute=_compute_free_occasions)
 
     def action_calendar_local_occasion(self):
         res = self.env.ref('calendar_af.action_calendar_local_occasion').read()[0]

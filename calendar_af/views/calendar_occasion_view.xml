@@ -3,11 +3,11 @@
     <record id="view_calendar_occasion_calendar" model="ir.ui.view">
         <field name="name">calendar.occasion.calendar</field>
         <field name="model">calendar.occasion</field>
-        <field name="priority" eval="2" />
+        <field name="priority" eval="2"/>
         <field name="arch" type="xml">
             <calendar string="Occasions" date_start="start" date_stop="stop" date_delay="duration"
-            color="user_id">
-                <field name="name" />
+                      color="user_id">
+                <field name="name"/>
             </calendar>
         </field>
     </record>
@@ -15,13 +15,13 @@
     <record id="view_calendar_occasion_tree" model="ir.ui.view">
         <field name="name">calendar.occasion.tree</field>
         <field name="model">calendar.occasion</field>
-        <field name="priority" eval="2" />
+        <field name="priority" eval="2"/>
         <field name="arch" type="xml">
             <tree string="Occasions">
-                <field name="name" />
-                <field name="start" />
-                <field name="stop" />
-                <field name="appointment_id" />
+                <field name="name"/>
+                <field name="start"/>
+                <field name="stop"/>
+                <field name="appointment_id"/>
             </tree>
         </field>
     </record>
@@ -29,11 +29,12 @@
     <record id="view_calendar_occasion_form" model="ir.ui.view">
         <field name="name">calendar.occasion.form</field>
         <field name="model">calendar.occasion</field>
-        <field name="priority" eval="2" />
+        <field name="priority" eval="2"/>
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <field name="state" nolabel="1" widget="statusbar" statusbar_visible="draft,request,ok,booked,fail"/>
+                    <field name="state" nolabel="1" widget="statusbar"
+                           statusbar_visible="draft,request,ok,booked,fail"/>
                 </header>
                 <sheet>
                     <group string="Create occasion">
@@ -42,61 +43,63 @@
                             <field name="start"/>
                             <field name="stop" invisible="0"/>
                             <field name="duration_selection" widget="radio" invisible="1"/>
-                            <field name="duration" invisible="0" />
+                            <field name="duration" invisible="0"/>
                         </group>
                         <group>
-                            <field name="type_id" domain="[('channel', '=', %(calendar_channel.channel_local)d)]" required="1" />
-                            <field name="office_id" required="1" />
-                            <field name="user_id" string="Case worker" widget="many2oneattendee" placeholder="Select case worker..." required="1" />
+                            <field name="type_id" domain="[('channel', '=', %(calendar_channel.channel_local)d)]"
+                                   required="1"/>
+                            <field name="office_id" required="1"/>
+                            <field name="user_id" string="Case worker" widget="many2oneattendee"
+                                   placeholder="Select case worker..." required="1"/>
                         </group>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
-<!-- 
-    <record id="view_calendar_occasion_pivot" model="ir.ui.view">
-        <field name="name">calendar.occasion.pivot</field>
-        <field name="model">calendar.occasion</field>
-        <field name="priority" eval="2" />
-        <field name="arch" type="xml">
-            <pivot string="Appointment">
-                <field name="start" type="col" interval="day" />
-                <field name="appointment_id" type="row" />
-            </pivot>
-        </field>
-    </record> -->
+    <!--
+        <record id="view_calendar_occasion_pivot" model="ir.ui.view">
+            <field name="name">calendar.occasion.pivot</field>
+            <field name="model">calendar.occasion</field>
+            <field name="priority" eval="2" />
+            <field name="arch" type="xml">
+                <pivot string="Appointment">
+                    <field name="start" type="col" interval="day" />
+                    <field name="appointment_id" type="row" />
+                </pivot>
+            </field>
+        </record> -->
 
     <record id="view_calendar_occasion_kanban" model="ir.ui.view">
         <field name="name">calendar.occasion.kanban</field>
         <field name="model">calendar.occasion</field>
-        <field name="priority" eval="2" />
+        <field name="priority" eval="2"/>
         <field name="arch" type="xml">
             <kanban>
-                <field name="name" />
-                <field name="start" />
-                <field name="stop" />
-                <field name="appointment_id" />
+                <field name="name"/>
+                <field name="start"/>
+                <field name="stop"/>
+                <field name="appointment_id"/>
                 <templates>
                     <t t-name="kanban-box">
                         <div class="oe_kanban_global_click">
                             <div class="oe_kanban_details">
                                 <strong class="o_kanban_record_title">
-                                    <field name="name" />
+                                    <field name="name"/>
                                 </strong>
                                 <div class="o_kanban_tags_section">
                                     <ul>
                                         <li>
                                             Start:
-                                            <field name="start" />
+                                            <field name="start"/>
                                         </li>
                                         <li>
                                             Stop:
-                                            <field name="stop" />
+                                            <field name="stop"/>
                                         </li>
                                         <li>
                                             Appointment:
-                                            <field name="appointment_id" />
+                                            <field name="appointment_id"/>
                                         </li>
                                     </ul>
                                 </div>
@@ -111,10 +114,10 @@
     <record id="view_calendar_occasion_local_calendar" model="ir.ui.view">
         <field name="name">calendar.occasion.local.calendar</field>
         <field name="model">calendar.occasion</field>
-        <field name="priority" eval="2" />
+        <field name="priority" eval="2"/>
         <field name="arch" type="xml">
             <calendar string="Occasions" date_start="start" date_stop="stop" date_delay="duration" color="office_id">
-                <field name="name" />
+                <field name="name"/>
             </calendar>
         </field>
     </record>
@@ -122,7 +125,7 @@
     <record id="view_calendar_occasion_local_tree" model="ir.ui.view">
         <field name="name">calendar.occasion.local.tree</field>
         <field name="model">calendar.occasion</field>
-        <field name="priority" eval="2" />
+        <field name="priority" eval="2"/>
         <field name="arch" type="xml">
             <tree string="Occasions" create="false" delete="true">
                 <field name="name" invisible="1"/>
@@ -143,27 +146,27 @@
         <field name="model">calendar.occasion</field>
         <field name="arch" type="xml">
             <search string="Rules">
-                <field name="state" />
-                <field name="type_id" />
+                <field name="state"/>
+                <field name="type_id"/>
                 <field name="office_id"/>
                 <field name="user_id"/>
                 <filter
-                    name="state_ok_req"
-                    domain="['|',['state','=','request'],['state','=','ok']]"
-                    string="Published or Accepted"
+                        name="state_ok_req"
+                        domain="['|',['state','=','request'],['state','=','ok']]"
+                        string="Published or Accepted"
                 />
                 <group expand="0" string="Group By...">
                     <filter
-                        name="group_by_type"
-                        string="Type"
-                        domain="[]"
-                        context="{'group_by':'type_id'}"
+                            name="group_by_type"
+                            string="Type"
+                            domain="[]"
+                            context="{'group_by':'type_id'}"
                     />
                     <filter
-                        name="group_by_office_id"
-                        string="office_id"
-                        domain="[]"
-                        context="{'group_by':'office_id'}"
+                            name="group_by_office_id"
+                            string="office_id"
+                            domain="[]"
+                            context="{'group_by':'office_id'}"
                     />
                 </group>
             </search>
@@ -174,47 +177,48 @@
         <field name="name">Occasions</field>
         <field name="res_model">calendar.occasion</field>
         <field name="view_mode">calendar,tree,form,pivot,kanban</field>
-        <field name="view_id" ref="view_calendar_occasion_calendar" />
+        <field name="view_id" ref="view_calendar_occasion_calendar"/>
     </record>
 
     <record id="action_calendar_local_occasion" model="ir.actions.act_window">
         <field name="name">Local occasions</field>
         <field name="res_model">calendar.occasion</field>
         <field name="view_mode">calendar,tree,pivot,kanban</field>
-        <field name="view_id" ref="view_calendar_occasion_local_tree" />
+        <field name="view_id" ref="view_calendar_occasion_local_tree"/>
         <!-- This should be a reference to the external id instead. -->
         <field name="domain">[('channel', '=', 'Local'), ('state', '!=', 'deleted')]</field>
-        <field name="search_view_id" ref="calendar_occasion_local_search" />
+        <field name="search_view_id" ref="calendar_occasion_local_search"/>
     </record>
-    
+
     <record id="action_view_calendar_occasion_tree" model="ir.actions.act_window.view">
-        <field name="act_window_id" ref="action_calendar_occasion" />
-        <field name="sequence" eval="1" />
+        <field name="act_window_id" ref="action_calendar_occasion"/>
+        <field name="sequence" eval="1"/>
         <field name="view_mode">tree</field>
-        <field name="view_id" ref="view_calendar_occasion_tree" />
+        <field name="view_id" ref="view_calendar_occasion_tree"/>
     </record>
 
     <record id="action_view_calendar_occasion_calendar" model="ir.actions.act_window.view">
-        <field name="act_window_id" ref="action_calendar_occasion" />
-        <field name="sequence" eval="2" />
+        <field name="act_window_id" ref="action_calendar_occasion"/>
+        <field name="sequence" eval="2"/>
         <field name="view_mode">calendar</field>
-        <field name="view_id" ref="view_calendar_occasion_calendar" />
+        <field name="view_id" ref="view_calendar_occasion_calendar"/>
     </record>
 
     <record id="action_view_calendar_occasion_form" model="ir.actions.act_window.view">
-        <field name="act_window_id" ref="action_calendar_occasion" />
-        <field name="sequence" eval="3" />
+        <field name="act_window_id" ref="action_calendar_occasion"/>
+        <field name="sequence" eval="3"/>
         <field name="view_mode">form</field>
-        <field name="view_id" ref="view_calendar_occasion_form" />
+        <field name="view_id" ref="view_calendar_occasion_form"/>
     </record>
 
     <record id="action_view_calendar_occasion_kanban" model="ir.actions.act_window.view">
-        <field name="act_window_id" ref="action_calendar_occasion" />
-        <field name="sequence" eval="5" />
+        <field name="act_window_id" ref="action_calendar_occasion"/>
+        <field name="sequence" eval="5"/>
         <field name="view_mode">kanban</field>
-        <field name="view_id" ref="view_calendar_occasion_kanban" />
+        <field name="view_id" ref="view_calendar_occasion_kanban"/>
     </record>
 
 
-    <menuitem action="action_calendar_local_occasion" id="menu_action_local_occasion" parent="menu_local" sequence="11" groups="af_security.af_meeting_planner"/>
+    <menuitem action="action_calendar_local_occasion" id="menu_action_local_occasion" parent="menu_local" sequence="11"
+              groups="af_security.af_meeting_planner"/>
 </odoo>
