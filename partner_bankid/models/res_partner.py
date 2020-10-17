@@ -19,30 +19,33 @@
 #
 ##############################################################################
 
-from odoo import models, fields, api, _
-from suds.client import *   # SOAP pip3 install suds-py3
 import logging
+from suds.client import *  # SOAP pip3 install suds-py3
+
+from odoo import models, fields, api, _
+
 _logger = logging.getLogger(__name__)
+
 
 class ResPartnerEleg(models.TransientModel):
     _name = 'res.partner.eleg'
-    
+
     user_id = fields.Many2one(comodel_name="res.users")
     partner_id = fields.Many2one(comodel_name="res.partner")
-    
-    def create_eleg(self,partner):
+
+    def create_eleg(self, partner):
         """
           Creates record for checking eleg, this record will varnish inte some minutes
         """
-        self.env['res.partner.eleg'].create({'user_id': self.env.user.id,'partner_id': partner.id})
+        self.env['res.partner.eleg'].create({'user_id': self.env.user.id, 'partner_id': partner.id})
 
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    def init_bank_id(self,personnummer):
-
-        bankid = suds.client.Client('http://bhipws.arbetsformedlingen.se/Integrationspunkt/ws/mobiltbankidinterntjanst?wsdl')  # create a Client instance
+    def init_bank_id(self, personnummer):
+        bankid = suds.client.Client(
+            'http://bhipws.arbetsformedlingen.se/Integrationspunkt/ws/mobiltbankidinterntjanst?wsdl')  # create a Client instance
         res = bankid.MobiltBankIDInternTjanst(personnummer)
         if res:
             pass
