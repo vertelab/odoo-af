@@ -19,25 +19,32 @@
 #
 ##############################################################################
 
-from odoo import models, fields, api, _
 import logging
 from datetime import datetime
 
+from odoo import models, fields, api, _
+
 _logger = logging.getLogger(__name__)
+
 
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'
 
-    appointment_ids_ahead = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings ahead', compute="compute_show_dates_ahead")
-    
-    appointment_ids = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings', inverse_name="user_id", compute="_get_records")
-    appointment_ids_all = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings ahead for everyone', inverse_name="user_id", compute='_get_records')
+    appointment_ids_ahead = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings ahead',
+                                            compute="compute_show_dates_ahead")
+
+    appointment_ids = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings',
+                                      inverse_name="user_id", compute="_get_records")
+    appointment_ids_all = fields.One2many(comodel_name='calendar.appointment',
+                                          string='Booked meetings ahead for everyone', inverse_name="user_id",
+                                          compute='_get_records')
 
     @api.one
     def compute_show_dates_ahead(self):
         self.appointment_ids = self.env['calendar.appointment'].search([('user_id', '=', self.env.user.id)])
-        self.appointment_ids_ahead = self.appointment_ids.filtered(lambda a: a.start > a.get_now() and a.state == 'confirmed')
-    
+        self.appointment_ids_ahead = self.appointment_ids.filtered(
+            lambda a: a.start > a.get_now() and a.state == 'confirmed')
+
     @api.depends('user_id')
     def _get_records(self):
         for rec in self:
@@ -46,43 +53,44 @@ class HrEmployee(models.Model):
 
             # TODO: re-add office once we know how.
             # appointment_record = rec.env['calendar.appointment'].search([('user_id', '!=', self.env.user.id), ('office', '=', self.env.user.office.id)])
-            appointment_record = rec.env['calendar.appointment'].search([('user_id', '!=', self.env.user.id), ('office_id', '=', self.env.user.office_id.id)])
-            rec.appointment_ids_all = appointment_record.filtered(lambda a: a.start > datetime.now() and a.state == 'confirmed' and a.user_id.location_id == self.env.user.location_id)
+            appointment_record = rec.env['calendar.appointment'].search(
+                [('user_id', '!=', self.env.user.id), ('office_id', '=', self.env.user.office_id.id)])
+            rec.appointment_ids_all = appointment_record.filtered(lambda
+                                                                      a: a.start > datetime.now() and a.state == 'confirmed' and a.user_id.location_id == self.env.user.location_id)
 
     @api.multi
     def get_now(self):
         return datetime.now()
-    
+
 
 class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     _inherit = 'hr.employee.jobseeker.search.wizard'
 
     appointment_ids_ahead = fields.One2many(related="employee_id.appointment_ids_ahead")
-    
+
     appointment_ids_all = fields.One2many(related="employee_id.appointment_ids_all")
-    
+
     @api.multi
     def create_appointment(self):
-        return{
+        return {
             'name': _('Booked meetings'),
-            'domain':[('partner_id', '=', self.ids)],
+            'domain': [('partner_id', '=', self.ids)],
             'view_type': 'form',
             'res_model': 'calendar.appointment',
             'view_id': self.env.ref('calendar_af.view_calendar_appointment_form').id,
-            'view_mode': 'form', 
-            'type': 'ir.actions.act_window',
-        }
-    
-    @api.multi
-    def open_others_appointments_ahead(self):
-        return{
-            'name': _('Calendar'),
-            'domain':[('start','>',datetime.now()), ('user_id','!=',self.env.user.id), ('location','=', self.env.user.location_id)], 
-            'view_type': 'form',
-            'res_model': 'calendar.appointment',
-            'view_id':  False,
-            'view_mode': 'tree,calendar,form',
+            'view_mode': 'form',
             'type': 'ir.actions.act_window',
         }
 
-    
+    @api.multi
+    def open_others_appointments_ahead(self):
+        return {
+            'name': _('Calendar'),
+            'domain': [('start', '>', datetime.now()), ('user_id', '!=', self.env.user.id),
+                       ('location', '=', self.env.user.location_id)],
+            'view_type': 'form',
+            'res_model': 'calendar.appointment',
+            'view_id': False,
+            'view_mode': 'tree,calendar,form',
+            'type': 'ir.actions.act_window',
+        }

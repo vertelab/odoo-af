@@ -19,26 +19,27 @@
 #
 ##############################################################################
 
-from odoo import models, fields, api, _
 import logging
 from datetime import datetime
 
+from odoo import models, fields, api, _
+
 _logger = logging.getLogger(__name__)
+
 
 class CalendarAppointmentSuggestion(models.Model):
     _inherit = 'calendar.appointment.suggestion'
-    
-    
+
     @api.multi
     def select_suggestion(self):
         # check state of appointment
         super(CalendarAppointmentSuggestion, self).select_suggestion()
-        
-        return{
+
+        return {
             'name': _("Jobseekers"),
             'res_id': self.appointment_id.partner_id.id,
             'res_model': "res.partner",
-            'view_id': self.env.ref("partner_view_360.view_jobseeker_form").id, 
-            'view_mode':"form",
+            'view_id': self.env.ref("partner_view_360.view_jobseeker_form").id,
+            'view_mode': "form",
             'type': 'ir.actions.act_window',
         }

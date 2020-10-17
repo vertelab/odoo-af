@@ -8,9 +8,9 @@
     "website": "https://vertel.se/",
     "category": "Tools",
     "depends": [
-        "calendar_af", 
-        "partner_view_360", 
-        'hr_360_view', 
+        "calendar_af",
+        "partner_view_360",
+        'hr_360_view',
     ],
     "external_dependencies": [
     ],
