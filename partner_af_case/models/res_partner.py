@@ -19,35 +19,40 @@
 #
 ##############################################################################
 
-from odoo import models, fields, api, _
 import logging
+
+from odoo import models, fields, api, _
+
 _logger = logging.getLogger(__name__)
+
 
 class ResPartnerCase(models.Model):
     _description = 'Case for a partner'
     _name = 'res.partner.case'
 
-    name = fields.Char(string="Title") 
+    name = fields.Char(string="Title")
     case_id = fields.Char(string="Case ID")
     partner_id = fields.Many2one(comodel_name="res.partner", string="Job seeker")
 
-    administrative_officer = fields.Many2one('res.users', string='Administrative officer', default=lambda self: self.env.user)
+    administrative_officer = fields.Many2one('res.users', string='Administrative officer',
+                                             default=lambda self: self.env.user)
     case_description = fields.Text(string="Case description")
     case_type = fields.Many2one(comodel_name="res.partner.case.type")
-    created_date = fields.Datetime(string="Creation date") 
-    changed_date = fields.Datetime(string="Date changed") 
-    due_date = fields.Datetime(string="Due date") 
+    created_date = fields.Datetime(string="Creation date")
+    changed_date = fields.Datetime(string="Date changed")
+    due_date = fields.Datetime(string="Due date")
     closed_date = fields.Datetime(string="Date closed")
     case_url = fields.Char(string="URL", default="https://aobp.arbetsformedlingen.se:8443/prweb/PRAuth/HLPortal")
 
     # office = fields.Many2one('res.partner', string="Office")
     # customer_id = fields.Char(string="Customer number", related="partner_id.customer_id") 
 
+
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    case_ids = fields.One2many(comodel_name='res.partner.case', 
-                                 string='case', inverse_name="partner_id")
+    case_ids = fields.One2many(comodel_name='res.partner.case',
+                               string='case', inverse_name="partner_id")
 
     @api.one
     def compute_case_count(self):
@@ -63,16 +68,17 @@ class ResPartner(models.Model):
             'domain': [('partner_id', '=', self.ids)],
             'view_type': 'form',
             'res_model': 'res.partner.case',
-            'view_id': self.env.ref('partner_af_case.view_partner_case_tree_button').id, 
-            'view_mode': 'tree', 
+            'view_id': self.env.ref('partner_af_case.view_partner_case_tree_button').id,
+            'view_mode': 'tree',
             'type': 'ir.actions.act_window',
         }
         if len(self) == 1:
             action['context'] = {'default_partner_id': self.id}
         return action
 
+
 class ResPartnerCaseType(models.Model):
-    _name="res.partner.case.type"
+    _name = "res.partner.case.type"
 
     case_id = fields.One2many(comodel_name="res.partner.case", inverse_name="case_type")
 
