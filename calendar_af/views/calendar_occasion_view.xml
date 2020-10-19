@@ -46,7 +46,7 @@
                         </group>
                         <group>
                             <field name="type_id" domain="[('channel', '=', %(calendar_channel.channel_local)d)]" required="1" />
-                            <field name="office_id" required="1" />
+                            <field name="location_id" required="1" />
                             <field name="user_id" string="Case worker" widget="many2oneattendee" placeholder="Select case worker..." required="1" />
                         </group>
                     </group>
@@ -113,7 +113,7 @@
         <field name="model">calendar.occasion</field>
         <field name="priority" eval="2" />
         <field name="arch" type="xml">
-            <calendar string="Occasions" date_start="start" date_stop="stop" date_delay="duration" color="office_id">
+            <calendar string="Occasions" date_start="start" date_stop="stop" date_delay="duration" color="location_id">
                 <field name="name" />
             </calendar>
         </field>
@@ -130,10 +130,9 @@
                 <field name="weekday"/>
                 <field name="start"/>
                 <field name="stop"/>
-                <field name="office_id"/>
+                <field name="location_id"/>
                 <field name="state"/>
                 <field name="user_id"/>
-                <field name="app_partner_pnr"/>
             </tree>
         </field>
     </record>
@@ -145,6 +144,8 @@
             <search string="Rules">
                 <field name="state" />
                 <field name="type_id" />
+                <field name="location_id"/>
+                <field name="user_id"/>
                 <filter
                     name="state_ok_req"
                     domain="['|',['state','=','request'],['state','=','ok']]"
@@ -158,10 +159,10 @@
                         context="{'group_by':'type_id'}"
                     />
                     <filter
-                        name="group_by_office_id"
-                        string="office_id"
+                        name="group_by_location_id"
+                        string="location_id"
                         domain="[]"
-                        context="{'group_by':'office_id'}"
+                        context="{'group_by':'location_id'}"
                     />
                 </group>
             </search>
@@ -178,7 +179,7 @@
     <record id="action_calendar_local_occasion" model="ir.actions.act_window">
         <field name="name">Local occasions</field>
         <field name="res_model">calendar.occasion</field>
-        <field name="view_mode">calendar,tree,form,pivot,kanban</field>
+        <field name="view_mode">calendar,tree,pivot,kanban</field>
         <field name="view_id" ref="view_calendar_occasion_local_tree" />
         <!-- This should be a reference to the external id instead. -->
         <field name="domain">[('channel', '=', 'Local'), ('state', '!=', 'deleted')]</field>
@@ -214,5 +215,5 @@
     </record>
 
 
-    <menuitem action="action_calendar_local_occasion" id="menu_action_local_occasion" parent="menu_local" sequence="11" groups="af_security.af_employers_editor,af_security.af_jobseekers_editor"/>
+    <menuitem action="action_calendar_local_occasion" id="menu_action_local_occasion" parent="menu_local" sequence="11" groups="af_security.af_meeting_planner"/>
 </odoo>

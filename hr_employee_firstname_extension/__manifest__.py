@@ -8,9 +8,9 @@
     'author': 'Vertel AB',
     'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
-    'depends': ['base', 
-				'hr', 
-				'hr_employee_firstname'],
+    'depends': ['base',
+                'hr',
+                'hr_employee_firstname'],
     'data': [
         'views/hr_view.xml'
 

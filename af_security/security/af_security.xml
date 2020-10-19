@@ -60,14 +60,15 @@
 
         <record id="af_meeting_planner" model="res.groups">
             <field name="name">Planner</field>
-            <field name="category_id" ref="module_category_af_meeting"/>
+            <field name="category_id" eval="module_category_af_meeting"/>
             <field name="comment">The user will have access to the appointments planner.</field>
         </record>
 
         <record id="af_meeting_admin" model="res.groups">
             <field name="name">Admin</field>
             <field name="category_id" ref="module_category_af_meeting"/>
-            <field name="implied_ids" eval="[(4, ref('af_meeting_planner'))]"/>
+            <!-- TODO: Remove implied_ids once we think every database is updated. -->
+            <field name="implied_ids" eval="[(6, 0, [])]"/>
             <field name="comment">The user will be able to administrate the appointments planner.</field>
         </record>
 

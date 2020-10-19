@@ -104,13 +104,13 @@ unused_occasions.unlink()</field>
             <search string="Rules">
                 <field name="name" />
                 <field name="login" />
-                <field name="office_id" />
+                <field name="location_id" />
                 <group expand="0" string="Group By...">
                     <filter
-                        name="group_by_office"
-                        string="Office"
+                        name="group_by_location"
+                        string="Location"
                         domain="[]"
-                        context="{'group_by':'office_id'}"
+                        context="{'group_by':'location_id'}"
                     />
                 </group>
             </search>
@@ -145,4 +145,5 @@ unused_occasions.unlink()</field>
     <menuitem name="Local" id="menu_local" parent="calendar_af.menu_calendar" sequence="12" />
     <menuitem name="Reports" id="menu_reports" parent="calendar_af.menu_calendar" sequence="13" />
     <menuitem name="Administration" id="menu_admin" parent="calendar_af.menu_calendar" sequence="20" />
+    <menuitem name="Holidays" action="resource.action_resource_calendar_leave_tree" id="menu_action_calendar_leave" parent="menu_admin" sequence="15" groups="af_security.af_meeting_admin" />
 </odoo>

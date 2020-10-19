@@ -22,6 +22,7 @@
 from odoo import models, fields, api, _
 from collections import OrderedDict
 
+
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
@@ -30,27 +31,39 @@ class ResPartner(models.Model):
         string='Access Level',
         compute='_compute_jobseeker_access',
         search='_search_jobseeker_access')
-    
+
     @api.multi
     def _compute_jobseeker_access(self):
         """ Placeholder. The real function is implemented in af_security_rules."""
         pass
-    
+
     @api.model
     def _search_jobseeker_access(self, op, value):
         """ Placeholder. The real function is implemented in af_security_rules."""
         # Return something that's always True.
         return [('id', '!=', 0)]
-    
+
     @api.multi
-    def _grant_jobseeker_access(self, access_type, user=None, reason_code=None, reason=None, granting_user=None, start=None, interval=1):
+    def _grant_jobseeker_access(
+            self,
+            access_type,
+            user=None,
+            reason_code=None,
+            reason=None,
+            granting_user=None,
+            start=None,
+            interval=1):
         """ Placeholder. The real function is implemented in af_security_rules."""
         return OrderedDict()
+
 
 class User(models.Model):
     _inherit = 'res.users'
 
-    af_signature = fields.Char(string='AF signature', compute='_compute_af_signature', store=True)
+    af_signature = fields.Char(
+        string='AF signature',
+        compute='_compute_af_signature',
+        store=True)
 
     @api.depends('login')
     def _compute_af_signature(self):

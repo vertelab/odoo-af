@@ -197,7 +197,7 @@ msgstr "Deltagare"
 #: model:ir.cron,cron_name:calendar_af.ir_cron_additional_times_autovacuum
 #: model:ir.cron,name:calendar_af.ir_cron_additional_times_autovacuum
 msgid "Auto-vacuum additional times"
-msgstr "Autorensning av ytterligare tider"
+msgstr "Rensning av ytterligare tider"
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_appointment_form
@@ -280,7 +280,7 @@ msgstr "Kalenderrapport"
 #: model_terms:ir.ui.view,arch_db:calendar_af.cancel_appointment_view_form
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_create_local_occasion_form
 msgid "Cancel"
-msgstr "Avbryt"
+msgstr "Avboka"
 
 #. module: calendar_af
 #: model:ir.actions.act_window,name:calendar_af.cancel_appointment_action
@@ -634,12 +634,12 @@ msgstr "Bokningsbara tider"
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment__location
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment__location_code
 msgid "Location"
-msgstr "Plats"
+msgstr "Kontaktväg"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_report_calendar_appointment__location_code
 msgid "Location code"
-msgstr "Platskod"
+msgstr "Kontaktvägskod"
 
 #. module: calendar_af
 #: model:ir.actions.act_window,name:calendar_af.action_mapped_dates
@@ -670,19 +670,19 @@ msgstr "Möteskanal"
 #: code:addons/calendar_af/models/calendar.py:463
 #, python-format
 msgid "Meeting confirmed"
-msgstr "Möte bekräftat"
+msgstr "Mötet är bekräftat"
 
 #. module: calendar_af
 #: code:addons/calendar_af/models/calendar.py:502
 #, python-format
 msgid "Meeting created"
-msgstr "Möte är skapat"
+msgstr "Mötet är skapat"
 
 #. module: calendar_af
 #: code:addons/calendar_af/models/calendar.py:483
 #, python-format
 msgid "Meeting deleted"
-msgstr "Möte är raderat"
+msgstr "Mötet är raderat"
 
 #. module: calendar_af
 #: code:addons/calendar_af/models/calendar.py:534
