@@ -54,8 +54,7 @@ class CalendarAppointmentReport(models.Model):
                                         string='Occasion state', 
                                         help="Status of the meeting",
                                         readonly=True)
-    location_id = fields.Many2one(string='Location', comodel_name='hr.location', related='user_id.location_id', readonly=True)
-    office_id = fields.Many2one(comodel_name='hr.department', string="Office", readonly=True)
+    location_id = fields.Many2one(string='Location', comodel_name='hr.location', readonly=True)
     type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type', readonly=True)
     additional_booking = fields.Boolean(String='Over booking', readonly=True)
     occ_start = fields.Datetime(string='Occasion start', readonly=True)
@@ -85,7 +84,6 @@ class CalendarAppointmentReport(models.Model):
                     co.state as occ_state,
                     ca.state as app_state,
                     ca.location_id as location_id,
-                    co.office_id as office_id,
                     co.type_id as type_id,
                     co.additional_booking as additional_booking,
                     ca.start as app_start,
@@ -93,7 +91,7 @@ class CalendarAppointmentReport(models.Model):
                     ca.start_time as app_start_time,
                     co.start_time as occ_start_time
         """
-
+#
         return select_str
 
     def _group_by(self):
@@ -110,7 +108,7 @@ class CalendarAppointmentReport(models.Model):
                     co.state,
                     ca.state,
                     ca.location_id,
-                    co.office_id,
+                    co.location_id,
                     co.type_id,
                     co.additional_booking,
                     ca.start,
@@ -118,6 +116,7 @@ class CalendarAppointmentReport(models.Model):
                     ca.start_time,
                     co.start_time
         """
+        #
         return group_by_str
 
     def init(self):

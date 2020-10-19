@@ -107,8 +107,8 @@ unused_occasions.unlink()</field>
                 <field name="location_id" />
                 <group expand="0" string="Group By...">
                     <filter
-                        name="group_by_office"
-                        string="Office"
+                        name="group_by_location"
+                        string="Location"
                         domain="[]"
                         context="{'group_by':'location_id'}"
                     />

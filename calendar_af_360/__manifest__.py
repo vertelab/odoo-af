@@ -15,8 +15,10 @@
     "external_dependencies": [
     ],
     "data": [
+        "views/calendar_occasion_view.xml",
         "views/res_partner_view.xml",
         "views/hr_employee_view.xml",
+        "views/calendar_occasion_view.xml"
     ],
     "application": False,
     "installable": True,

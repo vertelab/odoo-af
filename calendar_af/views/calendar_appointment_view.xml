@@ -57,7 +57,7 @@
                                             <field name="stop" />
                                         </li>
                                         <li>
-                                            Office:
+                                            Location:
                                             <field name="location_id" />
                                         </li>
                                     </ul>
