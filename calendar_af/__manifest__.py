@@ -17,7 +17,6 @@ Asök booking management \n
     "depends": [
         "calendar",
         "contacts",
-        "partner_daily_notes",
         "af_security",
         "hr_skill",
         'hr',
@@ -32,8 +31,7 @@ Asök booking management \n
         "data/mail_template.xml",
         "data/calendar_schedule_cron.xml",
         "security/ir.model.access.csv",
-        "views/hr_department_view.xml",
-        "views/res_partner_view.xml",
+        "views/hr_location_view.xml",
         "views/res_users_view.xml",
         "views/calendar_af_view.xml",
         "views/calendar_schedule_view.xml",

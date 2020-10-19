@@ -21,10 +21,10 @@
     <field name="model">res.users</field>
     <field name="priority" eval="10" />
     <field name="arch" type="xml">
-        <tree string="Offices" create="false" delete="false">
+        <tree string="Locations" create="false" delete="false">
             <field name="name" />
             <field name="login" />
-            <field name="office_id" />
+            <field name="location_id" />
         </tree>
     </field>
   </record>
@@ -47,7 +47,7 @@
               <field name="login"/>
             </group>
             <group>
-              <field name="office_id"/>
+              <field name="location_id"/>
             </group>
           </group>
         </sheet>

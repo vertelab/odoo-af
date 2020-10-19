@@ -51,8 +51,7 @@ class CalendarAppointmentLocalReport(models.Model):
                                         string='Occasion state', 
                                         help="Status of the meeting",
                                         readonly=True)
-    location = fields.Char(string='Location code', readonly=True)
-    office_id = fields.Many2one(comodel_name='hr.department', string="Office", readonly=True)
+    location_id = fields.Many2one(string='Location', comodel_name='hr.location', readonly=True)
     type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type', readonly=True)
     additional_booking = fields.Boolean(String='Over booking', readonly=True)
     occ_start = fields.Datetime(string='Occasion start', readonly=True)
@@ -78,8 +77,7 @@ class CalendarAppointmentLocalReport(models.Model):
                     co.name as name,
                     co.state as occ_state,
                     ca.state as app_state,
-                    ca.location as location,
-                    co.office_id as office_id,
+                    ca.location_id as location_id,
                     co.type_id as type_id,
                     co.additional_booking as additional_booking,
                     ca.start as app_start,
@@ -87,6 +85,7 @@ class CalendarAppointmentLocalReport(models.Model):
                     ca.start_time as app_start_time,
                     co.start_time as occ_start_time
         """
+#                    
 
         return select_str
 
@@ -103,8 +102,8 @@ class CalendarAppointmentLocalReport(models.Model):
                     co.name,
                     co.state,
                     ca.state,
-                    ca.location,
-                    co.office_id,
+                    ca.location_id,
+                    co.location_id,
                     co.type_id,
                     co.additional_booking,
                     ca.start,
@@ -112,6 +111,8 @@ class CalendarAppointmentLocalReport(models.Model):
                     ca.start_time,
                     co.start_time
         """
+           #                 
+
         return group_by_str
 
     def init(self):
