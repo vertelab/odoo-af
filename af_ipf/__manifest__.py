@@ -2,12 +2,12 @@
 
 {
     "name": "AF IPF Integration",
-    "summary": "Module for synchronous integration between AF and IPF",
-    "version": "12.0.2.0.0",
+    "version": "12.0.1.0.1",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
+    "summary": "Module for synchronous integrations to IPF",
     'description': """
 Jira
 ===========================================
@@ -19,6 +19,7 @@ AFC-734 Integration till AIS-Å (V12.0.2.0.0)
         "views/ipf_views.xml",
         "data/customer_data.xml",
         "data/ais_a_data.xml",
+        #"data/planning_data.xml",
     ],
     "application": True,
     "installable": True,

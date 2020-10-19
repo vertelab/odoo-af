@@ -23,12 +23,17 @@ from odoo import models, fields, api, _
 import logging
 _logger = logging.getLogger(__name__)
 
-    
+
 class HrEmployee(models.Model):
     _inherit = "hr.employee"
 
     office_id = fields.Many2one('hr.department', string='Office')
-    office_ids = fields.Many2many('hr.department', relation='hr_department_office_partner_rel', column1='partner_id', column2='office_id', string='Offices')
+    office_ids = fields.Many2many(
+        'hr.department',
+        relation='hr_department_office_partner_rel',
+        column1='partner_id',
+        column2='office_id',
+        string='Offices')
 
     @api.one
     # @api.onchange('office_id')
@@ -43,7 +48,7 @@ class HrEmployee(models.Model):
         if 'office_id' in vals:
             self.update_office_ids()
         return vals
-    
+
     @api.model_create_multi
     @api.returns('self', lambda value: value.id)
     def create(self, vals_list):

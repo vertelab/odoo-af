@@ -33,12 +33,17 @@ import logging
 _logger = logging.getLogger(__name__)
 
 LOCAL_TZ = timezone('Europe/Stockholm')
-WSDL_NYCKELTJANST = config.get('bhtj_nyckeltjanst', 'https://bhtj.arbetsformedlingen.se/KeyService/ws/nyckeltjanst?wsdl')
-WSDL_INITIERANDE_NYCKELTJANST = config.get('bhtj_initierande_nyckeltjanst', 'https://bhtj.arbetsformedlingen.se/KeyService/ws/initierandenyckeltjanst?wsdl')
+WSDL_NYCKELTJANST = config.get(
+    'bhtj_nyckeltjanst',
+    'https://bhtj.arbetsformedlingen.se/KeyService/ws/nyckeltjanst?wsdl')
+WSDL_INITIERANDE_NYCKELTJANST = config.get(
+    'bhtj_initierande_nyckeltjanst',
+    'https://bhtj.arbetsformedlingen.se/KeyService/ws/initierandenyckeltjanst?wsdl')
 NYCKELTJANST = None
 INITIERANDE_NYCKELTJANST = None
 INIT_HEADER_SYSTEM_ID = 'CRM'
 INIT_HEADER_API_VERSION = '1.3'
+
 
 class BHTJModel(models.AbstractModel):
     _name = 'bhtj.model'
@@ -55,19 +60,25 @@ class BHTJModel(models.AbstractModel):
             instead of once per rule (or more!).
         """
         keys = self.env.user.sudo()._bhtj_get_user_keys()
-        return super(BHTJModel, self.with_context(bhtj_keys=keys))._apply_ir_rules(query, mode=mode)
-    
+        return super(
+            BHTJModel, self.with_context(
+                bhtj_keys=keys))._apply_ir_rules(
+            query, mode=mode)
+
     @api.multi
     def check_access_rule(self, operation):
         """ Inject BHTJ data into context so we only run it once per call,
             instead of once per rule (or more!).
         """
         keys = self.env.user.sudo()._bhtj_get_user_keys()
-        return super(BHTJModel, self.with_context(bhtj_keys=keys)).check_access_rule(operation)
+        return super(BHTJModel, self.with_context(
+            bhtj_keys=keys)).check_access_rule(operation)
+
 
 class ResPartnerNotes(models.Model):
     _name = 'res.partner.notes'
     _inherit = ['res.partner.notes', 'bhtj.model']
+
 
 class ResPartner(models.Model):
     _name = 'res.partner'
@@ -78,13 +89,14 @@ class ResPartner(models.Model):
     # Can't specify domains per group (causes crossover between employers and jobseekers officers)
     # TODO: Look for a solution. Existing module or build one.
     #       Look at that encryption module to add new parameters to fields.
-    active = fields.Boolean(groups='base.group_system,af_security.group_af_employers_high,af_security.group_af_jobseekers_high')
+    active = fields.Boolean(
+        groups='base.group_system,af_security.group_af_employers_high,af_security.group_af_jobseekers_high')
     jobseeker_access = fields.Selection(
         selection=[('STARK', 'Stark'), ('MYCKET_STARK', 'Mycket stark')],
         string='Access Level',
         compute='_compute_jobseeker_access',
         search='_search_jobseeker_access')
-    
+
     @api.multi
     def _compute_jobseeker_access(self):
         """Compute jobseeker access level from BHTJ data."""
@@ -96,13 +108,13 @@ class ResPartner(models.Model):
                     # We need a person number to continue
                     continue
                 # Fetch keys from BHTJ
-                if keys == None:
+                if keys is None:
                     keys = self.env.user._bhtj_get_user_keys()
                 # Match person number to BHTJ response.
                 for access_level in keys.keys:
                     if partner.social_sec_nr in keys[access_level]:
                         partner.jobseeker_access = access_level
-    
+
     @api.model
     def _search_jobseeker_access(self, op, value):
         """ Perform a search on the jobseeker_access field using data from BHTJ.
@@ -115,11 +127,14 @@ class ResPartner(models.Model):
         #raise Warning('foobar')
         # BHTJ data injected in _apply_ir_rules
         if 'bhtj_keys' in self._context:
-            keys = self._context.get('bhtj_keys', {'STARK': [], 'MYCKET_STARK': []})
+            keys = self._context.get(
+                'bhtj_keys', {
+                    'STARK': [], 'MYCKET_STARK': []})
         else:
-            # New exiting path to get here. Try to find original user and contact BHTJ.
+            # New exiting path to get here. Try to find original user and
+            # contact BHTJ.
             _logger.info(_("No BHTJ data in context. Extra call made."
-                "Additional models need to inherit bhtj.model."))
+                           "Additional models need to inherit bhtj.model."))
             _logger.debug(''.join(traceback.format_stack()))
             user = self._context.get('uid')
             user = user and self.env['res.users'].browse(user) or self.env.user
@@ -142,7 +157,7 @@ class ResPartner(models.Model):
             pnr = []
             for v in value:
                 if v in ('STARK', 'MYCKET_STARK'):
-                    pnr +=keys[v]
+                    pnr += keys[v]
                 elif not v:
                     pnr += keys['STARK'] + keys['MYCKET_STARK']
                 else:
@@ -155,7 +170,7 @@ class ResPartner(models.Model):
         # This search is not supported. Let the developer (hopefully) know.
         raise Warning(_("res.partner._searchjobseeker_access: Search operator '%s'"
                         " and value '%s' has not been implemented yet.") % (op, value))
-    
+
     @api.model_create_multi
     @api.returns('self', lambda value: value.id)
     def create(self, vals_list):
@@ -176,10 +191,11 @@ class ResPartner(models.Model):
             if not NYCKELTJANST:
                 NYCKELTJANST = key_service
             return NYCKELTJANST
-        except:
+        except BaseException:
             # TODO: better logging
-            raise Warning(_("Could not connect to BHTJ to check access rights!"))
-    
+            raise Warning(
+                _("Could not connect to BHTJ to check access rights!"))
+
     @api.model
     def _bhtj_get_initierande_nyckeltjanst(self):
         """Fetch or initialize connection to BHTJ for granting access rights."""
@@ -191,11 +207,20 @@ class ResPartner(models.Model):
             if not INITIERANDE_NYCKELTJANST:
                 INITIERANDE_NYCKELTJANST = key_service
             return INITIERANDE_NYCKELTJANST
-        except:
-            raise Warning(_("Could not connect to BHTJ to grant access rights!"))
+        except BaseException:
+            raise Warning(
+                _("Could not connect to BHTJ to grant access rights!"))
 
     @api.multi
-    def _grant_jobseeker_access(self, access_type, user=None, reason_code=None, reason=None, granting_user=None, start=None, interval=1):
+    def _grant_jobseeker_access(
+            self,
+            access_type,
+            user=None,
+            reason_code=None,
+            reason=None,
+            granting_user=None,
+            start=None,
+            interval=1):
         """ Grant temporary access to these jobseekers.
             :param access_type: The type of access. One of 'STARK' or 'MYCKET_STARK'.
             :param user: The user that is to be granted permission. Defaults to current user.
@@ -218,11 +243,13 @@ class ResPartner(models.Model):
                 raise Warning(_("BHTJ: Partner %s is either not a jobseeker, or "
                                 "is lacking a person number.") % partner.id)
         if not (interval in (1, 7, 14, 30, 60, 100, 365)):
-            raise Warning(_("BHTJ: interval must be one of 1, 7, 14, 30, 60, 100, 365."))
+            raise Warning(
+                _("BHTJ: interval must be one of 1, 7, 14, 30, 60, 100, 365."))
         if not (reason or reason_code):
             raise Warning(_("BHTJ: You must provide a reason or reason_code."))
         if access_type not in ('STARK', 'MYCKET_STARK'):
-            raise Warning(_("BHTJ: Access type must be either STARK or MYCKET STARK."))
+            raise Warning(
+                _("BHTJ: Access type must be either STARK or MYCKET STARK."))
         values = {
             '_soapheaders': {
                 'apiVersion': INIT_HEADER_API_VERSION,
@@ -234,7 +261,7 @@ class ResPartner(models.Model):
             'intervall': 'Dagar_%i' % interval,
             'orsak': {
                 'friTxt': reason or '',
-                'orsakKod': reason_code or '',},
+                'orsakKod': reason_code or '', },
             'nyckelTyp': access_type,
             'signatur': user.login
         }
@@ -247,7 +274,7 @@ class ResPartner(models.Model):
         try:
             response = bhtj.service.skapaNyckel(**values)
             response = serialize_object(response, target_cls=dict)
-        except:
+        except BaseException:
             # TODO: Log error properly.
             raise Warning(_("Could not connect to BHTJ."))
         return response
@@ -256,7 +283,7 @@ class ResPartner(models.Model):
     def af_security_install_rules(self):
         """Update existing rules that can't be changed through XML."""
         self.env.ref('base.res_partner_rule_private_employee').active = False
-        
+
 
 class User(models.Model):
     _inherit = 'res.users'
@@ -267,8 +294,9 @@ class User(models.Model):
         # TODO: This happens multiple times in one function call.
         # We need to cache this or BHTJ will get swamped.
         # DONE: Attempted to move to abstract model bhtj.model and inject
-        # result into context. 
+        # result into context.
         bhtj = self.partner_id._bhtj_get_nyckeltjanst()
+
         def normalize_pnr(pnr):
             return '%s-%s' % (pnr[:8], pnr[8:12])
         try:
@@ -280,12 +308,13 @@ class User(models.Model):
                 if key['nyckeltyp'] == 'Stark':
                     keys['STARK'].append(normalize_pnr(key['personnummer']))
                 elif key['nyckeltyp'] == 'Mycket stark':
-                    keys['MYCKET_STARK'].append(normalize_pnr(key['personnummer']))
+                    keys['MYCKET_STARK'].append(
+                        normalize_pnr(key['personnummer']))
             return keys
-        except:
+        except BaseException:
             # TODO: Log error properly.
             raise Warning(_("Failed to connect to BHTJ!"))
-    
+
     @api.model
     def _get_notes_edit_limit(self):
         return (fields.Datetime.now() - timedelta(days=1)).replace(
