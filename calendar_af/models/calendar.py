@@ -268,7 +268,7 @@ class CalendarAppointment(models.Model):
     def _local_user_domain(self):
         if self.partner_id:
             res = []
-            res.append(('partner_id.office_id.id', '=', self.env.user.office_id.id)) 
+            res.append(('partner_id.location_id.id', '=', self.env.user.location_id.id)) 
 
             # TODO: add hr.skill check ('type_id.skills_ids', 'in', self.env.user.skill_ids)
             # TODO: add check if case worker has occasions and that these are free. Maybe use a computed field on res.users?
