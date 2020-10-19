@@ -4,13 +4,13 @@
             <field name="name">Low occasions warning</field>
             <field name="model_id" ref="calendar_af.model_calendar_appointment"/>
             <field name="subject">Low occasions warning</field>
-            <field name="email_to">${object.office_id.app_warn_user_ids.email | safe}</field>
+            <field name="email_to">${object.location_id.app_warn_user_ids.email | safe}</field>
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
                     <p style="margin: 0px; padding: 0px; font-size: 13px;">
                         Hello,
                         <br/><br/>
-                        You are running low on occasions for meeting type ${object.type_id.name} at office ${object.office_id.display_name}.
+                        You are running low on occasions for meeting type ${object.type_id.name} at office ${object.location_id.display_name}.
                         <br/>
                     </p>
                 </div>
