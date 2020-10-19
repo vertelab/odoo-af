@@ -185,9 +185,9 @@ class CalendarOccasion(models.Model):
                     row[key] = self.env['res.users'].search([('login', '=', row[key])]).id
                 elif key == 'additional_booking':
                     if row[key] == "Ja":
-                        row[key] == True
+                        row[key] = True
                     else:
-                        row[key] == False
+                        row[key] = False
 
                 keys_to_delete.append("date")
 
