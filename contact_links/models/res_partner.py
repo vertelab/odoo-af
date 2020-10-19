@@ -2,7 +2,6 @@ from odoo import models, fields, api, _
 
 
 class ResPartner(models.Model):
-
     _inherit = 'res.partner'
 
     link_ids = fields.Many2many(
@@ -29,11 +28,10 @@ class ResPartner(models.Model):
             links = self.env['partner.links'].search(
                 [('type_smart', '=', 'tab')])
             for link in links:
-                partner.link_ids =  [(4, link.id)]
+                partner.link_ids = [(4, link.id)]
 
 
 class PartnerLinks(models.Model):
-
     _name = 'partner.links'
     _description = "Partner Links"
 
