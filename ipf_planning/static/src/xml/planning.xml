@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <div t-name="ipf_planning_tab" class="ipf-planning-tab">
+        <div class="af_ais_a">
+            <button class="ipf-planning-btn-load">Visa handlingsplan</button>
+            <table t-if="widget.data" class="o_group o_inner_group">
+                <tbody>
+                    <tr>
+                        <td class="o_td_label">
+                            <label class="o_form_label o_readonly_modifier" data-original-title="" title="">Handlingsplan</label>
+                        </td>
+                        <td style="width: 100%;">
+                            <span class="o_field_widget o_readonly_modifier" t-esc="widget.get_source()" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- THE CODE BELOW ARE HEADERS AND ROWS PREPARED FOR FUTURE USE.-->
+            <!--
+            <div class="o_field_one2many o_field_widget o_field_x2many o_field_x2many_list o_readonly_modifier" name="ais_a_ids" id="o_field_input_183" data-original-title="" title="">
+            -->
+            <!--
+                 <div t-if="widget.data" class="o_field_one2many o_field_widget o_field_x2many o_field_x2many_list o_readonly_modifier" data-original-title="" title="">
+                <div class="table-responsive">
+                    <table class="o_list_view table table-sm table-hover table-striped o_list_view_ungrouped">
+                        <thead>
+                            <tr>
+                                <th class="o_column_sortable" t-foreach="widget.columns" t-as="column" data-original-title="" title=""><t t-esc="widget.headers[column]"/></th>
+                            </tr>
+                        </thead>
+                        <tbody class="ui-sortable">
+                            <tr class="o_data_row" t-foreach="widget.get_rows()" t-as="row">
+                                <td class="o_data_cell" t-foreach="widget.columns" t-as="column"><t t-esc="row[column]"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div> 
+            -->
+        </div>
+    </div>
+</templates>

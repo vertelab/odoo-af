@@ -11,7 +11,7 @@
     'description': """
 Jira
 ===========================================
-AFC-734 Integration till AIS-Å (V12.0.2.0.0)
+AFC-734 Integration till IPF(V12.0.1.0.1)
 """,
     "depends": ["af_security"],
     "external_dependencies": {'python': ['requests']},
@@ -19,7 +19,7 @@ AFC-734 Integration till AIS-Å (V12.0.2.0.0)
         "views/ipf_views.xml",
         "data/customer_data.xml",
         "data/ais_a_data.xml",
-        #"data/planning_data.xml",
+        "data/planning_data.xml",
     ],
     "application": True,
     "installable": True,
