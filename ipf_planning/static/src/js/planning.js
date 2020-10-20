@@ -21,7 +21,6 @@ odoo.define('ipf.planning', function (require) {
             this._super.apply(this, arguments);
             this.record = record;
             this.data = null;
-            console.log(this);
         },
         /**
          * @override
@@ -29,18 +28,13 @@ odoo.define('ipf.planning', function (require) {
         start: function () {
             var self = this;
             let tab = this.$el.closest('.tab-pane');
-            console.log(tab);
             let tab_id = tab.attr('id');
-            console.log(tab_id);
             let nav = $('a.nav-link[href="#' + tab_id + '"]');
-            console.log(nav);
             nav.click(function() {self.load_data()});
             return this._super.apply(this, arguments);
         },
         appendTo: function (target) {
             let tab = target.closest('.tab-pane');
-            console.log('appendTo');
-            console.log(tab);
             return this._super.apply(this, arguments);
         },
         renderElement: function () {
@@ -50,15 +44,12 @@ odoo.define('ipf.planning', function (require) {
         },
         load_data: function () {
             var self = this;
-            console.log(this.getParent());
-            console.log(this.record);
             // Call backend and run ipf_load_planning on the active res.partner.
             return this._rpc({
                 model: 'res.partner',
                 method: 'ipf_load_planning',
                 args: [this.record.res_id],
             }).then(function (result) {
-                console.log(result);
                 self.parse_data(result);
                 self.renderElement()
             });
@@ -91,7 +82,6 @@ odoo.define('ipf.planning', function (require) {
                     skapadAv: row.skapadAv || ''
                 });
             });
-            console.log(rows);
             return rows;
         },
         get_source: function () {

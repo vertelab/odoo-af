@@ -14,8 +14,6 @@ odoo.define('ipf.planning.form_renderer', function (require) {
         init: function (parent, state, params) {
             this._super.apply(this, arguments);
             this.ipf_planning = undefined;
-            console.log('Formrenderer');
-            console.log(this);
         },
     
         //--------------------------------------------------------------------------
