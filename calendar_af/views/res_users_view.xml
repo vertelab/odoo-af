@@ -16,6 +16,7 @@
         </field>
     </record>
 
+<<<<<<< HEAD
     <record id="view_calendar_user_tree" model="ir.ui.view">
         <field name="name">calendar.user.tree</field>
         <field name="model">res.users</field>
@@ -57,4 +58,44 @@
             </form>
         </field>
     </record>
+=======
+  <record id="view_calendar_user_tree" model="ir.ui.view">
+    <field name="name">calendar.user.tree</field>
+    <field name="model">res.users</field>
+    <field name="priority" eval="10" />
+    <field name="arch" type="xml">
+        <tree string="Locations" create="false" delete="false">
+            <field name="name" />
+            <field name="login" />
+            <field name="location_id" />
+        </tree>
+    </field>
+  </record>
+
+  <record id="view_calendar_user_form" model="ir.ui.view">
+    <field name="name">calendar.user.form</field>
+    <field name="model">res.users</field>
+    <field name="priority" eval="15" />
+    <field name="arch" type="xml">
+      <form>
+        <header>
+          <button string="Local occasions" type="object" class="oe_highlight" name="action_calendar_local_occasion"/>
+          <button string="Create occasion" type="object" class="oe_highlight" name="create_local_occasion_action"/>
+          <button string="Local appointments" type="object" class="oe_highlight" name="action_local_appointment"/>
+        </header>
+        <sheet>
+          <group string="Case worker">
+            <group>
+              <field name="name"/>
+              <field name="login"/>
+            </group>
+            <group>
+              <field name="location_id"/>
+            </group>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+>>>>>>> Dev-12.0
 </odoo>

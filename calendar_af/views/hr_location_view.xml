@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+<<<<<<< HEAD:calendar_af/views/hr_department_view.xml
     <record id="view_department_form_calendar_af_inherited" model="ir.ui.view">
         <field name="name">hr.department.form.calendar_af.inherited</field>
         <field name="model">hr.department</field>
@@ -33,4 +34,39 @@
             </sheet>
         </field>
     </record>
+=======
+  <record id="view_location_form_calendar_af_inherited" model="ir.ui.view"> 
+    <field name="name">hr.location.form.calendar_af.inherited</field>
+    <field name="model">hr.location</field> 
+    <field name="inherit_id" ref="hr_office.view_location_form" /> 
+    <field name="arch" type="xml"> 
+      <sheet position="inside">
+      <field name="user_ids"/>
+        <group>
+          <field name="reserve_admin_ids" widget="many2many_tags" domain="[('id', 'in', user_ids)]"/>
+          <field name="app_warn_user_ids" widget="many2many_tags" domain="[('id', 'in', user_ids)]"/>
+        </group>
+        <notebook>
+          <page name="type_location" string="Appointment warning thresholds">
+            <field name="type_location_ids" mode="tree" nolabel="1">
+              <tree editable="bottom">
+                <field name="type_id"/>
+                <field name="warning_threshold"/>
+              </tree>
+            </field>
+          </page>
+          <page name="mapped_dates" string="Mapped dates">
+            <field name="mapped_dates_ids" mode="tree" nolabel="1">
+              <tree editable="bottom">
+                <field name="name"/>
+                <field name="from_date"/>
+                <field name="to_date"/>
+              </tree>
+            </field>
+          </page>
+        </notebook>
+      </sheet>
+    </field>
+  </record> 
+>>>>>>> Dev-12.0:calendar_af/views/hr_location_view.xml
 </odoo>

@@ -21,6 +21,7 @@
 
 from odoo import models, fields, api, _
 
+
 class IrActionsServer(models.Model):
     _inherit = 'ir.actions.server'
 

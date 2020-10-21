@@ -21,11 +21,18 @@
                 <field name="type_id"/>
                 <field name="start"/>
                 <field name="duration"/>
+<<<<<<< HEAD
                 <field name="stop"/>
                 <field name="user_id"/>
                 <field name="partner_id"/>
                 <field name="location"/>
                 <field name="office_id"/>
+=======
+                <field name="stop" />
+                <field name="user_id" />
+                <field name="partner_id" />
+                <field name="location_id" />
+>>>>>>> Dev-12.0
             </tree>
         </field>
     </record>
@@ -36,10 +43,17 @@
         <field name="priority" eval="2"/>
         <field name="arch" type="xml">
             <kanban>
+<<<<<<< HEAD
                 <field name="name"/>
                 <field name="start"/>
                 <field name="stop"/>
                 <field name="office_id"/>
+=======
+                <field name="name" />
+                <field name="start" />
+                <field name="stop" />
+                <field name="location_id" />
+>>>>>>> Dev-12.0
                 <templates>
                     <t t-name="kanban-box">
                         <div class="oe_kanban_global_click">
@@ -58,8 +72,13 @@
                                             <field name="stop"/>
                                         </li>
                                         <li>
+<<<<<<< HEAD
                                             Office:
                                             <field name="office_id"/>
+=======
+                                            Location:
+                                            <field name="location_id" />
+>>>>>>> Dev-12.0
                                         </li>
                                     </ul>
                                 </div>
@@ -77,8 +96,13 @@
         <field name="priority" eval="2"/>
         <field name="arch" type="xml">
             <calendar string="Appointments" date_start="start" date_stop="stop" date_delay="duration"
+<<<<<<< HEAD
                       color="office_id">
                 <field name="name"/>
+=======
+                color="location_id">
+                <field name="name" />
+>>>>>>> Dev-12.0
             </calendar>
         </field>
     </record>
@@ -89,6 +113,7 @@
         <field name="priority" eval="2"/>
         <field name="arch" type="xml">
             <tree string="Appointments">
+<<<<<<< HEAD
                 <field name="type_id"/>
                 <field name="start"/>
                 <field name="stop"/>
@@ -96,6 +121,14 @@
                 <field name="partner_id"/>
                 <field name="location"/>
                 <field name="office_id"/>
+=======
+                <field name="type_id" />
+                <field name="start" />
+                <field name="stop" />
+                <field name="user_id" />
+                <field name="partner_id" />
+                <field name="location_id" />
+>>>>>>> Dev-12.0
             </tree>
         </field>
     </record>
@@ -145,9 +178,15 @@
                                     <field name="duration" invisible="1"/>
                                 </group>
                                 <group>
+<<<<<<< HEAD
                                     <field name="office_id" options="{'no_open': True}"
                                            attrs="{'required':[('channel_name','!=','PDM')],
                                       'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}"/>
+=======
+                                    <field name="location_id"  options="{'no_open': True}"
+                                      attrs="{'required':[('channel_name','!=','PDM')],
+                                      'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}" />
+>>>>>>> Dev-12.0
                                     <field string="Description" name="description" invisible="1"/>
                                     <field name="occasion_ids" invisible="1" widget="many2many_tags"/>
                                     <field name="show_suggestion_ids" invisible="1"/>
@@ -215,8 +254,12 @@
                                     <field name="duration" invisible="1"/>
                                 </group>
                                 <group>
+<<<<<<< HEAD
                                     <field name="office_id"
                                            attrs="{'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}"/>
+=======
+                                    <field name="location_id"  attrs="{'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}" />
+>>>>>>> Dev-12.0
                                     <field string="Description" name="description" invisible="1"/>
                                     <field name="occasion_ids" invisible="1" widget="many2many_tags"/>
                                 </group>
@@ -264,10 +307,17 @@
                             context="{'group_by':'state'}"
                     />
                     <filter
+<<<<<<< HEAD
                             name="group_by_office_id"
                             string="office_id"
                             domain="[]"
                             context="{'group_by':'office_id'}"
+=======
+                        name="group_by_location_id"
+                        string="location_id"
+                        domain="[]"
+                        context="{'group_by':'location_id'}"
+>>>>>>> Dev-12.0
                     />
                     <filter
                             name="group_by_type_id"
@@ -308,10 +358,17 @@
                             context="{'group_by':'state'}"
                     />
                     <filter
+<<<<<<< HEAD
                             name="group_by_office_id"
                             string="office_id"
                             domain="[]"
                             context="{'group_by':'office_id'}"
+=======
+                        name="group_by_location_id"
+                        string="location_id"
+                        domain="[]"
+                        context="{'group_by':'location_id'}"
+>>>>>>> Dev-12.0
                     />
                     <filter
                             name="group_by_type_id"

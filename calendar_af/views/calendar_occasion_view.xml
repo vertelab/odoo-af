@@ -46,11 +46,17 @@
                             <field name="duration" invisible="0"/>
                         </group>
                         <group>
+<<<<<<< HEAD
                             <field name="type_id" domain="[('channel', '=', %(calendar_channel.channel_local)d)]"
                                    required="1"/>
                             <field name="office_id" required="1"/>
                             <field name="user_id" string="Case worker" widget="many2oneattendee"
                                    placeholder="Select case worker..." required="1"/>
+=======
+                            <field name="type_id" domain="[('channel', '=', %(calendar_channel.channel_local)d)]" required="1" />
+                            <field name="location_id" required="1" />
+                            <field name="user_id" string="Case worker" widget="many2oneattendee" placeholder="Select case worker..." required="1" />
+>>>>>>> Dev-12.0
                         </group>
                     </group>
                 </sheet>
@@ -116,8 +122,13 @@
         <field name="model">calendar.occasion</field>
         <field name="priority" eval="2"/>
         <field name="arch" type="xml">
+<<<<<<< HEAD
             <calendar string="Occasions" date_start="start" date_stop="stop" date_delay="duration" color="office_id">
                 <field name="name"/>
+=======
+            <calendar string="Occasions" date_start="start" date_stop="stop" date_delay="duration" color="location_id">
+                <field name="name" />
+>>>>>>> Dev-12.0
             </calendar>
         </field>
     </record>
@@ -133,10 +144,9 @@
                 <field name="weekday"/>
                 <field name="start"/>
                 <field name="stop"/>
-                <field name="office_id"/>
+                <field name="location_id"/>
                 <field name="state"/>
                 <field name="user_id"/>
-                <field name="app_partner_pnr"/>
             </tree>
         </field>
     </record>
@@ -146,9 +156,15 @@
         <field name="model">calendar.occasion</field>
         <field name="arch" type="xml">
             <search string="Rules">
+<<<<<<< HEAD
                 <field name="state"/>
                 <field name="type_id"/>
                 <field name="office_id"/>
+=======
+                <field name="state" />
+                <field name="type_id" />
+                <field name="location_id"/>
+>>>>>>> Dev-12.0
                 <field name="user_id"/>
                 <filter
                         name="state_ok_req"
@@ -163,10 +179,17 @@
                             context="{'group_by':'type_id'}"
                     />
                     <filter
+<<<<<<< HEAD
                             name="group_by_office_id"
                             string="office_id"
                             domain="[]"
                             context="{'group_by':'office_id'}"
+=======
+                        name="group_by_location_id"
+                        string="location_id"
+                        domain="[]"
+                        context="{'group_by':'location_id'}"
+>>>>>>> Dev-12.0
                     />
                 </group>
             </search>

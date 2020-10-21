@@ -5,6 +5,6 @@
         </function>
         <function name="create_appointments" model="calendar.appointment">
         </function>
-      
+
     </data>
 </odoo>

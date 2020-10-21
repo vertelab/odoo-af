@@ -20,12 +20,18 @@
 ##############################################################################
 
 from odoo import models, fields, api, _
-    
+
+
 class HrEmployee(models.Model):
     _inherit = "hr.employee"
 
     office_id = fields.Many2one('hr.department', string='Office')
-    office_ids = fields.Many2many('hr.department', relation='res_partner_office_hr_department_rel', column1='partner_id', column2='department_id', string='Offices')
+    office_ids = fields.Many2many(
+        'hr.department',
+        relation='res_partner_office_hr_department_rel',
+        column1='partner_id',
+        column2='department_id',
+        string='Offices')
 
     @api.one
     # @api.onchange('office_id')
@@ -40,7 +46,7 @@ class HrEmployee(models.Model):
         if 'office_id' in vals:
             self.update_office_ids()
         return vals
-    
+
     @api.model_create_multi
     @api.returns('self', lambda value: value.id)
     def create(self, vals_list):

@@ -191,7 +191,7 @@ class CalendarMappedDates(models.Model):
     name = fields.Char(string="Name")
     from_date = fields.Date(string='From Date', required=True)
     to_date = fields.Date(string='To Date', required=True)
-    office_id = fields.Many2one(comodel_name='hr.department', string='Office')
+    location_id = fields.Many2one(comodel_name='hr.location', string='Location')
 
 
 class CalendarAppointmentSuggestion(models.Model):
@@ -205,7 +205,7 @@ class CalendarAppointmentSuggestion(models.Model):
     occasion_ids = fields.Many2many(comodel_name='calendar.occasion', string="Occasions")
     type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type')
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
-    office_id = fields.Many2one(comodel_name='hr.department', string="Office")
+    location_id = fields.Many2one(comodel_name="hr.location", string="Location")
     user_id = fields.Many2one(comodel_name='res.users', string="Case worker")
     weekday = fields.Char(string='Weekday', compute="_compute_weekday")
 
@@ -255,26 +255,6 @@ class CalendarAppointmentSuggestion(models.Model):
             'stop': self.stop,
         })
 
-        # create daily note
-        vals = {
-            "name": _("Booked %s" % self.appointment_id.type_id.name),
-            "partner_id": self.appointment_id.partner_id.id,
-            "administrative_officer": self.appointment_id.user_id.id,
-            "note": _("Booked %s: %s." % (self.appointment_id.type_id.name,
-                                          self.appointment_id.start)) if self.appointment_id.channel_name == "PDM" else _(
-                "Booked %s: %s, %s %s." % (
-                    self.appointment_id.type_id.name, self.appointment_id.start,
-                    self.appointment_id.office_id.office_code,
-                    self.appointment_id.user_id.login)),
-            "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
-            "office_id": self.appointment_id.partner_id.office_id.id,
-            "note_date": self.appointment_id.start,
-            "appointment_id": self.appointment_id.id,
-        }
-        self.appointment_id.sudo().partner_id.notes_ids = [(0, 0, vals)]
-        # create edi message
-        self.appointment_id.sudo().partner_id._create_next_last_msg()
-
     @api.multi
     def select_suggestion_move(self):
         occasions = self.env['calendar.occasion']
@@ -301,23 +281,12 @@ class CalendarAppointment(models.Model):
     _name = 'calendar.appointment'
     _description = "Appointment"
 
-    @api.multi
-    @api.depends('partner_id', 'start')
-    def name_get(self):
-        result = []
-        for app in self:
-            try:
-                name = _('Meeting with %s at %s') % (app.partner_id.company_registry, app.start)
-            except:
-                name = _('Meeting at %s') % app.start
-            result.append((app.id, name))
-        return result
-
     @api.model
     def _local_user_domain(self):
         if self.partner_id:
             res = []
-            res.append(('partner_id.office_id.id', '=', self.env.user.office_id.id))
+            res.append(('partner_id.location_id.id', '=', self.env.user.location_id.id)) 
+
             # TODO: add hr.skill check ('type_id.skills_ids', 'in', self.env.user.skill_ids)
             # TODO: add check if case worker has occasions and that these are free. Maybe use a computed field on res.users?
         else:
@@ -342,17 +311,12 @@ class CalendarAppointment(models.Model):
                                         ('confirmed', 'Confirmed'),
                                         ('done', 'Done'),
                                         ('canceled', 'Canceled')],
-                             string='State',
-                             default='free',
-                             help="Status of the meeting")
-    cancel_reason = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason',
-                                    help="Cancellation reason")
-    cancel_reason_temp = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason',
-                                         store=False, help="Cancellation reason")
-    location = fields.Char(string='Location', compute='compute_location', store=True)
-    location_id = fields.Many2one(string='Location', comodel_name='hr.location', related='user_id.location_id',
-                                  readonly=True)
-    office_id = fields.Many2one(comodel_name='hr.department', string="Office")
+                                        string='State', 
+                                        default='free', 
+                                        help="Status of the meeting")
+    cancel_reason = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason', help="Cancellation reason")
+    cancel_reason_temp = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason', store=False, help="Cancellation reason")
+    location_id = fields.Many2one(string='Location', comodel_name='hr.location')
     occasion_ids = fields.One2many(comodel_name='calendar.occasion', inverse_name='appointment_id', string="Occasion")
     type_id = fields.Many2one(string='Type', required=True, comodel_name='calendar.appointment.type')
     channel = fields.Many2one(string='Channel', required=True, comodel_name='calendar.channel',
@@ -364,8 +328,6 @@ class CalendarAppointment(models.Model):
     suggestion_ids = fields.One2many(comodel_name='calendar.appointment.suggestion', inverse_name='appointment_id',
                                      string='Suggested Dates')
     case_worker_name = fields.Char(string="Case worker", compute="compute_case_worker_name")
-    partner_pnr = fields.Char(string='Attendee SSN', related="partner_id.company_registry", readonly=True,
-                              groups="af_security.af_jobseekers_officer")
     active = fields.Boolean(string='Active', default=True)
     show_suggestion_ids = fields.Boolean(string="Show suggestions", default=False)
     weekday = fields.Char(string="Weekday", compute="_compute_weekday")
@@ -391,15 +353,6 @@ class CalendarAppointment(models.Model):
             }
             self.weekday = daynum2dayname[self.start.weekday()]
 
-    @api.depends('user_id')
-    def compute_location(self):
-        for app in self:
-            if app.channel_name == "PDM":
-                app.location = _("Distance")
-            elif app.location_id:
-                app.location = app.location_id.location_code
-            else:
-                app.location = ''
 
     @api.one
     def compute_case_worker_name(self):
@@ -407,34 +360,6 @@ class CalendarAppointment(models.Model):
             self.case_worker_name = _("Employment service officer")
         else:
             self.case_worker_name = self.user_id.login
-
-    @api.multi
-    def move_meeting_action(self):
-        partner = self.env['calendar.appointment'].browse(self._context.get('active_id')).partner_id
-        return {
-            'name': _('Move meeting for %s - %s') % (partner.company_registry, partner.display_name),
-            'res_model': 'calendar.appointment',
-            'res_id': self._context.get('active_id', False),
-            'view_type': 'form',
-            'view_mode': 'form',
-            'view_id': self.env.ref('calendar_af.view_calendar_appointment_move_form').id,
-            'target': 'current',
-            'type': 'ir.actions.act_window',
-        }
-
-    @api.multi
-    def cancel_meeting_action(self):
-        partner = self.env['calendar.appointment'].browse(self._context.get('active_id')).partner_id
-        return {
-            'name': _('Cancel meeting for %s - %s') % (partner.company_registry, partner.display_name),
-            'res_model': 'calendar.cancel_appointment',
-            'view_type': 'form',
-            'view_mode': 'form',
-            'view_id': self.env.ref('calendar_af.cancel_appointment_view_form').id,
-            'target': 'new',
-            'type': 'ir.actions.act_window',
-            'context': {},
-        }
 
     @api.model
     def default_partners(self):
@@ -475,7 +400,7 @@ class CalendarAppointment(models.Model):
     def compute_suggestion_ids(self):
         if not all((self.duration, self.type_id, self.channel)):
             return
-        if self.channel_name != "PDM" and not self.office_id:
+        if self.channel_name != "PDM" and not self.location_id:
             return
         start = self.start_meeting_search(self.type_id)
         stop = self.stop_meeting_search(start, self.type_id)
@@ -495,7 +420,7 @@ class CalendarAppointment(models.Model):
                         'duration': len(occasion) * 30,
                         'type_id': occasion[0].type_id.id,
                         'channel': occasion[0].channel.id,
-                        'office_id': occasion[0].office_id.id,
+                        'location_id': occasion[0].location_id.id,
                         'user_id': occasion[0].user_id,
                         'occasion_ids': [(6, 0, occasion._ids)],
                     }))
@@ -571,6 +496,9 @@ class CalendarAppointment(models.Model):
         else:
             self.active = True
         return self.active
+    
+    def generate_cancel_daily_note(self, cancel_reason, appointment):
+        pass
 
     def cancel(self, cancel_reason):
         """Cancels a planned meeting"""
@@ -582,24 +510,8 @@ class CalendarAppointment(models.Model):
                 appointment.state = 'canceled'
                 appointment.cancel_reason = cancel_reason.id
 
-                # create daily note
-                vals = {
-                    "name": _("Cancelled %s. Reason: %s" % (self.type_id.name, cancel_reason.name)),
-                    "partner_id": self.partner_id.id,
-                    "administrative_officer": self.user_id.id,
-                    "note": _("Cancelled %s: %s. Reason: %s" % (
-                        self.type_id.name, self.start, cancel_reason.name)) if self.channel_name == "PDM" else _(
-                        "Cancelled %s: %s, %s %s. Reason: %s" % (
-                            self.type_id.name, self.start, self.office_id.office_code, self.user_id.login,
-                            cancel_reason.name)),
-                    "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
-                    "office_id": self.partner_id.office_id.id,
-                    "note_date": self.start,
-                    "appointment_id": self.id,
-                }
-                appointment.partner_id.sudo().notes_ids = [(0, 0, vals)]
-                # create edi message
-                self.sudo().partner_id._create_next_last_msg()
+                self.generate_cancel_daily_note(cancel_reason, appointment)
+
                 appointment.occasion_ids = [(5, 0, 0)]
 
                 return True
@@ -616,29 +528,6 @@ class CalendarAppointment(models.Model):
 
             return res
 
-    @api.model
-    def create(self, values):
-        res = super(CalendarAppointment, self).create(values)
-
-        if res.sudo().partner_id and res.state == 'confirmed':
-            # create daily note
-            vals = {
-                "name": _("Booked %s" % self.type_id.name),
-                "partner_id": self.partner_id.id,
-                "administrative_officer": self.user_id.id,
-                "note": _("Booked %s: %s." % (self.type_id.name, self.start)) if self.channel_name == "PDM" else _(
-                    "Booked %s: %s, %s %s." % (
-                        self.type_id.name, self.start, self.office_id.office_code, self.user_id.login)),
-                "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
-                "office_id": self.partner_id.office_id.id,
-                "note_date": self.start,
-                "appointment_id": self.id,
-            }
-            res.sudo().partner_id.notes_ids = [(0, 0, vals)]
-            # create edi message
-            self.appointment_id.sudo().partner_id._create_next_last_msg()
-
-        return res
 
     @api.multi
     def write(self, vals):
@@ -665,19 +554,21 @@ class CalendarAppointment(models.Model):
                 ('additional_booking', '=', False),
                 ('appointment_id', '=', False),
                 ('state', 'in', ['free', 'confirmed']),
-                ('office_id', '=', self.office_id.id)])
+                ('location_id', '=', self.location_id.id)])
 
             if occ_num < min_num:
-                if self.office_id.app_warn_user_ids:
-                    for user in self.office_id.app_warn_user_ids:
+                if self.location_id.app_warn_user_ids:
+                    for user in self.location_id.app_warn_user_ids:
                         template = self.env.ref('calendar_af.email_template_low_occasion_warning')
                         template.email_to = user.work_email
                         template.send_mail(self.id, force_send=True)
                 else:
-                    _logger.debug(_("No threshold users setup for office %s") % self.office_id.name)
+                    _logger.debug(_("No threshold users setup for location %s") % self.location_id.name)
         else:
-            _logger.debug(
-                _("No threshold set for office %s and meeting type %s") % (self.office_id.name, self.type_id.name))
+            _logger.debug(_("No threshold set for location %s and meeting type %s") % (self.location_id.name, self.type_id.name))
+
+    def generate_move_daily_note(self, occasions, reason):
+        pass
 
     @api.one
     def move_appointment(self, occasions, reason=False):
@@ -697,22 +588,7 @@ class CalendarAppointment(models.Model):
             }
             self.write(vals)
 
-            # create daily note
-            vals = {
-                "name": _("Meeting moved %s. Reason: %s" % (self.type_id.name, reason.name)),
-                "partner_id": self.partner_id.id,
-                "administrative_officer": self.user_id.id,
-                "note": _("Meeting moved %s: %s. Reason: %s" % (
-                    self.type_id.name, self.start, reason.name)) if self.channel_name == "PDM" else _(
-                    "Meeting moved %s: %s, %s %s. Reason: %s" % (
-                        self.type_id.name, self.start, self.office_id.office_code, self.user_id.login, reason.name)),
-                "note_type": self.env.ref('partner_daily_notes.note_type_as_02').id,
-                "office_id": self.partner_id.office_id.id,
-                "appointment_id": self.id,
-            }
-            self.partner_id.sudo().notes_ids = [(0, 0, vals)]
-            # create edi message
-            self.sudo().partner_id._create_next_last_msg()
+            self.generate_move_daily_note(occasions, reason)
             res = True
 
         return res
@@ -761,12 +637,10 @@ class CalendarOccasion(models.Model):
                                         ('fail', 'Rejected'),
                                         ('booked', 'Booked'),
                                         ('deleted', 'Deleted')],
-                             string='Occasion state',
-                             default='request',
-                             help="Status of the meeting")
-    office_id = fields.Many2one(comodel_name='hr.department', string="Office")
-    app_partner_pnr = fields.Char(string='Attendee SSN', related="appointment_id.partner_id.company_registry",
-                                  readonly=True)
+                                        string='Occasion state', 
+                                        default='request', 
+                                        help="Status of the meeting")
+    location_id = fields.Many2one(comodel_name='hr.location', string="Location")
     start_time = fields.Char(string='Occasion start time', readonly=True, compute='_occ_start_time_calc', store=True)
     weekday = fields.Char(string='Weekday', compute="_compute_weekday")
 
@@ -812,8 +686,7 @@ class CalendarOccasion(models.Model):
             self.stop = self.start + timedelta(minutes=int(self.duration * 60))
 
     @api.model
-    def _force_create_occasion(self, duration, start, type_id, channel, state, user=False, office_id=False,
-                               additional_booking=True):
+    def _force_create_occasion(self, duration, start, type_id, channel, state, user=False, location_id=False, additional_booking=True):
         """In case we need to force through a new occasion for some reason"""
         vals = {
             'name': _('%sm @ %s') % (duration, pytz.timezone(LOCAL_TZ).localize(start)),
@@ -823,7 +696,7 @@ class CalendarOccasion(models.Model):
             'appointment_id': False,
             'type_id': type_id,
             'channel': channel,
-            'office_id': office_id.id if office_id else False,
+            'location_id': location_id.id if location_id else False,
             'user_id': user.id if user else False,
             'additional_booking': additional_booking,
             'state': state,
@@ -854,15 +727,13 @@ class CalendarOccasion(models.Model):
         return res
 
     @api.model
-    def _check_date_mapping(self, date, office_id):
+    def _check_date_mapping(self, date, location_id):
         """Checks if a date has a mapped date, and returns the mapped date 
         if it exists """
-        if office_id:
-            mapped_date = self.env['calendar.mapped_dates'].search(
-                [('from_date', '=', date), ('office_id', '=', office_id.id)])
+        if location_id:
+            mapped_date = self.env['calendar.mapped_dates'].search([('from_date', '=', date), ('location_id', '=', location_id.id)])
         else:
-            mapped_date = self.env['calendar.mapped_dates'].search(
-                [('from_date', '=', date), ('office_id', '=', False)])
+            mapped_date = self.env['calendar.mapped_dates'].search([('from_date', '=', date), ('location_id', '=', False)])
         if mapped_date:
             res = mapped_date.to_date
         else:
@@ -870,7 +741,7 @@ class CalendarOccasion(models.Model):
         return res
 
     @api.model
-    def _get_additional_booking(self, date, duration, type_id, office_id=False):
+    def _get_additional_booking(self, date, duration, type_id, location_id=False):
         """"Creates extra, additional, occasions. Iff overbooking is allowed. """
         # Check if overbooking is allowed on this meeting type
         if not type_id.additional_booking:
@@ -878,7 +749,7 @@ class CalendarOccasion(models.Model):
             _logger.debug(_("Overbooking not allowed on %s" % type_id.name))
             return False
         # Replace date with mapped date if we have one
-        date = self._check_date_mapping(date, office_id)
+        date = self._check_date_mapping(date, location_id)
         date_list = date.strftime("%Y-%-m-%-d").split("-")
         # Copy to make sure we dont overwrite BASE_DAY_START or BASE_DAY_STOP
         day_start = copy.copy(BASE_DAY_START)
@@ -901,7 +772,7 @@ class CalendarOccasion(models.Model):
                 'appointment_id': False,
                 'type_id': type_id.id,
                 'channel': type_id.channel.id,
-                'office_id': office_id.id if office_id else False,
+                'location_id': location_id.id if location_id else False,
                 'additional_booking': True,
                 'state': 'ok',
             }
@@ -954,7 +825,7 @@ class CalendarOccasion(models.Model):
         return ret
 
     @api.model
-    def get_bookable_occasions(self, start, stop, duration, type_id, office_id=False, max_depth=1):
+    def get_bookable_occasions(self, start, stop, duration, type_id, location_id=False, max_depth=1):
         """Returns a list of occasions matching the defined parameters of the appointment. Creates additional 
         occasions if allowed.
         :param start: Start search as this time.
@@ -991,8 +862,8 @@ class CalendarOccasion(models.Model):
         # define our domain since this part of it 
         # will be the same throughout all loops
         domain = [('type_id', '=', type_id.id), ('appointment_id', '=', False), ('additional_booking', '=', False)]
-        if office_id:
-            domain.append(('office_id', '=', office_id.id))
+        if location_id:
+            domain.append(('location_id', '=', location_id.id))
         # TODO: This if can and should probably be removed 
         # but I don't want to break anything right now
         if type_id.channel == self.env.ref('calendar_channel.channel_local'):
@@ -1043,7 +914,7 @@ class CalendarOccasion(models.Model):
         # free occasions, create new ones:
         if type_id.additional_booking and all(not l for l in occ_lists):
             # Changed this line to create over bookings on the LAST allowed date.
-            occ_lists[-1].append([self._get_additional_booking(stop, duration, type_id, office_id)])
+            occ_lists[-1].append([self._get_additional_booking(stop, duration, type_id, location_id)])
 
         return occ_lists
 
@@ -1073,8 +944,8 @@ class CalendarOccasion(models.Model):
                 'user_id': False,
                 'partner_id': False,
                 'state': 'reserved',
-                'office_id': False,
-                'occasion_ids': occasion_ids,  # I dont think this does anything?
+                'location_id': False,
+                'occasion_ids': occasion_ids, # I dont think this does anything?
                 'reserved': datetime.now(),
             }
             appointment = self.env['calendar.appointment'].create(vals)
