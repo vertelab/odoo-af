@@ -15,7 +15,7 @@
           <page name="type_location" string="Appointment warning thresholds">
             <field name="type_location_ids" mode="tree" nolabel="1">
               <tree editable="bottom">
-                <field name="type_id"/>
+                <field name="type_id" domain="[('channel', '=', %(calendar_channel.channel_local)d)]"/>
                 <field name="warning_threshold"/>
               </tree>
             </field>
