@@ -20,36 +20,53 @@
 ##############################################################################
 
 from odoo import models, fields, api, _
-from datetime import datetime, timedelta, date
-from odoo.exceptions import Warning
 import logging
 
 _logger = logging.getLogger(__name__)
 
-class hr_location(models.Model):
-    _inherit = 'hr.location'
 
-    reserve_admin_ids = fields.Many2many(comodel_name='hr.employee', string='Reserve time managers')
-    app_warn_user_ids = fields.Many2many(comodel_name='hr.employee', string='Appointment warnings')
-    type_location_ids = fields.One2many(comodel_name='calendar.appointment.type.location', inverse_name='location_id', string='Type - Location mapping')
-    mapped_dates_ids = fields.One2many(comodel_name='calendar.mapped_dates', inverse_name='location_id', string='Mapped dates')
+class hr_location(models.Model):
+    _inherit = "hr.location"
+
+    reserve_admin_ids = fields.Many2many(
+        comodel_name="hr.employee", string="Reserve time managers"
+    )
+    app_warn_user_ids = fields.Many2many(
+        comodel_name="hr.employee", string="Appointment warnings"
+    )
+    type_location_ids = fields.One2many(
+        comodel_name="calendar.appointment.type.location",
+        inverse_name="location_id",
+        string="Type - Location mapping",
+    )
+    mapped_dates_ids = fields.One2many(
+        comodel_name="calendar.mapped_dates",
+        inverse_name="location_id",
+        string="Mapped dates",
+    )
 
     def view_reserve_dates(self):
         return {
-            'name': _('Mapped dates for %s') % (self.display_name),
-            'res_model': 'calendar.mapped_dates',
-            'view_type': 'form',
-            'view_mode': 'tree',
-            'domain': "[('location_id', '=', %s)]" % self.id,
-            'view_id': self.env.ref('calendar_af.view_calendar_mapped_dates_tree').id,
-            'target': 'current',
-            'type': 'ir.actions.act_window',
+            "name": _("Mapped dates for %s") % (self.display_name),
+            "res_model": "calendar.mapped_dates",
+            "view_type": "form",
+            "view_mode": "tree",
+            "domain": "[('location_id', '=', %s)]" % self.id,
+            "view_id": self.env.ref("calendar_af.view_calendar_mapped_dates_tree").id,
+            "target": "current",
+            "type": "ir.actions.act_window",
         }
 
-class AppointmentTypeLocation(models.Model):
-    _name = 'calendar.appointment.type.location'
 
-    type_id = fields.Many2one(comodel_name='calendar.appointment.type', string='Appointment type', required=True)
-    location_id = fields.Many2one(comodel_name='hr.location', string='Location', required=True)
-    warning_threshold = fields.Integer(string='Warning threshold')
-    
+class AppointmentTypeLocation(models.Model):
+    _name = "calendar.appointment.type.location"
+
+    type_id = fields.Many2one(
+        comodel_name="calendar.appointment.type",
+        string="Appointment type",
+        required=True,
+    )
+    location_id = fields.Many2one(
+        comodel_name="hr.location", string="Location", required=True
+    )
+    warning_threshold = fields.Integer(string="Warning threshold")
