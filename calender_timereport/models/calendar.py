@@ -19,11 +19,13 @@
 #
 ##############################################################################
 
-from odoo import models, fields, api, _
-from odoo.tools import UserError
 import logging
+from odoo.tools import UserError
+
+from odoo import models, fields, api, _
 
 _logger = logging.getLogger(__name__)
+
 
 class CalendarEvent(models.Model):
     _inherit = 'calendar.event'
@@ -34,19 +36,19 @@ class CalendarEvent(models.Model):
     @api.one
     def create_timereport(self):
         # ~ if not self.project_id:
-                # ~ raise UserError(_('You have to at least add a Project'))
+        # ~ raise UserError(_('You have to at least add a Project'))
         for partner in self.partner_ids:
-            
-            user = self.env['res.users'].search([('partner_id','=',partner.id)])
+
+            user = self.env['res.users'].search([('partner_id', '=', partner.id)])
             if user:
-                employee = self.env['hr.employee'].search([('user_id','=',user.id)])
+                employee = self.env['hr.employee'].search([('user_id', '=', user.id)])
             if employee:
-                sheet = self.env['hr_timesheet.sheet'].search([('employee_id','=', employee.id),
-                                                            ('date_start', '<=', self.start_datetime.date()), 
-                                                            ('date_end', '>=', self.start_datetime.date())])
+                sheet = self.env['hr_timesheet.sheet'].search([('employee_id', '=', employee.id),
+                                                               ('date_start', '<=', self.start_datetime.date()),
+                                                               ('date_end', '>=', self.start_datetime.date())])
                 if not sheet:
-                    #TODO: this defaults to current week/month, this only works if there is a time_sheet for other weeks 
-                    sheet = self.env['hr_timesheet.sheet'].create({'employee_id':employee.id}) 
+                    # TODO: this defaults to current week/month, this only works if there is a time_sheet for other weeks
+                    sheet = self.env['hr_timesheet.sheet'].create({'employee_id': employee.id})
                 timereport = self.env['account.analytic.line'].create({
                     'date': self.start_datetime.date(),
                     'name': self.name,
@@ -58,5 +60,3 @@ class CalendarEvent(models.Model):
                     'employee_id': employee.id,
                     'account_id': self.project_id.analytic_account_id.id,
                 })
-        
-

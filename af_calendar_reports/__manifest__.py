@@ -7,7 +7,7 @@
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
-	"description": """
+    "description": """
 	 v12.0.1.3 KPD-516 - Change sortorder in Meetings-tab
     """,
     "depends": ["calendar_af"],
