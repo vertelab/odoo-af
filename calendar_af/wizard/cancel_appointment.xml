@@ -6,10 +6,21 @@
         <field name="model">calendar.cancel_appointment</field>
         <field name="arch" type="xml">
             <form string="Cancel appointment">
-                    <group>
-                        <field name="cancel_reason" required="1"/>
-                        <field name="appointment_ids" options="{'no_create_edit':True}"/>
-                    </group>
+                <group>
+                    <field name="cancel_reason" required="1"/>
+                    <field name="appointment_ids" readonly="1">
+                        <tree>
+                            <field name="type_id"/>
+                            <field name="start"/>
+                            <field name="stop"/>
+                            <field name="user_id"/>
+                            <field name="partner_id"/>
+                            <field name="location_id"/>
+                        </tree>
+                        <form>
+                        </form>
+                    </field>
+                </group>
                 <footer>
                     <group>
                         <span>

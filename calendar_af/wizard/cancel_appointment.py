@@ -20,25 +20,31 @@
 ##############################################################################
 
 import logging
+
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
-from datetime import datetime, timedelta
 
-import pytz
-import copy
 
 _logger = logging.getLogger(__name__)
 
+
 class CancelAppointment(models.TransientModel):
-    _name = 'calendar.cancel_appointment'
-    _description = 'Cancel appointment'
+    _name = "calendar.cancel_appointment"
+    _description = "Cancel appointment"
 
     @api.model
     def _get_appointments(self):
-        return self.env['calendar.appointment'].browse(self._context.get('active_ids'))
+        return self.env["calendar.appointment"].browse(self._context.get("active_ids"))
 
-    appointment_ids = fields.Many2many(string='Appointments to be cancelled', comodel_name='calendar.appointment', default=_get_appointments)
-    cancel_reason = fields.Many2one(string='Reason for cancellation', comodel_name='calendar.appointment.cancel_reason')
+    appointment_ids = fields.Many2many(
+        string="Appointments to be cancelled",
+        comodel_name="calendar.appointment",
+        default=_get_appointments,
+    )
+    cancel_reason = fields.Many2one(
+        string="Reason for cancellation",
+        comodel_name="calendar.appointment.cancel_reason",
+    )
 
     def action_cancel_appointment(self):
         if self.cancel_reason:
