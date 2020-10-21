@@ -147,7 +147,7 @@
         </record>
 
         <menuitem id="dialogue_event_id" name="Dialogue Event" action="action_dialogue_event" sequence="1"
-                  parent="automatic_customer_dialogue.customer_dialogue_menu_id"/>
+                  parent="af_automatic_customer_dialogue.customer_dialogue_menu_id"/>
 
     </data>
 </odoo>

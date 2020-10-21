@@ -26,19 +26,19 @@ class PartnerEvent(models.Model):
     def _prefill_email_schedule_ids(self):
         values = [
             (0, 0, {
-                'template_id': self.env.ref('automatic_customer_dialogue.on_boarding_email_template'),
+                'template_id': self.env.ref('af_automatic_customer_dialogue.on_boarding_email_template'),
                 'interval_type': 'after_sub',
                 'interval_nbr': 1,
                 'interval_unit': 'now'
             }),
             (0, 0, {
-                'template_id': self.env.ref('automatic_customer_dialogue.meeting_reminder_email_template'),
+                'template_id': self.env.ref('af_automatic_customer_dialogue.meeting_reminder_email_template'),
                 'interval_type': 'before_event',
                 'interval_nbr': 1,
                 'interval_unit': 'days'
             }),
             (0, 0, {
-                'template_id': self.env.ref('automatic_customer_dialogue.meeting_follow_up_email_template'),
+                'template_id': self.env.ref('af_automatic_customer_dialogue.meeting_follow_up_email_template'),
                 'interval_type': 'after_event',
                 'interval_nbr': 3,
                 'interval_unit': 'days'

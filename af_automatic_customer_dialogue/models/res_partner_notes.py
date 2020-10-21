@@ -17,7 +17,7 @@ class PartnerNotes(models.Model):
                     if partner_note_rec:
                         if (vals.get('note_date') == today_date) and (partner_note_rec.name == '90') and (
                                 partner_rec.segment_jobseeker == 'a'):
-                            template_id = self.env.ref('automatic_customer_dialogue.on_boarding_email_template')
+                            template_id = self.env.ref('af_automatic_customer_dialogue.on_boarding_email_template')
                             template_id.sudo().with_context(
                                 partner_email=partner_rec.email, partner_lang=partner_rec.lang
                             ).send_mail(self.id, force_send=True)

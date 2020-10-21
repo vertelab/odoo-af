@@ -2,7 +2,7 @@
     <data>
         <record id="on_boarding_email_template" model="mail.template">
             <field name="name">Welcome to our agency</field>
-            <field name="model_id" ref="automatic_customer_dialogue.model_partner_event"/>
+            <field name="model_id" ref="af_automatic_customer_dialogue.model_partner_event"/>
             <field name="subject">Welcome to Our Agency</field>
             <field name="email_to">${ctx['partner_email'] | safe}</field>
             <field name="body_html" type="html">
@@ -21,7 +21,7 @@
 
         <record id="meeting_invitation_email_template" model="mail.template">
             <field name="name">Meeting Invitation</field>
-            <field name="model_id" ref="automatic_customer_dialogue.model_partner_event"/>
+            <field name="model_id" ref="af_automatic_customer_dialogue.model_partner_event"/>
             <field name="subject">Meeting Invitation</field>
             <field name="email_to">${ctx['partner_email'] | safe}</field>
             <field name="body_html" type="html">
@@ -40,7 +40,7 @@
 
         <record id="meeting_reminder_email_template" model="mail.template">
             <field name="name">Reminder of the Meeting</field>
-            <field name="model_id" ref="automatic_customer_dialogue.model_partner_event"/>
+            <field name="model_id" ref="af_automatic_customer_dialogue.model_partner_event"/>
             <field name="subject">Reminder of the Meeting</field>
             <field name="email_to">${ctx['partner_email'] | safe}</field>
             <field name="body_html" type="html">
@@ -60,7 +60,7 @@
 
         <record id="meeting_follow_up_email_template" model="mail.template">
             <field name="name">Follow Up of the Meeting</field>
-            <field name="model_id" ref="automatic_customer_dialogue.model_partner_event"/>
+            <field name="model_id" ref="af_automatic_customer_dialogue.model_partner_event"/>
             <field name="subject">Follow Up of the Meeting</field>
             <field name="email_to">${ctx['partner_email'] | safe}</field>
             <field name="body_html" type="html">

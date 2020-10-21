@@ -3,7 +3,7 @@
     <data>
         <template id="assets_backend" name="event assets" inherit_id="web.assets_backend">
             <xpath expr="." position="inside">
-                <link rel="stylesheet" type="text/scss" href="/automatic_customer_dialogue/static/src/scss/event.scss"/>
+                <link rel="stylesheet" type="text/scss" href="/af_automatic_customer_dialogue/static/src/scss/event.scss"/>
             </xpath>
         </template>
     </data>
