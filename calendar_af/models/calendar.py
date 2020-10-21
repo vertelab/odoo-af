@@ -71,7 +71,6 @@ class CalendarSchedule(models.Model):
     @api.multi
     def create_occasions(self):
         """Creates a number of occasions from schedules, depending on number of scheduled agents"""
-        _logger.warn("create_occasions")
         for schedule in self:
             no_occasions = self.env['calendar.occasion'].search_count([('start', '=', schedule.start), ('type_id', '=', schedule.type_id.id), ('additional_booking', '=', False)])
             if (schedule.scheduled_agents - no_occasions) > 0:
@@ -98,13 +97,11 @@ class CalendarSchedule(models.Model):
     @api.multi
     def comp_possible_starts(self):
         """Updates possible start times for appointments on a given day and meeting type"""
-        _logger.warn("comp_possible_starts")
         # init start date and time
         loop_date = copy.copy(BASE_DAY_START).replace(
             year=self.start.year, month=self.start.month, day=self.start.day)
 
         # init last_dict and set all previous values to 0 since this is the first loop
-        # use .get(app_type.id, 0) in the code and we can skip this?
         last_dict = {}
 
         # 16 is the number of half/whole hour slots between 9 and 17. Hopefully.
