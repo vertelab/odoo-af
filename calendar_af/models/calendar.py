@@ -90,6 +90,45 @@ class CalendarSchedule(models.Model):
             elif (schedule.scheduled_agents - no_occasions) < 0:
                 # TODO: handle this case better
                 pass
+        
+        # recalculate possible start times
+        self.comp_possible_starts()
+
+    @api.multi
+    def comp_possible_starts(self):
+        """Updates possible start times for appointments on a given day and meeting type"""
+        # init start date and time
+        loop_date = copy.copy(BASE_DAY_START).replace(
+            year=self.start.year, month=self.start.month, day=self.start.day)
+
+        # init last_dict and set all previous values to 0 since this is the first loop
+        last_dict = {}
+
+        # 16 is the number of half/whole hour slots between 9 and 17. Hopefully.
+        for j in range(16):
+            search_domain = [('type_id', '=', self.type_id.id), ('start', '=', loop_date), ('state', '=', 'ok'), ('appointment_id', '=', False)]
+            if self.type_id.duration == 60:
+                no_occasions = self.env['calendar.occasion'].search_count(search_domain)
+                # compute possible appointment starts for this time and type
+                no_possible_starts = max(no_occasions - last_dict.get(self.type_id.id, 0), 0)
+                # update last_dict for appointment type
+                last_dict[self.type_id.id] = no_possible_starts
+
+                if no_possible_starts != 0:
+                    occasions_true = self.env['calendar.occasion'].search(search_domain, limit=no_possible_starts)
+                    occasions_false = self.env['calendar.occasion'].search(search_domain + [('id', 'not in', occasions_true._ids)], limit=no_possible_starts)
+                    for occ_true in occasions_true:
+                        occ_true.is_possible_start = '1'
+                    for occ_false in occasions_false:
+                        occ_false.is_possible_start = '0'
+            else:
+                # if 30 min meeting length all occs are possible starts
+                occasions_true = self.env['calendar.occasion'].search(search_domain)
+                for occ_true in occasions_true:
+                    occ_true.is_possible_start = '1'
+
+            # move ahead by 30 mins
+            loop_date += timedelta(minutes=BASE_DURATION)
 
     @api.model
     def cron_get_schedules(self, type_ids, days):
@@ -610,6 +649,10 @@ class CalendarOccasion(models.Model):
     location_id = fields.Many2one(comodel_name='hr.location', string="Location")
     start_time = fields.Char(string='Occasion start time', readonly=True, compute='_occ_start_time_calc', store=True)
     weekday = fields.Char(string='Weekday', compute="_compute_weekday")
+    is_possible_start = fields.Selection(string='Is a possible start time', 
+                                         selection=[('', 'Not set'),
+                                                    ('0', 'No'),
+                                                    ('1', 'Yes')])
 
     @api.one
     def _compute_weekday(self):
