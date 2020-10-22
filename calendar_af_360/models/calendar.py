@@ -42,3 +42,53 @@ class CalendarAppointmentSuggestion(models.Model):
             'view_mode':"form",
             'type': 'ir.actions.act_window',
         }
+
+class CalendarAppointment(models.Model):
+    _inherit = 'calendar.appointment'
+
+    @api.multi
+    @api.depends('partner_id', 'start')
+    def name_get(self):
+        result = []
+        for app in self:
+            try:
+                name = _('Meeting with %s at %s') % (app.partner_id.company_registry, app.start)
+            except:
+                name = _('Meeting at %s') % app.start
+            result.append((app.id, name))
+        return result
+
+    partner_pnr = fields.Char(string='Attendee SSN', related="partner_id.company_registry", readonly=True, groups="af_security.af_jobseekers_officer")
+
+    @api.multi
+    def move_meeting_action(self):
+        partner = self.env['calendar.appointment'].browse(self._context.get('active_id')).partner_id
+        return {
+            'name': _('Move meeting for %s - %s') % (partner.company_registry, partner.display_name),
+            'res_model': 'calendar.appointment',
+            'res_id': self._context.get('active_id', False),
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': self.env.ref('calendar_af.view_calendar_appointment_move_form').id,
+            'target': 'current',
+            'type': 'ir.actions.act_window',
+        }
+
+    @api.multi
+    def cancel_meeting_action(self):
+        partner = self.env['calendar.appointment'].browse(self._context.get('active_id')).partner_id
+        return {
+            'name': _('Cancel meeting for %s - %s') % (partner.company_registry, partner.display_name),
+            'res_model': 'calendar.cancel_appointment', 
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': self.env.ref('calendar_af.cancel_appointment_view_form').id,
+            'target': 'new',
+            'type': 'ir.actions.act_window',
+            'context': {},
+        }
+
+class CalendarOccasion(models.Model):
+    _inherit = 'calendar.occasion'
+
+    app_partner_pnr = fields.Char(string='Attendee SSN', related="appointment_id.partner_id.company_registry", readonly=True)

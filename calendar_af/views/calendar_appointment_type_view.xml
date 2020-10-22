@@ -8,7 +8,8 @@
                 <field name="ipf_num"/>
                 <field name="name"/>
                 <field name="duration"/>
-                <field name="duration_default"/>
+                <field name="duration_30"/>
+                <field name="duration_60"/>
                 <field name="days_first"/>
                 <field name="days_last"/>
                 <field name="channel"/>
@@ -45,6 +46,6 @@
         <field name="view_id" ref="view_calendar_appointment_cancel_reason_tree"/>
     </record>
 
-    <menuitem action="action_type" id="menu_action_type" parent="menu_admin" sequence="10" groups="af_security.af_employers_editor,af_security.af_jobseekers_editor" />
-    <menuitem action="action_cancel_reason" id="menu_action_cancel_reason" parent="menu_admin" sequence="15" groups="af_security.af_employers_editor,af_security.af_jobseekers_editor" />
+    <menuitem action="action_type" id="menu_action_type" parent="menu_admin" sequence="10" groups="af_security.af_meeting_admin" />
+    <menuitem action="action_cancel_reason" id="menu_action_cancel_reason" parent="menu_admin" sequence="15" groups="af_security.af_meeting_admin" />
 </odoo>

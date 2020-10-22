@@ -52,3 +52,25 @@ class ResUsers(models.Model):
         return self.env['calendar.occasion'].search([('user_id', '=', self.id), ('appointment_id', '=', False)])
 
     free_occ = fields.Many2one(comodel_name='calendar.occasion', string='Free occasions', compute=_compute_free_occasions)
+
+    def action_calendar_local_occasion(self):
+        res = self.env.ref('calendar_af.action_calendar_local_occasion').read()[0]
+        res['domain'] = [('location_id', '=', self.location_id.id), ('user_id', '=', self.id)]
+        return res
+
+    def create_local_occasion_action(self):
+        res = self.env.ref('calendar_af.create_local_occasion_action').read()[0]
+
+        # we get context as a str not a dict        
+        context = eval(res.get('context', "{}"))
+
+        context['default_location_id'] = self.location_id.id
+        context['default_user_ids'] = self._ids
+        # convert back to str and return
+        res['context'] = str(context)
+        return res
+
+    def action_local_appointment(self):
+        res = self.env.ref('calendar_af.action_local_appointment').read()[0]
+        res['domain'] = [('location_id', '=', self.location_id.id), ('user_id', '=', self.id)]
+        return res

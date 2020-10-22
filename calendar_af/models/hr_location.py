@@ -26,13 +26,13 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-class hr_department(models.Model):
-    _inherit = 'hr.department'
+class hr_location(models.Model):
+    _inherit = 'hr.location'
 
     reserve_admin_ids = fields.Many2many(comodel_name='hr.employee', string='Reserve time managers')
     app_warn_user_ids = fields.Many2many(comodel_name='hr.employee', string='Appointment warnings')
-    type_department_ids = fields.One2many(comodel_name='calendar.appointment.type.department', inverse_name='office_id', string='Type - Office mapping')
-    mapped_dates_ids = fields.One2many(comodel_name='calendar.mapped_dates', inverse_name='office_id', string='Mapped dates')
+    type_location_ids = fields.One2many(comodel_name='calendar.appointment.type.location', inverse_name='location_id', string='Type - Location mapping')
+    mapped_dates_ids = fields.One2many(comodel_name='calendar.mapped_dates', inverse_name='location_id', string='Mapped dates')
 
     def view_reserve_dates(self):
         return {
@@ -40,16 +40,16 @@ class hr_department(models.Model):
             'res_model': 'calendar.mapped_dates',
             'view_type': 'form',
             'view_mode': 'tree',
-            'domain': "[('office_id', '=', %s)]" % self.id,
+            'domain': "[('location_id', '=', %s)]" % self.id,
             'view_id': self.env.ref('calendar_af.view_calendar_mapped_dates_tree').id,
             'target': 'current',
             'type': 'ir.actions.act_window',
         }
 
-class AppointmentTypeDepartment(models.Model):
-    _name = 'calendar.appointment.type.department'
+class AppointmentTypeLocation(models.Model):
+    _name = 'calendar.appointment.type.location'
 
     type_id = fields.Many2one(comodel_name='calendar.appointment.type', string='Appointment type', required=True)
-    office_id = fields.Many2one(comodel_name='hr.department', string='Office', required=True)
+    location_id = fields.Many2one(comodel_name='hr.location', string='Location', required=True)
     warning_threshold = fields.Integer(string='Warning threshold')
     

@@ -34,7 +34,7 @@
                                 <group>
                                     <field name="type_id" required="1" domain="[('channel', '=', %(calendar_channel.channel_local)d)]"/>
                                     <field name="channel_name" invisible="1" />
-                                    <field name="office_id" required="1" />
+                                    <field name="location_id" required="1" />
                                     <!-- I cant use many2manyattendees widget here for some reason?  -->
                                     <field name="user_ids" string="Case worker" widget="many2many_tags" placeholder="Select case worker..." required="1" />
                                 </group>
@@ -71,6 +71,6 @@
         key2="client_action_multi"
         target="new"/>
 
-    <menuitem action="create_local_occasion_action" id="menu_action_create_local_occasion" parent="menu_local" sequence="12" groups="af_security.af_employers_editor,af_security.af_jobseekers_editor"/>
+    <menuitem action="create_local_occasion_action" id="menu_action_create_local_occasion" parent="menu_local" sequence="12" groups="af_security.af_meeting_planner"/>
 
 </odoo>

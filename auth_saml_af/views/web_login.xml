@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <odoo>
-	<!-- Hide everything except SAML login -->
+    <!-- Hide everything except SAML login -->
     <template id="login_af" inherit_id="web.login">
-		<xpath expr="//div[hasclass('field-login')]" position="attributes">
-			<attribute name="t-if">debug</attribute>
-		</xpath>
-		<xpath expr="//div[hasclass('field-password')]" position="attributes">
-			<attribute name="t-if">debug</attribute>
-		</xpath>
-		<xpath expr="//button[@type='submit']" position="attributes">
-			<attribute name="t-if">debug</attribute>
-		</xpath>
-	</template>
+        <xpath expr="//div[hasclass('field-login')]" position="attributes">
+            <attribute name="t-if">debug</attribute>
+        </xpath>
+        <xpath expr="//div[hasclass('field-password')]" position="attributes">
+            <attribute name="t-if">debug</attribute>
+        </xpath>
+        <xpath expr="//button[@type='submit']" position="attributes">
+            <attribute name="t-if">debug</attribute>
+        </xpath>
+    </template>
 </odoo>

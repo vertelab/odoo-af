@@ -21,16 +21,16 @@ v12.0.1.2	- Updated manifest and added Af-logo to description. \n
     'website': 'http://www.vertel.se',
     'depends': [
         'contacts',
-		'af_security',
-		'hr_360_view'
+        'af_security',
+        'hr_360_view'
     ],
     'data': [
         'security/security.xml',
-		'views/res_partner_view.xml',
+        'views/res_partner_view.xml',
         'security/ir.model.access.csv',
         'data/server_action.xml',
         'data/partner.links.csv',
-        #'data/sync_link.xml'
+        # 'data/sync_link.xml'
     ],
     'demo': [
     ],

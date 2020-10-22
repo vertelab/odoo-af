@@ -17,5 +17,5 @@
         <field name="view_id" ref="view_calendar_channel_tree"/>
     </record>
 
-    <menuitem action="action_channel" id="menu_action_channel" parent="menu_admin" sequence="10" />
+    <menuitem action="action_channel" id="menu_action_channel" parent="menu_admin" sequence="10" groups="af_security.af_meeting_admin" />
 </odoo>

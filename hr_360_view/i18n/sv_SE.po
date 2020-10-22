@@ -38,18 +38,9 @@ msgid "Callback"
 msgstr "Återkalla"
 
 #. module: hr_360_view
-#: model_terms:ir.ui.view,arch_db:hr_360_view.hr_employee_360_form
 #: model_terms:ir.ui.view,arch_db:hr_360_view.search_jobseeker_form
 msgid "Cancel"
 msgstr "Avbryt"
-
-#. module: hr_360_view
-#: model:ir.model.fields,field_description:hr_360_view.field_hr_employee__case_ids
-#: model:ir.model.fields,field_description:hr_360_view.field_hr_employee_jobseeker_search_wizard__case_ids
-#: model_terms:ir.ui.view,arch_db:hr_360_view.hr_employee_360_form
-#: model_terms:ir.ui.view,arch_db:hr_360_view.search_jobseeker_form
-msgid "Case"
-msgstr "Ärenden"
 
 #. module: hr_360_view
 #: model:ir.model.fields,field_description:hr_360_view.field_hr_employee_jobseeker_search_wizard__create_uid
@@ -120,12 +111,6 @@ msgid "Handläggaryta"
 msgstr "Arbetsyta"
 
 #. module: hr_360_view
-#: model_terms:ir.ui.view,arch_db:hr_360_view.hr_employee_360_form
-#: model_terms:ir.ui.view,arch_db:hr_360_view.search_jobseeker_form
-msgid "History"
-msgstr "Historik"
-
-#. module: hr_360_view
 #: model:ir.model.fields,field_description:hr_360_view.field_hr_employee_jobseeker_search_wizard__id
 msgid "ID"
 msgstr "ID"
@@ -146,12 +131,19 @@ msgid "Identification"
 msgstr "Identifikation"
 
 #. module: hr_360_view
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:100
+#, python-format
+msgid "Identification must be set before searching"
+msgstr "Identifikation måste fyllas i innan sökning"
+
+#. module: hr_360_view
 #: selection:hr.employee.jobseeker.search.wizard,identification:0
 msgid "Identified by certifier"
 msgstr "Identifierad genom intygsgivare"
 
 #. module: hr_360_view
 #: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:90
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:135
 #, python-format
 msgid "Incorrectly formated social security number: %s"
 msgstr "Felformaterat personnummer: %s"
@@ -163,6 +155,7 @@ msgstr "Utredning"
 
 #. module: hr_360_view
 #: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:111
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:156
 #: model:ir.model.fields,field_description:hr_360_view.field_hr_employee__jobseekers_ids
 #: model:ir.model.fields,field_description:hr_360_view.field_hr_employee_jobseeker_search_wizard__jobseekers_ids
 #, python-format
@@ -200,16 +193,16 @@ msgid "My Administrative Officer Area"
 msgstr "Arbetsyta"
 
 #. module: hr_360_view
-#: model_terms:ir.ui.view,arch_db:hr_360_view.hr_employee_360_form
 #: model_terms:ir.ui.view,arch_db:hr_360_view.search_jobseeker_form
 msgid "My Jobseekers"
 msgstr "Mina arbetssökande"
 
 #. module: hr_360_view
 #: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:106
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:151
 #, python-format
 msgid "No id found"
-msgstr "Finns inget id"
+msgstr "Inget id hittades"
 
 #. module: hr_360_view
 #: selection:hr.employee.jobseeker.search.wizard,search_reason:0
@@ -219,9 +212,10 @@ msgstr "Annan orsak"
 
 #. module: hr_360_view
 #: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:102
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:147
 #, python-format
 msgid "Other reason selected but other reason field is not filled in"
-msgstr "Annan orsak vald, men annan orsak fältet är tomt"
+msgstr "Annan orsak vald men fältet för annan orsak är inte ifyllt"
 
 #. module: hr_360_view
 #: model:ir.model.fields,help:hr_360_view.field_hr_employee__related_partner_id
@@ -244,14 +238,12 @@ msgid "Search Filter"
 msgstr "Sökfilter"
 
 #. module: hr_360_view
-#: model_terms:ir.ui.view,arch_db:hr_360_view.hr_employee_360_form
 #: model_terms:ir.ui.view,arch_db:hr_360_view.search_jobseeker_form
 msgid "Search Jobseekers"
 msgstr "Sök arbetssökande"
 
 #. module: hr_360_view
 #: model:ir.actions.act_window,name:hr_360_view.search_jobseeker_wizard
-#: model_terms:ir.ui.view,arch_db:hr_360_view.hr_employee_360_form
 #: model_terms:ir.ui.view,arch_db:hr_360_view.search_jobseeker_form
 msgid "Search Partner"
 msgstr "Sök efter kontakter"
@@ -262,7 +254,7 @@ msgid "Search reason"
 msgstr "Sökorsak"
 
 #. module: hr_360_view
-#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:100
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:145
 #, python-format
 msgid "Search reason or identification must be set before searching"
 msgstr "Du måste välja sökorsak eller identifieringsmetod före sökning"
