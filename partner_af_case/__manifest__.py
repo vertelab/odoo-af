@@ -41,10 +41,10 @@ v12.0.1.2 Lagt till översättningar som saknades.
         'hr_360_view',
     ],
     'data': [
-	    'views/res_partner_view.xml',
-            'security/ir.model.access.csv',
-            'views/res_partner_notes_view.xml',
-            #'data/ir.model.fields.csv', 
+        'views/res_partner_view.xml',
+        'security/ir.model.access.csv',
+        'views/res_partner_notes_view.xml',
+        # 'data/ir.model.fields.csv',
     ],
     'demo': [
     ],

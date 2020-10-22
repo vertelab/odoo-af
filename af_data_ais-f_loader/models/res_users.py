@@ -19,45 +19,48 @@
 #
 ##############################################################################
 
+import tempfile
+import os
+import csv
 from odoo import models, fields, api, _
 import logging
 _logger = logging.getLogger(__name__)
 
-import csv
-import os
-import tempfile
 
 class ResUsers(models.Model):
     _inherit = "res.users"
+
     @api.model
     def create_users(self):
         a = ReadCSV("")
         self.create_user(a.parse())
-    
+
     @api.model
     def create_user(self, rows):
         for row in rows:
-            user_login = self.env['res.users'].search([('login', '=', row['login'])])
-            partner_id = self.env.ref("af_data_ais-f_loader.%s" % row['partner_id']).id
-            row.update({'partner_id' :  partner_id}) 
+            user_login = self.env['res.users'].search(
+                [('login', '=', row['login'])])
+            partner_id = self.env.ref(
+                "af_data_ais-f_loader.%s" %
+                row['partner_id']).id
+            row.update({'partner_id': partner_id})
             _logger.info("%s" % row['partner_id'])
             _logger.info("creating row %s" % row)
             if not user_login:
                 self.env['res.users'].create(row)
             else:
                 self.env['res.users'].update(row)
-                
 
+    # create a record using data from csv
 
-    #create a record using data from csv
 
 class ReadCSV(object):
-    def __init__(self, path):     
+    def __init__(self, path):
         try:
             rows = []
             f = open(path)
             f.seek(0)
-            reader = csv.DictReader(f,delimiter=",")
+            reader = csv.DictReader(f, delimiter=",")
             for row in reader:
                 rows.append(row)
             f.close()
@@ -65,12 +68,24 @@ class ReadCSV(object):
         except IOError as e:
             _logger.error(u'Could not read CSV file')
             raise ValueError(e)
-        if not list(self.data[0].keys()) == ['external_id', 'login', 'password', 'partner_id']:
-            _logger.error(u'Row 0 was looking for "id", "login", "password", "partner_id"')
-            raise ValueError("Wrong format, expected format: ['external_id', 'login', 'password', 'partner_id'], seems like we're getting: %s" % list(self.data[0].keys()))
+        if not list(
+                self.data[0].keys()) == [
+                'external_id',
+                'login',
+                'password',
+                'partner_id']:
+            _logger.error(
+                u'Row 0 was looking for "id", "login", "password", "partner_id"')
+            raise ValueError(
+                "Wrong format, expected format: ['external_id', 'login', 'password', 'partner_id'], seems like we're getting: %s" %
+                list(
+                    self.data[0].keys()))
 
     def parse(self):
-        a = CSVIterator(self.data,len(self.data),['external_id', 'login', 'password', 'partner_id'])
+        a = CSVIterator(
+            self.data, len(
+                self.data), [
+                'external_id', 'login', 'password', 'partner_id'])
         rows = []
         while a.hasNext():
             _logger.info("appending row %s" % a.getRow())
@@ -92,9 +107,8 @@ class CSVIterator(object):
             self.row += 1
 
     def hasNext(self):
-        return self.row <= self.nrows -1
+        return self.row <= self.nrows - 1
 
     def getRow(self):
-        r = list(self.data[(self.row)].values())      
+        r = list(self.data[(self.row)].values())
         return {self.header[n]: r[n] for n in range(len(self.header))}
-    

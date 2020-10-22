@@ -20,6 +20,29 @@
 ##############################################################################
 
 from odoo import models, fields, api, _, tools
+from datetime import datetime, timedelta
+from copy import copy
+import pytz
+import logging
+
+_logger = logging.getLogger(__name__)
+
+# LOCAL_TZ: Local timezone
+LOCAL_TZ = "Europe/Stockholm"
+# BASE_DURATION: Base duration given by TeleOpti. This is the duration of the calendar.schedule slots in minutes.
+BASE_DURATION = 30.0
+# BASE_DAY_START, BASE_DAY_STOP: The hours between which we normally accept appointments
+BASE_DAY_START = (
+    pytz.timezone(LOCAL_TZ)
+    .localize(datetime.now().replace(hour=9, minute=0, second=0, microsecond=0))
+    .astimezone(pytz.utc)
+)
+BASE_DAY_STOP = (
+    pytz.timezone(LOCAL_TZ)
+    .localize(datetime.now().replace(hour=16, minute=0, second=0, microsecond=0))
+    .astimezone(pytz.utc)
+)
+
 
 
 class CalendarAppointmentReport(models.Model):
@@ -85,7 +108,7 @@ class CalendarAppointmentReport(models.Model):
         select_str = """
              SELECT
                     COUNT(DISTINCT ca.id) as app_count,
-                    COUNT(case co.additional_booking when 'f' then 1 else null end) as occ_count,
+                    (case is_possible_start when '1' then 1 else 0 end) as occ_count,
                     COUNT(case co.additional_booking when 't' then 1 else null end) as add_book_count,
                     COUNT(DISTINCT ca.id) - COUNT(case co.additional_booking when 't' then 1 else null end) as booked_from_cal,
                     COUNT(DISTINCT co.id) - COUNT(ca.id) as free_occ,
@@ -148,3 +171,64 @@ class CalendarAppointmentReport(models.Model):
         """
             % (self._table, self._select(), self._group_by())
         )
+
+    @api.model
+    def comp_possible_starts(self, start=datetime.now(), days_ahead=30):
+        app_types = self.env["calendar.appointment.type"].search(
+            [("channel", "=", self.env.ref("calendar_channel.channel_pdm").id)]
+        )
+
+        # init start date and time
+        loop_date = copy(BASE_DAY_START).replace(
+            year=start.year, month=start.month, day=start.day
+        )
+
+        # init last_dict and set all previous values to 0 since this is the first loop
+        last_dict = {}
+
+        # look days_ahead number of days ahead
+        for i in range(days_ahead):
+            # 16 is the number of half/whole hour slots between 9 and 17. Hopefully.
+            for j in range(16):
+                for app_type in app_types:
+                    search_domain = [
+                        ("type_id", "=", app_type.id),
+                        ("start", "=", loop_date),
+                        ("state", "=", "ok"),
+                        ("appointment_id", "=", False),
+                    ]
+                    if app_type.duration == 60:
+                        no_occasions = self.env["calendar.occasion"].search_count(
+                            search_domain
+                        )
+                        # compute possible appointment starts for this time and type
+                        no_possible_starts = max(
+                            no_occasions - last_dict.get(app_type.id, 0), 0
+                        )
+                        # update last_dict for appointment type
+                        last_dict[app_type.id] = no_possible_starts
+
+                        if no_possible_starts != 0:
+                            occasions_true = self.env["calendar.occasion"].search(
+                                search_domain, limit=no_possible_starts
+                            )
+                            occasions_false = self.env["calendar.occasion"].search(
+                                search_domain + [("id", "not in", occasions_true._ids)],
+                                limit=no_possible_starts,
+                            )
+                            for occ_true in occasions_true:
+                                occ_true.is_possible_start = "1"
+                            for occ_false in occasions_false:
+                                occ_false.is_possible_start = "0"
+                    else:
+                        # if 30 min meeting length all occs are possible starts
+                        occasions_true = self.env["calendar.occasion"].search(
+                            search_domain
+                        )
+                        for occ_true in occasions_true:
+                            occ_true.is_possible_start = "1"
+
+                # move ahead by 30 mins
+                loop_date += timedelta(minutes=BASE_DURATION)
+            # move ahead 1 day and reset to start time.
+            loop_date += timedelta(days=1, hours=-8)

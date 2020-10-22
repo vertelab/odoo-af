@@ -71,7 +71,7 @@
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
     </record>
-    <menuitem name="IPF" id="menu_ipf" parent="base.menu_custom" sequence="10" />
-    <menuitem name="IPF Settings" id="menu_ipf_settings" action="action_ipf" parent="menu_ipf" sequence="10" />
-    <menuitem name="IPF Endpoints" id="menu_ipf_endpoint" action="action_ipf_endpoint" parent="menu_ipf" sequence="10" />
+    <menuitem name="IPF" id="menu_ipf" parent="base.menu_custom" sequence="10"/>
+    <menuitem name="IPF Settings" id="menu_ipf_settings" action="action_ipf" parent="menu_ipf" sequence="10"/>
+    <menuitem name="IPF Endpoints" id="menu_ipf_endpoint" action="action_ipf_endpoint" parent="menu_ipf" sequence="10"/>
 </odoo>
