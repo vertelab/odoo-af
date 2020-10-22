@@ -92,6 +92,13 @@ odoo.define('ipf.planning', function (require) {
             } else {
                 return 'Saknas';
             }
+        },
+        update: function(record){
+            this.record = record;
+            this.data = null;
+            delete this.columns;
+            delete this.headers;
+            this.renderElement();
         }
     });
     
