@@ -59,9 +59,9 @@
                                 <field name="note_date"/>
                                 <field name="note_type"/>
                                 <field name="note_number"/>
-<!--
-                                <field name="office"/>
--->
+                                <!--
+                                                                <field name="office"/>
+                                -->
                             </tree>
                         </field>
 
@@ -80,13 +80,13 @@
         <field name="res_id" ref="introduction_tour_record"/>
     </record>
 
-<!--    <act_window id="introduction_tour_wizard"-->
-<!--                name="Search Partner"-->
-<!--                src_model="res.partner"-->
-<!--                res_model="introduction.tour.wizard"-->
-<!--                view_mode="form"-->
-<!--                target="inline"-->
-<!--                key2="client_action_multi"/>-->
+    <!--    <act_window id="introduction_tour_wizard"-->
+    <!--                name="Search Partner"-->
+    <!--                src_model="res.partner"-->
+    <!--                res_model="introduction.tour.wizard"-->
+    <!--                view_mode="form"-->
+    <!--                target="inline"-->
+    <!--                key2="client_action_multi"/>-->
 
     <menuitem id="introduction_tour_wizard"
               name="Workspace"

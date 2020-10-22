@@ -46,7 +46,7 @@ class CreateLocalOccasion(models.TransientModel):
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel', related='type_id.channel')
     channel_name = fields.Char(string='Channel', related='channel.name')
     user_ids = fields.Many2many(string='Case worker', comodel_name='res.users', help="Booked case worker", required=True)
-    office_id = fields.Many2one(comodel_name='hr.department', string="Office")
+    location_id = fields.Many2one(comodel_name="hr.location", string="Location")
     # fields describing how to create occasions:
     create_type = fields.Selection(string='Type', selection=[('single', 'Single'), ('repeating', 'Repeating'),], default='single', required=True)
     start_range = fields.Date(string='Start of repeat')
@@ -93,7 +93,7 @@ class CreateLocalOccasion(models.TransientModel):
 
             for user_id in self.user_ids:
                 for curr_occ in range(no_occ):
-                    occ = self.env['calendar.occasion']._force_create_occasion(30, self.start + timedelta(minutes=curr_occ*30), self.type_id.id, self.channel.id, 'request', user_id, self.office_id, False)
+                    occ = self.env['calendar.occasion']._force_create_occasion(30, self.start + timedelta(minutes=curr_occ*30), self.type_id.id, self.channel.id, 'request', user_id, self.location_id, False)
             return True
         elif self.create_type == 'repeating':
             # create list of weekday values allowed:
@@ -119,6 +119,6 @@ class CreateLocalOccasion(models.TransientModel):
                     # create only 30 min occasions (if duration is longer, create several occasions):
                     for user_id in self.user_ids:
                         for curr_occ in range(no_occ): 
-                            occ = self.env['calendar.occasion']._force_create_occasion(30, start_date + timedelta(minutes=curr_occ*30), self.type_id.id, self.channel.id, 'request', user_id, self.office_id, False)
+                            occ = self.env['calendar.occasion']._force_create_occasion(30, start_date + timedelta(minutes=curr_occ*30), self.type_id.id, self.channel.id, 'request', user_id, self.location_id, False)
             return True
         return False

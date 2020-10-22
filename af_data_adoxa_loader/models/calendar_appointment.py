@@ -19,36 +19,40 @@
 #
 ##############################################################################
 
+import gc
+import tempfile
+import os
+import csv
+from odoo.tools import config
 from odoo import models, fields, api, _
 import logging
 _logger = logging.getLogger(__name__)
-
-from odoo.tools import config
-
-import csv
-import os
-import tempfile
-import gc
 
 
 class CalendarOccasion(models.Model):
     _inherit = "calendar.appointment"
 
-    xmlid_module="__adoxa_import__"
+    xmlid_module = "__adoxa_import__"
 
     @api.model
-    def create_occasions(self):     
-        headers_header = ['occasions.csv', 'Notering',  'Trans', 'Odoo']
-        path = os.path.join(config.options.get('data_dir'), 'Adoxa/occasions.csv')
-        path = "/usr/share/odoo-af/af_data_adoxa_loader/data/test_dumps/occasions.csv" #testing purposes only
+    def create_occasions(self):
+        headers_header = ['occasions.csv', 'Notering', 'Trans', 'Odoo']
+        path = os.path.join(
+            config.options.get('data_dir'),
+            'Adoxa/occasions.csv')
+        # testing purposes only
+        path = "/usr/share/odoo-af/af_data_adoxa_loader/data/test_dumps/occasions.csv"
         header_path = "/usr/share/odoo-af/af_data_adoxa_loader/data/occasion_mapping.csv"
         self.create_calendar_objs(headers_header, path, header_path)
 
     @api.model
-    def create_appointments(self):     
-        headers_header = ['appointments.csv', 'Notering',  'Trans', 'Odoo']
-        path = os.path.join(config.options.get('data_dir'), 'Adoxa/appointments.csv')
-        path = "/usr/share/odoo-af/af_data_adoxa_loader/data/test_dumps/appointments.csv" #testing purposes only
+    def create_appointments(self):
+        headers_header = ['appointments.csv', 'Notering', 'Trans', 'Odoo']
+        path = os.path.join(
+            config.options.get('data_dir'),
+            'Adoxa/appointments.csv')
+        # testing purposes only
+        path = "/usr/share/odoo-af/af_data_adoxa_loader/data/test_dumps/appointments.csv"
         header_path = "/usr/share/odoo-af/af_data_adoxa_loader/data/appointment_mapping.csv"
         self.create_calendar_objs(headers_header, path, header_path)
 
@@ -59,14 +63,14 @@ class CalendarOccasion(models.Model):
         field_map = {}
         transformations = {}
         for row in header_rows:
-            
+
             if row['Odoo'] != '' and "!" not in row['Odoo']:
                 field_map.update({row['Odoo']: row[headers_header[0]]})
             if row['Trans'] != '':
                 key = row['Trans'].split(",")[0]
                 value = row['Trans'].split(",")[1]
                 transformations.update({key: value})
-            old_header.append(row[headers_header[0]]) #adoxa fields
+            old_header.append(row[headers_header[0]])  # adoxa fields
         reader = ReadCSV(path, old_header)
         iterations = 0
         for row in reader.get_data():
@@ -74,21 +78,20 @@ class CalendarOccasion(models.Model):
             header = list(field_map.keys())
             for i in range(len(header)):
                 if header[i] in field_map:
-                    r.update({header[i] : row[field_map[header[i]]]})
+                    r.update({header[i]: row[field_map[header[i]]]})
             self.create_occasion_from_row(r, transformations)
             iterations += 1
             if iterations > 500:
                 self.env.cr.commit()
                 iterations = 0
         reader.close()
-        
-    
+
     @api.model
     def create_occasion_from_row(self, row, transformations):
         transformed_row_and_id = self.transform(row, transformations)
         if transformed_row_and_id != {}:
             external_xmlid = transformed_row_and_id['external_xmlid']
-            transformed_row = transformed_row_and_id['row']                
+            transformed_row = transformed_row_and_id['row']
 
             if 'occasion_id' in transformed_row:
                 obj = self.env['calendar.appointment'].create(transformed_row)
@@ -97,24 +100,24 @@ class CalendarOccasion(models.Model):
                 obj = self.env['calendar.occasion'].create(transformed_row)
 
             self.env['ir.model.data'].create({
-                            'name': external_xmlid.split('.')[1],
-                            'module': external_xmlid.split('.')[0],
-                            'model': obj._name,
-                            'res_id': obj.id
-                            }) #creates an external id in the system for the partner.
-        
+                'name': external_xmlid.split('.')[1],
+                'module': external_xmlid.split('.')[0],
+                'model': obj._name,
+                'res_id': obj.id
+            })  # creates an external id in the system for the partner.
+
         else:
             _logger.warning("Did not create row %s" % row)
-    
+
     @api.model
     def transform(self, row, transformations):
         create = True
         external_xmlid = ""
         keys_to_delete = []
         keys_to_update = []
-        for key in row.keys(): 
+        for key in row.keys():
             if row[key] == '(null)' or row[key] == '':
-                    keys_to_delete.append(key)
+                keys_to_delete.append(key)
         for i in range(len(keys_to_delete)):
             row.pop(keys_to_delete[i], None)
         keys_to_delete = []
@@ -123,29 +126,34 @@ class CalendarOccasion(models.Model):
             if key in transformations:
                 transform = transformations[key]
 
-                if key == 'external_id':                        
+                if key == 'external_id':
                     xmlid_name = "%s%s" % (transform, row[key])
                     external_xmlid = "%s.%s" % (self.xmlid_module, xmlid_name)
                     keys_to_delete.append(key)
                 elif key == 'partner_id':
                     ipf = self.env.ref('af_ipf.ipf_endpoint_customer').sudo()
-                    res = ipf.call(customer_id = row[key])
+                    res = ipf.call(customer_id=row[key])
                     pnr = None
                     if res:
                         pnr = res.get('ids', {}).get('pnr')
                         if pnr:
                             pnr = '%s-%s' % (pnr[:8], pnr[8:12])
                     if pnr:
-                        row[key] = self.env['res.partner'].search([('social_sec_nr', '=', pnr)]).id
+                        row[key] = self.env['res.partner'].search(
+                            [('social_sec_nr', '=', pnr)]).id
                     else:
-                        _logger.warn("could not find person corresponding to %s, skipping" % row[key])
+                        _logger.warn(
+                            "could not find person corresponding to %s, skipping" %
+                            row[key])
                         create = False
                 elif key == 'occasion_id':
-                    xmlid = "%s.%s%s" % (self.xmlid_module, transform, row[key])
-                    occasion_id = self.env['ir.model.data'].xmlid_to_res_id(xmlid)
+                    xmlid = "%s.%s%s" % (
+                        self.xmlid_module, transform, row[key])
+                    occasion_id = self.env['ir.model.data'].xmlid_to_res_id(
+                        xmlid)
                     row[key] = occasion_id
                 elif key == 'start' or key == 'stop':
-                    row[key] = "%s %s" %(row['date'].split(' ')[0], row[key])
+                    row[key] = "%s %s" % (row['date'].split(' ')[0], row[key])
                 elif key == 'duration_selection':
                     if row['duration'] == "60":
                         row[key] = "1 hour"
@@ -154,121 +162,130 @@ class CalendarOccasion(models.Model):
                     else:
                         create = False
                 elif key == 'type_id':
-                    # Meeting type 23 is deprecated and replaced with meeting type 26, 
-                    # see calendar_af/data/calendar.appointment.type.csv for descriptions of the meeting types
-                    if row[key] == "23": 
+                    # Meeting type 23 is deprecated and replaced with meeting type 26,
+                    # see calendar_af/data/calendar.appointment.type.csv for
+                    # descriptions of the meeting types
+                    if row[key] == "23":
                         row[key] == "26"
-                    type_id = self.env['calendar.appointment.type'].search([('ipf_num', '=', row[key])])
+                    type_id = self.env['calendar.appointment.type'].search(
+                        [('ipf_num', '=', row[key])])
                     if type_id:
                         row[key] = type_id.id
                         row['name'] = type_id.name
-                    else: 
+                    else:
                         create = False
                 elif key == 'state':
                     if 'occasion_id' in row:
                         translation_dict = {
-                            'NULL':'confirmed',
-                            '1':'done',
-                            '2':'done',
+                            'NULL': 'confirmed',
+                            '1': 'done',
+                            '2': 'done',
                         }
                     else:
                         translation_dict = {
-                            'NULL':'request',
-                            '6':'ok',
-                            '7':'fail',
+                            'NULL': 'request',
+                            '6': 'ok',
+                            '7': 'fail',
                         }
                     row[key] = translation_dict[row[key]]
                 # elif key == 'location_id': #location is found through user_id.location_id, this might be needed in the future
                 #     row[key] = self.env['hr.location'].search([('location_code', '=', row[key])]).id
                 #     keys_to_delete.append(key)
                 elif key == 'user_id':
-                    row[key] = self.env['res.users'].search([('login', '=', row[key])]).id
+                    row[key] = self.env['res.users'].search(
+                        [('login', '=', row[key])]).id
                 elif key == 'additional_booking':
-                    if row[key] == "Ja":
-                        row[key] == True
+                        row[key] = True
                     else:
-                        row[key] == False
+                        row[key] = False
 
                 keys_to_delete.append("date")
 
-
-
         for i in range(len(keys_to_update)):
             row.update(keys_to_update[i])
-        
+
         for key in row.keys():
             if "skip" in key:
                 keys_to_delete.append(key)
         for i in range(len(keys_to_delete)):
-                row.pop(keys_to_delete[i], None)
+            row.pop(keys_to_delete[i], None)
         id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
-        if id_check != False:
+        if id_check:
             create = False
             _logger.warning("external id already in database, skipping")
-        
+
         if create:
             return {
-                    'row': row, 
-                    'external_xmlid': external_xmlid 
-                    }
+                'row': row,
+                'external_xmlid': external_xmlid
+            }
         else:
             return {}
 
 
 class ReadCSV(object):
-    def __init__(self, path, header): 
+    def __init__(self, path, header):
         self.header = header
         try:
             self.f = open(path)
             self.f.seek(0)
-            reader = csv.DictReader(self.f,delimiter=",")           
+            reader = csv.DictReader(self.f, delimiter=",")
             self.data = reader
         except IOError as e:
             _logger.error(u'Could not read CSV file at path %s' % path)
             raise ValueError(e)
-        
+
         row = next(self.data)
         self.f.seek(0)
         next(self.data)
         for i in range(len(self.header)):
-            if not self.header[i] in row.keys(): 
+            if not self.header[i] in row.keys():
                 _logger.error(u'Row 0 could not find "%s"' % self.header[i])
-                raise ValueError("Missing column '%s', columns found: %s" % (self.header[i], list(row.keys())))
-        
-    
+                raise ValueError(
+                    "Missing column '%s', columns found: %s" %
+                    (self.header[i], list(
+                        row.keys())))
+
     def get_data(self):
         return self.data
+
     def get_header(self):
         return self.header
+
     def close(self):
         self.f.close()
+
     def seek_zero(self):
         self.f.seek(0)
 
     def parse(self, field_map):
-        csvIter = CSVIterator(self.data,len(self.data), list(field_map.keys()), field_map)
+        csvIter = CSVIterator(
+            self.data, len(
+                self.data), list(
+                field_map.keys()), field_map)
         pairs = []
         while csvIter.hasNext():
             pairs.append(csvIter.getRow())
             csvIter.next()
         return pairs
-    
+
     def parse_header(self):
         field_map = {}
         for i in range(len(self.header)):
-            field_map.update({self.header[i] : self.header[i]})
+            field_map.update({self.header[i]: self.header[i]})
         rows = []
         self.seek_zero()
         for row in self.data:
             rows.append(row)
         self.seek_zero()
-        csvIter = CSVIterator(rows,len(rows), self.header, field_map)
+        csvIter = CSVIterator(rows, len(rows), self.header, field_map)
         pairs = []
         while csvIter.hasNext():
             csvIter.next()
             pairs.append(csvIter.getRow())
-            
+
         return pairs
+
 
 class CSVIterator(object):
     def __init__(self, data, nrows, header, field_map):
@@ -290,8 +307,7 @@ class CSVIterator(object):
         r = {}
         for i in range(len(self.header)):
             if self.header[i] in self.field_map:
-                r.update({self.header[i] : self.data[self.row][self.field_map[self.header[i]]]})
+                r.update({self.header[i]: self.data[self.row]
+                          [self.field_map[self.header[i]]]})
 
         return r
-
-     

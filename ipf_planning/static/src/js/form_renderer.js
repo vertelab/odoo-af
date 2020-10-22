@@ -1,7 +1,7 @@
-odoo.define('ipf.ais_a.form_renderer', function (require) {
+odoo.define('ipf.planning.form_renderer', function (require) {
     "use strict";
     
-    var AisA = require('ipf.ais_a');
+    var Planning = require('ipf.planning');
     var FormRenderer = require('web.FormRenderer');
     
     /**
@@ -13,9 +13,7 @@ odoo.define('ipf.ais_a.form_renderer', function (require) {
          */
         init: function (parent, state, params) {
             this._super.apply(this, arguments);
-            this.ais_a = undefined;
-            console.log('Formrenderer');
-            console.log(this);
+            this.ipf_planning = undefined;
         },
     
         //--------------------------------------------------------------------------
@@ -23,25 +21,25 @@ odoo.define('ipf.ais_a.form_renderer', function (require) {
         //--------------------------------------------------------------------------
     
         /**
-         * Overrides the function that renders the nodes to return the ais_a's $el
-         * for the 'af_ais_a' div node.
+         * Overrides the function that renders the nodes to return the planning $el
+         * for the 'ipf-planning-tab' div node.
          *
          * @override
          * @private
          */
         _renderNode: function (node) {
-            if (node.tag === 'div' && node.attrs.class === 'af-ais-a') {
-                if (!this.ais_a) {
-                    this.ais_a = new AisA(this, this.state, {
+            if (node.tag === 'div' && node.attrs.class === 'ipf-planning-tab') {
+                if (!this.ipf_planning) {
+                    this.ipf_planning = new Planning(this, this.state, {
                         isEditable: this.activeActions.edit,
                         viewType: 'form',
                     });
-                    this.ais_a.appendTo($('<div>'));
-                    this._handleAttributes(this.ais_a.$el, node);
+                    this.ipf_planning.appendTo($('<div>'));
+                    this._handleAttributes(this.ipf_planning.$el, node);
                 } else {
-                    this.ais_a.update(this.state);
+                    this.ipf_planning.update(this.state);
                 }
-                return this.ais_a.$el;
+                return this.ipf_planning.$el;
             } else {
                 return this._super.apply(this, arguments);
             }
