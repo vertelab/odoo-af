@@ -21,48 +21,65 @@
 
 from odoo import models, fields, api, _, tools
 
+
 class CalendarAppointmentReport(models.Model):
-    _name = 'report.calendar.appointment'
+    _name = "report.calendar.appointment"
     _description = "Appointment report"
-    _order = 'name'
+    _order = "name"
     _auto = False
 
-    name = fields.Char(string='Name', readonly=True)
-    duration = fields.Float(string='Duration', readonly=True)
-    app_count = fields.Integer(string='Booked appointments', readonly=True)
-    occ_count = fields.Integer(string='Possible appointments', readonly=True)
-    add_book_count = fields.Integer(string='No. additional occasions', readonly=True)
-    booked_from_cal = fields.Integer(string='Booked from calendar', readonly=True)
-    free_occ = fields.Integer(string='Free occasions', readonly=True)
-    no_overbooked = fields.Integer(string='Overbooked occasions', readonly=True)
-    app_id = fields.Integer(string='Occasion id', readonly=True)
-    user_id = fields.Many2one(comodel_name='res.users', string='Case worker', readonly=True)
-    partner_id = fields.Many2one(comodel_name='res.partner', string='Jobseeker', readonly=True)
-    app_state = fields.Selection(selection=[('free', 'Draft'),
-                                        ('reserved', 'Reserved'),
-                                        ('confirmed', 'Confirmed'),
-                                        ('done', 'Done'),
-                                        ('canceled', 'Canceled')],
-                                        string='State', 
-                                        help="Status of the meeting",
-                                        readonly=True)
-    occ_state = fields.Selection(selection=[('draft', 'Draft'),
-                                        ('request', 'Published'),
-                                        ('ok', 'Accepted'),
-                                        ('fail', 'Rejected'),
-                                        ('deleted', 'Deleted')],
-                                        string='Occasion state', 
-                                        help="Status of the meeting",
-                                        readonly=True)
-    operation_id = fields.Many2one(string='Operation', comodel_name='hr.operation', readonly=True)
-    type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type', readonly=True)
-    additional_booking = fields.Boolean(String='Over booking', readonly=True)
-    occ_start = fields.Datetime(string='Occasion start', readonly=True)
-    occ_stop = fields.Datetime(string='Occasion stop', readonly=True)
-    app_start = fields.Datetime(string='Appointment start', readonly=True)
-    app_stop = fields.Datetime(string='Appointment stop', readonly=True)
-    occ_start_time = fields.Char(string='Occasion start time', readonly=True)
-    app_start_time = fields.Char(string='Appointment start time', readonly=True)
+    name = fields.Char(string="Name", readonly=True)
+    duration = fields.Float(string="Duration", readonly=True)
+    app_count = fields.Integer(string="Booked appointments", readonly=True)
+    occ_count = fields.Integer(string="Possible appointments", readonly=True)
+    add_book_count = fields.Integer(string="No. additional occasions", readonly=True)
+    booked_from_cal = fields.Integer(string="Booked from calendar", readonly=True)
+    free_occ = fields.Integer(string="Free occasions", readonly=True)
+    no_overbooked = fields.Integer(string="Overbooked occasions", readonly=True)
+    app_id = fields.Integer(string="Occasion id", readonly=True)
+    user_id = fields.Many2one(
+        comodel_name="res.users", string="Case worker", readonly=True
+    )
+    partner_id = fields.Many2one(
+        comodel_name="res.partner", string="Jobseeker", readonly=True
+    )
+    app_state = fields.Selection(
+        selection=[
+            ("free", "Draft"),
+            ("reserved", "Reserved"),
+            ("confirmed", "Confirmed"),
+            ("done", "Done"),
+            ("canceled", "Canceled"),
+        ],
+        string="State",
+        help="Status of the meeting",
+        readonly=True,
+    )
+    occ_state = fields.Selection(
+        selection=[
+            ("draft", "Draft"),
+            ("request", "Published"),
+            ("ok", "Accepted"),
+            ("fail", "Rejected"),
+            ("deleted", "Deleted"),
+        ],
+        string="Occasion state",
+        help="Status of the meeting",
+        readonly=True,
+    )
+    operation_id = fields.Many2one(
+        string="Operation", comodel_name="hr.operation", readonly=True
+    )
+    type_id = fields.Many2one(
+        string="Type", comodel_name="calendar.appointment.type", readonly=True
+    )
+    additional_booking = fields.Boolean(String="Over booking", readonly=True)
+    occ_start = fields.Datetime(string="Occasion start", readonly=True)
+    occ_stop = fields.Datetime(string="Occasion stop", readonly=True)
+    app_start = fields.Datetime(string="Appointment start", readonly=True)
+    app_stop = fields.Datetime(string="Appointment stop", readonly=True)
+    occ_start_time = fields.Char(string="Occasion start time", readonly=True)
+    app_start_time = fields.Char(string="Appointment start time", readonly=True)
 
     def _select(self):
         select_str = """
@@ -91,7 +108,7 @@ class CalendarAppointmentReport(models.Model):
                     ca.start_time as app_start_time,
                     co.start_time as occ_start_time
         """
-#
+        #
         return select_str
 
     def _group_by(self):
@@ -121,10 +138,13 @@ class CalendarAppointmentReport(models.Model):
 
     def init(self):
         tools.drop_view_if_exists(self._cr, self._table)
-        self._cr.execute("""
+        self._cr.execute(
+            """
             CREATE view %s as
               %s
               FROM calendar_occasion co
                 LEFT JOIN calendar_appointment ca ON ca.id = co.appointment_id
                     %s
-        """ % (self._table, self._select(), self._group_by()))
+        """
+            % (self._table, self._select(), self._group_by())
+        )

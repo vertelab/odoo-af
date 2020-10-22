@@ -24,53 +24,70 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-class ResUsers(models.Model):
-    _inherit = 'res.users'
 
-    appointment_ids = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings', inverse_name="user_id")
+class ResUsers(models.Model):
+    _inherit = "res.users"
+
+    appointment_ids = fields.One2many(
+        comodel_name="calendar.appointment",
+        string="Booked meetings",
+        inverse_name="user_id",
+    )
 
     @api.one
     def _compute_appointment_count(self):
         for user in self:
             user.appointment_count = len(user.appointment_ids)
 
-    appointment_count = fields.Integer(compute='_compute_appointment_count')
+    appointment_count = fields.Integer(compute="_compute_appointment_count")
 
     @api.multi
     def view_appointments(self):
-        return{
-            'name': _('Booked meetings'),
-            'domain':[('user_id', '=', self.ids)],
-            'view_type': 'form',
-            'res_model': 'calendar.appointment',
-            'view_id': self.env.ref('calendar_af.view_calendar_appointment_tree').id,
-            'view_mode': 'tree', 
-            'type': 'ir.actions.act_window',
+        return {
+            "name": _("Booked meetings"),
+            "domain": [("user_id", "=", self.ids)],
+            "view_type": "form",
+            "res_model": "calendar.appointment",
+            "view_id": self.env.ref("calendar_af.view_calendar_appointment_tree").id,
+            "view_mode": "tree",
+            "type": "ir.actions.act_window",
         }
 
     def _compute_free_occasions(self):
-        return self.env['calendar.occasion'].search([('user_id', '=', self.id), ('appointment_id', '=', False)])
+        return self.env["calendar.occasion"].search(
+            [("user_id", "=", self.id), ("appointment_id", "=", False)]
+        )
 
-    free_occ = fields.Many2one(comodel_name='calendar.occasion', string='Free occasions', compute=_compute_free_occasions)
+    free_occ = fields.Many2one(
+        comodel_name="calendar.occasion",
+        string="Free occasions",
+        compute=_compute_free_occasions,
+    )
 
     def action_calendar_local_occasion(self):
-        res = self.env.ref('calendar_af.action_calendar_local_occasion').read()[0]
-        res['domain'] = [('operation_id', '=', self.operation_id.id), ('user_id', '=', self.id)]
+        res = self.env.ref("calendar_af.action_calendar_local_occasion").read()[0]
+        res["domain"] = [
+            ("operation_id", "=", self.operation_id.id),
+            ("user_id", "=", self.id),
+        ]
         return res
 
     def create_local_occasion_action(self):
-        res = self.env.ref('calendar_af.create_local_occasion_action').read()[0]
+        res = self.env.ref("calendar_af.create_local_occasion_action").read()[0]
 
-        # we get context as a str not a dict        
-        context = eval(res.get('context', "{}"))
+        # we get context as a str not a dict
+        context = eval(res.get("context", "{}"))
 
-        context['default_operation_id'] = self.operation_id.id
-        context['default_user_ids'] = self._ids
+        context["default_operation_id"] = self.operation_id.id
+        context["default_user_ids"] = self._ids
         # convert back to str and return
-        res['context'] = str(context)
+        res["context"] = str(context)
         return res
 
     def action_local_appointment(self):
-        res = self.env.ref('calendar_af.action_local_appointment').read()[0]
-        res['domain'] = [('operation_id', '=', self.operation_id.id), ('user_id', '=', self.id)]
+        res = self.env.ref("calendar_af.action_local_appointment").read()[0]
+        res["domain"] = [
+            ("operation_id", "=", self.operation_id.id),
+            ("user_id", "=", self.id),
+        ]
         return res
