@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="hr_assets_backend" name="Job Seeker Assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" type="text/scss" href="/hr_jobseeker/static/src/scss/job_seeker.scss"/>
+            </xpath>
+        </template>
+    </data>
+</odoo>
