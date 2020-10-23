@@ -229,7 +229,6 @@ class CalendarAppointmentSuggestion(models.Model):
     occasion_ids = fields.Many2many(comodel_name='calendar.occasion', string="Occasions")
     type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type')
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
-    # location_id = fields.Many2one(comodel_name="hr.location", string="Location")
     operation_id = fields.Many2one(comodel_name="hr.operation", string="Operation")
     office_id = fields.Many2one(comodel_name="hr.department", related="operation_id.department_id", string="Office", readonly=True)
     user_id = fields.Many2one(comodel_name='res.users', string="Case worker")
@@ -272,13 +271,18 @@ class CalendarAppointmentSuggestion(models.Model):
 
                 occasions |= free_occasion
 
+        app_vals = {}
+
+        if self.channel == self.env.ref('calendar_channel.channel_local') and not self.user_id:
+            app_vals['user_id'] = occasions[0].user_id
+
+        app_vals['state'] = 'confirmed'
+        app_vals['start'] = self.start
+        app_vals['stop'] = self.stop
+
         # Write data to appointment_id
         occasions.write({'appointment_id': self.appointment_id.id})
-        self.appointment_id.write({
-            'state': 'confirmed',
-            'start': self.start,
-            'stop': self.stop,
-        })
+        self.appointment_id.write(app_vals)
         
 
     @api.multi
@@ -309,7 +313,7 @@ class CalendarAppointment(models.Model):
     def _local_user_domain(self):
         if self.partner_id:
             res = []
-            res.append(('partner_id.location_id.id', '=', self.env.user.location_id.id)) 
+            # res.append(('partner_id.operation_id.id', '=', self.env.user.operation_id.id)) 
 
             # TODO: add hr.skill check ('type_id.skills_ids', 'in', self.env.user.skill_ids)
             # TODO: add check if case worker has occasions and that these are free. Maybe use a computed field on res.users?
@@ -335,7 +339,6 @@ class CalendarAppointment(models.Model):
                                         help="Status of the meeting")
     cancel_reason = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason', help="Cancellation reason")
     cancel_reason_temp = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason', store=False, help="Cancellation reason")
-    # location_id = fields.Many2one(string='Location', comodel_name='hr.location')
     operation_id = fields.Many2one(string='Operation', comodel_name='hr.operation')
     office_id = fields.Many2one(comodel_name='hr.department', string="Office", related="operation_id.department_id", readonly=True)
     occasion_ids = fields.One2many(comodel_name='calendar.occasion', inverse_name='appointment_id', string="Occasion")
@@ -846,6 +849,11 @@ class CalendarOccasion(models.Model):
         :param type_id: Meeting type.
         :param max_depth: Number of bookable occasions per time slot.
         """
+        # TODO: Garanterar vi verkligen att två occasions 
+        # har samma handläggare för lokalkontor?
+        #   - vi behöver loopa över varje employee per 
+        #     hr.department kopplat till operation_id???
+
         # Calculate number of occasions needed to match booking duration
         no_occasions = int(duration / BASE_DURATION)
         date_delta = (stop - start)
@@ -895,7 +903,7 @@ class CalendarOccasion(models.Model):
                 start_dt = start_dt - timedelta(days=1)
                 start_dt = start_dt.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute)
                 last_slot = last_slot - timedelta(days=1)
-            
+
             count_prev_starts = 0
             # loop within the day to find slots
             while start_dt <= last_slot:
