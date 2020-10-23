@@ -25,23 +25,30 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-class hr_location(models.Model):
-    _inherit = "hr.location"
+class hr_department(models.Model):
+    _inherit = "hr.department"
 
     reserve_admin_ids = fields.Many2many(
-        comodel_name="hr.employee", string="Reserve time managers"
+        comodel_name="hr.employee",
+        string="Reserve time managers",
+        relation="hr_department_hr_employee_reserve",
     )
-    app_warn_user_ids = fields.Many2many(
+
+
+class hr_operation(models.Model):
+    _inherit = "hr.operation"
+
+    app_warn_emp_ids = fields.Many2many(
         comodel_name="hr.employee", string="Appointment warnings"
     )
-    type_location_ids = fields.One2many(
-        comodel_name="calendar.appointment.type.location",
-        inverse_name="location_id",
-        string="Type - Location mapping",
+    type_operation_ids = fields.One2many(
+        comodel_name="calendar.appointment.type.operation",
+        inverse_name="operation_id",
+        string="Type - Operation mapping",
     )
     mapped_dates_ids = fields.One2many(
         comodel_name="calendar.mapped_dates",
-        inverse_name="location_id",
+        inverse_name="operation_id",
         string="Mapped dates",
     )
 
@@ -51,22 +58,22 @@ class hr_location(models.Model):
             "res_model": "calendar.mapped_dates",
             "view_type": "form",
             "view_mode": "tree",
-            "domain": "[('location_id', '=', %s)]" % self.id,
+            "domain": "[('operation_id', '=', %s)]" % self.id,
             "view_id": self.env.ref("calendar_af.view_calendar_mapped_dates_tree").id,
             "target": "current",
             "type": "ir.actions.act_window",
         }
 
 
-class AppointmentTypeLocation(models.Model):
-    _name = "calendar.appointment.type.location"
+class AppointmentTypeOperation(models.Model):
+    _name = "calendar.appointment.type.operation"
 
     type_id = fields.Many2one(
         comodel_name="calendar.appointment.type",
         string="Appointment type",
         required=True,
     )
-    location_id = fields.Many2one(
-        comodel_name="hr.location", string="Location", required=True
+    operation_id = fields.Many2one(
+        comodel_name="hr.operation", string="Operation", required=True
     )
     warning_threshold = fields.Integer(string="Warning threshold")

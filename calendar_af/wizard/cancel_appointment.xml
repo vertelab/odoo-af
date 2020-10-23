@@ -15,7 +15,7 @@
                             <field name="stop"/>
                             <field name="user_id"/>
                             <field name="partner_id"/>
-                            <field name="location_id"/>
+                            <field name="operation_id"/>
                         </tree>
                         <form>
                         </form>

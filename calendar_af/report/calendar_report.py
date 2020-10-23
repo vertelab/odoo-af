@@ -44,6 +44,7 @@ BASE_DAY_STOP = (
 )
 
 
+
 class CalendarAppointmentReport(models.Model):
     _name = "report.calendar.appointment"
     _description = "Appointment report"
@@ -89,8 +90,8 @@ class CalendarAppointmentReport(models.Model):
         help="Status of the meeting",
         readonly=True,
     )
-    location_id = fields.Many2one(
-        string="Location", comodel_name="hr.location", readonly=True
+    operation_id = fields.Many2one(
+        string="Operation", comodel_name="hr.operation", readonly=True
     )
     type_id = fields.Many2one(
         string="Type", comodel_name="calendar.appointment.type", readonly=True
@@ -122,7 +123,7 @@ class CalendarAppointmentReport(models.Model):
                     co.name as name,
                     co.state as occ_state,
                     ca.state as app_state,
-                    ca.location_id as location_id,
+                    ca.operation_id as operation_id,
                     co.type_id as type_id,
                     co.additional_booking as additional_booking,
                     ca.start as app_start,
@@ -146,8 +147,8 @@ class CalendarAppointmentReport(models.Model):
                     co.name,
                     co.state,
                     ca.state,
-                    ca.location_id,
-                    co.location_id,
+                    ca.operation_id,
+                    co.operation_id,
                     co.type_id,
                     co.additional_booking,
                     ca.start,
