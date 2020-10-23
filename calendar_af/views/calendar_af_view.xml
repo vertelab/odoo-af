@@ -104,13 +104,13 @@ unused_occasions.unlink()</field>
             <search string="Rules">
                 <field name="name" />
                 <field name="login" />
-                <field name="office_id" />
+                <field name="office_ids" />
                 <group expand="0" string="Group By...">
                     <filter
                         name="group_by_office"
                         string="Office"
                         domain="[]"
-                        context="{'group_by':'office_id'}"
+                        context="{'group_by':'office_ids'}"
                     />
                 </group>
             </search>

@@ -10,12 +10,11 @@
     "category": "Tools",
     "depends": [
         "contacts",
-        'hr',
+        'hr_office',
         ],
     "external_dependencies": {'python': ['zeep']},
     "data": [
         "security/af_security.xml",
-        "views/hr_views.xml",
         "views/res_users.xml",
         "views/ir_actions.xml",
     ],
