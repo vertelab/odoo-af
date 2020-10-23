@@ -29,7 +29,9 @@ class hr_department(models.Model):
     _inherit = "hr.department"
 
     reserve_admin_ids = fields.Many2many(
-        comodel_name="hr.employee", string="Reserve time managers"
+        comodel_name="hr.employee",
+        string="Reserve time managers",
+        relation="hr_department_hr_employee_reserve",
     )
 
 
