@@ -1,0 +1,115 @@
+.af_apps_sidebar_panel {
+    height: calc(100% - #{$o-navbar-height}); 
+	position: fixed; 
+    overflow-y: auto;	
+    top: $o-navbar-height;
+    background-color: $af-appbar-background;
+    .af_apps_sidebar {
+	    padding: 0;
+	    white-space: nowrap;
+	    .af_apps_sidebar_menu {
+		    list-style: none;
+		    margin: 0;
+		    padding: 0;
+		    > li {
+		        margin: 0;
+		        padding: 0;
+		        border: 0px;
+		        display: block;
+		        > a {
+		            margin: 0;
+		            border: 0px;
+		            display: block;
+		            cursor: pointer;
+		            font-size: 13px;
+		            font-weight: 300;
+		            overflow: hidden;
+		            padding: 8px 11px;
+		            position: relative;
+		            text-decoration: none;
+		            color: $af-appbar-color;
+		            text-overflow: ellipsis;
+		            .af_apps_sidebar_icon {
+					    width: 22px;
+					    height: 22px;
+					    margin-right: 5px;
+					}
+		        }
+		    }
+	        > li:hover > a {
+			    background: #f1f8fe;
+			    color: #00005a !important;
+	        }
+	    }
+	}
+}
+
+@include media-breakpoint-up(lg) {
+	.af_sidebar_type_large {
+		.af_apps_sidebar_panel {
+			width: $af-sidebar-large-width;
+		}
+		.o_main {
+			padding-left: $af-sidebar-large-width;
+		}
+	}
+	.af_sidebar_type_small {
+		.af_apps_sidebar_panel {
+			width: $af-sidebar-small-width;
+			.af_apps_sidebar_name {
+				display: none;
+			}
+			.af_apps_sidebar_icon {
+				margin-right: 0 !important;
+			}
+		}
+		.o_main {
+			padding-left: $af-sidebar-small-width;
+		}
+	}
+	.af_sidebar_type_invisible {
+		.af_apps_sidebar_panel {
+			display: none;
+		}
+	}
+}
+
+@include media-breakpoint-only(md) {
+	.af_sidebar_type_large, .af_sidebar_type_small {
+		.af_apps_sidebar_panel {
+			width: $af-sidebar-small-width;
+			.af_apps_sidebar_name {
+				display: none;
+			}
+			.af_apps_sidebar_icon {
+				margin-right: 0 !important;
+			}
+		}
+		.o_main {
+			padding-left: $af-sidebar-small-width;
+		}
+	}
+	.af_sidebar_type_invisible {
+		.af_apps_sidebar_panel {
+			display: none;
+		}
+	}
+}
+
+@include media-breakpoint-down(sm) {
+	.af_apps_sidebar_panel {
+		display: none;
+	}
+	.o_main {
+		padding-left: 0;
+	}
+}
+
+.o_fullscreen {
+	.af_apps_sidebar_panel {
+		display: none;
+	}
+	.o_main {
+		padding-left: 0;
+	}
+}

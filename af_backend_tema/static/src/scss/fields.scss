@@ -1,0 +1,18 @@
+.o_field_widget {
+    &.o_field_many2one .o_external_button {
+        color: $o-brand-odoo
+    }
+}
+
+.o_required_modifier {
+    &.o_input, .o_input {
+        background-color: $af-required-color !important;
+    }
+}
+
+@include media-breakpoint-down(sm) {
+    .o_form_view .af_mobile_add {
+		margin-left: 0 !important;
+        margin-bottom: 10px !important;
+	}
+}

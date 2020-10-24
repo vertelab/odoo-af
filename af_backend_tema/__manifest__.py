@@ -15,8 +15,12 @@
     "depends": [
         'base', 'portal', 'web'
     ],
+    "qweb": [
+        "static/src/xml/*.xml",
+    ],
     "data": [
         'views/assets.xml',
         'views/template.xml',
+        "views/web.xml"
     ]
 }
