@@ -4,7 +4,7 @@
 {
     "name": "AF Backend Tema V12",
     "summary": "AF Backend Theme V12	",
-    "version": "12.0.0.5",
+    "version": "12.0.0.6",
     "category": "Theme/Backend",
     "description": """
 		AF Backend tema för Odoo 12.0 community edition.
