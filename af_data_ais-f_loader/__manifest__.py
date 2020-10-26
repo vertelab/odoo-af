@@ -25,7 +25,7 @@ v12.0.1.3  - removed state-partner.csv\n
         "calendar", 
         #"partner_view_360", 
         "partner_kpi_data", 
-		#"partner_daily_notes", 
+		"partner_daily_notes", 
 		#"partner_desired_jobs",
         ],
     

@@ -328,13 +328,25 @@ class ResPartner(models.Model):
         keys_to_delete = []
         for key in row.keys():
             if key not in transformations and isinstance(row[key], str):
+                value = row[key].strip()
                 if row[key].lower() == "j":
-                    keys_to_update.append({key: "True"})
+                    keys_to_update.append({key: True})
                 elif row[key].lower() == "n":
-                    keys_to_update.append({key: "False"})
-
+                    keys_to_update.append({key: False})
+                elif len(value) > 0 and value != ' ':
+                    keys_to_update.append({key: value})
+                else:
+                    keys_to_delete.append(key)
+        for i in range(len(keys_to_update)):
+            row.update(keys_to_update[i])
+        for i in range(len(keys_to_delete)):
+            row.pop(keys_to_delete[i], None)
         if 'type' not in row:  # new
             row['type'] = 'contact'
+        if 'next_contact_type' in row:
+            keys_to_update.append({'next_contact_type': row['next_contact_type'][0]})
+        if 'last_contact_type' in row:
+            keys_to_update.append({'last_contact_type': row['last_contact_type'][0]})
 
         for key in row.keys():
             if key in transformations:
@@ -351,7 +363,7 @@ class ResPartner(models.Model):
                             "Skipping partner, contains U in ORGTYP")
                         break
                 elif transform == 'skip_if_j':
-                    if row[key].lower() == 'j':
+                    if row[key]:
                         create = False
                         _logger.warning(
                             "Skipping partner, contains J in RADERAD")
@@ -384,6 +396,11 @@ class ResPartner(models.Model):
                     create = False
                 elif key == 'office_id':
                     row[key] = self.env['hr.department'].search([('office_code','=', row[key])]).id
+                elif key == 'user_id':
+                    user_id = self.env['res.users'].search([('login', '=', row[key])]).id
+                    if not user_id:
+                        user_id = self.env['res.users'].create({'login': row[key], 'firstname': 'placeholder', 'lastname':'jobseeker officer'}).id
+                    row[key] = user_id
                 elif key == 'partner_id':
                     if 'fiscal_year' in row:
 
@@ -413,8 +430,7 @@ class ResPartner(models.Model):
                                 ssyk_xmlid)
                             if ssyk_id:
                                 updated_values = {}
-                                if 'education' in row and row['education'].lower(
-                                ) == 'j':
+                                if 'education' in row and row['education']:
                                     updated_values.update({'education': True})
                                 else:
                                     updated_values.update({'education': False})
