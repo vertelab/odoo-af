@@ -1,148 +1,140 @@
 <odoo>
-    <!--Template fo contact breadcrumbs-->
-    <template id="portal_my_home_menu_visually_impaired_breadcrumbs" name="Portal layout : visually impaired menu entries" inherit_id="portal.portal_breadcrumbs" priority="80">
-        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
-            <li t-if="page_name == 'contacts'" t-attf-class="breadcrumb-item #{'active ' if not contact else ''}">
-                <a t-if="contacts" t-attf-href="/contacts?{{ keep_query() }}">Contacts</a>
-                <t t-else="">Contacts</t>
-            </li>
-            <li t-if="contact_info" class="breadcrumb-item active">
-                <t t-esc="contact_info.name"/>
-            </li>
-        </xpath>
-    </template>
 
-    <!--Template to add contact to the home menu list-->
+<!-- todo: Add short guide on how to access the customizations in the browser. -->
+<!-- todo: Verify that all the conditionals are required, removing the excessives. -->
 
-    <template id="portal_my_home_invoice" name="Portal My Home : visually impaired menu entries" inherit_id="portal.portal_my_home" priority="30">
-        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
-            <t t-if="contact_count" t-call="portal.portal_docs_entry">
-                <t t-set="title">Contacts</t>
-                <t t-set="url" t-value="'/contacts'"/>
-                <t t-set="count" t-value="contact_count"/>
-            </t>
-        </xpath>
-    </template>
 
-    <!--Template for all contacts-->
 
-    <template id="portal_all_contact_access" name="All Contacts">
-      <t t-call="portal.portal_layout">
-        <t t-set="breadcrumbs_searchbar" t-value="True"/>
+<!--Template fo contact breadcrumbs-->
+<template id="portal_my_home_menu_visually_impaired_breadcrumbs" name="Portal layout : visually impaired menu entries" inherit_id="portal.portal_breadcrumbs" priority="80">
+    <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+        <li t-if="page_name == 'contacts'" t-attf-class="breadcrumb-item #{'active ' if not contact else ''}">
+            <a t-if="contacts" t-attf-href="/contacts?{{ keep_query() }}">Contacts</a>
+            <t t-else="">Contacts</t>
+        </li>
+        <li t-if="contact_info" class="breadcrumb-item active">
+            <t t-esc="contact_info.name"/>
+        </li>
+    </xpath>
+</template>
 
-        <t t-call="portal.portal_searchbar">
+
+
+<!--Template to add contact to the home menu list-->
+<template id="portal_my_home_invoice" name="Portal My Home : visually impaired menu entries" inherit_id="portal.portal_my_home" priority="30">
+    <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+        <t t-if="contact_count" t-call="portal.portal_docs_entry">
             <t t-set="title">Contacts</t>
+            <t t-set="url" t-value="'/contacts'"/>
+            <t t-set="count" t-value="contact_count"/>
         </t>
-        <t t-if="not partners">
-            <p>There are currently no invoices and payments for your account.</p>
-        </t>
-        <t t-if="partners" t-call="portal.portal_table">
-            <thead>
-                <tr class="active">
-                    <th>Name #</th>
-                    <th>Address</th>
-                    <th>Email</th>
-                    <th>Phone Number</th>
+    </xpath>
+</template>
+
+
+
+<!--Template for all contacts-->
+<template id="portal_all_contact_access" name="All Contacts">
+  <t t-call="portal.portal_layout">
+    <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+    <t t-call="portal.portal_searchbar">
+        <t t-set="title">Contacts</t>
+    </t>
+    <t t-if="not partners">
+        <p>There are currently no invoices and payments for your account.</p>
+    </t>
+    <t t-if="partners" t-call="portal.portal_table">
+        <thead>
+            <tr class="active">
+                <th>Name #</th>
+                <th>Address</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            <t t-foreach="partners" t-as="partner">
+                <tr>
+                    <td>
+                        <a t-att-href="'/contact/%s' % (partner.id)" t-att-title="partner.name">
+                            <t t-esc="partner.name" t-if="partner.name"/>
+                        </a>
+                    </td>
+                    <td><span t-field="partner.street"/></td>
+                    <td class='d-none d-md-table-cell'>
+                        <span t-field="partner.email"/>
+                    </td>
+                    <td>
+                        <span t-field="partner.phone"/>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                <t t-foreach="partners" t-as="partner">
-                    <tr>
-                        <td>
-                            <a t-att-href="'/contact/%s' % (partner.id)" t-att-title="partner.name">
-                                <t t-esc="partner.name" t-if="partner.name"/>
-                            </a>
-                        </td>
-                        <td><span t-field="partner.street"/></td>
-                        <td class='d-none d-md-table-cell'>
-                            <span t-field="partner.email"/>
-                        </td>
-                        <td>
-                            <span t-field="partner.phone"/>
-                        </td>
-                    </tr>
+            </t>
+        </tbody>
+    </t>
+  </t>
+</template>
+
+
+
+<!--Template for each contact-->
+<template id="access_contact_portal_template" name="Selected Contact" inherit_id="portal.portal_sidebar" primary="True">
+    <xpath expr="//div[hasclass('o_portal_sidebar')]" position="inside">
+
+        <div class="row mt16 o_portal_sale_sidebar">
+            <!-- Sidebar -->
+            <t t-call="portal.portal_record_sidebar">
+                <t t-set="classes" t-value="'col-lg-auto d-print-none'"/>
+
+                <t t-set="title">
+                    <div class="col flex-grow-0 pr-2">
+                        <img t-if="contact_info.image" t-att-src="image_data_uri(contact_info.image)" alt="Contact" style="width: 150px !important; height: 150px !important;"/>
+                        <img t-if="not contact_info.image" src="/web/static/src/img/placeholder.png" alt="Contact" style="width: 150px !important; height: 150px !important;"/>
+                    </div>
+                    <h2 class="mb-0"><b t-field="contact_info.name"/> </h2>
                 </t>
-            </tbody>
-        </t>
-      </t>
-    </template>
+            </t>
 
-    <!--Template for each contact-->
+            <!-- Page content -->
+            <div id="quote_content" class="col-12 col-lg justify-content-end">
 
-    <template id="access_contact_portal_template" name="Selected Contact" inherit_id="portal.portal_sidebar" primary="True">
-        <xpath expr="//div[hasclass('o_portal_sidebar')]" position="inside">
-
-            <div class="row mt16 o_portal_sale_sidebar">
-                <!-- Sidebar -->
-                <t t-call="portal.portal_record_sidebar">
-                    <t t-set="classes" t-value="'col-lg-auto d-print-none'"/>
-
-                    <t t-set="title">
-                        <div class="col flex-grow-0 pr-2">
-                            <img t-if="contact_info.image" t-att-src="image_data_uri(contact_info.image)" alt="Contact" style="width: 150px !important; height: 150px !important;"/>
-                            <img t-if="not contact_info.image" src="/web/static/src/img/placeholder.png" alt="Contact" style="width: 150px !important; height: 150px !important;"/>
-                        </div>
-                        <h2 class="mb-0"><b t-field="contact_info.name"/> </h2>
-<!--                        <div class="col pl-0">-->
-<!--                            <span t-field="contact_info.phone"/>-->
-<!--                        </div>-->
-                    </t>
-                </t>
-
-                <!-- Page content -->
-                <div id="quote_content" class="col-12 col-lg justify-content-end">
-
-<!--                    <t t-if="sale_order.transaction_ids">-->
-<!--                        <t t-call="payment.payment_confirmation_status">-->
-<!--                            <t t-set="payment_tx_id" t-value="sale_order.get_portal_last_transaction()"/>-->
-<!--                            <t t-set="reference" t-value="sale_order.reference"/>-->
-<!--                        </t>-->
-<!--                    </t>-->
-
-                    <div t-attf-class="card">
-                        <div class="col-12" style="padding: 20px;">
-                            <h3><strong>Personal Information</strong></h3>
-                            <div class="container">
-                                <div class="row col-12" style="margin-bottom: 20px">
-                                    <div class="col-6">
-                                        <strong>Address:</strong> <br/> <span t-field="contact_info.street"/>
-                                    </div>
-                                    <div class="col-6">
-                                        <strong>Phone Number:</strong> <br/> <span t-field="contact_info.phone"/>
-                                    </div>
+                <div t-attf-class="card">
+                    <div class="col-12" style="padding: 20px;">
+                        <h3><strong>Personal Information</strong></h3>
+                        <div class="container">
+                            <div class="row col-12" style="margin-bottom: 20px">
+                                <div class="col-6">
+                                    <strong>Address:</strong> <br/> <span t-field="contact_info.street"/>
                                 </div>
-
-                                <div class="row col-12" style="margin-bottom: 20px">
-                                    <div class="col-6">
-                                        <strong>Email:</strong> <br/> <span t-field="contact_info.email"/>
-                                    </div>
-                                    <div class="col-6">
-                                        <strong>Website:</strong> <br/> <span t-field="contact_info.website"/>
-                                    </div>
-                                </div>
-
-                                <div class="row col-12">
-                                    <div class="col-6">
-                                        <strong>Language:</strong> <br/> <span t-field="contact_info.lang"/>
-                                    </div>
+                                <div class="col-6">
+                                    <strong>Phone Number:</strong> <br/> <span t-field="contact_info.phone"/>
                                 </div>
                             </div>
 
-                        </div>
-<!--                        <div t-call="sale.sale_order_portal_content"/>-->
-                    </div>
+                            <div class="row col-12" style="margin-bottom: 20px">
+                                <div class="col-6">
+                                    <strong>Email:</strong> <br/> <span t-field="contact_info.email"/>
+                                </div>
+                                <div class="col-6">
+                                    <strong>Website:</strong> <br/> <span t-field="contact_info.website"/>
+                                </div>
+                            </div>
 
-                    <!-- chatter -->
-<!--                    <div id="sale_order_communication" class="mt-4">-->
-<!--                        <h2>Communication</h2>-->
-<!--                        <t t-call="portal.message_thread">-->
-<!--                            <t t-set="object" t-value="contact_info"/>-->
-<!--                        </t>-->
-<!--                    </div>-->
+                            <div class="row col-12">
+                                <div class="col-6">
+                                    <strong>Language:</strong> <br/> <span t-field="contact_info.lang"/>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
+
             </div>
-        </xpath>
-    </template>
+        </div>
+    </xpath>
+</template>
+
 
 
 </odoo>
