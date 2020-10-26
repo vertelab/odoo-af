@@ -46,35 +46,17 @@
                             <field name="duration" invisible="0"/>
                         </group>
                         <group>
-<<<<<<< HEAD
-                            <field name="type_id" domain="[('channel', '=', %(calendar_channel.channel_local)d)]"
-                                   required="1"/>
-                            <field name="office_id" required="1"/>
-                            <field name="user_id" string="Case worker" widget="many2oneattendee"
-                                   placeholder="Select case worker..." required="1"/>
-=======
-                            <field name="type_id" domain="[('channel', '=', %(calendar_channel.channel_local)d)]" required="1" />
-                            <field name="location_id" required="1" />
-                            <field name="user_id" string="Case worker" widget="many2oneattendee" placeholder="Select case worker..." required="1" />
->>>>>>> Dev-12.0
+                            <field name="type_id" domain="[('channel', '=', %(calendar_channel.channel_local)d)]" 
+                                   required="1" />
+                            <field name="operation_id" required="1" />
+                            <field name="user_id" string="Case worker" widget="many2oneattendee" 
+                                   placeholder="Select case worker..." required="1" />
                         </group>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
-    <!--
-        <record id="view_calendar_occasion_pivot" model="ir.ui.view">
-            <field name="name">calendar.occasion.pivot</field>
-            <field name="model">calendar.occasion</field>
-            <field name="priority" eval="2" />
-            <field name="arch" type="xml">
-                <pivot string="Appointment">
-                    <field name="start" type="col" interval="day" />
-                    <field name="appointment_id" type="row" />
-                </pivot>
-            </field>
-        </record> -->
 
     <record id="view_calendar_occasion_kanban" model="ir.ui.view">
         <field name="name">calendar.occasion.kanban</field>
@@ -122,13 +104,8 @@
         <field name="model">calendar.occasion</field>
         <field name="priority" eval="2"/>
         <field name="arch" type="xml">
-<<<<<<< HEAD
-            <calendar string="Occasions" date_start="start" date_stop="stop" date_delay="duration" color="office_id">
-                <field name="name"/>
-=======
-            <calendar string="Occasions" date_start="start" date_stop="stop" date_delay="duration" color="location_id">
+            <calendar string="Occasions" date_start="start" date_stop="stop" date_delay="duration" color="operation_id">
                 <field name="name" />
->>>>>>> Dev-12.0
             </calendar>
         </field>
     </record>
@@ -144,7 +121,7 @@
                 <field name="weekday"/>
                 <field name="start"/>
                 <field name="stop"/>
-                <field name="location_id"/>
+                <field name="operation_id"/>
                 <field name="state"/>
                 <field name="user_id"/>
             </tree>
@@ -156,15 +133,9 @@
         <field name="model">calendar.occasion</field>
         <field name="arch" type="xml">
             <search string="Rules">
-<<<<<<< HEAD
-                <field name="state"/>
-                <field name="type_id"/>
-                <field name="office_id"/>
-=======
                 <field name="state" />
                 <field name="type_id" />
-                <field name="location_id"/>
->>>>>>> Dev-12.0
+                <field name="operation_id"/>
                 <field name="user_id"/>
                 <filter
                         name="state_ok_req"
@@ -179,17 +150,10 @@
                             context="{'group_by':'type_id'}"
                     />
                     <filter
-<<<<<<< HEAD
-                            name="group_by_office_id"
-                            string="office_id"
+                            name="group_by_operation_id"
+                            string="operation_id"
                             domain="[]"
-                            context="{'group_by':'office_id'}"
-=======
-                        name="group_by_location_id"
-                        string="location_id"
-                        domain="[]"
-                        context="{'group_by':'location_id'}"
->>>>>>> Dev-12.0
+                            context="{'group_by':'operation_id'}"
                     />
                 </group>
             </search>

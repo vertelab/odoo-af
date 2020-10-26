@@ -2,4 +2,4 @@
 
 from . import calendar
 from . import res_users
-from . import hr_location
+from . import hr_department

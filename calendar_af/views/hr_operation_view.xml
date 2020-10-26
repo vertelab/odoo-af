@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_operation_form_calendar_af_inherited" model="ir.ui.view"> 
+    <field name="name">hr.operation.form.calendar_af.inherited</field>
+    <field name="model">hr.operation</field> 
+    <field name="inherit_id" ref="hr_office.view_operation_form" /> 
+    <field name="arch" type="xml"> 
+      <sheet position="inside">
+      <field name="employee_ids" invisible="1"/>
+        <group>
+          <field name="app_warn_emp_ids" widget="many2many_tags" domain="[('id', 'in', employee_ids)]"/>
+        </group>
+        <notebook>
+          <page name="type_operation" string="Appointment warning thresholds">
+            <field name="type_operation_ids" mode="tree" nolabel="1">
+              <tree editable="bottom">
+                <field name="type_id" domain="[('channel', '=', %(calendar_channel.channel_local)d)]"/>
+                <field name="warning_threshold"/>
+              </tree>
+            </field>
+          </page>
+          <page name="mapped_dates" string="Mapped dates">
+            <field name="mapped_dates_ids" mode="tree" nolabel="1">
+              <tree editable="bottom">
+                <field name="name"/>
+                <field name="from_date"/>
+                <field name="to_date"/>
+              </tree>
+            </field>
+          </page>
+        </notebook>
+      </sheet>
+    </field>
+  </record> 
+</odoo>

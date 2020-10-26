@@ -46,7 +46,7 @@
               <field name="duration" widget="float_time" />
               <field name="case_worker_name" />
               <field name="channel_name" />
-              <field name="location_id" />
+              <field name="operation_id" />
               <button name="cancel_meeting_action" type="object" string="Cancel" icon="fa-times" context="{'active_id': id}" />
               <button name="move_meeting_action" type="object" string="Move" icon="fa-repeat" context="{'active_id': id}" />
             </tree>
@@ -61,7 +61,7 @@
               <field name="duration" widget="float_time" />
               <field name="case_worker_name" />
               <field name="channel_name" />
-              <field name="location_id" />
+              <field name="operation_id" />
             </tree>
           </field>
       </page>
