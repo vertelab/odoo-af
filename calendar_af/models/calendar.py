@@ -813,7 +813,6 @@ class CalendarOccasion(models.Model):
         start_date = self._get_min_occasions(type_id, day_start, day_stop)
         # Calculate how many occasions we need
         no_occasions = int(duration / BASE_DURATION)
-        _logger.warn("DAER: operation_id: %s" % operation_id)
         if operation_id:
             if operation_id.department_id and operation_id.department_id.reserve_admin_ids:
                 # find employees listed as available for reserve bookings on operation
