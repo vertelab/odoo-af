@@ -1,8 +1,8 @@
-console.log("Matomo script commencing...");
-console.log("0a");
+// console.log("Matomo script commencing...");
+// console.log("0a");
 
 if (_mtm) {
-  console.log("Matomo declared.");
+  // console.log("Matomo declared.");
 
   const entry1 = {
     "mtm.startTime": new Date().getTime(),
