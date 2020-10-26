@@ -74,6 +74,6 @@ class JobSeekerStage(models.Model):
     _description = 'HR Job Seeker Stage'
 
     name = fields.Char(string="Name")
-    sequence = fields.Integer(strin="Sequence")
+    sequence = fields.Integer(string="Sequence")
     fold = fields.Boolean(string="Fold")
     template_id = fields.Many2one('mail.template', string="Mail Template")
