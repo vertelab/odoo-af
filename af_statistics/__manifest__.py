@@ -4,7 +4,7 @@
 {
     "name": "AF Statistics",
     "summary": "AF Statistics for Matomo",
-    "version": "12.0.0.1",
+    "version": "12.0.0.2",
     "category": "TBD",
     "description": "AF Statistics for Matomo",
     "author": "AF",

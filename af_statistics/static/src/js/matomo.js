@@ -1,5 +1,4 @@
 console.log("Matomo script commencing...");
-console.log("0a");
 
 if (_mtm) {
   console.log("Matomo declared.");
@@ -24,7 +23,7 @@ if (_mtm) {
 
 
 
-
+// Do not remove the commented code. It is needed for stage 2 logging comming up soon.
 // var matomo_data = matomo_data || [];
 // const matomo_entry = {
 //   "mtm.startTime": new Date().getTime(),
