@@ -167,6 +167,8 @@
                             <field name="occasion_ids" invisible="1"/>
                             <button name="select_suggestion" type="object" string="Book"/>
                         </tree>
+                        <form>
+                        </form>
                     </field>
                 </sheet>
             </form>
@@ -233,6 +235,8 @@
                             <field name="occasion_ids" invisible="1"/>
                             <button name="select_suggestion_move" type="object" string="Move"/>
                         </tree>
+                        <form>
+                        </form>
                     </field>
                 </sheet>
             </form>
