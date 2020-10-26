@@ -68,7 +68,7 @@ class ResUsers(models.Model):
     def action_calendar_local_occasion(self):
         res = self.env.ref("calendar_af.action_calendar_local_occasion").read()[0]
         res["domain"] = [
-            ("operation_id", "=", self.operation_id.id),
+            ("operation_id", "in", self.operation_ids._ids),
             ("user_id", "=", self.id),
         ]
         return res
@@ -79,7 +79,7 @@ class ResUsers(models.Model):
         # we get context as a str not a dict
         context = eval(res.get("context", "{}"))
 
-        context["default_operation_id"] = self.operation_id.id
+        context["default_operation_id"] = self.operation_ids._ids[0]
         context["default_user_ids"] = self._ids
         # convert back to str and return
         res["context"] = str(context)
@@ -88,7 +88,7 @@ class ResUsers(models.Model):
     def action_local_appointment(self):
         res = self.env.ref("calendar_af.action_local_appointment").read()[0]
         res["domain"] = [
-            ("operation_id", "=", self.operation_id.id),
+            ("operation_id", "in", self.operation_ids._ids),
             ("user_id", "=", self.id),
         ]
         return res
