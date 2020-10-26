@@ -34,7 +34,7 @@
                                 <group>
                                     <field name="type_id" required="1" domain="[('channel', '=', %(calendar_channel.channel_local)d)]"/>
                                     <field name="channel_name" invisible="1" />
-                                    <field name="location_id" required="1" />
+                                    <field name="operation_id" required="1" />
                                     <!-- I cant use many2manyattendees widget here for some reason?  -->
                                     <field name="user_ids" string="Case worker" widget="many2many_tags" placeholder="Select case worker..." required="1" />
                                 </group>
