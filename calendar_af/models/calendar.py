@@ -902,9 +902,8 @@ class CalendarOccasion(models.Model):
         no_occasions = int(duration / BASE_DURATION)
         date_delta = (stop - start)
         td_base_duration = timedelta(minutes=BASE_DURATION)
-        limit = 0
 
-        def get_occasions(start, occ_list, i):
+        def get_occasions(start, occ_list, i, limit):
             # check if we still need to do recursive calls
             if i > 0:
                 # get occasions
@@ -912,7 +911,7 @@ class CalendarOccasion(models.Model):
                 # append to result list
                 occ_list.append(res)
                 # recursive call to get following occasions
-                occ_list = get_occasions(start + td_base_duration, occ_list, i - 1)
+                occ_list = get_occasions(start + td_base_duration, occ_list, i - 1, limit)
             return occ_list
 
         def check_available_depth(occasions):
@@ -948,7 +947,7 @@ class CalendarOccasion(models.Model):
                     if limit != 0:
                         occasions = []
                         # search for specific occasions
-                        occasions = get_occasions(start_dt, occasions, no_occasions)
+                        occasions = get_occasions(start_dt, occasions, no_occasions, limit)
                         # check the available depth of our result
                         available_depth = check_available_depth(occasions)
                         slot = []
