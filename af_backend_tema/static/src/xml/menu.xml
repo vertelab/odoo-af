@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-extend="AppsMenu">
+		<t t-jquery="a[data-toggle='dropdown']" t-operation="replace">
+             <a class="full" data-toggle="dropdown" data-display="static" href="#">
+                  <i class="fa fa-th-large"/> Main Menu
+            </a>
+        </t>
+	</t>
+
+</templates>
