@@ -8,17 +8,16 @@
     "website": "https://vertel.se/",
     "category": "Tools",
     "depends": [
-        "calendar_af", 
-        "partner_view_360", 
-        'hr_360_view', 
+        "calendar_af",
+        "partner_view_360",
+        "hr_360_view",
     ],
-    "external_dependencies": [
-    ],
+    "external_dependencies": [],
     "data": [
         "views/calendar_occasion_view.xml",
         "views/res_partner_view.xml",
         "views/hr_employee_view.xml",
-        "views/calendar_occasion_view.xml"
+        "views/calendar_occasion_view.xml",
     ],
     "application": False,
     "installable": True,
