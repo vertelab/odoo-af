@@ -19,18 +19,23 @@
 #
 ##############################################################################
 
-from odoo import models, fields, api, _
 import logging
 from datetime import datetime, timedelta
 
+from odoo import models, fields, api, _
+
 _logger = logging.getLogger(__name__)
+
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    appointment_ids_past = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings', compute="compute_show_dates_past")
-    appointment_ids_ahead = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings', compute="compute_show_dates_ahead")
-    appointment_ids = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings', inverse_name="partner_id")
+    appointment_ids_past = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings',
+                                           compute="compute_show_dates_past")
+    appointment_ids_ahead = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings',
+                                            compute="compute_show_dates_ahead")
+    appointment_ids = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings',
+                                      inverse_name="partner_id")
 
     @api.one
     def _compute_appointment_count(self):
@@ -41,46 +46,46 @@ class ResPartner(models.Model):
 
     @api.multi
     def view_appointments(self):
-        return{
+        return {
             'name': _('Booked meetings'),
-            'domain':[('partner_id', '=', self.ids)],
+            'domain': [('partner_id', '=', self.ids)],
             'view_type': 'form',
             'res_model': 'calendar.appointment',
             'view_id': self.env.ref('calendar_af.view_calendar_appointment_tree').id,
-            'view_mode': 'tree', 
+            'view_mode': 'tree',
             'type': 'ir.actions.act_window',
         }
 
-
     @api.multi
     def open_partner_calendar(self):
-        return{
+        return {
             'name': _('Calendar'),
-            'domain':[('partner_id', '=', self.ids)],
+            'domain': [('partner_id', '=', self.ids)],
             'view_type': 'form',
             'res_model': 'calendar.appointment',
-            'view_id':  False,
+            'view_id': False,
             'view_mode': 'tree,calendar,kanban,pivot,form',
             'type': 'ir.actions.act_window',
         }
 
-    #unbook meeting?
+    # unbook meeting?
     @api.multi
     def create_appointment(self):
-        return{
+        return {
             'name': _('Booked meetings'),
-            'domain':[('partner_id', '=', self.ids)],
+            'domain': [('partner_id', '=', self.ids)],
             'view_type': 'form',
             'res_model': 'calendar.appointment',
             'view_id': self.env.ref('calendar_af.view_calendar_appointment_form').id,
-            'view_mode': 'form', 
+            'view_mode': 'form',
             'type': 'ir.actions.act_window',
         }
 
     @api.one
     def compute_show_dates_ahead(self):
-        self.appointment_ids_ahead = self.appointment_ids.filtered(lambda a: a.start > datetime.now() and a.state == 'confirmed')
-    
+        self.appointment_ids_ahead = self.appointment_ids.filtered(
+            lambda a: a.start > datetime.now() and a.state == 'confirmed')
+
     @api.one
     def compute_show_dates_past(self):
         self.appointment_ids_past = self.appointment_ids.filtered(lambda a: a.start < datetime.now())
@@ -97,8 +102,9 @@ class ResPartner(models.Model):
         type_21 = self.env.ref('calendar_meeting_type.type_21')
         type_26 = self.env.ref('calendar_meeting_type.type_26')
         # find appointments that need to be moved
-        appointment_ids = self.env['calendar.appointment'].search([('partner_id', 'in', partner_ids._ids),('type_id', '=', type_21.id)])
-        
+        appointment_ids = self.env['calendar.appointment'].search(
+            [('partner_id', 'in', partner_ids._ids), ('type_id', '=', type_21.id)])
+
         desired_time = datetime.now()
         # loop through appointments to be moved
         for appointment in appointment_ids:

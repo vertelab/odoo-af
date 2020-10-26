@@ -19,13 +19,13 @@
 #
 ##############################################################################
 
-import logging
-from odoo import api, fields, models, _
-from odoo.exceptions import UserError
-from datetime import datetime, timedelta
-
-import pytz
 import copy
+import logging
+import pytz
+from datetime import datetime, timedelta
+from odoo.exceptions import UserError
+
+from odoo import api, fields, models, _
 
 _logger = logging.getLogger(__name__)
 
