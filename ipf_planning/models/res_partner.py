@@ -19,33 +19,41 @@
 #
 ##############################################################################
 
+from odoo import models, fields, api, _
+import requests
+from requests.auth import HTTPBasicAuth
+import json
+from uuid import uuid4
 import logging
-
-from odoo import api, fields, models, _
-from odoo.exceptions import UserError
-
+from odoo.exceptions import Warning
 
 _logger = logging.getLogger(__name__)
 
+class Partner(models.Model):
+    _inherit = 'res.partner'
+    
+   
+    @api.multi
+    def ipf_load_planning(self):
+        self.ensure_one()
+        res = None
+        if self.is_jobseeker:
+            personnummer = self.get_ais_a_pnr()
+            if personnummer:
+                try:
+                    ipf = self.env.ref('af_ipf.ipf_endpoint_planning').sudo()
+                    res = ipf.call(personnummer=personnummer)
+                except Exception as e:
+                    _logger.warn('Error in IPF Planning integration.', exc_info=e)
+        return res
 
-class CancelAppointment(models.TransientModel):
-    _name = "calendar.cancel_appointment"
-    _description = "Cancel appointment"
+    @api.multi
+    def get_ais_a_pnr(self):
+        try:
+            if self.company_registry:
+                pnr = self.company_registry.replace('-', '')
+                return pnr
+        except:
+            _logger.warn("Invalid personal identification number: %s" % self.company_registry)
 
-    @api.model
-    def _get_appointments(self):
-        return self.env["calendar.appointment"].browse(self._context.get("active_ids"))
 
-    appointment_ids = fields.Many2many(
-        string="Appointments to be cancelled",
-        comodel_name="calendar.appointment",
-        default=_get_appointments,
-    )
-    cancel_reason = fields.Many2one(
-        string="Reason for cancellation",
-        comodel_name="calendar.appointment.cancel_reason",
-    )
-
-    def action_cancel_appointment(self):
-        if self.cancel_reason:
-            return self.appointment_ids.cancel(self.cancel_reason)
