@@ -271,6 +271,7 @@ class ResPartner(models.Model):
             values['orsak']['orsakDef'] = 'FRITXT'
 
         bhtj = self._bhtj_get_initierande_nyckeltjanst()
+        _logger.debug('_grant_jobseeker_access: %s' % values)
         try:
             response = bhtj.service.skapaNyckel(**values)
             response = serialize_object(response, target_cls=dict)

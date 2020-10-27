@@ -10,6 +10,6 @@ Mötestypsid,,,name
 Bokningsstatus,,"state,_",state
 Skapad,,,
 Skapad av,,,
-Kontorskod,,"location_id,_",!location_id
+Kontorskod,,"location_id,_",location_id
 Kontorsnamn,,,
 Möteshandläggare,,"user_id,_",user_id
