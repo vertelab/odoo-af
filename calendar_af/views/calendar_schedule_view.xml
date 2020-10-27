@@ -6,28 +6,28 @@
         <field name="priority" eval="2"/>
         <field name="arch" type="xml">
             <calendar string="Schedules" date_start="start" date_stop="stop" date_delay="duration"
-                color="type_id">
+                      color="type_id">
                 <field name="name"/>
             </calendar>
         </field>
     </record>
 
-     <record id="view_calendar_schedule_tree" model="ir.ui.view">
+    <record id="view_calendar_schedule_tree" model="ir.ui.view">
         <field name="name">calendar.schedule.tree</field>
         <field name="model">calendar.schedule</field>
         <field name="priority" eval="2"/>
         <field name="arch" type="xml">
-            <tree string="Appointments" >
-                    <field name="name"/>
-                    <field name="start"/>
-                    <field name="stop"/>
-                    <field name="scheduled_agents"/>
-                    <field name="forecasted_agents"/>
-                    <field name="type_id"/>
-                </tree>
+            <tree string="Appointments">
+                <field name="name"/>
+                <field name="start"/>
+                <field name="stop"/>
+                <field name="scheduled_agents"/>
+                <field name="forecasted_agents"/>
+                <field name="type_id"/>
+            </tree>
         </field>
     </record>
-    
+
     <record id="view_calendar_schedule_form" model="ir.ui.view">
         <field name="name">calendar.schedule.form</field>
         <field name="model">calendar.schedule</field>
@@ -37,19 +37,19 @@
                 <sheet>
                     <div class="oe_title">
                         <h1>
-                            <field name="name" />
+                            <field name="name"/>
                         </h1>
                     </div>
                     <group>
                         <group>
-                            <field name="start" />
-                            <field name="stop" />
-                            <field name="duration" />
+                            <field name="start"/>
+                            <field name="stop"/>
+                            <field name="duration"/>
                         </group>
                         <group>
-                            <field name="scheduled_agents" />
-                            <field name="forecasted_agents" />
-                            <field name="type_id" />
+                            <field name="scheduled_agents"/>
+                            <field name="forecasted_agents"/>
+                            <field name="type_id"/>
                         </group>
                     </group>
                 </sheet>
@@ -66,7 +66,7 @@
                 <field name="name"/>
                 <field name="start"/>
                 <field name="stop"/>
-                <field name="type_id" />
+                <field name="type_id"/>
                 <templates>
                     <t t-name="kanban-box">
                         <div class="oe_kanban_global_click">
@@ -76,9 +76,15 @@
                                 </strong>
                                 <div class="o_kanban_tags_section">
                                     <ul>
-                                        <li> Start: <field name="start"/> </li>
-                                        <li> Stop: <field name="stop"/> </li> 
-                                        <li> Meeting type: <field name="type_id"/> </li>
+                                        <li>Start:
+                                            <field name="start"/>
+                                        </li>
+                                        <li>Stop:
+                                            <field name="stop"/>
+                                        </li>
+                                        <li>Meeting type:
+                                            <field name="type_id"/>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -125,7 +131,7 @@
         <field name="view_id" ref="view_calendar_schedule_kanban"/>
     </record>
 
-    <menuitem action="action_calendar_schedule" id="menu_action_schedule" parent="menu_pdm" sequence="10" />
+    <menuitem action="action_calendar_schedule" id="menu_action_schedule" parent="menu_pdm" sequence="10"/>
 </odoo>
 
 

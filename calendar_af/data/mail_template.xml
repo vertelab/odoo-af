@@ -10,7 +10,8 @@
                     <p style="margin: 0px; padding: 0px; font-size: 13px;">
                         Hello,
                         <br/><br/>
-                        You are running low on occasions for meeting type ${object.type_id.name} at office ${object.operation_id.display_name}.
+                        You are running low on occasions for meeting type ${object.type_id.name} at office 
+                        ${object.operation_id.display_name}.
                         <br/>
                     </p>
                 </div>

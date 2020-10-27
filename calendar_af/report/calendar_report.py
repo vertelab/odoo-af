@@ -45,6 +45,7 @@ BASE_DAY_STOP = (
 
 
 
+
 class CalendarAppointmentReport(models.Model):
     _name = "report.calendar.appointment"
     _description = "Appointment report"
