@@ -77,6 +77,15 @@ class ResPartner(models.Model):
         self.create_partners(headers_header, path, header_path)
 
     @api.model
+    def create_officers(self):
+        headers_header = ['handlaggare.csv', 'Notering', 'Trans', 'Odoo']
+        path = os.path.join(config.options.get('data_dir'), 'AIS-F/handlaggare.csv')
+        # testing purposes only
+        path = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/handlaggare.csv"
+        header_path = "/usr/share/odoo-af/af_data_ais-f_loader/data/handlaggare_mapping.csv"
+        self.create_partners(headers_header, path, header_path)
+
+    @api.model
     def create_contact_persons(self):
         headers_header = ['kontaktperson.csv', 'Notering', 'Trans', 'Odoo']
         path = os.path.join(
@@ -201,9 +210,6 @@ class ResPartner(models.Model):
 
     @api.model
     def create_partner_from_row(self, row, transformations):
-        # TODO: läs given address först, skapa den och sen lägg på fältet
-        # given_address_id = xmlid_to_res_id
-
         #_logger.info("row: %s" % row)
         transformed_row_and_id = self.transform(row, transformations)
         if transformed_row_and_id != {}:
@@ -214,32 +220,52 @@ class ResPartner(models.Model):
             secondary_address_transformations = transformed_row_and_id[
                 'secondary_address_transformations']
 
-           #_logger.info("creating partner: %s" % transformed_row)
+            _logger.info("creating partner: %s" % transformed_row)
+            if 'login' in transformed_row:
+                transformed_row.pop('country_id', None)
+                transformed_row.pop('type', None)
+                office_id = transformed_row['office_id']
+                transformed_row.pop('office_id', None)
+                user = self.env['res.users'].search([('login', '=', transformed_row['login'])])
+                employee_vals = {
+                            'firstname': transformed_row['firstname'],
+                            'lastname': transformed_row['lastname'],
+                            'user_id': user.id,
+                            }
+                if not user:
+                    user = self.env['res.users'].create(transformed_row)
+                    employee_vals['office_ids'] = [(4,office_id,0)]
+                            
+                    self.env['hr.employee'].create(employee_vals)
 
-            transformed_row.pop('state_id', None)
-            transformed_row.pop('education_level', None)
-            transformed_row.pop('country_id', None)
-            transformed_row.pop('jobseeker_category', None)
+                    self.env['ir.model.data'].create({
+                        'name': external_xmlid.split('.')[1],
+                        'module': external_xmlid.split('.')[0],
+                        'model': user._name,
+                        'res_id': user.id
+                        })
+                else:
+                    
+                    user = self.env['res.users'].search([('login','=',transformed_row['login'])])
+                    for employee in user.employee_ids:
+                            employee.write(employee_vals)
+            else:
+                partner = self.env['res.partner'].create(transformed_row)
 
-            partner = self.env['res.partner'].create(transformed_row)
-
-            #_logger.info("visitation address dict before create: %s" % visitation_address)
-            if secondary_address != {}:
-                #_logger.info("CREATING VISITATION ADDRESS")
-                secondary_address.update({'parent_id': partner.id})
-                self.create_partner_from_row(
-                    secondary_address, secondary_address_transformations)
-            # self.env['res.partner'].update() #add visitation_address id to
-            # partner
-            self.env['ir.model.data'].create({
-                'name': external_xmlid.split('.')[1],
-                'module': external_xmlid.split('.')[0],
-                'model': partner._name,
-                'res_id': partner.id
-            })  # creates an external id in the system for the partner.
-
-        # else:
-            #_logger.warning("Did not create row %s" % row)
+                #_logger.info("visitation address dict before create: %s" % visitation_address)
+                if secondary_address != {}:
+                    #_logger.info("CREATING VISITATION ADDRESS")
+                    secondary_address.update({'parent_id': partner.id})
+                    self.create_partner_from_row(
+                        secondary_address, secondary_address_transformations)
+                # self.env['res.partner'].update() #add visitation_address id to
+                # partner
+                self.env['ir.model.data'].create({
+                    'name': external_xmlid.split('.')[1],
+                    'module': external_xmlid.split('.')[0],
+                    'model': partner._name,
+                    'res_id': partner.id
+                })  # creates an external id in the system for the partner.
 
     @api.model
     def create_kpi_from_row(self, row):
@@ -383,7 +409,6 @@ class ResPartner(models.Model):
                          row['external_id'])}
                     self.create_office_from_row(vals)
                     create = False
-
                 elif key == 'partner_id':
                     if 'fiscal_year' in row:
 
@@ -603,10 +628,8 @@ class ResPartner(models.Model):
             country_id = self.env['ir.model.data'].xmlid_to_res_id('base.se')
             row.update({'country_id': country_id})
         else:
-            _logger.warning(
-                "Skipping partner, wrong country %s" %
-                row['country_id'])
-            create = False
+            keys_to_delete.append('country_id')
+            _logger.info("Country not sweden, leaving country_id blank")
 
         if 'state_id' in row:
             if row['state_id'] != '0':
