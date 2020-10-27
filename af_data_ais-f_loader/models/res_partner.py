@@ -219,7 +219,7 @@ class ResPartner(models.Model):
             secondary_address_transformations = transformed_row_and_id[
                 'secondary_address_transformations']
 
-            _logger.info("creating partner: %s" % transformed_row)
+            #_logger.info("creating partner: %s" % transformed_row)
             if 'login' in transformed_row:
                 transformed_row.pop('country_id', None)
                 transformed_row.pop('type', None)
@@ -424,7 +424,10 @@ class ResPartner(models.Model):
                     self.create_office_from_row(vals)
                     create = False
                 elif key == 'office_id':
-                    row[key] = self.env['hr.department'].search([('office_code','=', row[key])]).id
+                    office_id = self.env['hr.department'].search([('office_code','=', row[key])]).id
+                    if not office_id:
+                        office_id = self.env['hr.department'].create({'name': row[key], 'office_code': row[key]}).id
+                    row[key] = office_id
                 elif key == 'user_id':
                     user_id = self.env['res.users'].search([('login', '=', row[key])]).id
                     if not user_id:
