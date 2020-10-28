@@ -234,7 +234,7 @@ class ResPartner(models.Model):
                 if not user:
                     user = self.env['res.users'].create(transformed_row)
                     employee_vals['office_ids'] = [(4,office_id,0)]
-                            
+                    employee_vals['user_id'] = user.id  
                     self.env['hr.employee'].create(employee_vals)
 
                     self.env['ir.model.data'].create({
@@ -248,6 +248,7 @@ class ResPartner(models.Model):
                             if employee_vals['office_ids'] in employee.office_ids:
                                 employee_vals['office_ids'] = [(4,office_id,0)]
                             employee.write(employee_vals)
+                            _logger.info("office_id: %s, employee_vals: %s" % (office_id, employee_vals))
                     user = self.env['res.users'].search([('login','=',transformed_row['login'])])
                     for employee in user.employee_ids:
                             employee.write(employee_vals)
