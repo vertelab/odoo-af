@@ -47,7 +47,7 @@
               <field name="login"/>
             </group>
             <group>
-              <field name="office_ids"/>
+              <field name="office_ids" widget="many2many_tags"/>
             </group>
           </group>
         </sheet>
