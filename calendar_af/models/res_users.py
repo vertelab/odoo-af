@@ -22,6 +22,7 @@
 import logging
 
 from odoo import models, fields, api, _
+from odoo.exceptions import Warning
 
 _logger = logging.getLogger(__name__)
 
@@ -78,7 +79,8 @@ class ResUsers(models.Model):
 
         # we get context as a str not a dict
         context = eval(res.get("context", "{}"))
-
+        if not self.operation_ids:
+            raise Warning(_("User is not connected to any operations"))
         context["default_operation_id"] = self.operation_ids._ids[0]
         context["default_user_ids"] = self._ids
         # convert back to str and return
