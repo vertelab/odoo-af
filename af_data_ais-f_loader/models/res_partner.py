@@ -248,7 +248,6 @@ class ResPartner(models.Model):
                             if employee_vals['office_ids'] in employee.office_ids:
                                 employee_vals['office_ids'] = [(4,office_id,0)]
                             employee.write(employee_vals)
-                            _logger.info("office_id: %s, employee_vals: %s" % (office_id, employee_vals))
                     user = self.env['res.users'].search([('login','=',transformed_row['login'])])
                     for employee in user.employee_ids:
                             employee.write(employee_vals)
@@ -415,9 +414,10 @@ class ResPartner(models.Model):
                         'phone': row['phone'] if 'phone' in row else False,
                     }
                     partner = self.env['res.partner'].create(partner_vals)
+                    office_code = row[key].zfill(4)
                     vals = {
                         "name": row['name'],
-                        "office_code": row["office_code"],
+                        "office_code": office_code,
                         "partner_id": partner.id,
                         "external_id": "%s%s" %
                         (transformations['external_id'],
@@ -425,9 +425,10 @@ class ResPartner(models.Model):
                     self.create_office_from_row(vals)
                     create = False
                 elif key == 'office_id':
-                    office_id = self.env['hr.department'].search([('office_code','=', row[key])]).id
+                    office_code = row[key].zfill(4)
+                    office_id = self.env['hr.department'].search([('office_code','=', office_code)]).id
                     if not office_id:
-                        office_id = self.env['hr.department'].create({'name': row[key], 'office_code': row[key]}).id
+                        office_id = self.env['hr.department'].create({'name': row[key], 'office_code': office_code}).id
                     row[key] = office_id
                 elif key == 'user_id':
                     user_id = self.env['res.users'].search([('login', '=', row[key])]).id
