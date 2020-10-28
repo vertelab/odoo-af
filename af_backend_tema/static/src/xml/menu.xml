@@ -1,12 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates id="template" xml:space="preserve">
 
-    <t t-extend="AppsMenu">
-		<t t-jquery="a[data-toggle='dropdown']" t-operation="replace">
-             <a class="full" data-toggle="dropdown" data-display="static" href="#">
-                  <i class="fa fa-th-large"/> Main Menu
-            </a>
-        </t>
-	</t>
+<t t-extend="AppsMenu">
+<t t-jquery="a[data-toggle='dropdown']" t-operation="replace">
+
+  <!-- Original code -->
+  <!-- <a class="full" data-toggle="dropdown" data-display="static" href="#">
+    <i class="fa fa-th-large"/><span> </span>Main Menu
+  </a> -->
+
+  <!-- Button approach -->
+  <script>
+    var target = $("#toggler");
+    target.click(function(){
+      var current = $(this).attr("aria-expanded") === "true";
+      $(this).attr("aria-expanded", !current);
+    });
+  </script>
+  <nav id="navigation">
+    <button id="toggler" aria-expanded="false">Huvudmeny!</button>
+    <ul>
+      <li role="menuitem"><a href="#">Hem</a></li>
+      <li role="menuitem"><a href="#">Administration</a></li>
+      <li role="menuitem"><a href="#">Avrop</a></li>
+      <li role="menuitem"><a href="#">Deltagare</a></li>
+      <li role="menuitem"><a href="#">Statistik</a></li>
+      <li role="menuitem"><a href="#">Meddelanden</a></li>
+      <li role="menuitem"><a href="#">Om tjänsten</a></li>
+    </ul>
+  </nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</t>
+</t>
 
 </templates>
