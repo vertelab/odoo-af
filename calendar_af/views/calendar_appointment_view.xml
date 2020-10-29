@@ -209,7 +209,7 @@
                         <page name="page_details" string="Meeting Details">
                             <group>
                                 <group>
-                                    <field name="start" invisible="1"/>
+                                    <field name="start"/>
                                     <field name="stop" invisible="1"/>
                                     <field name="duration_selection" widget="radio"/>
                                     <field name="duration" invisible="1"/>
@@ -218,18 +218,18 @@
                                     <field name="operation_id"  attrs="{'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}" />
                                     <field string="Description" name="description" invisible="1"/>
                                     <field name="occasion_ids" invisible="1" widget="many2many_tags"/>
+                                    <field name="show_suggestion_ids" invisible="1"/>
                                 </group>
                             </group>
                         </page>
                     </notebook>
                     <span aria-atomic="true" class="btn-group oe-right oe_button_box">
-                        <button name="compute_suggestion_ids" type="object" string="Update"/>
+                        <button name="compute_suggestion_ids" type="object" string="Next"/>
                     </span>
-                    <field name="suggestion_ids">
+                    <field name="suggestion_ids" readonly="1" attrs="{'invisible':[('show_suggestion_ids','=',False)]}">
                         <tree string="Bookable Occasions" limit="10">
                             <field name="weekday"/>
                             <field name="start"/>
-                            <field name="stop"/>
                             <field name="duration"/>
                             <field name="type_id"/>
                             <field name="occasion_ids" invisible="1"/>
