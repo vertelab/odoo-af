@@ -21,13 +21,15 @@
 
 import logging
 from datetime import date
+from zeep.client import CachingClient
+import json
 
 from odoo import models, fields, api, _
-
-_logger = logging.getLogger(__name__)
 from odoo.exceptions import Warning
 from odoo.tools.safe_eval import safe_eval
-import json
+from odoo.http import request
+
+_logger = logging.getLogger(__name__)
 
 
 class HrEmployeeJobseekerSearchWizard(models.TransientModel):
@@ -43,6 +45,8 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     # jobseekers_ids = fields.One2many(related='employee_id.jobseekers_ids')
     # case_ids = fields.One2many(related='employee_id.case_ids')
     # daily_note_ids = fields.One2many(related='employee_id.daily_note_ids')
+    # social_sec_nr_search = fields.Char(string="Social security number",default=lambda self: '%s' % request.params.get('args')) # [-1].get('params',{'personnummer':'None'}).get('personnummer')) # 
+    bank_id_text = fields.Text(string=None)
 
     search_reason = fields.Selection(string="Search reason",
                                      selection=[('record incoming documents', 'Record incoming documents'), (
@@ -229,3 +233,27 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             action['view_mode'] = 'form'
 
         return action
+
+    @api.multi
+    def do_bankid(self):
+        bankid = CachingClient(self.env['ir.config_parameter'].sudo().get_param('hr_360_view.bankid_wsdl', 'http://bhipws.arbetsformedlingen.se/Integrationspunkt/ws/mobiltbankidinterntjanst?wsdl'))  # create a Client instance
+        res = bankid.service.startaIdentifiering(self.social_sec_nr_search.replace('-',''),'crm')
+        try:
+            orderRef = res['orderRef']
+            if not orderRef:
+                try:
+                    status = res['felStatusKod']
+                except:
+                    status = _("Error in communication with BankID")
+        except:
+                    status = _("Error in communication with BankID")
+        if orderRef:
+            res = bankid.service.verifieraIdentifiering(orderRef,'crm')
+            try:
+                status = res['statusText']
+            except:
+                try:
+                    status = res['felStatusKod']
+                except:
+                    status = _("Error in communication with BankID")
+        self.bank_id_text = '%s' % status
