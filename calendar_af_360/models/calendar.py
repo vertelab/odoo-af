@@ -43,6 +43,19 @@ class CalendarAppointmentSuggestion(models.Model):
             "view_mode": "form",
             "type": "ir.actions.act_window",
         }
+    @api.multi
+    def select_suggestion_move(self):
+        # check state of appointment
+        super(CalendarAppointmentSuggestion, self).select_suggestion()
+
+        return {
+            "name": _("Jobseekers"),
+            "res_id": self.appointment_id.partner_id.id,
+            "res_model": "res.partner",
+            "view_id": self.env.ref("partner_view_360.view_jobseeker_form").id,
+            "view_mode": "form",
+            "type": "ir.actions.act_window",
+        }
 
 
 class CalendarAppointment(models.Model):
@@ -69,46 +82,6 @@ class CalendarAppointment(models.Model):
         readonly=True,
         groups="af_security.af_jobseekers_officer",
     )
-
-    @api.multi
-    def move_meeting_action(self):
-        partner = (
-            self.env["calendar.appointment"]
-            .browse(self._context.get("active_id"))
-            .partner_id
-        )
-        return {
-            "name": _("Move meeting for %s - %s")
-            % (partner.company_registry, partner.display_name),
-            "res_model": "calendar.appointment",
-            "res_id": self._context.get("active_id", False),
-            "view_type": "form",
-            "view_mode": "form",
-            "view_id": self.env.ref(
-                "calendar_af.view_calendar_appointment_move_form"
-            ).id,
-            "target": "current",
-            "type": "ir.actions.act_window",
-        }
-
-    @api.multi
-    def cancel_meeting_action(self):
-        partner = (
-            self.env["calendar.appointment"]
-            .browse(self._context.get("active_id"))
-            .partner_id
-        )
-        return {
-            "name": _("Cancel meeting for %s - %s")
-            % (partner.company_registry, partner.display_name),
-            "res_model": "calendar.cancel_appointment",
-            "view_type": "form",
-            "view_mode": "form",
-            "view_id": self.env.ref("calendar_af.cancel_appointment_view_form").id,
-            "target": "new",
-            "type": "ir.actions.act_window",
-            "context": {},
-        }
 
 
 class CalendarOccasion(models.Model):

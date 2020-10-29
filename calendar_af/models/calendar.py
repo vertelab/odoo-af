@@ -450,6 +450,9 @@ class CalendarAppointment(models.Model):
             return
         if self.channel_name != "PDM" and not self.operation_id:
             return
+        # if self.cancel_reason_temp:
+        
+    
         start = self.start_meeting_search(self.type_id)
         stop = self.stop_meeting_search(start, self.type_id)
         self.show_suggestion_ids = True
@@ -612,6 +615,45 @@ class CalendarAppointment(models.Model):
                     _logger.debug(_("No threshold users setup for operation %s") % self.operation_id.name)
         else:
             _logger.debug(_("No threshold set for operation %s and meeting type %s") % (self.operation_id.name, self.type_id.name))
+
+    @api.multi
+    def move_meeting_action(self):
+        self.show_suggestion_ids = False
+        partner = (
+            self.env["calendar.appointment"]
+            .browse(self._context.get("active_id"))
+            .partner_id
+        )
+        return {
+            "name": _("Move meeting"),
+            "res_model": "calendar.appointment",
+            "res_id": self._context.get("active_id", False),
+            "view_type": "form",
+            "view_mode": "form",
+            "view_id": self.env.ref(
+                "calendar_af.view_calendar_appointment_move_form"
+            ).id,
+            "target": "inline",
+            "type": "ir.actions.act_window",
+        }
+
+    @api.multi
+    def cancel_meeting_action(self):
+        partner = (
+            self.env["calendar.appointment"]
+            .browse(self._context.get("active_id"))
+            .partner_id
+        )
+        return {
+            "name": _("Cancel meeting"),
+            "res_model": "calendar.cancel_appointment",
+            "view_type": "form",
+            "view_mode": "form",
+            "view_id": self.env.ref("calendar_af.cancel_appointment_view_form").id,
+            "target": "new",
+            "type": "ir.actions.act_window",
+            "context": {},
+        }
 
     def generate_move_daily_note(self, occasions, reason):
         pass
