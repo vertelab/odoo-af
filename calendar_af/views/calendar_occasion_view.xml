@@ -151,7 +151,7 @@
                     />
                     <filter
                             name="group_by_operation_id"
-                            string="operation_id"
+                            string="Operation"
                             domain="[]"
                             context="{'group_by':'operation_id'}"
                     />
