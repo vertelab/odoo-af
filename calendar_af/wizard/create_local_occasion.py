@@ -26,6 +26,7 @@ from datetime import datetime, timedelta
 from odoo.exceptions import UserError
 
 from odoo import api, fields, models, _
+from odoo.exceptions import Warning
 
 _logger = logging.getLogger(__name__)
 
@@ -139,7 +140,11 @@ class CreateLocalOccasion(models.TransientModel):
                         self.operation_id,
                         False,
                     )
-            return True
+            res = self.env.ref("calendar_af.action_calendar_local_occasion").read()[0]
+            res["domain"] = [
+                ("user_id", "in", self.user_ids._ids),
+            ]
+            return res
         elif self.create_type == "repeating":
             # create list of weekday values allowed:
             repeat_list = []
@@ -181,5 +186,9 @@ class CreateLocalOccasion(models.TransientModel):
                                 self.operation_id,
                                 False,
                             )
-            return True
+            res = self.env.ref("calendar_af.action_calendar_local_occasion").read()[0]
+            res["domain"] = [
+                ("user_id", "in", self.user_ids._ids),
+            ]
+            return res
         return False

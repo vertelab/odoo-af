@@ -25,6 +25,7 @@
             <field name="name" />
             <field name="login" />
             <field name="office_codes" />
+            <field name="operation_names"/>
         </tree>
     </field>
   </record>
@@ -47,7 +48,7 @@
               <field name="login"/>
             </group>
             <group>
-              <field name="office_ids" widget="many2many_tags"/>
+              <field name="operation_ids" widget="many2many_tags"/>
             </group>
           </group>
         </sheet>
