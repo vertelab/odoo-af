@@ -485,6 +485,7 @@ class CalendarAppointment(models.Model):
     def onchange_channel(self):
         if self.type_id and (self.channel != self.type_id.channel):
             self.type_id = False
+            self.operation_id = False
 
     @api.onchange('channel_name')
     def onchange_channel_name(self):
