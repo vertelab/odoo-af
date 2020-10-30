@@ -857,7 +857,7 @@ class CalendarOccasion(models.Model):
         # Calculate how many occasions we need
         no_occasions = int(duration / BASE_DURATION)
         if operation_id:
-            if operation_id and operation_id.reserve_admin_ids:
+            if operation_id.reserve_admin_ids:
                 # find employees listed as available for reserve bookings on operation
                 employee_ids = operation_id.reserve_admin_ids
                 # select random employee from the recordset
