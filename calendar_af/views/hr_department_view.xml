@@ -8,7 +8,7 @@
       <sheet position="inside">
         <field name="member_ids" invisible="1"/>
         <group>
-          <field name="reserve_admin_ids" widget="many2many_tags" domain="[('id', 'in', member_ids)]"/>
+          <field name="reserve_admin_ids" widget="many2many_tags" domain="[('id', 'in', employee_ids)]"/>
         </group>
       </sheet>
     </field>

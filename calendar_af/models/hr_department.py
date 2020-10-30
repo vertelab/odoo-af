@@ -38,6 +38,10 @@ class hr_department(models.Model):
 class hr_operation(models.Model):
     _inherit = "hr.operation"
 
+    reserve_admin_ids = fields.Many2many(comodel_name="hr.employee", related="department_id.reserve_admin_ids")
+
+    reserve_admin_id = fields.Many2one(comodel_name='hr.employee', string="Reserve time manager")
+
     app_warn_emp_ids = fields.Many2many(
         comodel_name="hr.employee", string="Appointment warnings"
     )
