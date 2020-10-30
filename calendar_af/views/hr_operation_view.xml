@@ -9,7 +9,6 @@
         <group>
           <field name="reserve_admin_ids" invisible="1"/>
           <field name="reserve_admin_id" domain="[('id', 'in', reserve_admin_ids)]"/>
-
           <field name="app_warn_emp_ids" widget="many2many_tags" domain="[('id', 'in', employee_ids)]"/>
         </group>
         <notebook>
@@ -32,11 +31,11 @@
           </page>
         </notebook>
         <field name="employee_ids">
-        <tree string="Administrative officers">
-          <field name="name"/>
-          <field name="signature"/>
-          <field name="operation_names"/>
-        </tree>
+          <tree string="Administrative officers">
+            <field name="name"/>
+            <field name="signature"/>
+            <field name="operation_names"/>
+          </tree>
       </field>
       </sheet>
     </field>
