@@ -1017,7 +1017,7 @@ class CalendarOccasion(models.Model):
             domain.append(('state', '=', 'ok'))
             start_domain = domain
             for employee in operation_id.employee_ids:
-                domain = start_domain + [('user', '=', employee.user_id.id)]
+                domain = start_domain + [('user_id', '=', employee.user_id.id)]
                 do_loop()
         else:
             do_loop()
