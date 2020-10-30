@@ -155,6 +155,12 @@
                             domain="[]"
                             context="{'group_by':'operation_id'}"
                     />
+                    <filter
+                            name="group_by_additional_booking"
+                            string="Additional booking"
+                            domain="[]"
+                            context="{'group_by':'additional_booking'}"
+                    />
                 </group>
             </search>
         </field>

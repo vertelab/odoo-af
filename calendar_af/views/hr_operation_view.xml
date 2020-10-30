@@ -6,7 +6,6 @@
     <field name="inherit_id" ref="hr_office.view_operation_form" /> 
     <field name="arch" type="xml"> 
       <sheet position="inside">
-      <field name="employee_ids" invisible="1"/>
         <group>
           <field name="app_warn_emp_ids" widget="many2many_tags" domain="[('id', 'in', employee_ids)]"/>
         </group>
@@ -29,6 +28,13 @@
             </field>
           </page>
         </notebook>
+        <field name="employee_ids">
+        <tree string="Administrative officers">
+          <field name="name"/>
+          <field name="signature"/>
+          <field name="operation_names"/>
+        </tree>
+      </field>
       </sheet>
     </field>
   </record> 

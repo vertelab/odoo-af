@@ -104,15 +104,15 @@ unused_occasions.unlink()</field>
             <search string="Rules">
                 <field name="name" />
                 <field name="login" />
-                <field name="operation_id" />
-                <group expand="0" string="Group By...">
+                <field name="operation_ids" />
+                <!-- <group expand="0" string="Group By..."> broken due to operation_ids being a related field
                     <filter
                         name="group_by_operation"
                         string="Operation"
                         domain="[]"
-                        context="{'group_by':'operation_id'}"
+                        context="{'group_by':'operation_ids'}"
                     />
-                </group>
+                </group> -->
             </search>
         </field>
     </record>
