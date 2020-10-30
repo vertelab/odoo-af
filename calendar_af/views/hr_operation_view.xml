@@ -7,8 +7,7 @@
     <field name="arch" type="xml"> 
       <sheet position="inside">
         <group>
-          <field name="reserve_admin_ids" invisible="1"/>
-          <field name="reserve_admin_id" domain="[('id', 'in', reserve_admin_ids)]"/>
+          <field name="reserve_admin_ids" widget="many2many_tags" domain="[('id', 'in', employee_ids)]"/>
           <field name="app_warn_emp_ids" widget="many2many_tags" domain="[('id', 'in', employee_ids)]"/>
         </group>
         <notebook>
