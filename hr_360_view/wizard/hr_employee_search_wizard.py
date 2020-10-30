@@ -45,7 +45,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     # jobseekers_ids = fields.One2many(related='employee_id.jobseekers_ids')
     # case_ids = fields.One2many(related='employee_id.case_ids')
     # daily_note_ids = fields.One2many(related='employee_id.daily_note_ids')
-    # social_sec_nr_search = fields.Char(string="Social security number",default=lambda self: '%s' % request.params.get('args')) # [-1].get('params',{'personnummer':'None'}).get('personnummer')) # 
+    social_sec_nr_search = fields.Char(string="Social security number",default=lambda self: '%s' % request.session.pop('ssn',''))
     bank_id_text = fields.Text(string=None)
 
     search_reason = fields.Selection(string="Search reason",
@@ -65,7 +65,6 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                                                  ('known (previously identified)', 'Known (previously identified)'),
                                                  ('identified by certifier', 'Identified by certifier')])  #
 
-    social_sec_nr_search = fields.Char(string="Social security number")
     customer_id_search = fields.Char(string="Customer number")
     email_search = fields.Char(string="Email")
 
