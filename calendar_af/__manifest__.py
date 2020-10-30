@@ -42,6 +42,7 @@ Asök booking management \n
         "views/calendar_mapped_dates_view.xml",
         "wizard/cancel_appointment.xml",
         "wizard/create_local_occasion.xml",
+        "wizard/change_user_appointment.xml",
         "report/calendar_report_views.xml",
         "report/calendar_local_report_views.xml",
     ],

@@ -889,7 +889,7 @@ class CalendarOccasion(models.Model):
     @api.multi
     def publish_occasion(self):
         """User publishes suggested occasion"""
-        if self.state == 'draft':
+        if self.state == 'draft' or self.state == 'fail':
             self.state = 'request'
             ret = True
         else:
@@ -900,7 +900,7 @@ class CalendarOccasion(models.Model):
     @api.multi
     def accept_occasion(self):
         """User accepts suggested occasion"""
-        if self.state == 'request':
+        if self.state == 'request' or self.state == 'fail':
             self.state = 'ok'
             ret = True
         else:
