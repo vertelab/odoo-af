@@ -143,7 +143,6 @@ class CreateLocalOccasion(models.TransientModel):
             res = self.env.ref("calendar_af.action_calendar_local_occasion").read()[0]
             res["domain"] = [
                 ("user_id", "in", self.user_ids._ids),
-                #('operation_id', '=', self.operation_id)
             ]
             return res
         elif self.create_type == "repeating":
@@ -190,7 +189,6 @@ class CreateLocalOccasion(models.TransientModel):
             res = self.env.ref("calendar_af.action_calendar_local_occasion").read()[0]
             res["domain"] = [
                 ("user_id", "in", self.user_ids._ids),
-                #('operation_id', '=', self.operation_id)
             ]
             return res
         return False
