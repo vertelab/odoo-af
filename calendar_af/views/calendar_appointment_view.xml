@@ -297,6 +297,11 @@
                 <field name="type_id"/>
                 <field name="user_id"/>
                 <filter
+                        name="additional_booking"
+                        domain="[('additional_booking','=','True')]"
+                        string="Additional bookings"
+                />
+                <filter
                         name="state_confirmed"
                         domain="[('state','=','confirmed')]"
                         string="Confirmed"
