@@ -69,13 +69,14 @@ class HrEmployee(models.Model):
             appointment_record = rec.env["calendar.appointment"].search(
                 [
                     ("user_id", "!=", self.env.user.id),
-                    ("location_id", "=", self.env.user.location_id.id),
+                    ("office_id", "in", self.env.user.office_ids._ids),
                 ]
             )
             rec.appointment_ids_all = appointment_record.filtered(
                 lambda a: a.start > datetime.now()
                 and a.state == "confirmed"
-                and a.user_id.location_id == self.env.user.location_id
+                # TODO: is this needed?
+                # and a.user_id.location_id == self.env.user.location_id
             )
 
     @api.multi
@@ -109,7 +110,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             "domain": [
                 ("start", ">", datetime.now()),
                 ("user_id", "!=", self.env.user.id),
-                ("location", "=", self.env.user.location_id),
+                ("office_id", "in", self.env.user.office_ids),
             ],
             "view_type": "form",
             "res_model": "calendar.appointment",
