@@ -20,12 +20,14 @@
 ##############################################################################
 
 import logging
+import pytz
 from datetime import datetime
 
 from odoo import models, fields, api, _
 
 _logger = logging.getLogger(__name__)
 
+LOCAL_TZ = 'Europe/Stockholm'
 
 class CalendarAppointmentSuggestion(models.Model):
     _inherit = "calendar.appointment.suggestion"
@@ -69,10 +71,10 @@ class CalendarAppointment(models.Model):
             try:
                 name = _("Meeting with %s at %s") % (
                     app.partner_id.company_registry,
-                    app.start,
+                    pytz.timezone(LOCAL_TZ).localize(app.start),
                 )
             except:
-                name = _("Meeting at %s") % app.start
+                name = _("Meeting at %s") % pytz.timezone(LOCAL_TZ).localize(app.start)
             result.append((app.id, name))
         return result
 
