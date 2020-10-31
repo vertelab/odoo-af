@@ -48,7 +48,7 @@ class CalendarAppointmentSuggestion(models.Model):
     @api.multi
     def select_suggestion_move(self):
         # check state of appointment
-        super(CalendarAppointmentSuggestion, self).select_suggestion()
+        super(CalendarAppointmentSuggestion, self).select_suggestion_move()
 
         return {
             "name": _("Jobseekers"),
