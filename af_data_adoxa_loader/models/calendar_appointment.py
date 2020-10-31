@@ -139,8 +139,16 @@ class CalendarOccasion(models.Model):
                         if pnr:
                             pnr = '%s-%s' % (pnr[:8], pnr[8:12])
                     if pnr:
-                        row[key] = self.env['res.partner'].search(
-                            [('social_sec_nr', '=', pnr)]).id
+                        partner = self.env['res.partner'].search(
+                            [('social_sec_nr', '=', pnr)])
+                        if len(partner) > 0:
+                            row[key] = partner[0].id
+                        else:
+                            _logger.warn(
+                            "could not find jobseeker corresponding to %s" %
+                            pnr)
+                            row[key] = False
+                        
                     else:
                         _logger.warn(
                             "could not find person corresponding to %s, skipping" %

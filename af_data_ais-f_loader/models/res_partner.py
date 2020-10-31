@@ -421,7 +421,7 @@ class ResPartner(models.Model):
                         "partner_id": partner.id,
                         "external_id": "%s%s" %
                         (transformations['external_id'],
-                         row['external_id'])}
+                         office_code)}
                     self.create_office_from_row(vals)
                     create = False
                 elif key == 'office_id':
