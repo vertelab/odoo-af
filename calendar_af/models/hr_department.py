@@ -31,7 +31,7 @@ class hr_operation(models.Model):
     reserve_admin_ids = fields.Many2many(
         comodel_name="hr.employee",
         string="Reserve time managers",
-        relation="hr_department_hr_employee_reserve",
+        relation="hr_operation_hr_employee_reserve",
     )
     
     app_warn_emp_ids = fields.Many2many(
