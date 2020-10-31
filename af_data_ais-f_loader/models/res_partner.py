@@ -245,12 +245,9 @@ class ResPartner(models.Model):
                         })
                 else:
                     for employee in user.employee_ids:
-                            if employee_vals['office_ids'] in employee.office_ids:
-                                employee_vals['office_ids'] = [(4,office_id,0)]
-                            employee.write(employee_vals)
-                    user = self.env['res.users'].search([('login','=',transformed_row['login'])])
-                    for employee in user.employee_ids:
-                            employee.write(employee_vals)
+                        if office_id not in employee.mapped('office_ids.id'):
+                            employee_vals['office_ids'] = [(4,office_id,0)]
+                        employee.write(employee_vals)
             else:
                 partner = self.env['res.partner'].create(transformed_row)
 
