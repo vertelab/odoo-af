@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="act_project_project_2_project_task_own" model="ir.actions.act_window">
+        <field name="name">Tasks</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">kanban,tree,form,calendar,pivot,graph,activity</field>
+        <field name="search_view_id" ref="project.view_task_search_form"/>
+        <field name="domain">[('user_id', '=', uid)]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click <i>Create</i> to start a new task.
+            </p>
+            <p>
+                To get things done, use activities and status on tasks.
+                <br/>
+                Chat in real time or by email to collaborate efficiently.
+            </p>
+        </field>
+    </record>
+
+    <record id="af_dashboard_view" model="ir.ui.view">
+        <field name="name">af.dashboard.kanban</field>
+        <field name="model">af.dashboard</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" create="false" import="false">
+                <field name="name"/>
+                <field name="user_id"/>
+<!--                <field name="task_ids"/>-->
+                <templates>
+                    <t t-name="kanban-box">
+                        <div style="width:100%;height:500px;border:none;background-color:#80808003">
+                            <h2>Welcome
+                                <t t-if="record.user_id.raw_value">
+                                    <t t-esc="record.user_id.value"/>
+                                </t>
+                            </h2>
+                            <br/>
+                            <p>
+                                You will soon be able to visualise and perform all your daily tasks as a FA here.
+                                You can already create accounts and handle different permission rules to your
+                                employees under the tab Administration in the menu bar.
+                            </p>
+                            <br/>
+                            <table>
+                                <tr>
+                                    <td width="33%" style="padding-left:5px;background-color:#8080805c">
+                                        <h2>To DO</h2>
+                                        <br/>
+                                        <h4>Comming Function</h4>
+                                        <br/>
+                                        <h5>You will soon be able to see your present working tasks here</h5>
+                                        <a name="%(act_project_project_2_project_task_own)d" type="action">
+                                            <img align="center" style="padding-left:25%"
+                                                 src="/fenix_dashboard/static/img/task.png" alt="Tasks"/>
+                                        </a>
+                                        <!--                                             <t t-foreach="record.task_ids.raw_value" t-as="task">-->
+                                        <!--                                                <t t-esc="task.name"/>-->
+                                        <!--                                            </t>-->
+                                    </td>
+                                    <td width="5%"/>
+                                    <td width="33%" style="padding-left:5px;background-color:#8080805c">
+                                        <h2>Statistic</h2>
+                                        <br/>
+                                        <h4>Comming Function</h4>
+                                        <br/>
+                                        <h5>You will soon find collections of statistics and possibility
+                                            to see participators development</h5>
+                                        <img align="center" style="padding-left:25%"
+                                                 src="/fenix_dashboard/static/img/statistics.png" alt="Statistics"/>
+                                    </td>
+                                    <td width="5%"/>
+                                    <td width="33%" style="padding-left:5px;background-color:#8080805c">
+                                        <h2>News for the service</h2>
+                                        <br/>
+                                        <h4>Comming Function</h4>
+                                        <br/>
+                                        <h5>You will soon see everything that is actual issues</h5>
+                                        <img align="center" style="padding-left:25%"
+                                                 src="/fenix_dashboard/static/img/issues.png" alt="Issues"/>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_af_dashboard" model="ir.actions.act_window">
+        <field name="name">My Dashboard</field>
+        <field name="res_model">af.dashboard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">kanban</field>
+    </record>
+
+    <menuitem id="af_dashboard_menu" action="action_af_dashboard" name="My Dashboard" sequence="0"/>
+
+
+</odoo>
