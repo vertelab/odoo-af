@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record id="cancel_appointment_view_form" model="ir.ui.view">
+    <record id="change_user_appointment_view_form" model="ir.ui.view">
         <field name="name">calendar_change_user_appointment.form</field>
         <field name="model">calendar.change_user_appointment</field>
         <field name="arch" type="xml">
