@@ -1,0 +1,29 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_hr_messages_search">
+            <field name="name">mail.message.search</field>
+            <field name="model">mail.message</field>
+            <field name="priority">25</field>
+            <field name="arch" type="xml">
+                <search string="Messages Search">
+                    <filter string="HR Messages"
+                            name="hr_messages" help="HR Messages"
+                            domain="[('model', '=', 'hr.employee')]"/>
+
+                </search>
+            </field>
+        </record>
+
+        <record id="action_view_hr_mail_message" model="ir.actions.act_window">
+            <field name="name">Messages</field>
+            <field name="res_model">mail.message</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_hr_messages': 1}</field>
+            <field name="search_view_id" ref="view_hr_messages_search"/>
+        </record>
+
+        <menuitem name="Messages" id="hr_menu_mail_messages" parent="hr.menu_hr_root" action="action_view_hr_mail_message" sequence="200"/>
+
+    </data>
+</odoo>
