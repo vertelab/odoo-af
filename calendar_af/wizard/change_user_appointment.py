@@ -35,15 +35,17 @@ class ChangeUserAppointment(models.TransientModel):
 
     @api.model
     def _get_appointment(self):
-        return self.env["calendar.appointment"].browse(self._context.get("active_id"))
+        if self._context.get("active_model") == 'calendar.appointment':
+            return self.env["calendar.appointment"].browse(self._context.get("active_id"))
 
     @api.model
     def _get_appointment_start(self):
-        return (
-            self.env["calendar.appointment"]
-            .browse(self._context.get("active_id"))
-            .start
-        )
+        if self._context.get("active_model") == 'calendar.appointment':
+            return (
+                self.env["calendar.appointment"]
+                .browse(self._context.get("active_id"))
+                .start
+            )
 
     appointment_id = fields.Many2one(
         string="Appointment",
@@ -70,11 +72,33 @@ class ChangeUserAppointment(models.TransientModel):
                 .browse(self._context.get("active_id"))
                 .office_id.employee_ids._ids,
             )
-        ],
+        ] if self._context.get("active_model") == 'calendar.appointment' else [],
     )
     start = fields.Datetime(string="New start", default=_get_appointment_start)
 
+    @api.multi
+    def check_access_planner_locations(self, locations):
+        """Check if current user is planner with access to these locations."""
+        if not self.env.user.has_group('af_security.af_meeting_planner'):
+            return False
+        if not self.mapped('appointment_id.operation_id.location_id') in locations:
+            return False
+        return True
+
     def action_change_user_appointment(self):
+        # Perform access control.
+        allowed = False
+        denied = False
+        locations = self.env.user.mapped('employee_ids.office_ids.operation_ids.location_id')
+        # Check access for Meeting Planner
+        if self.check_access_planner_locations(locations):
+            allowed = True
+        if allowed and not denied:
+            # Checks passed. Run inner function with sudo.
+            return self.sudo()._action_change_user_appointment()
+        raise Warning(_('You are not allowed to create these occasions.'))
+
+    def _action_change_user_appointment(self):
         # TODO: add check that case worker is indeed free
         if self.appointment_id.start != self.start:
             self.appointment_id.start = self.start

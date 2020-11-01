@@ -111,7 +111,7 @@ class ResPartner(models.Model):
                 if keys is None:
                     keys = self.env.user._bhtj_get_user_keys()
                 # Match person number to BHTJ response.
-                for access_level in keys.keys:
+                for access_level in keys.keys():
                     if partner.social_sec_nr in keys[access_level]:
                         partner.jobseeker_access = access_level
 
@@ -284,7 +284,7 @@ class ResPartner(models.Model):
     def af_security_install_rules(self):
         """Update existing rules that can't be changed through XML."""
         self.env.ref('base.res_partner_rule_private_employee').active = False
-
+        self.env.ref('base.res_partner_rule_private_group').active = False
 
 class User(models.Model):
     _inherit = 'res.users'
