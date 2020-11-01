@@ -22,5 +22,5 @@
         'views/assets.xml',
         'views/template.xml',
         "views/web.xml"
-    ]
+    ],
 }
