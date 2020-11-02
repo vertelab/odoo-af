@@ -249,24 +249,22 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             orderRef = res['orderRef']
             if not orderRef:
                 try:
-                    status = res['felStatusKod']
+                    self.bank_id_text = res['felStatusKod']
                 except KeyError:
-                    status = _("Error in communication with BankID")
+                    self.bank_id_text = _("Error in communication with BankID")
         except KeyError:
-            status = _("Error in communication with BankID")
+            self.bank_id_text = _("Error in communication with BankID")
 
         if orderRef:
             deadline = time.monotonic() + TIMEOUT
-            time.sleep(9)
-            _logger.warn("BEFORE LOOP")
+            time.sleep(9) # Give user time to react before polling.
             while deadline > time.monotonic():
-                _logger.warn("DOING LOOP")
                 res = bankid.service.verifieraIdentifiering(orderRef,'crm')
                 _logger.warn("res: %s" % res)
                 if 'statusText' in res and res['statusText'] == 'OK':
                     self.bank_id_text = res['statusText']
                     break
-                elif 'felStatusKod' in res:
+                elif 'felStatusKod' in res and self.bank_id_text['felStatusKod']:
                     self.bank_id_text = res['felStatusKod']
                     break
                 time.sleep(3)
