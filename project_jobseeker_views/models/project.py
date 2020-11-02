@@ -16,7 +16,7 @@ class ProjectProject(models.Model):
         for rec in self:
             if rec.sale_order_id and (rec.task_count > 0):
                 for _ in rec.tasks:
-                    if (_.date_start.date() == datetime.today().date()) and (_.stage_id.name != 'Done'):
+                    if (_.date_start.date() <= datetime.today().date()) and (_.stage_id.name != 'Done'):
                         rec.project_next_task = rec.tasks[0]
 
     @api.depends('project_next_task')
