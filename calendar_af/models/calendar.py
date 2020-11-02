@@ -1199,8 +1199,9 @@ class CalendarOccasion(models.Model):
         """Reserves an occasion."""
         start = occasion_ids[0].start
         stop = occasion_ids[len(occasion_ids) - 1].stop
-        duration = stop.minute - start.minute
-        type_id = self.env.ref('calendar_meeting_type.type_00').id
+        duration = (stop - start).seconds/60/60
+        # type_id = self.env.ref('calendar_meeting_type.type_00').id
+        type_id = occasion_ids[0].type_id
 
         # check that occasions are free and unreserved
         free = True
@@ -1212,11 +1213,11 @@ class CalendarOccasion(models.Model):
 
         if free:
             vals = {
-                'name': occasion_ids[0].type_id.name,
+                'name': type_id.name,
                 'start': start,
                 'stop': stop,
                 'duration': duration,
-                'type_id': type_id,
+                'type_id': type_id.id,
                 'user_id': False,
                 'partner_id': False,
                 'state': 'reserved',
