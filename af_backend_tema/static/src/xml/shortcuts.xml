@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+	<t t-extend="UserMenu.shortcuts">
+        <t t-jquery="tbody" t-operation="prepend">
+			<tr>
+			    <td align="left">Open the apps menu</td>
+			    <td>
+			        <span class="o_key">Alt</span> + <span class="o_key">h</span>
+			    </td>
+			    <td>
+			        <span class="o_key">Control</span> + <span class="o_key">Alt</span> + <span class="o_key">h</span>
+			    </td>
+			</tr>
+        </t>
+    </t>
+
+</templates>

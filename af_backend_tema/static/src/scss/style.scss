@@ -1,3 +1,6 @@
+// a {
+//     color: #00005a !important;
+// }
 // Increase width and change color of line divider
 .o_cp_switch_buttons .btn-secondary:not(:disabled):not(.disabled):active, .o_cp_switch_buttons .btn-secondary:not(:disabled):not(.disabled).active, .show > .btn-secondary.dropdown-toggle {
     color: white !important;
@@ -55,7 +58,7 @@
     min-width: 200px;
 }
 
-// Increase height between fields 
+// Increase height between fields
 
 .o_form_view .o_form_label {
     margin-bottom: 10px;
@@ -156,7 +159,7 @@ body {
 }
 
 .o_notification_counter.badge.badge-pill {
-  background-color: $brand-blue-hover; 
+  background-color: $brand-blue-hover;
   color: $brand-primary;
   border: 1.4px solid $brand-primary;
 }
