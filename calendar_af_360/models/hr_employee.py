@@ -70,7 +70,6 @@ class HrEmployee(models.Model):
                 [
                     ("user_id", "!=", self.env.user.id),
                     ("office_id", "in", self.env.user.office_ids._ids),
-
                 ]
             )
             rec.appointment_ids_all = appointment_record.filtered(

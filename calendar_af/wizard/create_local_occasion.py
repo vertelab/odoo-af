@@ -58,10 +58,10 @@ class CreateLocalOccasion(models.TransientModel):
         comodel_name="calendar.appointment.type",
         string="Type",
         required=True,
-        domain="[('channel', '=', 'Local')]",
+        domain="[('channel', '=', 'Local')]"
     )
     channel = fields.Many2one(
-        string="Channel", comodel_name="calendar.channel", related="type_id.channel"
+        string="Channel", comodel_name="calendar.channel", related="type_id.channel", readonly=True
     )
     channel_name = fields.Char(string="Channel", related="channel.name")
     user_ids = fields.Many2many(
@@ -71,6 +71,7 @@ class CreateLocalOccasion(models.TransientModel):
         required=True,
     )
     operation_id = fields.Many2one(comodel_name="hr.operation", string="Operation")
+    location_ids = fields.Many2many(comodel_name='hr.location', string="Allowed Locations", default=lambda self: self.default_location_ids())
     # fields describing how to create occasions:
     create_type = fields.Selection(
         string="Type",
@@ -88,6 +89,10 @@ class CreateLocalOccasion(models.TransientModel):
     repeat_wed = fields.Boolean(string="Wednesday")
     repeat_thu = fields.Boolean(string="Thursday")
     repeat_fri = fields.Boolean(string="Friday")
+
+    @api.model
+    def default_location_ids(self):
+        return self.env.user.mapped('employee_ids.office_ids.operation_ids.location_id')
 
     @api.onchange("type_id")
     def set_duration_selection(self):
@@ -112,7 +117,30 @@ class CreateLocalOccasion(models.TransientModel):
         if self.start and self.duration:
             self.stop = self.start + timedelta(minutes=int(self.duration * 60))
 
+    @api.multi
+    def check_access_planner_locations(self, locations):
+        """Check if current user is planner with access to these locations."""
+        if not self.env.user.has_group('af_security.af_meeting_planner'):
+            return False
+        if not self.mapped('operation_id.location_id') in locations:
+            return False
+        return True
+
     def action_create_occasions(self):
+        """Create occasions."""
+        # Perform access control.
+        allowed = False
+        denied = False
+        locations = self.env.user.mapped('employee_ids.office_ids.operation_ids.location_id')
+        # Check access for Meeting Planner
+        if self.check_access_planner_locations(locations):
+            allowed = True
+        if allowed and not denied:
+            # Checks passed. Run inner function with sudo.
+            return self.sudo()._action_create_occasions()
+        raise Warning(_('You are not allowed to create these occasions.'))
+
+    def _action_create_occasions(self):
         if not (
             (self.start.minute in [0, 30] and self.stop.second == 0)
             and (self.stop.minute in [0, 30] and self.stop.second == 0)
