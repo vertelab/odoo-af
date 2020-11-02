@@ -30,6 +30,33 @@
     </field>
   </record>
 
+  <record id="calendar_user_search" model="ir.ui.view">
+    <field name="name">calendar.user.search</field>
+    <field name="model">res.users</field>
+    <field name="arch" type="xml">
+      <search string="Rules">
+        <field name="name" />
+        <field name="login" />
+        <field name="office_codes" />
+        <field name="operation_names"/>
+        <group expand="0" string="Group By...">
+            <filter
+              name="group_by_operation"
+              string="Operation"
+              domain="[]"
+              context="{'group_by':'operation_names'}"
+            />
+            <filter
+              name="group_by_office"
+              string="Office"
+              domain="[]"
+              context="{'group_by':'office_codes'}"
+            />
+        </group>
+      </search>
+    </field>
+  </record>
+
   <record id="view_calendar_user_form" model="ir.ui.view">
     <field name="name">calendar.user.form</field>
     <field name="model">res.users</field>
