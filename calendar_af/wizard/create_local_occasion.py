@@ -151,6 +151,7 @@ class CreateLocalOccasion(models.TransientModel):
         no_occ = int(self.duration / 0.5)
         if self.create_type == "single":
             # check if date is a holiday
+            # TODO: do we do this check in check_resource_calendar_occasion() now?
             if not self.env["calendar.appointment"]._check_resource_calendar_date(
                 self.start
             ):
@@ -158,16 +159,18 @@ class CreateLocalOccasion(models.TransientModel):
 
             for user_id in self.user_ids:
                 for curr_occ in range(no_occ):
-                    occ = self.env["calendar.occasion"]._force_create_occasion(
-                        30,
-                        self.start + timedelta(minutes=curr_occ * 30),
-                        self.type_id.id,
-                        self.channel.id,
-                        "request",
-                        user_id,
-                        self.operation_id,
-                        False,
-                    )
+                    curr_start = self.start + timedelta(minutes=curr_occ * 30)
+                    if user_id.check_resource_calendar_occasion(curr_start):
+                        occ = self.env["calendar.occasion"]._force_create_occasion(
+                            30,
+                            curr_start,
+                            self.type_id.id,
+                            self.channel.id,
+                            "request",
+                            user_id,
+                            self.operation_id,
+                            False,
+                        )
             res = self.env.ref("calendar_af.action_calendar_local_occasion").read()[0]
             res["domain"] = [
                 ("user_id", "in", self.user_ids._ids),
@@ -198,22 +201,25 @@ class CreateLocalOccasion(models.TransientModel):
                     year=date.year, month=date.month, day=date.day
                 )
                 # check if date is an allowed weekday
+                # TODO: do we do this check in check_resource_calendar_occasion() now?
                 if start_date.weekday() in repeat_list and self.env[
                     "calendar.appointment"
                 ]._check_resource_calendar_date(start_date):
                     # create only 30 min occasions (if duration is longer, create several occasions):
                     for user_id in self.user_ids:
                         for curr_occ in range(no_occ):
-                            occ = self.env["calendar.occasion"]._force_create_occasion(
-                                30,
-                                start_date + timedelta(minutes=curr_occ * 30),
-                                self.type_id.id,
-                                self.channel.id,
-                                "request",
-                                user_id,
-                                self.operation_id,
-                                False,
-                            )
+                            curr_start = start_date + timedelta(minutes=curr_occ * 30)
+                            if user_id.check_resource_calendar_occasion(curr_start):
+                                occ = self.env["calendar.occasion"]._force_create_occasion(
+                                    30,
+                                    curr_start,
+                                    self.type_id.id,
+                                    self.channel.id,
+                                    "request",
+                                    user_id,
+                                    self.operation_id,
+                                    False,
+                                )
             res = self.env.ref("calendar_af.action_calendar_local_occasion").read()[0]
             res["domain"] = [
                 ("user_id", "in", self.user_ids._ids),
