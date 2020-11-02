@@ -20,7 +20,7 @@ class ResPartner(models.Model):
 
     @api.multi
     def hello_world(self):
-        _logger.info("hello world in the log!") #you can also use warn and error depending on the situation
+        _logger.info("hello world in the log, test test!") #you can also use warn and error depending on the situation
         raise Warning('hello world!')
 
 #these models require access rights to be set in an ir.model.access.csv file in order to work properly
