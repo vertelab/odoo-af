@@ -97,26 +97,6 @@ unused_occasions.unlink()</field>
       raise Warning("One of your occasions is already booked")</field>
     </record>
 
-    <record id="calendar_user_search" model="ir.ui.view">
-        <field name="name">calendar.user.search</field>
-        <field name="model">res.users</field>
-        <field name="arch" type="xml">
-            <search string="Rules">
-                <field name="name" />
-                <field name="login" />
-                <field name="operation_ids" />
-                <!-- <group expand="0" string="Group By..."> broken due to operation_ids being a related field
-                    <filter
-                        name="group_by_operation"
-                        string="Operation"
-                        domain="[]"
-                        context="{'group_by':'operation_ids'}"
-                    />
-                </group> -->
-            </search>
-        </field>
-    </record>
-
   <record id="action_calendar_user" model="ir.actions.act_window">
         <field name="name">Case worker</field>
         <field name="res_model">res.users</field>
