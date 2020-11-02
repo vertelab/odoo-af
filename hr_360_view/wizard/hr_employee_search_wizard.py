@@ -244,6 +244,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
         res = bankid.service.startaIdentifiering(
             self.social_sec_nr_search.replace('-',''),
             'crm')
+        _logger.warn("res: %s" % res)
         try:
             orderRef = res['orderRef']
             if not orderRef:
@@ -257,16 +258,17 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
         if orderRef:
             deadline = time.monotonic() + TIMEOUT
             time.sleep(9)
+            _logger.warn("BEFORE LOOP")
             while deadline > time.monotonic():
+                _logger.warn("DOING LOOP")
                 res = bankid.service.verifieraIdentifiering(orderRef,'crm')
-                if 'statusText' in res:
+                _logger.warn("res: %s" % res)
+                if 'statusText' in res and res['statusText'] == 'OK':
                     self.bank_id_text = res['statusText']
                     break
-                elif 'felStatusKod' in res['felStatusKod']:
-                    self.bank_id_text = res['felSatusKod']
+                elif 'felStatusKod' in res:
+                    self.bank_id_text = res['felStatusKod']
                     break
                 time.sleep(3)
             else:
-                self.bank_id_text = "Error in communication with BankID"
-
-        self.bank_id_text = '%s' % status
+                self.bank_id_text = _("User timeout")
