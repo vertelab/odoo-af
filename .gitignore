@@ -15,7 +15,7 @@ base_afdemo/data/testdata_2020-04-07/res.partner.csv
 base_afdemo/data/testdata_2020-04-07/res.partner.notes.csv
 base_afdemo/data/testdata_2020-04-07/res.user.csv
 .idea/
-af_backend_tema
+af_backend_tema/
 
 # C extensions
 *.so
