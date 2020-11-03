@@ -2,7 +2,7 @@
 
 {
     "name": "Fenix Test Contacts",
-    "version": "12.0.1.0.0",
+    "version": "12.0.1.0.1",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
@@ -16,7 +16,6 @@
         'data/res_company.xml',
         'data/res_partner.xml',
         'data/res_user.xml',
-
     ],
     "application": True,
     "installable": True,
