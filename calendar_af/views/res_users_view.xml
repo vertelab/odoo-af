@@ -36,23 +36,7 @@
     <field name="arch" type="xml">
       <search string="Rules">
         <field name="name" />
-        <field name="login" />
-        <field name="office_codes" />
-        <field name="operation_names"/>
-        <group expand="0" string="Group By...">
-            <filter
-              name="group_by_operation"
-              string="Operation"
-              domain="[]"
-              context="{'group_by':'operation_names'}"
-            />
-            <filter
-              name="group_by_office"
-              string="Office"
-              domain="[]"
-              context="{'group_by':'office_codes'}"
-            />
-        </group>
+        <field name="login" />    
       </search>
     </field>
   </record>

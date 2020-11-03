@@ -39,4 +39,21 @@
       </sheet>
     </field>
   </record> 
+
+   <record id="view_calendar_operation_tree" model="ir.ui.view">
+    <field name="name">calendar.operation.tree</field>
+    <field name="model">hr.operation</field>
+    <field name="priority" eval="10" />
+    <field name="arch" type="xml">
+        <tree string="Operations" create="false" delete="false">
+            <button name="open_users_tree" type="object" string="Select"/>            
+            <field name="name" />
+            <field name="location_code" />
+            <field name="department_id" />
+            
+        </tree>
+    </field>
+  </record>
+
+
 </odoo>

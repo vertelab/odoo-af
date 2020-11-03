@@ -22,11 +22,15 @@
 from odoo import models, fields, api, _
 import logging
 
+from odoo.exceptions import Warning
+
 _logger = logging.getLogger(__name__)
 
 
 class hr_operation(models.Model):
     _inherit = "hr.operation"
+
+    user_ids = fields.Many2many(comodel_name="res.users", compute="compute_user_ids")
 
     reserve_admin_ids = fields.Many2many(
         comodel_name="hr.employee",
@@ -48,6 +52,11 @@ class hr_operation(models.Model):
         string="Mapped dates",
     )
 
+    @api.one
+    def compute_user_ids(self):
+        for employee in self.employee_ids:
+            self.user_ids |= employee.user_id
+
     def view_reserve_dates(self):
         return {
             "name": _("Mapped dates for %s") % (self.display_name),
@@ -59,6 +68,14 @@ class hr_operation(models.Model):
             "target": "current",
             "type": "ir.actions.act_window",
         }
+    @api.multi
+    def open_users_tree(self):
+        res = self.env['ir.actions.act_window'].for_xml_id('calendar_af', 'action_calendar_user') 
+        if self.user_ids:
+            res['domain'] = [('id', 'in', self.user_ids._ids)]
+        else:
+            raise Warning(_("No administrative officers on this operation"))
+        return res
 
 
 class AppointmentTypeOperation(models.Model):
