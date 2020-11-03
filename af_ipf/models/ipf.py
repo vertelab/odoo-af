@@ -141,3 +141,10 @@ class AfIpfEndpoint(models.Model):
         #    return
         _logger.debug("Unpack body: %s" % res)
         return res
+
+    @api.model
+    def get_pnr(self, customer_id):
+        ipf = self.env.ref('af_ipf.ipf_endpoint_customer')
+        res = ipf.call(customer_id = customer_id)
+        pnr = res.get('ids', {}).get('pnr')
+        return pnr
