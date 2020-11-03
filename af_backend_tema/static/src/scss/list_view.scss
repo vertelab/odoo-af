@@ -1,0 +1,68 @@
+.o_list_view.table {
+	overflow-x: hidden;
+}
+
+.o_list_view.table,
+.o_list_view.table thead,
+.o_list_view.table tfoot,
+.o_list_view.table td,
+.o_list_view.table th {
+    border: none;
+}
+
+.o_list_view.table thead {
+	background-color: white;
+	th.o_column_sortable:hover {
+	    background-color: white;
+	}
+}
+ 
+.table-striped > tbody > tr {
+	background-color: white;
+	&:nth-of-type(2n+1) {
+		background-color: gray('200');
+	}
+	&:hover {
+    	background-color: gray('300');
+    }
+}
+
+.o_list_view_grouped.table tbody tr {
+	&:nth-of-type(2n+1) {
+		background-color: white;
+	}
+	&.o_group_header {
+	    background-image: none;
+		background-color: gray('300');
+	    box-shadow: inset 0 1px 0 gray('400');
+	}
+	&:hover {
+    	background-color: gray('300');
+    }
+}
+
+.o_list_view tfoot {
+    color: white;
+    cursor: default;
+    font-weight: normal;
+}
+
+.o_content, .modal-content {
+	 > div > .table-responsive {
+	    overflow-x: initial;
+	    > .o_list_view {
+	        thead, thead tr:nth-child(1) th {
+	        	border-bottom: solid 1px gray('300');
+	    		background-color: white;
+	            position: sticky !important;
+	            z-index: 1;
+	            top: 0;
+	        }
+	        tfoot, tfoot tr:nth-child(1) td {
+    			background-color: $o-list-footer-bg-color;
+	            position: sticky !important;
+	            bottom: 0;
+	        }
+	    }
+	}
+}
