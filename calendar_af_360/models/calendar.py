@@ -20,12 +20,14 @@
 ##############################################################################
 
 import logging
+import pytz
 from datetime import datetime
 
 from odoo import models, fields, api, _
 
 _logger = logging.getLogger(__name__)
 
+LOCAL_TZ = 'Europe/Stockholm'
 
 class CalendarAppointmentSuggestion(models.Model):
     _inherit = "calendar.appointment.suggestion"
@@ -34,15 +36,41 @@ class CalendarAppointmentSuggestion(models.Model):
     def select_suggestion(self):
         # check state of appointment
         super(CalendarAppointmentSuggestion, self).select_suggestion()
+        try:
+            # TODO: We should only get here when going through Arbetsyta.
+            # When not going through Arbetsyta, jobseeker access can not be guaranteed.
+            # This is an ugly hack to prevent read errors when not going through Arbetsyta.
+            self.appointment_id.partner_id.name
+            return {
+                "name": _("Jobseekers"),
+                "res_id": self.appointment_id.partner_id.id,
+                "res_model": "res.partner",
+                "view_id": self.env.ref("partner_view_360.view_jobseeker_form").id,
+                "view_mode": "form",
+                "type": "ir.actions.act_window",
+            }
+        except:
+            pass
 
-        return {
-            "name": _("Jobseekers"),
-            "res_id": self.appointment_id.partner_id.id,
-            "res_model": "res.partner",
-            "view_id": self.env.ref("partner_view_360.view_jobseeker_form").id,
-            "view_mode": "form",
-            "type": "ir.actions.act_window",
-        }
+    @api.multi
+    def select_suggestion_move(self):
+        # check state of appointment
+        super(CalendarAppointmentSuggestion, self).select_suggestion_move()
+        try:
+            # TODO: We should only get here when going through Arbetsyta.
+            # When not going through Arbetsyta, jobseeker access can not be guaranteed.
+            # This is an ugly hack to prevent read errors when not going through Arbetsyta.
+            self.appointment_id.partner_id.name
+            return {
+                "name": _("Jobseekers"),
+                "res_id": self.appointment_id.partner_id.id,
+                "res_model": "res.partner",
+                "view_id": self.env.ref("partner_view_360.view_jobseeker_form").id,
+                "view_mode": "form",
+                "type": "ir.actions.act_window",
+            }
+        except:
+            pass
 
 
 class CalendarAppointment(models.Model):
@@ -56,10 +84,10 @@ class CalendarAppointment(models.Model):
             try:
                 name = _("Meeting with %s at %s") % (
                     app.partner_id.company_registry,
-                    app.start,
+                    pytz.timezone(LOCAL_TZ).localize(app.start),
                 )
             except:
-                name = _("Meeting at %s") % app.start
+                name = _("Meeting at %s") % pytz.timezone(LOCAL_TZ).localize(app.start)
             result.append((app.id, name))
         return result
 
@@ -69,46 +97,6 @@ class CalendarAppointment(models.Model):
         readonly=True,
         groups="af_security.af_jobseekers_officer",
     )
-
-    @api.multi
-    def move_meeting_action(self):
-        partner = (
-            self.env["calendar.appointment"]
-            .browse(self._context.get("active_id"))
-            .partner_id
-        )
-        return {
-            "name": _("Move meeting for %s - %s")
-            % (partner.company_registry, partner.display_name),
-            "res_model": "calendar.appointment",
-            "res_id": self._context.get("active_id", False),
-            "view_type": "form",
-            "view_mode": "form",
-            "view_id": self.env.ref(
-                "calendar_af.view_calendar_appointment_move_form"
-            ).id,
-            "target": "current",
-            "type": "ir.actions.act_window",
-        }
-
-    @api.multi
-    def cancel_meeting_action(self):
-        partner = (
-            self.env["calendar.appointment"]
-            .browse(self._context.get("active_id"))
-            .partner_id
-        )
-        return {
-            "name": _("Cancel meeting for %s - %s")
-            % (partner.company_registry, partner.display_name),
-            "res_model": "calendar.cancel_appointment",
-            "view_type": "form",
-            "view_mode": "form",
-            "view_id": self.env.ref("calendar_af.cancel_appointment_view_form").id,
-            "target": "new",
-            "type": "ir.actions.act_window",
-            "context": {},
-        }
 
 
 class CalendarOccasion(models.Model):

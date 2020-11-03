@@ -61,8 +61,7 @@ class ResPartner(models.Model):
         headers_header_jobs = ['SOK_SOKTYRKE.csv', 'Notering', 'Trans', 'Odoo']
         path_jobs = os.path.join(
             config.options.get('data_dir'),
-            'AIS-F/SOK_SOKTYRKE.csv')
-        # testing purposes only
+            'AIS-F/SOK_SOKTYRKE.csv') # testing purposes only
         path_jobs = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/SOK_SOKTYRKE.csv"
         header_path_jobs = "/usr/share/odoo-af/af_data_ais-f_loader/data/SOK_SOKTYRKE_mapping.csv"
         # self.create_partners(headers_header_jobs, path_jobs, header_path_jobs)
@@ -220,7 +219,7 @@ class ResPartner(models.Model):
             secondary_address_transformations = transformed_row_and_id[
                 'secondary_address_transformations']
 
-            _logger.info("creating partner: %s" % transformed_row)
+            #_logger.info("creating partner: %s" % transformed_row)
             if 'login' in transformed_row:
                 transformed_row.pop('country_id', None)
                 transformed_row.pop('type', None)
@@ -235,7 +234,7 @@ class ResPartner(models.Model):
                 if not user:
                     user = self.env['res.users'].create(transformed_row)
                     employee_vals['office_ids'] = [(4,office_id,0)]
-                            
+                    employee_vals['user_id'] = user.id  
                     self.env['hr.employee'].create(employee_vals)
 
                     self.env['ir.model.data'].create({
@@ -245,10 +244,10 @@ class ResPartner(models.Model):
                         'res_id': user.id
                         })
                 else:
-                    
-                    user = self.env['res.users'].search([('login','=',transformed_row['login'])])
                     for employee in user.employee_ids:
-                            employee.write(employee_vals)
+                        if office_id not in employee.mapped('office_ids.id'):
+                            employee_vals['office_ids'] = [(4,office_id,0)]
+                        employee.write(employee_vals)
             else:
                 partner = self.env['res.partner'].create(transformed_row)
 
@@ -355,13 +354,25 @@ class ResPartner(models.Model):
         keys_to_delete = []
         for key in row.keys():
             if key not in transformations and isinstance(row[key], str):
+                value = row[key].strip()
                 if row[key].lower() == "j":
-                    keys_to_update.append({key: "True"})
+                    keys_to_update.append({key: True})
                 elif row[key].lower() == "n":
-                    keys_to_update.append({key: "False"})
-
+                    keys_to_update.append({key: False})
+                elif len(value) > 0 and value != ' ':
+                    keys_to_update.append({key: value})
+                else:
+                    keys_to_delete.append(key)
+        for i in range(len(keys_to_update)):
+            row.update(keys_to_update[i])
+        for i in range(len(keys_to_delete)):
+            row.pop(keys_to_delete[i], None)
         if 'type' not in row:  # new
             row['type'] = 'contact'
+        if 'next_contact_type' in row:
+            keys_to_update.append({'next_contact_type': row['next_contact_type'][0]})
+        if 'last_contact_type' in row:
+            keys_to_update.append({'last_contact_type': row['last_contact_type'][0]})
 
         for key in row.keys():
             if key in transformations:
@@ -378,7 +389,7 @@ class ResPartner(models.Model):
                             "Skipping partner, contains U in ORGTYP")
                         break
                 elif transform == 'skip_if_j':
-                    if row[key].lower() == 'j':
+                    if row[key]:
                         create = False
                         _logger.warning(
                             "Skipping partner, contains J in RADERAD")
@@ -400,15 +411,27 @@ class ResPartner(models.Model):
                         'phone': row['phone'] if 'phone' in row else False,
                     }
                     partner = self.env['res.partner'].create(partner_vals)
+                    office_code = row[key].zfill(4)
                     vals = {
                         "name": row['name'],
-                        "office_code": row["office_code"],
+                        "office_code": office_code,
                         "partner_id": partner.id,
                         "external_id": "%s%s" %
                         (transformations['external_id'],
-                         row['external_id'])}
+                         office_code)}
                     self.create_office_from_row(vals)
                     create = False
+                elif key == 'office_id':
+                    office_code = row[key].zfill(4)
+                    office_id = self.env['hr.department'].search([('office_code','=', office_code)]).id
+                    if not office_id:
+                        office_id = self.env['hr.department'].create({'name': row[key], 'office_code': office_code}).id
+                    row[key] = office_id
+                elif key == 'user_id':
+                    user_id = self.env['res.users'].search([('login', '=', row[key])]).id
+                    if not user_id:
+                        user_id = self.env['res.users'].create({'login': row[key], 'firstname': 'placeholder', 'lastname':'jobseeker officer'}).id
+                    row[key] = user_id
                 elif key == 'partner_id':
                     if 'fiscal_year' in row:
 
@@ -427,13 +450,10 @@ class ResPartner(models.Model):
                         create = False
                     else:
                         partner_xmlid_name = "%s%s" % (transform, row[key])
-                        partner_xmlid = "%s.%s" % (
-                            self.xmlid_module, partner_xmlid_name)
-                        partner_id = self.env['ir.model.data'].xmlid_to_res_id(
-                            partner_xmlid)
-
-                        partner = self.env['res.partner'].search_read(
-                            [('id', '=', partner_id)], ['street', 'street2', 'city', 'zip'])[0]
+                        partner_xmlid = "%s.%s" % (self.xmlid_module, partner_xmlid_name)
+                        partner_id = self.env['ir.model.data'].xmlid_to_res_id(partner_xmlid)
+                        
+                        partner = self.env['res.partner'].search_read([('id', '=', partner_id)], ['street', 'street2', 'city', 'zip'])[0]
 
                         if 'job_id' in row:
                             ssyk_xmlid = "res_ssyk.ssyk_%s" % row['job_id']
@@ -441,8 +461,7 @@ class ResPartner(models.Model):
                                 ssyk_xmlid)
                             if ssyk_id:
                                 updated_values = {}
-                                if 'education' in row and row['education'].lower(
-                                ) == 'j':
+                                if 'education' in row and row['education']:
                                     updated_values.update({'education': True})
                                 else:
                                     updated_values.update({'education': False})
@@ -490,7 +509,7 @@ class ResPartner(models.Model):
                             create = False
 
                         if 'type' in row:
-                            if row['type'].lower() == 'egen_angiven':
+                            if row['type'].lower() == 'egen_angiven' or row['type'].lower() == 'egen_utlandsk':
                                 if 'street' in row:
                                     partner['street'] = row['street']
                                 if 'street2' in row:
@@ -519,14 +538,11 @@ class ResPartner(models.Model):
                                 if 'city' in row:
                                     partner['city'] = row['city']
                                 self.env['res.partner'].browse(partner_id).write({
-                                    'street': partner['street'],
-                                    'street2': partner['street2'],
-                                    'zip': partner['zip'],
-                                    'city': partner['city']
-                                })
-                            elif row['type'].lower() == 'egen_utlandsk':
-                                _logger.warning(
-                                    "foreign address on jobseeker, skipping")
+                                        'street': partner['street'],
+                                        'street2': partner['street2'],
+                                        'zip': partner['zip'],
+                                        'city': partner['city']
+                                        })  
                             create = False
                             keys_to_delete.append('type')
                 elif key == 'parent_id':

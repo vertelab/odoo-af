@@ -19,16 +19,20 @@
 #
 ##############################################################################
 
-import logging
 from datetime import date
+import json
+import logging
+import time
+from zeep.client import CachingClient
+
 
 from odoo import models, fields, api, _
-
-_logger = logging.getLogger(__name__)
 from odoo.exceptions import Warning
 from odoo.tools.safe_eval import safe_eval
-import json
+from odoo.http import request
 
+_logger = logging.getLogger(__name__)
+TIMEOUT = 60 * 3
 
 class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     _name = "hr.employee.jobseeker.search.wizard"
@@ -43,6 +47,8 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     # jobseekers_ids = fields.One2many(related='employee_id.jobseekers_ids')
     # case_ids = fields.One2many(related='employee_id.case_ids')
     # daily_note_ids = fields.One2many(related='employee_id.daily_note_ids')
+    social_sec_nr_search = fields.Char(string="Social security number",default=lambda self: '%s' % request.session.pop('ssn',''))
+    bank_id_text = fields.Text(string=None)
 
     search_reason = fields.Selection(string="Search reason",
                                      selection=[('record incoming documents', 'Record incoming documents'), (
@@ -61,7 +67,6 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                                                  ('known (previously identified)', 'Known (previously identified)'),
                                                  ('identified by certifier', 'Identified by certifier')])  #
 
-    social_sec_nr_search = fields.Char(string="Social security number")
     customer_id_search = fields.Char(string="Customer number")
     email_search = fields.Char(string="Email")
 
@@ -229,3 +234,39 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             action['view_mode'] = 'form'
 
         return action
+
+    @api.multi
+    def do_bankid(self):
+        """Send BankID request and wait for user verification."""
+        bankid = CachingClient(
+            self.env['ir.config_parameter'].sudo().get_param('hr_360_view.bankid_wsdl',
+            'http://bhipws.arbetsformedlingen.se/Integrationspunkt/ws/mobiltbankidinterntjanst?wsdl')) # create a Client instance
+        res = bankid.service.startaIdentifiering(
+            self.social_sec_nr_search.replace('-',''),
+            'crm')
+        _logger.warn("res: %s" % res)
+        try:
+            orderRef = res['orderRef']
+            if not orderRef:
+                try:
+                    self.bank_id_text = res['felStatusKod']
+                except KeyError:
+                    self.bank_id_text = _("Error in communication with BankID")
+        except KeyError:
+            self.bank_id_text = _("Error in communication with BankID")
+
+        if orderRef:
+            deadline = time.monotonic() + TIMEOUT
+            time.sleep(9) # Give user time to react before polling.
+            while deadline > time.monotonic():
+                res = bankid.service.verifieraIdentifiering(orderRef,'crm')
+                _logger.warn("res: %s" % res)
+                if 'statusText' in res and res['statusText'] == 'OK':
+                    self.bank_id_text = res['statusText']
+                    break
+                elif 'felStatusKod' in res and self.bank_id_text['felStatusKod']:
+                    self.bank_id_text = res['felStatusKod']
+                    break
+                time.sleep(3)
+            else:
+                self.bank_id_text = _("User timeout")

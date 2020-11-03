@@ -265,7 +265,37 @@ class CalendarAppointmentSuggestion(models.Model):
             self.weekday = daynum2dayname[self.start.weekday()]
 
     @api.multi
+    def af_check_access(self):
+        """ Check access for certain operations.
+            This covers the following operations:
+            * select_suggestion_move
+            * select_suggestion
+        """
+        allowed = False
+        denied = False
+        locations = self.env.user.mapped('employee_ids.office_ids.operation_ids.location_id')
+        for suggestion in self:
+            # Check access for Meeting Planner
+            if suggestion.appointment_id.check_access_planner_locations(locations):
+                allowed = True
+            # Check jobseeker access
+            elif suggestion.appointment_id.check_access_jobseeker_officer():
+                allowed = True
+            else:
+                # access denied by all checks
+                denied = True
+        return allowed and not denied
+
+    @api.multi
     def select_suggestion(self):
+        # Perform access control.
+        if self.af_check_access():
+            # Checks passed. Run inner function with sudo.
+            return self.sudo()._select_suggestion()
+        raise Warning(_('You are not allowed to handle these meetings.'))
+
+    @api.multi
+    def _select_suggestion(self):
         # check state of appointment
         if self.appointment_id.state in ['reserved', 'confirmed']:
             raise Warning(_("This appointment is already booked."))
@@ -300,10 +330,17 @@ class CalendarAppointmentSuggestion(models.Model):
         # Write data to appointment_id
         occasions.write({'appointment_id': self.appointment_id.id})
         self.appointment_id.write(app_vals)
-        
-
+    
     @api.multi
     def select_suggestion_move(self):
+        # Perform access control.
+        if self.af_check_access():
+            # Checks passed. Run inner function with sudo.
+            return self.sudo()._select_suggestion_move()
+        raise Warning(_('You are not allowed to handle these meetings.'))
+
+    @api.multi
+    def _select_suggestion_move(self):
         occasions = self.env['calendar.occasion']
         for occasion in self.occasion_ids:
             # Ensure that occasions are still free
@@ -351,8 +388,7 @@ class CalendarAppointment(models.Model):
     user_id_local = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker",
                                     domain=_local_user_domain)
     partner_id = fields.Many2one(string='Customer', comodel_name='res.partner', help="Booked customer",
-                                 default=lambda self: self.default_partners(),
-                                 groups="af_security.af_jobseekers_officer")
+                                 default=lambda self: self.default_partners())
     state = fields.Selection(selection=[('free', 'Draft'),
                                         ('reserved', 'Reserved'),
                                         ('confirmed', 'Confirmed'),
@@ -401,7 +437,6 @@ class CalendarAppointment(models.Model):
             }
             self.weekday = daynum2dayname[self.start.weekday()]
 
-
     @api.one
     def compute_case_worker_name(self):
         if self.channel_name == "PDM":
@@ -444,12 +479,69 @@ class CalendarAppointment(models.Model):
     def hide_suggestion_ids(self):
         self.show_suggestion_ids = False
 
+    @api.multi
+    def af_check_access(self):
+        """ Check access for certain operations that require sudo.
+            This covers the following operations:
+            * compute_suggestion_ids
+        """
+        allowed = False
+        denied = False
+        locations = self.env.user.mapped('employee_ids.office_ids.operation_ids.location_id')
+        # Check access for Meeting Planner
+        if self.check_access_planner_locations(locations):
+            allowed = True
+        if self.check_access_jobseeker_officer():
+            allowed = True
+        if allowed and not denied:
+            return True
+        return False
+    
+    @api.multi
+    def check_access_planner_locations(self, locations):
+        """Check if current user is planner with access to these locations."""
+        if not self.env.user.has_group('af_security.af_meeting_planner'):
+            return False
+        local_channel = self.env.ref('calendar_channel.channel_local')
+        for appointment in self:
+            # ensure that appointment is local
+            if appointment.channel != local_channel:
+                return False
+            # ensure that user has access to the appointment location.
+            if appointment.mapped('operation_id.location_id') not in locations:
+                return False
+        return True
+    
+    @api.multi
+    def check_access_jobseeker_officer(self):
+        """Check if the user has access to this jobseeker."""
+        try:
+            # Ensure jobseeker access
+            for appointment in self:
+                if appointment.partner_id.jobseeker_access not in ('STARK', 'MYCKET_STARK'):
+                    return False
+            return True
+        except:
+            # Assume Access Error
+            return False
+
     @api.one
     def compute_suggestion_ids(self):
+        # Perform access control.
+        if self.af_check_access():
+            # Checks passed. Run inner function with sudo.
+            return self.sudo()._compute_suggestion_ids()
+        raise Warning(_('You are not allowed to handle these meetings.'))
+
+    @api.one
+    def _compute_suggestion_ids(self):
         if not all((self.duration, self.type_id, self.channel)):
             return
         if self.channel_name != "PDM" and not self.operation_id:
             return
+        # if self.cancel_reason_temp:
+        
+    
         start = self.start_meeting_search(self.type_id)
         stop = self.stop_meeting_search(start, self.type_id)
         self.show_suggestion_ids = True
@@ -482,6 +574,7 @@ class CalendarAppointment(models.Model):
     def onchange_channel(self):
         if self.type_id and (self.channel != self.type_id.channel):
             self.type_id = False
+            self.operation_id = False
 
     @api.onchange('channel_name')
     def onchange_channel_name(self):
@@ -549,6 +642,13 @@ class CalendarAppointment(models.Model):
 
     def cancel(self, cancel_reason):
         """Cancels a planned meeting"""
+        # Perform access control.
+        if self.af_check_access():
+            # Checks passed. Run inner function with sudo.
+            return self.sudo()._cancel(cancel_reason)
+        raise Warning(_('You are not allowed to cancel these meetings.'))
+
+    def _cancel(self, cancel_reason):
         # Do not allow cancelation of meetings that have been sent to ACE
         if not cancel_reason:
             return False
@@ -565,6 +665,13 @@ class CalendarAppointment(models.Model):
 
     def confirm_appointment(self):
         """Confirm reserved booking"""
+        # Perform access control.
+        if self.af_check_access():
+            # Checks passed. Run inner function with sudo.
+            return self.sudo()._confirm_appointment()
+        raise Warning(_('You are not allowed to confirm these meetings.'))
+
+    def _confirm_appointment(self):
         for appointment in self:
             if appointment.state == 'reserved':
                 appointment.state = 'confirmed'
@@ -612,6 +719,45 @@ class CalendarAppointment(models.Model):
                     _logger.debug(_("No threshold users setup for operation %s") % self.operation_id.name)
         else:
             _logger.debug(_("No threshold set for operation %s and meeting type %s") % (self.operation_id.name, self.type_id.name))
+
+    @api.multi
+    def move_meeting_action(self):
+        self.show_suggestion_ids = False
+        partner = (
+            self.env["calendar.appointment"]
+            .browse(self._context.get("active_id"))
+            .partner_id
+        )
+        return {
+            "name": _("Move meeting"),
+            "res_model": "calendar.appointment",
+            "res_id": self._context.get("active_id", False),
+            "view_type": "form",
+            "view_mode": "form",
+            "view_id": self.env.ref(
+                "calendar_af.view_calendar_appointment_move_form"
+            ).id,
+            "target": "inline",
+            "type": "ir.actions.act_window",
+        }
+
+    @api.multi
+    def cancel_meeting_action(self):
+        partner = (
+            self.env["calendar.appointment"]
+            .browse(self._context.get("active_id"))
+            .partner_id
+        )
+        return {
+            "name": _("Cancel meeting"),
+            "res_model": "calendar.cancel_appointment",
+            "view_type": "form",
+            "view_mode": "form",
+            "view_id": self.env.ref("calendar_af.cancel_appointment_view_form").id,
+            "target": "new",
+            "type": "ir.actions.act_window",
+            "context": {},
+        }
 
     def generate_move_daily_note(self, occasions, reason):
         pass
@@ -814,9 +960,9 @@ class CalendarOccasion(models.Model):
         # Calculate how many occasions we need
         no_occasions = int(duration / BASE_DURATION)
         if operation_id:
-            if operation_id.department_id and operation_id.department_id.reserve_admin_ids:
+            if operation_id.reserve_admin_ids:
                 # find employees listed as available for reserve bookings on operation
-                employee_ids = operation_id.department_id.reserve_admin_ids
+                employee_ids = operation_id.reserve_admin_ids
                 # select random employee from the recordset
                 user_id = employee_ids[randint(0,len(employee_ids)-1)].user_id
             else:
@@ -844,9 +990,47 @@ class CalendarOccasion(models.Model):
         return res
 
     @api.multi
+    def check_access_planner_locations(self, locations):
+        """Check if current user is planner with access to these locations."""
+        if not self.env.user.has_group('af_security.af_meeting_planner'):
+            return False
+        for occasion in self:
+            # ensure that user has access to at least one location per occasion.
+            if not occasion.mapped('office_id.operation_ids.location_id') & locations:
+                return False
+        return True
+
+    @api.multi
+    def af_check_access(self):
+        """ Perform access control before allowing certain operations.
+            Controls access for:
+            * publish_occasion
+            * accept_occasion
+            * reject_occasion
+            * delete_occasion
+        """
+        allowed = False
+        denied = False
+        locations = self.env.user.mapped('employee_ids.office_ids.operation_ids.location_id')
+        # Check access for Meeting Planner
+        if self.check_access_planner_locations(locations):
+            allowed = True
+        if allowed and not denied:
+            return True
+        return False
+    
+    @api.multi
     def publish_occasion(self):
         """User publishes suggested occasion"""
-        if self.state == 'draft':
+        # Perform access control.
+        if self.af_check_access():
+            # Checks passed. Run inner function with sudo.
+            return self.sudo()._publish_occasion()
+        raise Warning(_('You are not allowed to publish these occasions.'))
+
+    @api.multi
+    def _publish_occasion(self):
+        if self.state == 'draft' or self.state == 'fail':
             self.state = 'request'
             ret = True
         else:
@@ -857,7 +1041,14 @@ class CalendarOccasion(models.Model):
     @api.multi
     def accept_occasion(self):
         """User accepts suggested occasion"""
-        if self.state == 'request':
+        # Perform access control.
+        if self.af_check_access():
+            # Checks passed. Run inner function with sudo.
+            return self.sudo()._accept_occasion()
+        raise Warning(_('You are not allowed to accept these occasions.'))
+    
+    def _accept_occasion(self):
+        if self.state == 'request' or self.state == 'fail':
             self.state = 'ok'
             ret = True
         else:
@@ -868,6 +1059,14 @@ class CalendarOccasion(models.Model):
     @api.multi
     def reject_occasion(self):
         """User rejects suggested occasion"""
+        # Perform access control.
+        if self.af_check_access():
+            # Checks passed. Run inner function with sudo.
+            return self.sudo()._reject_occasion()
+        raise Warning(_('You are not allowed to accept these occasions.'))
+
+    @api.multi
+    def _reject_occasion(self):
         if self.state in ['request', 'ok']:
             self.state = 'fail'
             ret = True
@@ -879,6 +1078,14 @@ class CalendarOccasion(models.Model):
     @api.multi
     def delete_occasion(self):
         """User deletes an occasion"""
+        # Perform access control.
+        if self.af_check_access():
+            # Checks passed. Run inner function with sudo.
+            return self.sudo()._delete_occasion()
+        raise Warning(_('You are not allowed to accept these occasions.'))
+
+    @api.multi
+    def _delete_occasion(self):
         if not self.appointment_id:
             self.state = 'deleted'
             ret = True
@@ -974,7 +1181,7 @@ class CalendarOccasion(models.Model):
             domain.append(('state', '=', 'ok'))
             start_domain = domain
             for employee in operation_id.employee_ids:
-                domain = start_domain + [('user', '=', employee.user_id.id)]
+                domain = start_domain + [('user_id', '=', employee.user_id.id)]
                 do_loop()
         else:
             do_loop()
@@ -992,8 +1199,9 @@ class CalendarOccasion(models.Model):
         """Reserves an occasion."""
         start = occasion_ids[0].start
         stop = occasion_ids[len(occasion_ids) - 1].stop
-        duration = stop.minute - start.minute
-        type_id = self.env.ref('calendar_meeting_type.type_00').id
+        duration = (stop - start).seconds/60/60
+        # type_id = self.env.ref('calendar_meeting_type.type_00').id
+        type_id = occasion_ids[0].type_id
 
         # check that occasions are free and unreserved
         free = True
@@ -1005,11 +1213,11 @@ class CalendarOccasion(models.Model):
 
         if free:
             vals = {
-                'name': occasion_ids[0].type_id.name,
+                'name': type_id.name,
                 'start': start,
                 'stop': stop,
                 'duration': duration,
-                'type_id': type_id,
+                'type_id': type_id.id,
                 'user_id': False,
                 'partner_id': False,
                 'state': 'reserved',

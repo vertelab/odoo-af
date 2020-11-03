@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="change_user_appointment_view_form" model="ir.ui.view">
+        <field name="name">calendar_change_user_appointment.form</field>
+        <field name="model">calendar.change_user_appointment</field>
+        <field name="arch" type="xml">
+            <form string="Change case worker">
+                <group>
+                    <field name="appointment_id" readonly="1"/>
+                    <field name="now_user_id" readonly="1"/>
+                    <field name="duration" readonly="1"/>
+                </group>
+                <group>
+                    <group>
+                        <field name="new_user_id" required="1"/>
+                    </group>
+                    <group>
+                        <field name="start"/>
+                    </group>
+                </group>
+                <footer>
+                    <group>
+                        <span>
+                            <button string="OK" type="object" class="oe_highlight" name="action_change_user_appointment"/>
+                            <button string="Cancel" class="oe_link" special="cancel"/>
+                        </span>
+                    </group>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="change_user_appointment_form_action" model="ir.actions.act_window">
+        <field name="name">Change case worker</field>
+        <field name="res_model">calendar.change_user_appointment</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <act_window id="change_user_appointment_action"
+                name="Change case worker"
+                src_model="calendar.appointment"
+                res_model="calendar.change_user_appointment"
+                view_type="form"
+                view_mode="form"
+                key2="client_action_multi"
+                target="new"/>
+
+</odoo>

@@ -52,7 +52,7 @@ unused_occasions.unlink()</field>
         <field name="binding_type">action</field>
         <field name="state">code</field>
         <field name="code">for rec in records:
-  if rec.state == 'draft':
+  if rec.state == 'draft' or rec.state == 'fail':
     res = rec.publish_occasion()
     if not res:
       raise Warning("One of your occasions is not a draft.")</field>
@@ -65,7 +65,7 @@ unused_occasions.unlink()</field>
         <field name="binding_type">action</field>
         <field name="state">code</field>
         <field name="code">for rec in records:
-  if rec.state == 'request':
+  if rec.state == 'request' or rec.state == 'fail':
     res = rec.accept_occasion()
     if not res:
       raise Warning("One of your occasions is not a request.")</field>
@@ -95,26 +95,6 @@ unused_occasions.unlink()</field>
     res = rec.delete_occasion()
     if not res:
       raise Warning("One of your occasions is already booked")</field>
-    </record>
-
-    <record id="calendar_user_search" model="ir.ui.view">
-        <field name="name">calendar.user.search</field>
-        <field name="model">res.users</field>
-        <field name="arch" type="xml">
-            <search string="Rules">
-                <field name="name" />
-                <field name="login" />
-                <field name="office_ids" />
-                <group expand="0" string="Group By...">
-                    <filter
-                        name="group_by_office"
-                        string="Office"
-                        domain="[]"
-                        context="{'group_by':'office_ids'}"
-                    />
-                </group>
-            </search>
-        </field>
     </record>
 
   <record id="action_calendar_user" model="ir.actions.act_window">
