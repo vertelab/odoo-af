@@ -75,7 +75,6 @@ class hr_operation(models.Model):
             res['domain'] = [('id', 'in', self.user_ids._ids)]
         else:
             raise Warning(_("No administrative officers on this operation"))
-        _logger.info("action: %s" % res)
         return res
 
 
