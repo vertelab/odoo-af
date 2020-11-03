@@ -101,7 +101,7 @@ class CalendarSchedule(models.Model):
                 pass
         
         # recalculate possible start times
-        self.comp_possible_starts()
+        self.sudo().comp_possible_starts()
 
     @api.multi
     def comp_possible_starts(self):
