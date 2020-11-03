@@ -12,7 +12,6 @@
                         <tree>
                             <field name="type_id"/>
                             <field name="start"/>
-                            <field name="stop"/>
                             <field name="user_id"/>
                             <field name="partner_id"/>
                             <field name="operation_id"/>

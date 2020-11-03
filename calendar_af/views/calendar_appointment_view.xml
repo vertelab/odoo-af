@@ -89,8 +89,9 @@
         <field name="arch" type="xml">
             <tree string="Appointments">
                 <field name="type_id" />
+                <field name="weekday"/>
                 <field name="start" />
-                <field name="stop" />
+                <field name="duration"/>
                 <field name="user_id" />
                 <field name="partner_id" />
                 <field name="operation_id" />
@@ -161,7 +162,6 @@
                         <tree string="Bookable Occasions" limit="10">
                             <field name="weekday"/>
                             <field name="start"/>
-                            <field name="stop"/>
                             <field name="duration"/>
                             <field name="type_id"/>
                             <field name="occasion_ids" invisible="1"/>
