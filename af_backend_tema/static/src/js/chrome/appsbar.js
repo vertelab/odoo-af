@@ -35,7 +35,7 @@ var AppsBar = Widget.extend({
 	events: _.extend({}, Widget.prototype.events, {
         'click .nav-link': '_onAppsMenuItemClicked',
     }),
-	template: "af_web_theme.AppsBarMenu",
+	template: "af_backend_tema.AppsBarMenu",
 	init: function (parent, menu) {
         this._super.apply(this, arguments);
         this._apps = _.map(menu.children, function (app) {

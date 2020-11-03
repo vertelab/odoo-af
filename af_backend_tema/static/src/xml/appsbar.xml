@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates id="template" xml:space="preserve">
 	
-	<t t-name="af_web_theme.AppsBarMenu">
+	<t t-name="af_backend_tema.AppsBarMenu">
         <div class="af_apps_sidebar">
 	        <ul class="af_apps_sidebar_menu">
 	            <t t-foreach="widget.getApps()" t-as="app">
