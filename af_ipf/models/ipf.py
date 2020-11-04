@@ -147,4 +147,6 @@ class AfIpfEndpoint(models.Model):
         ipf = self.env.ref('af_ipf.ipf_endpoint_customer')
         res = ipf.call(customer_id = customer_id)
         pnr = res.get('ids', {}).get('pnr')
+        if len(pnr) == 12:
+            pnr = pnr[:8] + "-" + pnr[8:12]
         return pnr
