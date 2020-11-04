@@ -146,6 +146,5 @@ class AfIpfEndpoint(models.Model):
     def get_pnr(self, customer_id):
         ipf = self.env.ref('af_ipf.ipf_endpoint_customer')
         res = ipf.call(customer_id = customer_id)
-        _logger.warn("af.ipf.endpoint get_pnr res: %s" % res)
         pnr = res.get('ids', {}).get('pnr')
         return pnr
