@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="af_dashboard_view" model="ir.ui.view">
+        <field name="name">af.dashboard.kanban</field>
+        <field name="model">af.dashboard</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" create="false" import="false">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="welcome_msg"/>
+                <field name="welcome_dsc"/>
+                <field name="box_ids"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div style="width:100%;height:500px;border:none;background-color:#80808003">
+                            <h2>
+                                <t t-esc="record.welcome_msg.value"/>
+                                <t t-if="record.user_id.raw_value">
+                                    <t t-esc="record.user_id.value"/>
+                                </t>
+                            </h2>
+                            <br/>
+                            <p>
+                                <t t-raw="record.welcome_dsc.raw_value"/>
+                            </p>
+                            <br/>
+                            <table>
+                                <tr>
+                                    <t t-foreach="record.box_ids.raw_value" t-as="box">
+                                        <t t-if="box.is_group">
+                                            <td width="33%" style="padding-left:5px;background-color:#8080805c">
+                                                <t t-raw="box.name"/>
+                                                <t t-raw="box.sub_title"/>
+                                                <t t-raw="box.description"/>
+                                                <t t-esc="record.user_id.groups_id"/>
+                                                <a t-att-href="box.action_url">
+                                                    <i style="font-size:200px;padding-left:5%" t-att-class="box.image"/>
+                                                </a>
+                                            </td>
+                                        </t>
+                                    </t>
+                                </tr>
+                            </table>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_af_dashboard" model="ir.actions.act_window">
+        <field name="name">My Dashboard</field>
+        <field name="res_model">af.dashboard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">kanban</field>
+        <field name="domain">[('user_id', '=', context.get('uid'))]</field>
+    </record>
+
+    <menuitem id="af_dashboard_menu" action="action_af_dashboard" name="My Dashboard" sequence="0"/>
+
+    <record id="af_dashboard_view_tree" model="ir.ui.view">
+        <field name="name">af.dashboard.tree</field>
+        <field name="model">af.dashboard</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="user_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="af_dashboard_view_form" model="ir.ui.view">
+        <field name="name">af.dashboard.form</field>
+        <field name="model">af.dashboard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="name" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="user_id" readonly="1"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="welcome_msg"/>
+                </group>
+                <group>
+                    <field name="welcome_dsc"/>
+                </group>
+                <group>
+                    <field name="box_ids" nolabel="1">
+                        <tree>
+                            <field name="name"/>
+                            <field name="sub_title"/>
+                            <field name="description"/>
+                            <field name="action_id"/>
+                            <field name="image"/>
+                            <field name="group_ids" widget="many2many_tags"/>
+                        </tree>
+                        <form>
+                            <group>
+                                <field name="name"/>
+                                <field name="sub_title"/>
+                                <field name="description"/>
+                                <field name="action_id"/>
+                                <field name="image"/>
+                                <field name="group_ids" widget="many2many_tags"/>
+                            </group>
+                        </form>
+                    </field>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_af_dashboard_config" model="ir.actions.act_window">
+        <field name="name">My Dashboard Configuration</field>
+        <field name="res_model">af.dashboard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="af_dashboard_menu_config" action="action_af_dashboard_config"
+              name="My Dashboard Configuration" sequence="100"
+              groups="fenix_dashboard.group_my_dashboard_manager"/>
+
+
+</odoo>
