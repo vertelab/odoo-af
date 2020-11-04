@@ -1131,14 +1131,14 @@ class CalendarOccasion(models.Model):
                 # find 'max_depth' number of free occasions for each timeslot
                 if day == date_delta.days:
                     start_dt = copy.copy(stop)
-                    start_dt = start_dt.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute)
+                    start_dt = start_dt.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute, second=BASE_DAY_START.second)
                     last_slot = copy.copy(stop)
-                    last_slot = last_slot.replace(hour=BASE_DAY_STOP.hour, minute=BASE_DAY_STOP.minute)
+                    last_slot = last_slot.replace(hour=BASE_DAY_STOP.hour, minute=BASE_DAY_STOP.minute, second=BASE_DAY_START.second)
                     last_slot -= timedelta(minutes=duration)
                 else:
                     # This will break given certain times and timezones. Should work for us.
                     start_dt = start_dt - timedelta(days=1)
-                    start_dt = start_dt.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute)
+                    start_dt = start_dt.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute, second=BASE_DAY_START.second)
                     last_slot = last_slot - timedelta(days=1)
 
                 count_prev_starts = 0
