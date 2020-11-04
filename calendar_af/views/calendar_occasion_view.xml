@@ -120,7 +120,7 @@
                 <field name="type_id"/>
                 <field name="weekday"/>
                 <field name="start"/>
-                <field name="stop"/>
+                <field name="duration"/>
                 <field name="operation_id"/>
                 <field name="state"/>
                 <field name="user_id"/>
