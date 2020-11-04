@@ -209,7 +209,7 @@
                         <page name="page_details" string="Meeting Details">
                             <group>
                                 <group>
-                                    <field name="start"/>
+                                    <field name="start" readonly="1" attrs="{'readonly': True}"/>
                                     <field name="stop" invisible="1"/>
                                     <field name="duration_selection" widget="radio"/>
                                     <field name="duration" invisible="1"/>
