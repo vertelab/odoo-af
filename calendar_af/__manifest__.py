@@ -27,7 +27,6 @@ Asök booking management \n
         "data/calendar.channel.csv",
         "data/calendar.appointment.type.csv",
         "data/calendar.appointment.cancel_reason.csv",
-        "data/resource.calendar.leaves.csv",
         "data/mail_template.xml",
         "data/calendar_schedule_cron.xml",
         "security/ir.model.access.csv",
