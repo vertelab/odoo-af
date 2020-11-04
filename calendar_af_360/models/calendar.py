@@ -27,7 +27,8 @@ from odoo import models, fields, api, _
 
 _logger = logging.getLogger(__name__)
 
-LOCAL_TZ = 'Europe/Stockholm'
+LOCAL_TZ = "Europe/Stockholm"
+
 
 class CalendarAppointmentSuggestion(models.Model):
     _inherit = "calendar.appointment.suggestion"
@@ -96,6 +97,12 @@ class CalendarAppointment(models.Model):
         related="partner_id.company_registry",
         readonly=True,
         groups="af_security.af_jobseekers_officer",
+    )
+    partner_forbidden_types = fields.Many2many(
+        string="Partner forbidden types",
+        comodel_name="calendar.appointment.type",
+        relation="app_forbidden_type_partner",
+        related="partner_id.forbidden_meeting_types",
     )
 
 
