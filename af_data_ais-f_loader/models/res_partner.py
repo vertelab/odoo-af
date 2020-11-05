@@ -404,6 +404,9 @@ class ResPartner(models.Model):
                         row[transform] = translation_dict[row[transform]]
                     else:
                         keys_to_delete.append(transform)
+                elif transform == 'jobseeker_category':
+                    if row[key]:
+                        row[key] = self.env['res.partner.skat'].search([('code', '=', row[key])])
                 elif key == 'office_code':  # if missing in AIS-F in existing record, replace
                     partner_vals = {
                         'name': row['name'],
