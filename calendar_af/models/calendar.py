@@ -811,18 +811,18 @@ class CalendarOccasion(models.Model):
     _description = "Occasion"
 
     name = fields.Char(string='Name', required=True)
-    start = fields.Datetime(string='Start', required=True, help="Start date of an occasion")
+    start = fields.Datetime(string='Start', required=True, help="Start date of an occasion", index=True)
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an occasion")
     duration_selection = fields.Selection(string="Duration",
                                           selection=[('30 minutes', '30 minutes'), ('1 hour', '1 hour')])
     duration = fields.Float('Duration')
-    appointment_id = fields.Many2one(comodel_name='calendar.appointment', string="Appointment")
-    type_id = fields.Many2one(comodel_name='calendar.appointment.type', string='Type')
+    appointment_id = fields.Many2one(comodel_name='calendar.appointment', string="Appointment", index=True)
+    type_id = fields.Many2one(comodel_name='calendar.appointment.type', string='Type', index=True)
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel', related='type_id.channel',
                               readonly=True)
     channel_name = fields.Char(string='Channel', related='type_id.channel.name', readonly=True)
-    additional_booking = fields.Boolean(String='Over booking')
-    user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
+    additional_booking = fields.Boolean(String='Over booking', index=True)
+    user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker", index=True)
     state = fields.Selection(selection=[('draft', 'Draft'),
                                         ('request', 'Published'),
                                         ('ok', 'Accepted'),
@@ -831,8 +831,8 @@ class CalendarOccasion(models.Model):
                                         ('deleted', 'Deleted')],
                                         string='Occasion state', 
                                         default='request', 
-                                        help="Status of the meeting")
-    operation_id = fields.Many2one(comodel_name='hr.operation', string="Operation")
+                                        help="Status of the meeting", index=True)
+    operation_id = fields.Many2one(comodel_name='hr.operation', string="Operation", index=True)
     office_id = fields.Many2one(comodel_name='hr.department', string="Office", related="operation_id.department_id", readonly=True)
     start_time = fields.Char(string='Occasion start time', readonly=True, compute='_occ_start_time_calc', store=True)
     weekday = fields.Char(string='Weekday', compute="_compute_weekday")
