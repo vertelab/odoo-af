@@ -38,13 +38,14 @@ class ResPartner(models.Model):
                                       inverse_name="partner_id")
     forbidden_meeting_types = fields.Many2many(string="Forbidden meeting types", comodel_name="calendar.appointment.type", compute="_comp_forbidden_meeting_types")
     
-    @api.multi
+    @api.one
     def _comp_forbidden_meeting_types(self):
-        type_24 = self.env.ref("calendar_meeting_type.type_24")
-        type_25 = self.env.ref("calendar_meeting_type.type_25")
-        if not self.match_area:
-            self.forbidden_meeting_types |= type_24
-            self.forbidden_meeting_types |= type_25
+        for partner in self:
+            type_24 = self.env.ref("calendar_meeting_type.type_24")
+            type_25 = self.env.ref("calendar_meeting_type.type_25")
+            if not partner.match_area:
+                partner.forbidden_meeting_types |= type_24
+                partner.forbidden_meeting_types |= type_25
 
     @api.one
     def _compute_appointment_count(self):
