@@ -266,25 +266,6 @@ class ResPartner(models.Model):
                     'res_id': partner.id
                 })  # creates an external id in the system for the partner.
 
-    @api.model
-    def create_kpi_from_row(self, row):
-        external_xmlid = '%s.%s' % (self.xmlid_module, row['external_id'])
-        row.pop('external_id', None)
-        id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
-      #_logger.info("id_check: %s" % id_check)
-        if not id_check:
-          #_logger.info("creating kpi: %s" % row)
-            kpi = self.env['res.partner.kpi'].create(row)
-
-            self.env['ir.model.data'].create({
-                'name': external_xmlid.split('.')[1],
-                'module': external_xmlid.split('.')[0],
-                'model': kpi._name,
-                'res_id': kpi.id
-            })
-        # else:
-          #_logger.info("kpi external_id already in database, skipping")
-
     # @api.model #ska använda api istället, om det inte blir api, flytta till separat modul som körs efteråt
     # def create_daily_note_from_row(self, row):
     #     external_xmlid = '%s%s' % (self.xmlid_module, row['external_id'])
@@ -442,14 +423,6 @@ class ResPartner(models.Model):
                             row['fiscal_year'][:4], row['fiscal_year'][4:6])
                         partner_id = self.env['res.partner'].search(
                             [('company_registry', '=', row['partner_id'])]).id
-                        self.create_kpi_from_row({
-                            'external_id': "%s%s" % (transformations['external_id'], row['external_id']),
-                            'partner_id': partner_id,
-                            'fiscal_year': fiscal_year_date,
-                            'profit': row['profit'],
-                            'turnover': row['turnover'],
-                            'employees': row['employees']
-                        })
                         create = False
                     else:
                         partner_xmlid_name = "%s%s" % (transform, row[key])
