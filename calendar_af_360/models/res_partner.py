@@ -36,8 +36,9 @@ class ResPartner(models.Model):
                                             compute="compute_show_dates_ahead")
     appointment_ids = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings',
                                       inverse_name="partner_id")
-    forbidden_meeting_types = fields.Many2many(string="Forbidden meeting types", comodel_name="calendar.appointment.type", compute="_comp_forbidden_meeting_types")
+    forbidden_meeting_types = fields.Many2many(string="Forbidden meeting types", comodel_name="calendar.appointment.type", compute="_comp_forbidden_meeting_types", store=True)
     
+    @api.depends("match_area")
     @api.one
     def _comp_forbidden_meeting_types(self):
         for partner in self:

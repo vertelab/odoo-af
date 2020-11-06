@@ -27,8 +27,7 @@ v12.0.1.3  - removed state-partner.csv\n
         #"partner_kpi_data", 
 		"partner_daily_notes", 
 		#"partner_desired_jobs",
-        ],
-    
+    ],
     "data": [
         #"data/res.country.state.csv",
         "data/res_partner.xml",
