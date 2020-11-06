@@ -322,8 +322,8 @@ class CalendarAppointmentSuggestion(models.Model):
 
         app_vals = {}
 
-        if self.channel == self.env.ref('calendar_channel.channel_local') and not self.user_id:
-            app_vals['user_id'] = occasions[0].user_id
+        if self.channel == self.env.ref('calendar_channel.channel_local'):
+            app_vals['user_id'] = occasions[0].user_id.id
 
         app_vals['state'] = 'confirmed'
         app_vals['start'] = self.start
