@@ -146,7 +146,7 @@ class ResPartner(models.Model):
         # testing purposes only
         path_kpi = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/kpi.csv"
         header_path_kpi = "/usr/share/odoo-af/af_data_ais-f_loader/data/kpi_mapping.csv"
-        self.create_partners(headers_header_kpi, path_kpi, header_path_kpi)
+        #self.create_partners(headers_header_kpi, path_kpi, header_path_kpi)
 
         headers_header_sni = [
             'organisationSNI.csv',
