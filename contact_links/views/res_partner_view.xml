@@ -23,8 +23,9 @@
                             <templates>
 
                                 <t t-name="kanban-box">
-                                    <a t-att-href="record.link.raw_value" target="new" t-if="record.link.raw_value"
-                                       style="flex:none;width:20em;">
+                                    <a t-att-href="record.link.raw_value" target="new" t-if="record.link.raw_value" style="flex:none;width:20em;">
+<!--                                    <a t-att-href="record.link.raw_value" target="new" t-if="record.link.raw_value" style="flex:none;width:20em;">-->
+
                                         <div t-att-class="oe_kanban_global_click" style="height:40px;width:40px">
                                             <div class="o_kanban_image" style="height:100%">
                                                 <t t-if="record.image.raw_value">

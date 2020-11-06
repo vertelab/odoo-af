@@ -2,7 +2,7 @@
 
 {
     'name': 'AF Contact Links',
-    'version': '12.0.1.2',
+    'version': '12.0.1.3',
     'category': '',
     'description': """
 Cases
@@ -22,7 +22,8 @@ v12.0.1.2	- Updated manifest and added Af-logo to description. \n
     'depends': [
         'contacts',
         'af_security',
-        'hr_360_view'
+        'hr_360_view',
+        'partner_view_360',
     ],
     'data': [
         'security/security.xml',

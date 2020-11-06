@@ -5,7 +5,7 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     link_ids = fields.Many2many(
-        'partner.links', 'parnter_link_rel', 'partner_id', 'link_id', string="Links")
+        'partner.links', 'parnter_link_rel', 'partner_id', 'link_id', string="Links", compute='sync_link')
 
     def action_partner_link(self):
         kanban_view_id = self.env.ref(
@@ -22,6 +22,7 @@ class ResPartner(models.Model):
             'domain': [('id', 'in', links.ids)],
         }
 
+    @api.depends('name')
     def sync_link(self):
         for partner in self:
             partner.write({'link_ids': [(5,)]})
