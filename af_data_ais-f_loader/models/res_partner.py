@@ -219,10 +219,11 @@ class ResPartner(models.Model):
             secondary_address_transformations = transformed_row_and_id[
                 'secondary_address_transformations']
 
-            #_logger.info("creating partner: %s" % transformed_row)
+            _logger.info("creating partner: %s" % transformed_row)
             if 'login' in transformed_row:
                 transformed_row.pop('country_id', None)
                 transformed_row.pop('type', None)
+                transformed_row['employee'] = True
                 office_id = transformed_row['office_id']
                 transformed_row.pop('office_id', None)
                 user = self.env['res.users'].search([('login', '=', transformed_row['login'])])
