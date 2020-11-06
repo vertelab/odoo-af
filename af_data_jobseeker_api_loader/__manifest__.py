@@ -1,19 +1,13 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 {
-    "name": "AIS-F Data Loader",
-    "version": "12.0.1.3",
+    "name": "AIS-F Jobseeker Loader",
+    "version": "12.0.1.0",
     "description": """
 
-AIS-F Data Loader
+AIS-F Jobseeker Loader
 ==========================================
-Loads database dumps from AIS-F into odoo \n
-Database dump files must be located in AIS-F/filename.csv in 'data_dir' directory defined in odoo.conf\n
-There are test dump files located in data/test_dumps\n
-v12.0.1.2  - added version -explanation\n
-v12.0.1.3  - removed state-partner.csv\n
-\n
-\n
+calls api to load all jobseekers according to file of customer ids
 """,
 
     "author": "Vertel AB",
@@ -21,12 +15,7 @@ v12.0.1.3  - removed state-partner.csv\n
     "website": "https://vertel.se/",
     "category": "Tools",
     "depends": [ 
-        "hr", 
-        "calendar", 
-        "hr_employee_firstname_extension", 
-        #"partner_kpi_data", 
-		"partner_daily_notes", 
-		#"partner_desired_jobs",
+		"edi_af_aisf_rask", 
     ],
     "data": [
         #"data/res.country.state.csv",
