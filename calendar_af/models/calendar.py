@@ -186,6 +186,8 @@ class CalendarSchedule(models.Model):
 
                     i += 1
 
+        # force a commit in order to save the messages before processing
+        self.env.cr.commit()
         route.run()
         cal_schedule_ids.inactivate()
         _logger.debug("Completed cron_get_schedules for meeting types: %s at %s" % (type_ids, datetime.now()))
