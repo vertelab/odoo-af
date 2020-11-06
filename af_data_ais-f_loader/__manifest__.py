@@ -25,6 +25,7 @@ v12.0.1.3  - removed state-partner.csv\n
         "calendar",
         "hr_employee_firstname_extension",
 		"partner_daily_notes",
+        #"partner_kpi_data",
 		#"partner_desired_jobs",
     ],
     "data": [
