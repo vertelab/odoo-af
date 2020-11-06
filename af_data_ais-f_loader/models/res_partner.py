@@ -263,7 +263,7 @@ class ResPartner(models.Model):
             secondary_address_transformations = transformed_row_and_id[
                 'secondary_address_transformations']
 
-            _logger.info("creating partner: %s" % transformed_row)
+            #_logger.info("creating partner: %s" % transformed_row)
             if 'login' in transformed_row:
                 transformed_row.pop('country_id', None)
                 transformed_row.pop('type', None)
