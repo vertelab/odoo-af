@@ -190,15 +190,15 @@ class ResPartner(models.Model):
         # reader.seek_zero()
         for row in reader.get_data():
             #_logger.info("row: %s" % row)
-            r = {}
-            header = list(field_map.keys())
+            #r = {}
+            #header = list(field_map.keys())
             #_logger.info("header: %s" % header)
-            for i in range(len(header)):
-                if header[i] in field_map:
-                    #_logger.info("header %s: %s" % (i, row[field_map[header[i]]]))
-                    r.update({header[i]: row[field_map[header[i]]]})
+            # for i in range(len(header)):
+            #     if header[i] in field_map:
+            #         #_logger.info("header %s: %s" % (i, row[field_map[header[i]]]))
+            #         r.update({header[i]: row[field_map[header[i]]]})
             #_logger.info("creating row %s" %r)
-            self.env['res.partner'].rask_controller(r['SOKANDE_ID'], '0', '0','0')
+            self.env['res.partner'].rask_controller(row['SOKANDE_ID'], '0', '0','0')
             iterations += 1
             if iterations > 500:
                 self.env.cr.commit()
