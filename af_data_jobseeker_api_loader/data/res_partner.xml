@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <function name="create_offices" model="res.partner">
+        </function>
+        <function name="create_officers" model="res.partner">
+        </function>
+        <function name="create_jobseekers" model="res.partner">
+        </function>
+        <function name="create_organisations" model="res.partner">
+        </function>
+        <function name="create_employers" model="res.partner">
+        </function>
+        <function name="create_contact_persons" model="res.partner">
+        </function>
+    </data>
+</odoo>
