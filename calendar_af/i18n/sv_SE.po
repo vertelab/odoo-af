@@ -334,7 +334,7 @@ msgstr "Avbokningsorsak för mötet"
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_occasion_form
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_report_search
 msgid "Case worker"
-msgstr "Handläggare"
+msgstr "Mötesansvarig"
 
 #. module: calendar_af
 #: code:addons/calendar_af/models/calendar.py:394
@@ -1164,7 +1164,7 @@ msgstr "Tisdag"
 #: model_terms:ir.ui.view,arch_db:calendar_af.calendar_occasion_local_search
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_report_search
 msgid "Type"
-msgstr "Typ"
+msgstr "Mötestyp"
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_report_search
