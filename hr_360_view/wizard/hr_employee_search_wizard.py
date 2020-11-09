@@ -49,6 +49,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     # daily_note_ids = fields.One2many(related='employee_id.daily_note_ids')
     social_sec_nr_search = fields.Char(string="Social security number",default=lambda self: '%s' % request.session.pop('ssn',''))
     bank_id_text = fields.Text(string=None)
+    bank_id_ok = fields.Boolean(string=None,default=False)
 
     search_reason = fields.Selection(string="Search reason",
                                      selection=[('record incoming documents', 'Record incoming documents'), (
@@ -263,10 +264,13 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                 _logger.warn("res: %s" % res)
                 if 'statusText' in res and res['statusText'] == 'OK':
                     self.bank_id_text = res['statusText']
+                    self.bank_id_ok = True
                     break
                 elif 'felStatusKod' in res and self.bank_id_text['felStatusKod']:
                     self.bank_id_text = res['felStatusKod']
+                    self.bank_id_ok = False
                     break
                 time.sleep(3)
             else:
                 self.bank_id_text = _("User timeout")
+                self.bank_id_ok   = False
