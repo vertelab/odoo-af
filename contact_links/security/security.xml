@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<odoo>
-
-    <record id="group_partner_link" model="res.groups">
-        <field name="name">Link Admin</field>
-    </record>
-
-</odoo>

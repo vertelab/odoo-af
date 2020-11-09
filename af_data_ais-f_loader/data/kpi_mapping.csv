@@ -1,9 +1,0 @@
-kpi.csv,Notering,Trans,Odoo
-ID,,"external_id,kpi_",external_id
-TMSTAMP,,,
-ORGNR,"p.g.a. att organisationer identifieras med kundnr inte orgnr används transformationen bara för att komma in i transformationsloopen, transformationsvärdet används inte","partner_id,placeholder",partner_id
-BOKSLUTSPERIOD,,,fiscal_year
-NETTO_OMSATTNING,,,profit
-TOTAL_OMSATTNING,,,turnover
-RORELSE_RESULTAT,,,
-ANTAL_ANSTALLDA,,,employees

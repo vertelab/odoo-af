@@ -1,7 +1,0 @@
-organisationSNI.csv,Notering,Trans,Odoo
-ID,,,
-TMSTAMP,,,
-ORGANISATION_KUNDNR,,"partner_id,part_org_",partner_id
-SNI_KOD,,"sni_id,sni_",sni_id
-SNI_KOD,,,
-SNI_TEXT,,,
