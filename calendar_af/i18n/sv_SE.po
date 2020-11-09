@@ -306,10 +306,10 @@ msgid "Cancel appointment"
 msgstr "Avboka mötet"
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:302
+#: code:addons/calendar_af/models/calendar.py:752
 #, python-format
-msgid "Cancel meeting for %s - %s"
-msgstr "Avboka möte för %s - %s"
+msgid "Cancel meeting"
+msgstr "Avboka möte"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment__cancel_reason
@@ -766,7 +766,7 @@ msgstr "Omboka"
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_appointment_move_form
 msgid "Move meeting"
-msgstr "Omboka mötet"
+msgstr "Omboka möte"
 
 #. module: calendar_af
 #: code:addons/calendar_af/models/calendar.py:288
@@ -793,8 +793,9 @@ msgstr "Namn"
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_appointment_form
+#: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_appointment_move_form
 msgid "Next"
-msgstr "Framåt"
+msgstr "Sök lediga tider"
 
 #. module: calendar_af
 #: code:addons/calendar_af/models/calendar.py:174

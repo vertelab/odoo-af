@@ -138,7 +138,7 @@
                         <page name="page_details" string="Meeting Details">
                             <group>
                                 <group>
-                                    <field name="start" invisible="1"/>
+                                    <field name="start" invisible="1" options="{'datepicker': {'hide': {'seconds': True}}}"/>
                                     <field name="stop" invisible="1"/>
                                     <field name="duration_selection" widget="radio"/>
                                     <field name="duration" invisible="1"/>
@@ -161,7 +161,7 @@
                            attrs="{'invisible':[('show_suggestion_ids','=',False)]}">
                         <tree string="Bookable Occasions" limit="10">
                             <field name="weekday"/>
-                            <field name="start"/>
+                            <field name="start" options="{'datepicker': {'hide': {'seconds': True}}}"/>
                             <field name="duration"/>
                             <field name="type_id"/>
                             <field name="occasion_ids" invisible="1"/>
@@ -209,7 +209,7 @@
                         <page name="page_details" string="Meeting Details">
                             <group>
                                 <group>
-                                    <field name="start" readonly="1" attrs="{'readonly': True}"/>
+                                    <field name="start" readonly="1" attrs="{'readonly': True}" options="{'datepicker': {'hide': {'seconds': True}}}"/>
                                     <field name="stop" invisible="1"/>
                                     <field name="duration_selection" widget="radio"/>
                                     <field name="duration" invisible="1"/>
@@ -229,7 +229,7 @@
                     <field name="suggestion_ids" readonly="1" attrs="{'invisible':[('show_suggestion_ids','=',False)]}">
                         <tree string="Bookable Occasions" limit="10">
                             <field name="weekday"/>
-                            <field name="start"/>
+                            <field name="start" options="{'datepicker': {'hide': {'seconds': True}}}"/>
                             <field name="duration"/>
                             <field name="type_id"/>
                             <field name="occasion_ids" invisible="1"/>

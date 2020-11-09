@@ -8,10 +8,11 @@
             <form string="Cancel appointment">
                 <group>
                     <field name="cancel_reason" required="1"/>
-                    <field name="appointment_ids" readonly="1">
+                    <field name="appointment_ids" readonly="1" string="">
                         <tree>
                             <field name="type_id"/>
                             <field name="start"/>
+                            <field name="duration_selection"/>
                             <field name="user_id"/>
                             <field name="partner_id"/>
                             <field name="operation_id"/>
