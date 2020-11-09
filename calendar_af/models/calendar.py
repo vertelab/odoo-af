@@ -541,9 +541,15 @@ class CalendarAppointment(models.Model):
             return
         if self.channel_name != "PDM" and not self.operation_id:
             return
-        # if self.cancel_reason_temp:
+        # checking if we allow meetings of this length
+        allowed_durations = []
+        if self.type_id.duration_60:
+            allowed_durations += [1]
+        if self.type_id.duration_30:
+            allowed_durations += [0.5]
+        if self.duration not in allowed_durations:
+            raise Warning(_("This duration is not allowed for the meeting type."))
         
-    
         start = self.start_meeting_search(self.type_id)
         stop = self.stop_meeting_search(start, self.type_id)
         self.show_suggestion_ids = True
@@ -555,7 +561,7 @@ class CalendarAppointment(models.Model):
             for day_occasions in day:
                 for occasion in day_occasions:
                     suggestion_ids.append((0, 0, {
-                        # Fyll i occasions-data på förslagen
+                        # Add occasions-data on suggestions
                         'start': occasion[0].start,
                         'stop': occasion[-1].stop,
                         'duration': len(occasion) * 30,
