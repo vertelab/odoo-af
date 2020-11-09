@@ -134,7 +134,7 @@ unused_occasions.unlink()</field>
         <field name="view_id" ref="view_calendar_operation_tree" />
     </record>
 
-    <menuitem action="action_calendar_operation" name="Calendar" id="menu_calendar" sequence="2" />
+    <menuitem action="action_calendar_operation" name="Calendar" id="menu_calendar" sequence="2" groups="af_security.af_meeting_planner,af_security.af_meeting_admin"/>
     <menuitem name="Distans Meeting" id="menu_book_distans_meeting" parent="calendar_af.menu_calendar" sequence="10" />
     <menuitem name="PDM" id="menu_pdm" parent="calendar_af.menu_calendar" sequence="11" />
     <menuitem name="Local" id="menu_local" parent="calendar_af.menu_calendar" sequence="12" />
