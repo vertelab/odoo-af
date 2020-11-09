@@ -13,7 +13,7 @@
 	</data>
 	<data>
 		<record id="ipf_endpoint_rask" model="af.ipf.endpoint">
-			<field name="name">ais-f-arbetssokande/v1/arbetssokande/{customer_id}/anpassad?resurser=alla&amp;client_id={{client}}&amp;client_secret={{secret}}</field>
+			<field name="name">ais-f-arbetssokande/v1/arbetssokande/{customer_id}/anpassad?resurser=alla&amp;client_id={clientid}&amp;client_secret={client_secret}</field>
 			<field name="ipf_id" ref="ipf_rask"/>
 	</record>
 	</data>
