@@ -12,5 +12,14 @@
                 </field>
             </field>
         </record>
+        <record id="calendar.mail_menu_calendar" model="ir.ui.menu">
+            <field name="active" eval="False"/>
+        </record>
+        <record id="partner_view_360.res_partner_jobseeker_search_wizard_menu" model="ir.ui.menu">
+            <field name="active" eval="False"/>
+        </record>
+        <record id="hr_office.operation_menu" model="ir.ui.menu">
+            <field name="active" eval="False"/>
+        </record>
     </data>
 </odoo>
