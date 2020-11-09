@@ -16,6 +16,11 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: ipf_planning
+#: model_terms:ir.ui.view,arch_db:ipf_planning.view_jobseeker_form
+msgid "Arbetsmarknadspolitisk Planering"
+msgstr "Kundens planering"
+
+#. module: ipf_planning
 #: model:ir.model,name:ipf_planning.model_res_partner
 msgid "Contact"
 msgstr "Kontakt"
