@@ -1,0 +1,116 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* af_security_rules
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0-20200508\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-09-07 14:37+0000\n"
+"PO-Revision-Date: 2020-09-07 17:12+0200\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: sv_SE\n"
+"X-Generator: Poedit 2.0.6\n"
+
+#. module: af_security_rules
+#: model:ir.model.fields,field_description:af_security_rules.field_res_partner__jobseeker_access
+#: model:ir.model.fields,field_description:af_security_rules.field_res_users__jobseeker_access
+msgid "Access Level"
+msgstr "Åtkomstnivå"
+
+#. module: af_security_rules
+#: model:ir.model.fields,field_description:af_security_rules.field_res_partner__active
+msgid "Active"
+msgstr "Aktiv"
+
+#. module: af_security_rules
+#: model:ir.model,name:af_security_rules.model_bhtj_model
+msgid "BHTJ Abstract Model"
+msgstr "BHTJ Abstrakt Modell"
+
+#. module: af_security_rules
+#: code:addons/af_security_rules/models/res_partner.py:218
+#, python-format
+msgid "BHTJ: Access type must be either STARK or MYCKET STARK."
+msgstr "BHTJ: Åtkomst typ måste vara antingen STARK eller MYCKET STARK"
+
+#. module: af_security_rules
+#: code:addons/af_security_rules/models/res_partner.py:211
+#, python-format
+msgid "BHTJ: Partner %s is either not a jobseeker, or is lacking a person number."
+msgstr "BHTJ: Partner %s är antingen inte arbetssökande eller saknar person nummer"
+
+#. module: af_security_rules
+#: code:addons/af_security_rules/models/res_partner.py:216
+#, python-format
+msgid "BHTJ: You must provide a reason or reason_code."
+msgstr "BHTJ: Du måste ange orsak eller en orsaks kod"
+
+#. module: af_security_rules
+#: code:addons/af_security_rules/models/res_partner.py:214
+#, python-format
+msgid "BHTJ: interval must be one of 1, 7, 14, 30, 60, 100, 365."
+msgstr "BHTJ: Intervallet måste vara något av 1, 7, 14, 30, 60, 100, 365."
+
+#. module: af_security_rules
+#: model:ir.model,name:af_security_rules.model_res_partner
+msgid "Contact"
+msgstr "Kontakt"
+
+#. module: af_security_rules
+#: code:addons/af_security_rules/models/res_partner.py:189
+#, python-format
+msgid "Could not connect to BHTJ to grant access rights!"
+msgstr "Kunde inte länka till BHTJ för åtkomst rättigheter!"
+
+#. module: af_security_rules
+#: model:ir.model,name:af_security_rules.model_res_partner_notes
+msgid "Daily notes for a partner"
+msgstr "Daganteckningar för en kund"
+
+#. module: af_security_rules
+#: model:ir.model.fields,field_description:af_security_rules.field_bhtj_model__display_name
+msgid "Display Name"
+msgstr "Visningsnamn"
+
+#. module: af_security_rules
+#: model:ir.model.fields,field_description:af_security_rules.field_bhtj_model__id
+msgid "ID"
+msgstr "ID"
+
+#. module: af_security_rules
+#: model:ir.model.fields,field_description:af_security_rules.field_bhtj_model____last_update
+msgid "Last Modified on"
+msgstr "Senast redigerad"
+
+#. module: af_security_rules
+#: selection:res.partner,jobseeker_access:0
+msgid "Mycket stark"
+msgstr "Mycket stark"
+
+#. module: af_security_rules
+#: code:addons/af_security_rules/models/res_partner.py:114
+#, python-format
+msgid "No BHTJ data in context. Extra call made.Additional models need to inherit bhtj.model."
+msgstr "Ingen BHTJ  informationssammanhang. Extra anrop gjord. Ytterligare modeller behöver ärva bhtj.model."
+
+#. module: af_security_rules
+#: selection:res.partner,jobseeker_access:0
+msgid "Stark"
+msgstr "Stark"
+
+#. module: af_security_rules
+#: model:ir.model,name:af_security_rules.model_res_users
+msgid "Users"
+msgstr "Användare"
+
+#. module: af_security_rules
+#: code:addons/af_security_rules/models/res_partner.py:149
+#, python-format
+msgid "res.partner._searchjobseeker_access: Search operator '%s' and value '%s' has not been implemented yet."
+msgstr "res.partner._searchjobseeker_access:  Sök operator '%s' och värde '%s' har inte blivit implementerad än. "

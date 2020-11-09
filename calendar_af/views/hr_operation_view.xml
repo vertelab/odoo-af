@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_operation_form_calendar_af_inherited" model="ir.ui.view"> 
+    <field name="name">hr.operation.form.calendar_af.inherited</field>
+    <field name="model">hr.operation</field> 
+    <field name="inherit_id" ref="hr_office.view_operation_form" /> 
+    <field name="arch" type="xml"> 
+      <sheet position="inside">
+        <group>
+          <field name="reserve_admin_ids" widget="many2many_tags" domain="[('id', 'in', employee_ids)]"/>
+          <field name="app_warn_emp_ids" widget="many2many_tags" domain="[('id', 'in', employee_ids)]"/>
+        </group>
+        <notebook>
+          <page name="type_operation" string="Appointment warning thresholds">
+            <field name="type_operation_ids" mode="tree" nolabel="1">
+              <tree editable="bottom">
+                <field name="type_id" domain="[('channel', '=', %(calendar_channel.channel_local)d)]"/>
+                <field name="warning_threshold"/>
+              </tree>
+            </field>
+          </page>
+          <page name="mapped_dates" string="Mapped dates">
+            <field name="mapped_dates_ids" mode="tree" nolabel="1">
+              <tree editable="bottom">
+                <field name="name"/>
+                <field name="from_date"/>
+                <field name="to_date"/>
+              </tree>
+            </field>
+          </page>
+        </notebook>
+        <field name="employee_ids">
+          <tree string="Administrative officers">
+            <field name="name"/>
+            <field name="signature"/>
+            <field name="operation_names"/>
+          </tree>
+      </field>
+      </sheet>
+    </field>
+  </record> 
+
+   <record id="view_calendar_operation_tree" model="ir.ui.view">
+    <field name="name">calendar.operation.tree</field>
+    <field name="model">hr.operation</field>
+    <field name="priority" eval="10" />
+    <field name="arch" type="xml">
+        <tree string="Operations" create="false" delete="false">
+            <button name="open_users_tree" type="object" string="Select"/>            
+            <field name="name" />
+            <field name="location_code" />
+            <field name="department_id" />
+            
+        </tree>
+    </field>
+  </record>
+
+
+</odoo>

@@ -1,0 +1,25 @@
+"kontor.csv","Notering","Trans","Odoo"
+"KONTOR_ID",,,
+"KONTOR_KOD",,"external_id,dptmnt_office_","external_id"
+"KONTOR_KOD",,"office_code,office_code","office_code"
+"TMSTAMP",,,
+"NAMN",,,"name"
+"BESOKSADRESS",,,
+"UTDELNINGSADRESS",,,
+"POSTNR",,,
+"POSTORT",,,
+"TELNR",,,"phone"
+"FAXNR",,,
+"EXTERN_EPOST",,,"email"
+"INTERN_EPOST",,,
+"KONTAKTPERSON_1",,,
+"KONTAKTPERSON_2",,,
+"KOMMUN_KOD",,,
+"UPPDAT_DATUM",,,
+"UPPDAT_SIGN",,,
+"ANMARKNING",,,
+"KONTAKTPERSON_ANNONSDIREKT",,,
+"RADERAD","probably not working as of 2020-09-13 rewrite to hr.department","skip_if_j,skip","skip_if_j"
+"LOGGMARKERING",,,
+"SERVICEDIREKT",,,
+"BEHORIGHETSTJANST",,,

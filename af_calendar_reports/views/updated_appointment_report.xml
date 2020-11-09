@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="updated_calendar_appointment_report_doc">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.internal_layout">
+                    <div class="page">
+                        <div class="row">
+                            <div class="col-12">
+                                <p>Here is an update of the appointment</p>
+                            </div>
+                            <div class="col-12">
+                                <p>
+                                    Date: <span t-esc="o.start.strftime('%A %d %B %Y')"/> <br/>
+                                    Place: <span t-esc="o.operation_id.name"/> <br/>
+                                    Time: <span t-esc="o.start.strftime('%I')"/> <br/>
+                                </p>
+                            </div>
+                            <div class="col-12">
+                                <p>
+                                    If you have any questions, please call us at 0771-416 416. <br/>
+                                    Greetings <br/>
+                                    Service Desk
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <report id="updated_calendar_appointment_report" model="calendar.appointment" string="Updated Calendar Appointment"
+            report_type="qweb-pdf"
+            name="af_calendar_reports.updated_calendar_appointment_report_doc"
+            file="af_calendar_reports.updated_calendar_appointment_report_doc"
+    />
+</odoo>

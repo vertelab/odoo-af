@@ -1,0 +1,13 @@
+id,ipf_num,name,duration_30,duration_60,days_first,days_last,additional_booking,channel/id,ipf_id,text
+calendar_meeting_type.type_00,00,"Reservation",True,False,0,0,False,calendar_channel.channel_none,"n/a",""
+calendar_meeting_type.type_21,21,"Första planeringssamtal PDM",True,False,3,15,True,calendar_channel.channel_pdm,ded72445-e5d3-4e21-a356-aad200dac83d,"F.n. förkortat från 60 min"
+calendar_meeting_type.type_22,22,"Uppföljande planeringssamtal PDM",False,True,3,90,False,calendar_channel.channel_pdm,f203b91b-bdbe-46e8-b6ae-aad200df9884,""
+calendar_meeting_type.type_23,23,"Fördjupat planeringssamtal PDM",False,True,3,15,False,calendar_channel.channel_pdm,93557f15-d25a-4f40-8a6b-aad200e1d2a0,""
+calendar_meeting_type.type_24,24,"Första planeringssamtal PDM KROM",False,True,3,10,True,calendar_channel.channel_pdm,8682813d-f063-4c60-9b0c-ab610091d20e,""
+calendar_meeting_type.type_25,25,"Uppföljande planeringssamtal PDM KROM",True,False,3,90,False,calendar_channel.channel_pdm,c56d910a-edda-45f1-b931-ab6400c7e3ca,""
+calendar_meeting_type.type_26,26,"Första planeringssamtal PDM STOM",True,False,3,25,True,calendar_channel.channel_pdm,"60844adc-bd74-454f-bdee-ac0c00975bba","STOM"
+calendar_meeting_type.type_27,27,"STOM beslut PDM",True,False,3,25,False,calendar_channel.channel_pdm,"3b14d4b7-2e2e-4079-9cb5-ac2500ef690f","STOM"
+calendar_meeting_type.type_31,31,"Första planeringssamtal Lokalkontor",False,True,3,15,False,calendar_channel.channel_local,"n/a",""
+calendar_meeting_type.type_32,32,"Uppföljande planeringssamtal Lokalkontor",True,False,3,90,False,calendar_channel.channel_local,"n/a",""
+calendar_meeting_type.type_33,33,"Fördjupat planeringssamtal Lokalkontor",True,False,3,15,False,calendar_channel.channel_local,"n/a",""
+calendar_meeting_type.type_34,34,"Första planeringssamtal Lokalkontor KM",True,False,3,15,False,calendar_channel.channel_local,"n/a","F.n. förkortat från 60 min"

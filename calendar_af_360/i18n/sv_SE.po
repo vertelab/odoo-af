@@ -1,0 +1,96 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* calendar_af_360
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0-20200508\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-10-06 10:25+0000\n"
+"PO-Revision-Date: 2020-10-06 12:27+0200\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: sv_SE\n"
+"X-Generator: Poedit 2.0.6\n"
+
+#. module: calendar_af_360
+#: model:ir.model,name:calendar_af_360.model_calendar_appointment_suggestion
+msgid "Bookable Occasion"
+msgstr "Bokningsbart tillfälle"
+
+#. module: calendar_af_360
+#: code:addons/calendar_af_360/models/hr_employee.py:67
+#: model:ir.model.fields,field_description:calendar_af_360.field_hr_employee__appointment_ids
+#, python-format
+msgid "Booked meetings"
+msgstr "Bokade möten"
+
+#. module: calendar_af_360
+#: model:ir.model.fields,field_description:calendar_af_360.field_hr_employee__appointment_ids_ahead
+#: model:ir.model.fields,field_description:calendar_af_360.field_hr_employee_jobseeker_search_wizard__appointment_ids_ahead
+msgid "Booked meetings ahead"
+msgstr "Framtida bokade möten"
+
+#. module: calendar_af_360
+#: model:ir.model.fields,field_description:calendar_af_360.field_hr_employee__appointment_ids_all
+#: model:ir.model.fields,field_description:calendar_af_360.field_hr_employee_jobseeker_search_wizard__appointment_ids_all
+msgid "Booked meetings ahead for everyone"
+msgstr "Framtida bokade möten för alla"
+
+#. module: calendar_af_360
+#: code:addons/calendar_af_360/models/hr_employee.py:79
+#, python-format
+msgid "Calendar"
+msgstr "Kalender"
+
+#. module: calendar_af_360
+#: model_terms:ir.ui.view,arch_db:calendar_af_360.view_employee_360_form_calendar_af_inherited
+#: model_terms:ir.ui.view,arch_db:calendar_af_360.view_jobseeker_form_calendar_af_inherited
+msgid "Cancel"
+msgstr "Avbryt"
+
+#. module: calendar_af_360
+#: model:ir.model,name:calendar_af_360.model_hr_employee
+msgid "Employee"
+msgstr "Anställd"
+
+#. module: calendar_af_360
+#: code:addons/calendar_af_360/models/calendar.py:38
+#, python-format
+msgid "Jobseekers"
+msgstr "Arbetssökande"
+
+#. module: calendar_af_360
+#: model_terms:ir.ui.view,arch_db:calendar_af_360.view_employee_360_form_calendar_af_inherited
+#: model_terms:ir.ui.view,arch_db:calendar_af_360.view_jobseeker_form_calendar_af_inherited
+msgid "Move"
+msgstr "Omboka"
+
+#. module: calendar_af_360
+#: model_terms:ir.ui.view,arch_db:calendar_af_360.view_jobseeker_form_calendar_af_inherited
+msgid "New appointment"
+msgstr "Nytt mötestillfälle"
+
+#. module: calendar_af_360
+#: model_terms:ir.ui.view,arch_db:calendar_af_360.view_employee_360_form_calendar_af_inherited
+msgid "Show all appointments"
+msgstr "Visa kollegors möten"
+
+#. module: calendar_af_360
+#: model_terms:ir.ui.view,arch_db:calendar_af_360.view_employee_360_form_calendar_af_inherited
+msgid "Upcoming meetings"
+msgstr "Kommande möten"
+
+#. module: calendar_af_360
+#: model_terms:ir.ui.view,arch_db:calendar_af_360.view_employee_360_form_calendar_af_inherited
+msgid "Upcoming meetings for others"
+msgstr "Kollegors kommande möten"
+
+#. module: calendar_af_360
+#: model:ir.model,name:calendar_af_360.model_hr_employee_jobseeker_search_wizard
+msgid "hr.employee.jobseeker.search.wizard"
+msgstr "hr_360_view-sökvizard"
