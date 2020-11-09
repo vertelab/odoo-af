@@ -22,7 +22,7 @@
                             </group>
                         </group>
                         <group></group>
-                        <button name="search_jobseeker" string="search" type="object" class="btn-primary"   attrs="{'invisible': [('identification','==','Digital ID'),('bank_id_ok','!=',True)]}" />
+                        <button name="search_jobseeker" string="search" type="object" class="btn-primary" attrs="{'invisible': [('identification','==','Digital ID'),('bank_id_ok','!=',True)]}"/>
                         <button string="Cancel" class="btn-secondary" special="cancel"/>
                     </page>
                     <page string="Based on the needs of the authority">
@@ -37,7 +37,11 @@
                             </group>
                         </group>
                         <group></group>
+<<<<<<< HEAD
                         <button name="search_jobseeker1" string="search" type="object" class="btn-primary"  />
+=======
+                        <button name="search_jobseeker1" string="search" type="object" class="btn-primary" attrs="{'invisible': [('identification','==','Digital ID'),('bank_id_ok','!=',True)]}" />
+>>>>>>> d071a57958154ab0d4cd32b752df0d26ced8f550
                         <button string="Cancel" class="btn-secondary" special="cancel"/>
                     </page>
                 </notebook>
