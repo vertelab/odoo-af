@@ -171,6 +171,14 @@ class CreateLocalOccasion(models.TransientModel):
                             self.operation_id,
                             False,
                         )
+                        if curr_occ == 0:
+                            first_occ = occ
+                        else:
+                            # connect related occasions
+                            occ.occasion_ids |= first_occ
+                            first_occ.occasion_ids |= occ 
+                    else:
+                        raise Warning("Worker not working this date and time.")
             res = self.env.ref("calendar_af.action_calendar_local_occasion").read()[0]
             res["domain"] = [
                 ("user_id", "in", self.user_ids._ids),
@@ -220,6 +228,12 @@ class CreateLocalOccasion(models.TransientModel):
                                     self.operation_id,
                                     False,
                                 )
+                                if curr_occ == 0:
+                                    first_occ = occ
+                                else:
+                                    # connect related occasions
+                                    occ.occasion_ids |= first_occ
+                                    first_occ.occasion_ids |= occ 
             res = self.env.ref("calendar_af.action_calendar_local_occasion").read()[0]
             res["domain"] = [
                 ("user_id", "in", self.user_ids._ids),
