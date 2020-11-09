@@ -49,7 +49,7 @@ class ResPartner(models.Model):
         # testing purposes only
         path = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/arbetssokande.csv"
         header_path = "/usr/share/odoo-af/af_data_ais-f_loader/data/arbetssokande_mapping.csv"
-        self.create_partners_from_api(headers_header, path, header_path)
+        #self.create_partners(headers_header, path, header_path)
 
         headers_header_adr = ['sok_adress.csv', 'Notering', 'Trans', 'Odoo']
         path_adr = os.path.join(
@@ -207,7 +207,7 @@ class ResPartner(models.Model):
         reader.close()
     
     
-    @profile
+    
     @api.model
     def create_partners(self, headers_header, path, header_path):
         header_reader = ReadCSV(header_path, headers_header)
@@ -250,7 +250,7 @@ class ResPartner(models.Model):
                # _loger.info("commit")
                 iterations = 0
         reader.close()
-
+    @profile
     @api.model
     def create_partner_from_row(self, row, transformations):
         #_logger.info("row: %s" % row)

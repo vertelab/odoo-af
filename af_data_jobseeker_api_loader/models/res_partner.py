@@ -41,16 +41,16 @@ class ResPartner(models.Model):
         path = os.path.join(
             config.options.get('data_dir'),
             'AIS-F/arbetssokande.csv')
-        path = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/arbetssokande.csv" # testing purposes only
+        path = "/usr/share/odoo-af/af_data_jobseeker_api_loader/data/test_dumps/arbetssokande.csv" # testing purposes only
         self.create_partners_from_api(header, path)
 
-    
+    @profile
     @api.model
     def create_partners_from_api(self, header, path):
         reader = ReadCSV(path, header)
         iterations = 0
         for row in reader.get_data():
-            self.env['res.partner'].rask_controller(row[header], '0', '0','0')
+            self.env['res.partner'].rask_as_get(row[header[0]])
             iterations += 1
             if iterations > 500:
                 self.env.cr.commit()

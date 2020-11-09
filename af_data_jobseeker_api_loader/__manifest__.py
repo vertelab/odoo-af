@@ -15,7 +15,7 @@ calls api to load all jobseekers according to file of customer ids
     "website": "https://vertel.se/",
     "category": "Tools",
     "depends": [ 
-		"edi_af_aisf_rask", 
+		"edi_af_aisf_rask_get_jobseeker", 
     ],
     "data": [
         #"data/res.country.state.csv",
