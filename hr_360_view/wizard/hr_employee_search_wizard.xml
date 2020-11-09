@@ -13,6 +13,7 @@
                                 <field name="identification"/>
                                 <!-- <field name="search_domain" widget="domain" options="{'model' : 'res.partner'}"> </field> -->
                                 <field name="social_sec_nr_search"/>
+                                <field name="bank_id_ok" invisible="1"/>
                             </group>
                             <group>
                                 <button name="do_bankid"  string="BankID" type="object" attrs="{'invisible': [('identification','!=','Digital ID')]}"/>
@@ -21,7 +22,7 @@
                             </group>
                         </group>
                         <group></group>
-                        <button name="search_jobseeker" string="search" type="object" class="btn-primary"/>
+                        <button name="search_jobseeker" string="search" type="object" class="btn-primary" attrs="{'invisible': [('identification','==','Digital ID'),('bank_id_ok','!=',True)]}"/>
                         <button string="Cancel" class="btn-secondary" special="cancel"/>
                     </page>
                     <page string="Based on the needs of the authority">
@@ -36,7 +37,7 @@
                             </group>
                         </group>
                         <group></group>
-                        <button name="search_jobseeker1" string="search" type="object" class="btn-primary"/>
+                        <button name="search_jobseeker1" string="search" type="object" class="btn-primary"  />
                         <button string="Cancel" class="btn-secondary" special="cancel"/>
                     </page>
                 </notebook>
