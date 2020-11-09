@@ -186,6 +186,8 @@ class CalendarSchedule(models.Model):
 
                     i += 1
 
+        # force a commit in order to save the messages before processing
+        self.env.cr.commit()
         route.run()
         cal_schedule_ids.inactivate()
         _logger.debug("Completed cron_get_schedules for meeting types: %s at %s" % (type_ids, datetime.now()))
@@ -320,8 +322,8 @@ class CalendarAppointmentSuggestion(models.Model):
 
         app_vals = {}
 
-        if self.channel == self.env.ref('calendar_channel.channel_local') and not self.user_id:
-            app_vals['user_id'] = occasions[0].user_id
+        if self.channel == self.env.ref('calendar_channel.channel_local'):
+            app_vals['user_id'] = occasions[0].user_id.id
 
         app_vals['state'] = 'confirmed'
         app_vals['start'] = self.start
@@ -539,9 +541,15 @@ class CalendarAppointment(models.Model):
             return
         if self.channel_name != "PDM" and not self.operation_id:
             return
-        # if self.cancel_reason_temp:
+        # checking if we allow meetings of this length
+        allowed_durations = []
+        if self.type_id.duration_60:
+            allowed_durations += [1]
+        if self.type_id.duration_30:
+            allowed_durations += [0.5]
+        if self.duration not in allowed_durations:
+            raise Warning(_("This duration is not allowed for the meeting type."))
         
-    
         start = self.start_meeting_search(self.type_id)
         stop = self.stop_meeting_search(start, self.type_id)
         self.show_suggestion_ids = True
@@ -553,7 +561,7 @@ class CalendarAppointment(models.Model):
             for day_occasions in day:
                 for occasion in day_occasions:
                     suggestion_ids.append((0, 0, {
-                        # Fyll i occasions-data på förslagen
+                        # Add occasions-data on suggestions
                         'start': occasion[0].start,
                         'stop': occasion[-1].stop,
                         'duration': len(occasion) * 30,
@@ -811,18 +819,18 @@ class CalendarOccasion(models.Model):
     _description = "Occasion"
 
     name = fields.Char(string='Name', required=True)
-    start = fields.Datetime(string='Start', required=True, help="Start date of an occasion")
+    start = fields.Datetime(string='Start', required=True, help="Start date of an occasion", index=True)
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an occasion")
     duration_selection = fields.Selection(string="Duration",
                                           selection=[('30 minutes', '30 minutes'), ('1 hour', '1 hour')])
     duration = fields.Float('Duration')
-    appointment_id = fields.Many2one(comodel_name='calendar.appointment', string="Appointment")
-    type_id = fields.Many2one(comodel_name='calendar.appointment.type', string='Type')
+    appointment_id = fields.Many2one(comodel_name='calendar.appointment', string="Appointment", index=True)
+    type_id = fields.Many2one(comodel_name='calendar.appointment.type', string='Type', index=True)
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel', related='type_id.channel',
                               readonly=True)
     channel_name = fields.Char(string='Channel', related='type_id.channel.name', readonly=True)
-    additional_booking = fields.Boolean(String='Over booking')
-    user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
+    additional_booking = fields.Boolean(String='Over booking', index=True)
+    user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker", index=True)
     state = fields.Selection(selection=[('draft', 'Draft'),
                                         ('request', 'Published'),
                                         ('ok', 'Accepted'),
@@ -831,8 +839,8 @@ class CalendarOccasion(models.Model):
                                         ('deleted', 'Deleted')],
                                         string='Occasion state', 
                                         default='request', 
-                                        help="Status of the meeting")
-    operation_id = fields.Many2one(comodel_name='hr.operation', string="Operation")
+                                        help="Status of the meeting", index=True)
+    operation_id = fields.Many2one(comodel_name='hr.operation', string="Operation", index=True)
     office_id = fields.Many2one(comodel_name='hr.department', string="Office", related="operation_id.department_id", readonly=True)
     start_time = fields.Char(string='Occasion start time', readonly=True, compute='_occ_start_time_calc', store=True)
     weekday = fields.Char(string='Weekday', compute="_compute_weekday")
@@ -840,6 +848,14 @@ class CalendarOccasion(models.Model):
                                          selection=[('', 'Not set'),
                                                     ('0', 'No'),
                                                     ('1', 'Yes')])
+    occasion_ids = fields.Many2many(
+        comodel_name="calendar.occasion",
+        relation="calendar_occasion_related",
+        column1="occasion_1",
+        column2="occasion_2",
+        string="Related occasions",
+        readonly=True,
+    )
 
     @api.one
     def _compute_weekday(self):
@@ -1032,6 +1048,8 @@ class CalendarOccasion(models.Model):
     def _publish_occasion(self):
         if self.state == 'draft' or self.state == 'fail':
             self.state = 'request'
+            for occasion_id in self.occasion_ids:
+                occasion_id.state = 'request'
             ret = True
         else:
             ret = False
@@ -1050,6 +1068,8 @@ class CalendarOccasion(models.Model):
     def _accept_occasion(self):
         if self.state == 'request' or self.state == 'fail':
             self.state = 'ok'
+            for occasion_id in self.occasion_ids:
+                occasion_id.state = 'ok'
             ret = True
         else:
             ret = False
@@ -1067,8 +1087,10 @@ class CalendarOccasion(models.Model):
 
     @api.multi
     def _reject_occasion(self):
-        if self.state in ['request', 'ok']:
+        if self.state in ['request', 'ok'] and not self.appointment_id:
             self.state = 'fail'
+            for occasion_id in self.occasion_ids:
+                occasion_id.state = 'fail'
             ret = True
         else:
             ret = False
@@ -1178,6 +1200,12 @@ class CalendarOccasion(models.Model):
         # TODO: domain.append(('state', '=', 'ok')) can and should probably be moved outside of this if 
         if type_id.channel == self.env.ref('calendar_channel.channel_local') and operation_id:
             domain.append(('operation_id', '=', operation_id.id))
+            domain.append(('state', '=', 'ok'))
+            # messy messy code. will not work if we have 60+ min meetings.
+            # TODO: implemnting like this now to save time. Review
+            # Make sure we don't use a 60 min slot for a 30min meeting. 
+            if no_occasions == 1:
+                domain.append(('occasion_ids', '=', False))
             domain.append(('state', '=', 'ok'))
             start_domain = domain
             for employee in operation_id.employee_ids:

@@ -146,7 +146,7 @@ class ResPartner(models.Model):
         # testing purposes only
         path_kpi = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/kpi.csv"
         header_path_kpi = "/usr/share/odoo-af/af_data_ais-f_loader/data/kpi_mapping.csv"
-        self.create_partners(headers_header_kpi, path_kpi, header_path_kpi)
+        #self.create_partners(headers_header_kpi, path_kpi, header_path_kpi)
 
         headers_header_sni = [
             'organisationSNI.csv',
@@ -404,6 +404,9 @@ class ResPartner(models.Model):
                         row[transform] = translation_dict[row[transform]]
                     else:
                         keys_to_delete.append(transform)
+                elif transform == 'jobseeker_category':
+                    if row[key]:
+                        row[key] = self.env['res.partner.skat'].search([('code', '=', row[key])])
                 elif key == 'office_code':  # if missing in AIS-F in existing record, replace
                     partner_vals = {
                         'name': row['name'],

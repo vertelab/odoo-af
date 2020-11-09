@@ -26,7 +26,7 @@ HEMKOMMUN_KOD,,,state_id
 TEL_ARBETET,,,work_phone
 TEL_MOBIL,,,mobile
 MEDD_ERS_AVAN_AVAKT,,,
-SKAT,,,jobseeker_category
+SKAT,,"jobseeker_category,_",jobseeker_category
 SKAT_SEDAN,,,
 MATCHNINGSBAR,,,
 AVAKT_DATUM,,,deactualization_date

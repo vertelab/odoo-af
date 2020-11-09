@@ -49,6 +49,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     # daily_note_ids = fields.One2many(related='employee_id.daily_note_ids')
     social_sec_nr_search = fields.Char(string="Social security number",default=lambda self: '%s' % request.session.pop('ssn',''))
     bank_id_text = fields.Text(string=None)
+    bank_id_ok = fields.Boolean(string=None,default=False)
 
     search_reason = fields.Selection(string="Search reason",
                                      selection=[('record incoming documents', 'Record incoming documents'), (
@@ -238,9 +239,12 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     @api.multi
     def do_bankid(self):
         """Send BankID request and wait for user verification."""
+        self.bank_id_ok = False
         bankid = CachingClient(
             self.env['ir.config_parameter'].sudo().get_param('hr_360_view.bankid_wsdl',
             'http://bhipws.arbetsformedlingen.se/Integrationspunkt/ws/mobiltbankidinterntjanst?wsdl')) # create a Client instance
+        if not self.social_sec_nr_search:
+           raise Warning(_('Social security number missing'))
         res = bankid.service.startaIdentifiering(
             self.social_sec_nr_search.replace('-',''),
             'crm')
@@ -248,13 +252,14 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
         try:
             orderRef = res['orderRef']
             if not orderRef:
+                self.bank_id_ok = False
                 try:
                     self.bank_id_text = res['felStatusKod']
                 except KeyError:
                     self.bank_id_text = _("Error in communication with BankID")
         except KeyError:
             self.bank_id_text = _("Error in communication with BankID")
-
+            self.bank_id_ok = False			
         if orderRef:
             deadline = time.monotonic() + TIMEOUT
             time.sleep(9) # Give user time to react before polling.
@@ -263,10 +268,19 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                 _logger.warn("res: %s" % res)
                 if 'statusText' in res and res['statusText'] == 'OK':
                     self.bank_id_text = res['statusText']
+                    self.bank_id_ok = True
                     break
                 elif 'felStatusKod' in res and self.bank_id_text['felStatusKod']:
                     self.bank_id_text = res['felStatusKod']
+                    self.bank_id_ok = False
                     break
                 time.sleep(3)
             else:
                 self.bank_id_text = _("User timeout")
+                self.bank_id_ok   = False
+
+        action = self.env['ir.actions.act_window'].browse(self.env.ref('hr_360_view.search_jobseeker_wizard').id).read()[0]
+        action['res_id'] = self.id
+        action['view_mode'] = 'form'
+        return action
+
