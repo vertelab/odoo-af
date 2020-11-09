@@ -842,6 +842,14 @@ class CalendarOccasion(models.Model):
                                          selection=[('', 'Not set'),
                                                     ('0', 'No'),
                                                     ('1', 'Yes')])
+    occasion_ids = fields.Many2many(
+        comodel_name="calendar.occasion",
+        relation="calendar_occasion_related",
+        column1="occasion_1",
+        column2="occasion_2",
+        string="Related occasions",
+        readonly=True,
+    )
 
     @api.one
     def _compute_weekday(self):
@@ -1034,6 +1042,8 @@ class CalendarOccasion(models.Model):
     def _publish_occasion(self):
         if self.state == 'draft' or self.state == 'fail':
             self.state = 'request'
+            for occasion_id in self.occasion_ids:
+                occasion_id.state = 'request'
             ret = True
         else:
             ret = False
@@ -1052,6 +1062,8 @@ class CalendarOccasion(models.Model):
     def _accept_occasion(self):
         if self.state == 'request' or self.state == 'fail':
             self.state = 'ok'
+            for occasion_id in self.occasion_ids:
+                occasion_id.state = 'ok'
             ret = True
         else:
             ret = False
@@ -1069,8 +1081,10 @@ class CalendarOccasion(models.Model):
 
     @api.multi
     def _reject_occasion(self):
-        if self.state in ['request', 'ok']:
+        if self.state in ['request', 'ok'] and not self.appointment_id:
             self.state = 'fail'
+            for occasion_id in self.occasion_ids:
+                occasion_id.state = 'fail'
             ret = True
         else:
             ret = False
@@ -1180,6 +1194,12 @@ class CalendarOccasion(models.Model):
         # TODO: domain.append(('state', '=', 'ok')) can and should probably be moved outside of this if 
         if type_id.channel == self.env.ref('calendar_channel.channel_local') and operation_id:
             domain.append(('operation_id', '=', operation_id.id))
+            domain.append(('state', '=', 'ok'))
+            # messy messy code. will not work if we have 60+ min meetings.
+            # TODO: implemnting like this now to save time. Review
+            # Make sure we don't use a 60 min slot for a 30min meeting. 
+            if no_occasions == 1:
+                domain.append(('occasion_ids', '=', False))
             domain.append(('state', '=', 'ok'))
             start_domain = domain
             for employee in operation_id.employee_ids:
