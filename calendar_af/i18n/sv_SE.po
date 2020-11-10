@@ -275,9 +275,10 @@ msgstr "Bokade möten"
 
 #. module: calendar_af
 #: code:addons/calendar_af/models/res_partner.py:58
+#: model:ir.actions.act_window,name:calendar_af.action_calendar_user
 #, python-format
 msgid "Calendar"
-msgstr "Kalender"
+msgstr "Handläggare"
 
 #. module: calendar_af
 #: model:ir.actions.act_window,name:calendar_af.action_calendar_report_tree
@@ -640,10 +641,16 @@ msgid "Local appointments"
 msgstr "Lokalkontorsmöten"
 
 #. module: calendar_af
-#: model:ir.actions.act_window,name:calendar_af.action_calendar_local_occasion
 #: model:ir.ui.menu,name:calendar_af.menu_action_local_occasion
 msgid "Local occasions"
 msgstr "Bokningsbara tider"
+
+#. module: calendar_af
+#: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_user_form
+#: model:ir.actions.act_window,name:calendar_af.action_calendar_local_occasion
+#: model:ir.ui.view,name:calendar_af.action_calendar_local_occasion
+msgid "Local occasions"
+msgstr "Publicerade, Accepterade, Avböjda"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment__location
