@@ -250,7 +250,7 @@ class ResPartner(models.Model):
                # _loger.info("commit")
                 iterations = 0
         reader.close()
-    @profile
+
     @api.model
     def create_partner_from_row(self, row, transformations):
         #_logger.info("row: %s" % row)
