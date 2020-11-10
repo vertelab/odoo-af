@@ -416,6 +416,14 @@ msgstr "Skapa"
 msgid "Create occasion"
 msgstr "Skapa bokningsbar tid"
 
+#. För att hantera knappar i Calendar/Handläggare separat
+#. module: calendar_af
+#: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_user_form
+#: model:ir.actions.act_window,name:calendar_af.create_local_occasion_action
+#: model:ir.ui.view,name:calendar_af.create_local_occasion_action
+msgid "Create occasion"
+msgstr "Publicera"
+
 #. module: calendar_af
 #: model:ir.actions.act_window,name:calendar_af.create_local_occasion_form_action
 msgid "Create occasions"
@@ -640,11 +648,20 @@ msgstr "Lokalkontor"
 msgid "Local appointments"
 msgstr "Lokalkontorsmöten"
 
+#. För att hantera knappar i Calendar/Handläggare separat
+#. module: calendar_af
+#: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_user_form
+#: model:ir.actions.act_window,name:calendar_af.action_local_appointment
+#: model:ir.ui.view,name:calendar_af.action_local_appointment
+msgid "Local appointments"
+msgstr "Bokade möten"
+
 #. module: calendar_af
 #: model:ir.ui.menu,name:calendar_af.menu_action_local_occasion
 msgid "Local occasions"
 msgstr "Bokningsbara tider"
 
+#. För att hantera knappar i Calendar/Handläggare separat
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_user_form
 #: model:ir.actions.act_window,name:calendar_af.action_calendar_local_occasion
