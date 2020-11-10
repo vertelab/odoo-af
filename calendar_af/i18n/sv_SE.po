@@ -408,16 +408,15 @@ msgid "Create"
 msgstr "Skapa"
 
 #. module: calendar_af
-#: model:ir.actions.act_window,name:calendar_af.create_local_occasion_action
 #: model:ir.model,name:calendar_af.model_calendar_create_local_occasion
-#: model:ir.ui.menu,name:calendar_af.menu_action_create_local_occasion
-#: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_create_local_occasion_form
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_occasion_form
+#: model:ir.ui.menu,name:calendar_af.menu_action_create_local_occasion
 msgid "Create occasion"
-msgstr "Skapa bokningsbar tid"
+msgstr "Skapa bokningsbartrervf tid"
 
-#. För att hantera knappar i Calendar/Handläggare separat
+#. För att hantera knappar och fönster i Calendar/Handläggare separat
 #. module: calendar_af
+#: model:ir.actions.act_window,name:calendar_af.create_local_occasion_action
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_user_form
 #: model:ir.actions.act_window,name:calendar_af.create_local_occasion_action
 #: model:ir.ui.view,name:calendar_af.create_local_occasion_action
@@ -531,7 +530,7 @@ msgstr "Arbetsförmedlare"
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_create_local_occasion__stop_range
 msgid "End of repeat"
-msgstr "Slut på repetitioner"
+msgstr "Slut datum"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment_type__days_first
@@ -1078,7 +1077,7 @@ msgstr "Startdatum för en tillfälle"
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_create_local_occasion__start_range
 msgid "Start of repeat"
-msgstr "Start för repetition"
+msgstr "Start datum"
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_appointment_kanban

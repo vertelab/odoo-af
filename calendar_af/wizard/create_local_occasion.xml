@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <form string="Create occasion">
                 <sheet>
-                    <group string="Create occasion">
+                    <group string="">
                         <group>
                             <field name="create_type" widget="radio"/>
                             <field name="start_range" attrs="{'invisible':[('create_type', '!=', 'repeating')]}"/>
