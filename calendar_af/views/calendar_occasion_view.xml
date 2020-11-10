@@ -142,6 +142,11 @@
                         domain="['|',['state','=','request'],['state','=','ok']]"
                         string="Published or Accepted"
                 />
+                <filter
+                        name="additional_booking_true"
+                        string="Additional bookings"
+                        domain="[['additional_booking','=',True]]"
+                />
                 <group expand="0" string="Group By...">
                     <filter
                             name="group_by_type"
