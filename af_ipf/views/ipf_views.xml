@@ -27,6 +27,7 @@
                         <field name="environment"/>
                         <field name="systemid"/>
                         <field name="enduserid"/>
+                        <field name="enduserid_hardcoded"/>
                         <field name="ssl_verify"/>
                         <field name="ssl_cert"/>
                         <field name="ssl_key" password="True"/>
