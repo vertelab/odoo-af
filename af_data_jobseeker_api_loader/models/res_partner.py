@@ -44,7 +44,6 @@ class ResPartner(models.Model):
         path = "/usr/share/odoo-af/af_data_jobseeker_api_loader/data/test_dumps/arbetssokande.csv" # testing purposes only
         self.create_partners_from_api(header, path)
 
-    @profile
     @api.model
     def create_partners_from_api(self, header, path):
         reader = ReadCSV(path, header)
