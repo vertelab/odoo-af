@@ -7,10 +7,18 @@
     <field name="arch" type="xml"> 
       <sheet position="inside">
         <group>
-          <field name="reserve_admin_ids" widget="many2many_tags" domain="[('id', 'in', employee_ids)]"/>
           <field name="app_warn_emp_ids" widget="many2many_tags" domain="[('id', 'in', employee_ids)]"/>
         </group>
         <notebook>
+          <page name="employees" string="Case workers">
+            <field name="employee_ids">
+              <tree string="Administrative officers">
+                <field name="name"/>
+                <field name="signature"/>
+                <field name="operation_names"/>
+              </tree>
+            </field>
+          </page>
           <page name="type_operation" string="Appointment warning thresholds">
             <field name="type_operation_ids" mode="tree" nolabel="1">
               <tree editable="bottom">
@@ -28,32 +36,32 @@
               </tree>
             </field>
           </page>
+          <page name="reserve_times" string="Reserve times">
+            <group>
+              <group>
+                <field name="reserve_admin_ids" widget="many2many_tags" domain="[('id', 'in', employee_ids)]"/>
+                <field name="reserve_time" widget="float_time"/>
+              </group>
+              <group>
+              </group>
+            </group>
+          </page>
         </notebook>
-        <field name="employee_ids">
-          <tree string="Administrative officers">
-            <field name="name"/>
-            <field name="signature"/>
-            <field name="operation_names"/>
-          </tree>
-      </field>
       </sheet>
     </field>
   </record> 
 
-   <record id="view_calendar_operation_tree" model="ir.ui.view">
+  <record id="view_calendar_operation_tree" model="ir.ui.view">
     <field name="name">calendar.operation.tree</field>
     <field name="model">hr.operation</field>
     <field name="priority" eval="10" />
     <field name="arch" type="xml">
-        <tree string="Operations" create="false" delete="false">
-            <button name="open_users_tree" type="object" string="Select"/>            
-            <field name="name" />
-            <field name="location_code" />
-            <field name="department_id" />
-            
-        </tree>
+      <tree string="Operations" create="false" delete="false">
+        <button name="open_users_tree" type="object" string="Select"/>            
+        <field name="name" />
+        <field name="location_code" />
+        <field name="department_id" />    
+      </tree>
     </field>
   </record>
-
-
 </odoo>

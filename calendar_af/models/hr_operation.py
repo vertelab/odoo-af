@@ -31,13 +31,11 @@ class hr_operation(models.Model):
     _inherit = "hr.operation"
 
     user_ids = fields.Many2many(comodel_name="res.users", compute="compute_user_ids")
-
     reserve_admin_ids = fields.Many2many(
         comodel_name="hr.employee",
         string="Reserve time managers",
         relation="hr_operation_hr_employee_reserve",
     )
-    
     app_warn_emp_ids = fields.Many2many(
         comodel_name="hr.employee", string="Appointment warnings"
     )
@@ -51,6 +49,7 @@ class hr_operation(models.Model):
         inverse_name="operation_id",
         string="Mapped dates",
     )
+    reserve_time = fields.Float(string='Reserve time start')
 
     @api.one
     def compute_user_ids(self):

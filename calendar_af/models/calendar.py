@@ -966,7 +966,18 @@ class CalendarOccasion(models.Model):
         day_start = day_start.replace(year=int(date_list[0]), month=int(date_list[1]), day=int(date_list[2]))
         day_stop = day_stop.replace(year=int(date_list[0]), month=int(date_list[1]), day=int(date_list[2]))
         # Find when to create new occasion
-        start_date = self._get_min_occasions(type_id, day_start, day_stop)
+        if (
+            type_id.channel == self.env.ref("calendar_channel.channel_local")
+            and operation_id
+            and operation_id.reserve_time
+        ):
+            date_now = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+            datetime_offset = timedelta(
+                days=type_id.days_last, hours=operation_id.reserve_time
+            )
+            start_date = date_now + datetime_offset
+        else:
+            start_date = self._get_min_occasions(type_id, day_start, day_stop)
         # Calculate how many occasions we need
         no_occasions = int(duration / BASE_DURATION)
         if operation_id:
