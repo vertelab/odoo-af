@@ -26,6 +26,8 @@ import csv
 from odoo.tools import config
 from odoo import models, fields, api, _
 import logging
+from odoo.tools.profiler import profile
+
 _logger = logging.getLogger(__name__)
 
 
@@ -47,7 +49,7 @@ class ResPartner(models.Model):
         # testing purposes only
         path = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/arbetssokande.csv"
         header_path = "/usr/share/odoo-af/af_data_ais-f_loader/data/arbetssokande_mapping.csv"
-        self.create_partners(headers_header, path, header_path)
+        #self.create_partners(headers_header, path, header_path)
 
         headers_header_adr = ['sok_adress.csv', 'Notering', 'Trans', 'Odoo']
         path_adr = os.path.join(
@@ -56,7 +58,7 @@ class ResPartner(models.Model):
         # testing purposes only
         path_adr = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/sok_adress.csv"
         header_path_adr = "/usr/share/odoo-af/af_data_ais-f_loader/data/sok_adress_mapping.csv"
-        self.create_partners(headers_header_adr, path_adr, header_path_adr)
+        #self.create_partners(headers_header_adr, path_adr, header_path_adr)
 
         headers_header_jobs = ['SOK_SOKTYRKE.csv', 'Notering', 'Trans', 'Odoo']
         path_jobs = os.path.join(
@@ -161,9 +163,51 @@ class ResPartner(models.Model):
         header_path_sni = "/usr/share/odoo-af/af_data_ais-f_loader/data/organisationSNI_mapping.csv"
         self.create_partners(headers_header_sni, path_sni, header_path_sni)
 
-    # TODO:
-    # För varje adress sök upp partner utifrån external_id, lägg på address
+    @api.model
+    def create_partners_from_api(self, headers_header, path, header_path):
+        header_reader = ReadCSV(header_path, headers_header)
+        header_rows = header_reader.parse_header()
+        old_header = []
+        field_map = {}
+        transformations = {}
+        for row in header_rows:
 
+            #_logger.info("header_rows row processing: %s" % row)
+            if row['Odoo'] != '' and "!" not in row['Odoo']:
+                field_map.update({row['Odoo']: row[headers_header[0]]})
+            # if row['Odoo2'] != '' and "!" not in row['Odoo2']:
+            #     field_map.update({row['Odoo2']: row[headers_header[0]]})
+            if row['Trans'] != '':
+                #_logger.info("transformations %s"%row['Trans'])
+                key = row['Trans'].split(",")[0]
+                value = row['Trans'].split(",")[1]
+                transformations.update({key: value})
+            old_header.append(row[headers_header[0]])  # AIS-F fields
+        #_logger.info("old_header: %s" % old_header)
+        reader = ReadCSV(path, old_header)
+        iterations = 0
+        #_logger.info("get_data: %s" % next(reader.get_data()))
+        # reader.seek_zero()
+        for row in reader.get_data():
+            #_logger.info("row: %s" % row)
+            #r = {}
+            #header = list(field_map.keys())
+            #_logger.info("header: %s" % header)
+            # for i in range(len(header)):
+            #     if header[i] in field_map:
+            #         #_logger.info("header %s: %s" % (i, row[field_map[header[i]]]))
+            #         r.update({header[i]: row[field_map[header[i]]]})
+            #_logger.info("creating row %s" %r)
+            self.env['res.partner'].rask_controller(row['SOKANDE_ID'], '0', '0','0')
+            iterations += 1
+            if iterations > 500:
+                self.env.cr.commit()
+               # _loger.info("commit")
+                iterations = 0
+        reader.close()
+    
+    
+    
     @api.model
     def create_partners(self, headers_header, path, header_path):
         header_reader = ReadCSV(header_path, headers_header)
@@ -223,6 +267,7 @@ class ResPartner(models.Model):
             if 'login' in transformed_row:
                 transformed_row.pop('country_id', None)
                 transformed_row.pop('type', None)
+                transformed_row['employee'] = True
                 office_id = transformed_row['office_id']
                 transformed_row.pop('office_id', None)
                 user = self.env['res.users'].search([('login', '=', transformed_row['login'])])

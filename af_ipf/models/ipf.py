@@ -50,6 +50,7 @@ class AfIpf(models.Model):
         default='T2',
         required=True)
     enduserid = fields.Boolean()
+    enduserid_hardcoded = fields.Boolean()
     endpoint_ids = fields.One2many(comodel_name='af.ipf.endpoint', inverse_name='ipf_id')
     url = fields.Char(string='IPF url', help="AF's web address", default='https://ipfapi.arbetsformedlingen.se',
                       required=True)
@@ -73,10 +74,13 @@ class AfIpf(models.Model):
             'AF-TrackingId': '%s' % uuid4(),
         }
         if self.enduserid:
-            user = self._context.get('uid')
-            user = user and self.env['res.users'].browse(user) or self.env.user
-            headers['AF-EndUserId'] = user.af_signature
-        return headers
+            if self.enduserid_hardcoded:
+                headers['AF-EndUserId'] = '*sys*'
+            else:
+                user = self._context.get('uid')
+                user = user and self.env['res.users'].browse(user) or self.env.user
+                headers['AF-EndUserId'] = user.af_signature
+        return headers 
 
     @api.multi
     def get_ssl_params(self):
