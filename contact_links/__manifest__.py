@@ -2,7 +2,7 @@
 
 {
     'name': 'AF Contact Links',
-    'version': '12.0.1.2',
+    'version': '12.0.1.4',
     'category': '',
     'description': """
 Cases
@@ -15,6 +15,7 @@ Actions and search 'Update Link'. Open it and click on 'Create Contexual Action'
 v12.0.1.2	- Updated manifest and added Af-logo to description. \n
 			- Updated the security-groups in the datafile to match new version of af_security-groups. \n
 \n
+v12.0.1.4 - Made sure the contact links are computed with the customer number
 """,
     'author': 'Vertel AB',
     'license': 'AGPL-3',
@@ -22,13 +23,14 @@ v12.0.1.2	- Updated manifest and added Af-logo to description. \n
     'depends': [
         'contacts',
         'af_security',
-        'hr_360_view'
+        'hr_360_view',
+        'partner_view_360',
     ],
     'data': [
         'security/security.xml',
         'views/res_partner_view.xml',
         'security/ir.model.access.csv',
-        'data/server_action.xml',
+        # 'data/server_action.xml',
         'data/partner.links.csv',
         # 'data/sync_link.xml'
     ],

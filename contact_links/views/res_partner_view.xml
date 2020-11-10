@@ -14,7 +14,7 @@
             </div>
             <xpath expr="//notebook" position="inside">
                 <page name="partner_link" string="Links">
-                    <field name="link_ids" mode="kanban">
+                    <field name="link_target_ids" mode="kanban">
                         <kanban>
                             <field name="name"/>
                             <field name='id'/>
@@ -23,13 +23,12 @@
                             <templates>
 
                                 <t t-name="kanban-box">
-                                    <a t-att-href="record.link.raw_value" target="new" t-if="record.link.raw_value"
-                                       style="flex:none;width:20em;">
+                                    <a t-att-href="record.link.raw_value" target="new" t-if="record.link.raw_value" style="flex:none;width:20em;">
                                         <div t-att-class="oe_kanban_global_click" style="height:40px;width:40px">
                                             <div class="o_kanban_image" style="height:100%">
                                                 <t t-if="record.image.raw_value">
                                                     <img alt="" style="max-width:100%;height:100%"
-                                                         t-att-src="kanban_image('partner.links', 'image', record.id.raw_value)"/>
+                                                         t-att-src="kanban_image('partner.links.target', 'image', record.id.raw_value)"/>
                                                 </t>
                                                 <t t-if="!record.image.raw_value">
                                                     <img alt="Avatar" style="width:70px;max-height:60px"
@@ -67,7 +66,7 @@
             </div>
             <xpath expr="//notebook" position="inside">
                 <page name="partner_link" string="Links">
-                    <field name="link_ids" mode="kanban">
+                    <field name="link_target_ids" mode="kanban">
                         <kanban>
                             <field name="name"/>
                             <field name='id'/>
@@ -82,7 +81,7 @@
                                             <div class="o_kanban_image" style="height:100%">
                                                 <t t-if="record.image.raw_value">
                                                     <img alt="" style="max-width:100%;height:100%"
-                                                         t-att-src="kanban_image('partner.links', 'image', record.id.raw_value)"/>
+                                                         t-att-src="kanban_image('partner.links.target', 'image', record.id.raw_value)"/>
                                                 </t>
                                                 <t t-if="!record.image.raw_value">
                                                     <img alt="Avatar" style="width:70px;max-height:60px"
@@ -120,7 +119,7 @@
             </div>
             <xpath expr="//notebook" position="inside">
                 <page name="partner_link" string="Links">
-                    <field name="link_ids" mode="kanban">
+                    <field name="link_target_ids" mode="kanban">
                         <kanban>
                             <field name="name"/>
                             <field name='id'/>
@@ -135,7 +134,7 @@
                                             <div class="o_kanban_image" style="height:100%">
                                                 <t t-if="record.image.raw_value">
                                                     <img alt="" style="max-width:100%;height:100%"
-                                                         t-att-src="kanban_image('partner.links', 'image', record.id.raw_value)"/>
+                                                         t-att-src="kanban_image('partner.links.target', 'image', record.id.raw_value)"/>
                                                 </t>
                                                 <t t-if="!record.image.raw_value">
                                                     <img alt="Avatar" style="width:70px;max-height:60px"
@@ -167,6 +166,7 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
+                <field name="partner_id"/>
                 <field name="static_url_1"/>
                 <field name="inserted_field" domain="[('model_id.model', '=', 'res.partner')]"/>
                 <field name="static_url_2"/>
@@ -188,6 +188,7 @@
                     <group>
                         <group>
                             <field name="name"/>
+                            <field name="partner_id"/>
                             <field name="static_url_1"/>
                             <field name="inserted_field" domain="[('model_id.model', '=', 'res.partner')]"/>
                             <field name="static_url_2"/>
@@ -220,7 +221,7 @@
                             <div class="o_kanban_image">
                                 <t t-if="record.image.raw_value">
                                     <img alt=""
-                                         t-att-src="kanban_image('partner.links', 'image', record.id.raw_value)"/>
+                                         t-att-src="kanban_image('partner.links.target', 'image', record.id.raw_value)"/>
                                 </t>
                                 <t t-if="!record.image.raw_value">
                                     <img alt="Avatar"
@@ -238,7 +239,7 @@
                         <!--                            <a t-att-href="record.link.raw_value" target='new' t-if="record.link.raw_value">-->
                         <!--                            <div class="o_kanban_image">-->
                         <!--                                <img style="min-width:140px; max-width:140px;max-height:65px" alt="" t-if="record.image.raw_value"-->
-                        <!--                                     t-att-src="kanban_image('partner.links', 'image', record.id.raw_value)"/>-->
+                        <!--                                     t-att-src="kanban_image('partner.links.target', 'image', record.id.raw_value)"/>-->
                         <!--                            </div>-->
                         <!--                            </a>-->
                         <!--                        </div>-->
