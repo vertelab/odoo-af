@@ -7,10 +7,7 @@
             <tree string="AIS-Å">
                 <field name="name"/>
                 <field name="res_officer"/>
-                <field name="res_office"/>
-                <field name="dec_office"/>
                 <field name="status"/>
-                <field name="status_change"/>
                 <field name="atgard"/>
 
             </tree>

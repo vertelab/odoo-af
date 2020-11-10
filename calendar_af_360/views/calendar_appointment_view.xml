@@ -5,12 +5,11 @@
     <field name="model">calendar.appointment</field>
     <field name="inherit_id" ref="calendar_af.view_calendar_appointment_form" />
     <field name="arch" type="xml">
-      <field name="type_id" position="replace">
+      <field name="type_id" position="before">
         <field name="partner_forbidden_types" invisible="1"/>
-        <field string="Meeting type" name="type_id"
-            domain="[('channel', '=', channel), ('id', 'not in', partner_forbidden_types)]"
-            options="{'no_quick_create':True,'no_create_edit':True,'no_create':True,'no_edit':True,'no_open':True}"
-            context="{ 'default_channel': %(calendar_channel.channel_pdm)d }"/>
+      </field>
+      <field name="type_id" position="attributes">
+        <attribute name="domain">[('channel', '=', channel), ('id', 'not in', partner_forbidden_types)]</attribute>
       </field>
     </field>
   </record>

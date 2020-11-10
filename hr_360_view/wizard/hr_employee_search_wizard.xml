@@ -10,9 +10,8 @@
                     <page string="When in contact">
                         <group>
                             <group>
-                                <field name="identification"/>
-                                <!-- <field name="search_domain" widget="domain" options="{'model' : 'res.partner'}"> </field> -->
                                 <field name="social_sec_nr_search"/>
+                                <field name="identification"/>
                                 <field name="bank_id_ok" invisible="1"/>
                             </group>
                             <group>

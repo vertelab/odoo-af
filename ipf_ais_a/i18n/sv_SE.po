@@ -21,7 +21,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:ipf_ais_a.view_ais_a_tree
 #: model_terms:ir.ui.view,arch_db:ipf_ais_a.view_jobseeker_form
 msgid "AIS-Å"
-msgstr "AIS-Å"
+msgstr "Programbeslut i AIS-Å"
 
 #. module: ipf_ais_a
 #: model:ir.model,name:ipf_ais_a.model_res_partner_ais_a
@@ -36,7 +36,7 @@ msgstr "Beslutande kontor"
 #. module: ipf_ais_a
 #: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__name
 msgid "Case nr"
-msgstr "Beslutsnummer"
+msgstr "Ärendenummer"
 
 #. module: ipf_ais_a
 #: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner__ais_a_ids
@@ -67,7 +67,7 @@ msgstr "Visningsnamn"
 #. module: ipf_ais_a
 #: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__res_officer
 msgid "Handlaggare"
-msgstr "Handläggare"
+msgstr "Beslutande handläggare"
 
 #. module: ipf_ais_a
 #: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__id
@@ -112,4 +112,4 @@ msgstr "Status"
 #. module: ipf_ais_a
 #: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__atgard
 msgid "Åtgärd"
-msgstr "Åtgärd"
+msgstr "Program/Insats"

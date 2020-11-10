@@ -73,7 +73,7 @@ msgstr "Omboka"
 #. module: calendar_af_360
 #: model_terms:ir.ui.view,arch_db:calendar_af_360.view_jobseeker_form_calendar_af_inherited
 msgid "New appointment"
-msgstr "Nytt mötestillfälle"
+msgstr "Boka nytt möte"
 
 #. module: calendar_af_360
 #: model_terms:ir.ui.view,arch_db:calendar_af_360.view_employee_360_form_calendar_af_inherited
