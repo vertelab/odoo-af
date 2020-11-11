@@ -59,8 +59,8 @@
       <tree string="Operations" create="false" delete="false">
         <button name="open_users_tree" type="object" string="Select"/>            
         <field name="name" />
-        <field name="location_code" />
         <field name="department_id" />    
+        <field name="location_code" />
       </tree>
     </field>
   </record>
