@@ -27,6 +27,7 @@ from datetime import datetime, timedelta, date
 from odoo.exceptions import Warning
 
 from odoo import models, fields, api, _
+from odoo.tools.profiler import profile
 
 _logger = logging.getLogger(__name__)
 
@@ -529,6 +530,10 @@ class CalendarAppointment(models.Model):
 
     @api.one
     def compute_suggestion_ids(self):
+        # TODO: REMOVE THIS LINE BEFORE MERGE OR WE BREAK THE SECURITY RULES
+        # BUG: DO NOT LET THIS SLIP THROUGH
+        # !!!!ALERT ALERT ALERT ALERT!!!!
+        return self.sudo()._compute_suggestion_ids()
         # Perform access control.
         if self.af_check_access():
             # Checks passed. Run inner function with sudo.
@@ -1127,6 +1132,7 @@ class CalendarOccasion(models.Model):
 
         return ret
 
+    @profile
     @api.model
     def get_bookable_occasions(self, start, stop, duration, type_id, operation_id=False, max_depth=1):
         """Returns a list of occasions matching the defined parameters of the appointment. Creates additional 
@@ -1219,11 +1225,45 @@ class CalendarOccasion(models.Model):
                 domain.append(('occasion_ids', '=', False))
             domain.append(('state', '=', 'ok'))
             start_domain = domain
+            
+            # Replace loop below with sql query
+            # self._cr.execute("""SELECT start, user_id, count(id) 
+            #                 FROM calendar_occasion
+            #                 WHERE appointment_id IS NULL 
+            #                     AND type_id = {sql_type_id}
+            #                     AND start > {sql_start}
+            #                     AND start < {sql_stop}
+            #                 GROUP BY start, user_id
+            #                 ORDER BY start DESC;""")
+
             for employee in operation_id.employee_ids:
                 domain = start_domain + [('user_id', '=', employee.user_id.id)]
                 do_loop()
         else:
-            do_loop()
+            # Do PDM search
+            sql_type_id = type_id.id
+            sql_start = start
+            sql_stop = stop
+            sql_query = f"""SELECT start, array_agg(id) 
+                            FROM calendar_occasion
+                            WHERE appointment_id IS NULL
+                                AND additional_booking = 'f' 
+                                AND type_id = {sql_type_id}
+                                AND start >= '{sql_start}'
+                                AND start <= '{sql_stop}'
+                            GROUP BY start
+                            ORDER BY start DESC;"""
+            _logger.warn("DAER sql_query: %s" % sql_query)
+            self._cr.execute(sql_query)
+            sql_res = self._cr.fetchall()
+            _logger.warn("DAER sql_res: %s" % sql_res)
+            _logger.warn("DAER type(sql_res): %s" % type(sql_res))
+
+            # do_loop needs reformat sql_res into format expected in occ_lists
+            # needs to do self.env['calendar.occasion].browse(<id>) 
+            # on occasions we intend to return (or rewrite downstream functions)
+            
+            # do_loop()
 
         # if type allows additional bookings and we didn't find any
         # free occasions, create new ones:
