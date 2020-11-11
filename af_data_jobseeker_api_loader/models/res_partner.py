@@ -49,7 +49,9 @@ class ResPartner(models.Model):
         reader = ReadCSV(path, header)
         iterations = 0
         for row in reader.get_data():
-            self.env['res.partner'].rask_as_get(row[header[0]])
+            customer_id = row[header[0]]
+            if not self.env['res.partner'].search([('customer_id','=',customer_id)]):
+                self.env['res.partner'].rask_as_get(customer_id)
             iterations += 1
             if iterations > 500:
                 self.env.cr.commit()
