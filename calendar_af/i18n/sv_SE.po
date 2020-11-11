@@ -33,6 +33,11 @@ msgid "Operation"
 msgstr "Lokalkontor"
 
 #. module: calendar_af
+#: model:ir.actions.act_window,name:calendar_af.action_calendar_operation
+msgid "Operations"
+msgstr "Lokalkontor"
+
+#. module: calendar_af
 #: code:addons/calendar_af/models/calendar.py:537
 #, python-format
 msgid " because of reason: %s."
