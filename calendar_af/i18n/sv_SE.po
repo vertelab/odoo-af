@@ -1261,3 +1261,8 @@ msgstr "Kontors_id"
 #: model:ir.model.fields,help:calendar_af.field_calendar_occasion__app_partner_pnr
 msgid "organization number"
 msgstr "organisationsnummer"
+
+#. module: hr_360_view
+#: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_operation_tree
+msgid "Select"
+msgstr "Välj"
