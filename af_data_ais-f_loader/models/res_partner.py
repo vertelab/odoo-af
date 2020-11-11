@@ -268,6 +268,7 @@ class ResPartner(models.Model):
                 transformed_row.pop('country_id', None)
                 transformed_row.pop('type', None)
                 transformed_row['employee'] = True
+                transformed_row['groups_id'] = [(6, 0, [self.env.ref('base.group_user').id])],
                 office_id = transformed_row['office_id']
                 transformed_row.pop('office_id', None)
                 user = self.env['res.users'].search([('login', '=', transformed_row['login'])])
@@ -277,7 +278,7 @@ class ResPartner(models.Model):
                             'user_id': user.id,
                             }
                 if not user:
-                    user = self.env['res.users'].create(transformed_row)
+                    user = self.env['res.users'].with_context(no_reset_password=True).create(transformed_row)
                     employee_vals['office_ids'] = [(4,office_id,0)]
                     employee_vals['user_id'] = user.id  
                     self.env['hr.employee'].create(employee_vals)
@@ -327,24 +328,7 @@ class ResPartner(models.Model):
                 'model': kpi._name,
                 'res_id': kpi.id
             })
-        # else:
-          #_logger.info("kpi external_id already in database, skipping")
 
-    # @api.model #ska använda api istället, om det inte blir api, flytta till separat modul som körs efteråt
-    # def create_daily_note_from_row(self, row):
-    #     external_xmlid = '%s%s' % (self.xmlid_module, row['external_id'])
-    #     external_id = row['external_id']
-    #     row.pop('external_id', None)
-    #     id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
-    #     if id_check != False:
-    #         kpi = self.env['res.partner.notes'].create(row)
-
-    #         self.env['ir.model.data'].create({
-    #                             'name': external_id,
-    #                             'module': self.xmlid_module,
-    #                             'model': kpi._name,
-    #                             'res_id': kpi.id
-    #                             })
 
     @api.model
     def create_desired_jobs_from_row(self, row):
@@ -453,13 +437,15 @@ class ResPartner(models.Model):
                     if row[key]:
                         row[key] = self.env['res.partner.skat'].search([('code', '=', row[key])])
                 elif key == 'office_code':  # if missing in AIS-F in existing record, replace
+                    office_code = row[key].zfill(4)
                     partner_vals = {
                         'name': row['name'],
                         'email': row['email'] if 'email' in row else False,
                         'phone': row['phone'] if 'phone' in row else False,
                     }
-                    partner = self.env['res.partner'].create(partner_vals)
-                    office_code = row[key].zfill(4)
+                    if not self.env['hr.department'].search([('office_code','=', office_code)]):
+                        partner = self.env['res.partner'].create(partner_vals)
+                    
                     vals = {
                         "name": row['name'],
                         "office_code": office_code,
@@ -478,7 +464,7 @@ class ResPartner(models.Model):
                 elif key == 'user_id':
                     user_id = self.env['res.users'].search([('login', '=', row[key])]).id
                     if not user_id:
-                        user_id = self.env['res.users'].create({'login': row[key], 'firstname': 'placeholder', 'lastname':'jobseeker officer'}).id
+                        user_id = self.env['res.users'].with_context(no_reset_password=True).create({'login': row[key], 'firstname': 'placeholder', 'lastname':'jobseeker officer', 'groups_id': [(6, 0, [self.env.ref('base.group_user').id])]}).id
                     row[key] = user_id
                 elif key == 'partner_id':
                     if 'fiscal_year' in row:

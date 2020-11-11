@@ -92,8 +92,8 @@ class CalendarOccasion(models.Model):
         if transformed_row_and_id != {}:
             external_xmlid = transformed_row_and_id['external_xmlid']
             transformed_row = transformed_row_and_id['row']
-
-            if 'occasion_id' in transformed_row:
+            _logger.info("creating row: %s" % transformed_row)
+            if 'occasion_ids' in transformed_row:
                 obj = self.env['calendar.appointment'].create(transformed_row)
 
             else:
@@ -154,12 +154,12 @@ class CalendarOccasion(models.Model):
                             "could not find person corresponding to %s, skipping" %
                             row[key])
                         create = False
-                elif key == 'occasion_id':
+                elif key == 'occasion_idss':
                     xmlid = "%s.%s%s" % (
                         self.xmlid_module, transform, row[key])
-                    occasion_id = self.env['ir.model.data'].xmlid_to_res_id(
+                    occasion_ids = self.env['ir.model.data'].xmlid_to_res_id(
                         xmlid)
-                    row[key] = occasion_id
+                    row[key] = [(6, 0, [occasion_ids])]
                 elif key == 'start' or key == 'stop':
                     row[key] = "%s %s" % (row['date'].split(' ')[0], row[key])
                 elif key == 'duration_selection':
@@ -183,7 +183,7 @@ class CalendarOccasion(models.Model):
                     else:
                         create = False
                 elif key == 'state':
-                    if 'occasion_id' in row:
+                    if 'occasion_ids' in row:
                         translation_dict = {
                             'NULL': 'confirmed',
                             '1': 'done',
