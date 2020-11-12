@@ -1139,6 +1139,42 @@ class CalendarOccasion(models.Model):
         :param type_id: Meeting type.
         :param operation_id: The local office to filter for.
         :param max_depth: Number of bookable occasions per time slot.
+
+        Pseudo-code:
+
+        if 'local occasions':
+            SQL query returns:
+
+             user_id | start_date | start_time | array_agg
+            ---------+------------+------------+-----------
+             2       | 2020-11-25 | 09:00:00   | {210987}
+             2       | 2020-11-25 | 09:30:00   | {210988}
+             2       | 2020-11-25 | 13:00:00   | {210985}
+             2       | 2020-11-25 | 13:30:00   | {210986}
+             479     | 2020-11-25 | 13:00:00   | {210983}
+             479     | 2020-11-25 | 13:30:00   | {210984}
+
+            loop lines with respect to user and date in that order
+                if meeting is more than 30 min long:
+                    check if we allow meetings to be booked by comparing
+                    number of occasions in previous loop with current.
+                Add either max_depth or found # of allowed occasions to list occasions
+                add list occasions to list occ_lists[index of date]
+                repeat
+
+        else 'pdm occasions':
+            works the same as above but without users.
+            SQL query returns:
+
+             start_date | start_time |    array_agg
+            ------------+------------+-----------------
+             2020-11-25 | 09:00:00   | {210987}
+             2020-11-25 | 09:30:00   | {210988}
+             2020-11-25 | 13:00:00   | {210983,210985}
+             2020-11-25 | 13:30:00   | {210984,210986}
+             2020-11-20 | 13:00:00   | {210951}
+             2020-11-20 | 13:30:00   | {210952}
+
         """
 
         # Calculate number of occasions needed to match booking duration
