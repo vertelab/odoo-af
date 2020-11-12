@@ -33,7 +33,7 @@ class HrEmployee(models.Model):
     appointment_ids_ahead = fields.One2many(
         comodel_name="calendar.appointment",
         string="Booked meetings ahead",
-        compute="compute_show_dates_ahead",
+        compute="_get_records",
     )
 
     appointment_ids = fields.One2many(
@@ -49,15 +49,6 @@ class HrEmployee(models.Model):
         compute="_get_records",
     )
 
-    @api.one
-    def compute_show_dates_ahead(self):
-        self.appointment_ids = self.env["calendar.appointment"].search(
-            [("user_id", "=", self.env.user.id)]
-        )
-        self.appointment_ids_ahead = self.appointment_ids.filtered(
-            lambda a: a.start > a.get_now() and a.state == "confirmed"
-        )
-
     @api.depends("user_id")
     def _get_records(self):
         for rec in self:
@@ -65,6 +56,9 @@ class HrEmployee(models.Model):
                 [("user_id", "=", self.env.user.id)]
             )
             rec.appointment_ids = appointment_record
+            rec.appointment_ids_ahead = appointment_record.filtered(
+            lambda a: a.start > fields.datetime.now() and a.state == "confirmed" #datetime.now() might not work?
+            )
 
             appointment_record = rec.env["calendar.appointment"].search(
                 [
@@ -72,16 +66,11 @@ class HrEmployee(models.Model):
                     ("office_id", "in", self.env.user.office_ids._ids),
                 ]
             )
-            rec.appointment_ids_all = appointment_record.filtered(
-                lambda a: a.start > datetime.now()
-                and a.state == "confirmed"
-                # TODO: is this needed?
-                # and a.user_id.location_id == self.env.user.location_id
-            )
 
-    @api.multi
-    def get_now(self):
-        return datetime.now()
+            rec.appointment_ids_all = appointment_record.filtered(
+                lambda a: a.start > fields.datetime.now()
+                and a.state == "confirmed"
+            )
 
 
 class HrEmployeeJobseekerSearchWizard(models.TransientModel):
