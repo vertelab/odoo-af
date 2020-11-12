@@ -450,7 +450,7 @@ class ResPartner(models.Model):
                     vals = {
                         "name": row['name'],
                         "office_code": office_code,
-                        "partner_id": partner.id,
+                        "partner_id": partner and partner.id,
                         "external_id": "%s%s" %
                         (transformations['external_id'],
                          office_code)}
