@@ -27,6 +27,7 @@ from datetime import datetime, timedelta, date
 from odoo.exceptions import Warning
 
 from odoo import models, fields, api, _
+from odoo.tools.profiler import profile
 
 _logger = logging.getLogger(__name__)
 
@@ -1127,6 +1128,7 @@ class CalendarOccasion(models.Model):
 
         return ret
 
+    @profile
     @api.model
     def get_bookable_occasions(self, start, stop, duration, type_id, operation_id=False, max_depth=1):
         """Returns a list of occasions matching the defined parameters of the appointment. Creates additional 
@@ -1135,7 +1137,44 @@ class CalendarOccasion(models.Model):
         :param stop: Stop search as this time.
         :param duration: Meeting length.
         :param type_id: Meeting type.
+        :param operation_id: The local office to filter for.
         :param max_depth: Number of bookable occasions per time slot.
+
+        Pseudo-code:
+
+        if 'local occasions':
+            SQL query returns:
+
+             user_id | start_date | start_time | array_agg
+            ---------+------------+------------+-----------
+             2       | 2020-11-25 | 09:00:00   | {210987}
+             2       | 2020-11-25 | 09:30:00   | {210988}
+             2       | 2020-11-25 | 13:00:00   | {210985}
+             2       | 2020-11-25 | 13:30:00   | {210986}
+             479     | 2020-11-25 | 13:00:00   | {210983}
+             479     | 2020-11-25 | 13:30:00   | {210984}
+
+            loop lines with respect to user and date in that order
+                if meeting is more than 30 min long:
+                    check if we allow meetings to be booked by comparing
+                    number of occasions in previous loop with current.
+                Add either max_depth or found # of allowed occasions to list occasions
+                add list occasions to list occ_lists[index of date]
+                repeat
+
+        else 'pdm occasions':
+            works the same as above but without users.
+            SQL query returns:
+
+             start_date | start_time |    array_agg
+            ------------+------------+-----------------
+             2020-11-25 | 09:00:00   | {210987}
+             2020-11-25 | 09:30:00   | {210988}
+             2020-11-25 | 13:00:00   | {210983,210985}
+             2020-11-25 | 13:30:00   | {210984,210986}
+             2020-11-20 | 13:00:00   | {210951}
+             2020-11-20 | 13:30:00   | {210952}
+
         """
 
         # Calculate number of occasions needed to match booking duration
@@ -1143,87 +1182,175 @@ class CalendarOccasion(models.Model):
         date_delta = (stop - start)
         td_base_duration = timedelta(minutes=BASE_DURATION)
 
-        def get_occasions(start, occ_list, i, limit):
-            # check if we still need to do recursive calls
-            if i > 0:
-                # get occasions
-                res = self.env['calendar.occasion'].search(domain + [('start', '=', start)], limit=limit)
-                # append to result list
-                occ_list.append(res)
-                # recursive call to get following occasions
-                occ_list = get_occasions(start + td_base_duration, occ_list, i - 1, limit)
-            return occ_list
-
-        def check_available_depth(occasions):
-            available_depth = min([len(o) for o in occasions] or [0])
-            return available_depth
-
-        def do_loop():
-            # find occasions for each day, starting with last day
-            for day in reversed(range(date_delta.days + 1)):
-                # find 'max_depth' number of free occasions for each timeslot
-                if day == date_delta.days:
-                    start_dt = copy.copy(stop)
-                    start_dt = start_dt.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute, second=BASE_DAY_START.second)
-                    last_slot = copy.copy(stop)
-                    last_slot = last_slot.replace(hour=BASE_DAY_STOP.hour, minute=BASE_DAY_STOP.minute, second=BASE_DAY_START.second)
-                    last_slot -= timedelta(minutes=duration)
-                else:
-                    # This will break given certain times and timezones. Should work for us.
-                    start_dt = start_dt - timedelta(days=1)
-                    start_dt = start_dt.replace(hour=BASE_DAY_START.hour, minute=BASE_DAY_START.minute, second=BASE_DAY_START.second)
-                    last_slot = last_slot - timedelta(days=1)
-
-                count_prev_starts = 0
-                # loop within the day to find slots
-                while start_dt <= last_slot:
-                    # get number of possbile meeting starts at start_dt
-                    count_current_starts = self.env['calendar.occasion'].search_count(domain + [('start', '=', start_dt)])
-                    # compare to previous meeting starts
-                    count_prev_starts = max(count_current_starts-count_prev_starts,0)
-                    # limit depth depending on this number
-                    limit = min(count_prev_starts, max_depth)
-                    # no need to do this if the depth is 0
-                    if limit != 0:
-                        occasions = []
-                        # search for specific occasions
-                        occasions = get_occasions(start_dt, occasions, no_occasions, limit)
-                        # check the available depth of our result
-                        available_depth = check_available_depth(occasions)
-                        slot = []
-                        for i in range(available_depth):
-                            slot_occasion = self.env['calendar.occasion']
-                            for occ in occasions:
-                                slot_occasion |= occ[i]
-                            slot.append(slot_occasion)
-                        if slot:
-                            occ_lists[day].append(slot)
-                    start_dt += td_base_duration
-
         occ_lists = []
         # declare lists for each day
         for i in range(date_delta.days + 1):
             occ_lists.append([])
 
-        # define our domain since this part of it 
-        # will be the same throughout all loops
-        domain = [('type_id', '=', type_id.id), ('appointment_id', '=', False), ('additional_booking', '=', False)]
-        # TODO: domain.append(('state', '=', 'ok')) can and should probably be moved outside of this if 
+        sql_type_id = type_id.id
+        sql_start = start
+        sql_stop = stop
+        sql_max_depth = max_depth
+
+        # do search for local offices
         if type_id.channel == self.env.ref('calendar_channel.channel_local') and operation_id:
-            domain.append(('operation_id', '=', operation_id.id))
-            domain.append(('state', '=', 'ok'))
-            # messy messy code. will not work if we have 60+ min meetings.
-            # TODO: implemnting like this now to save time. Review
-            # Make sure we don't use a 60 min slot for a 30min meeting. 
-            if no_occasions == 1:
-                domain.append(('occasion_ids', '=', False))
-            domain.append(('state', '=', 'ok'))
-            start_domain = domain
-            for employee in operation_id.employee_ids:
-                domain = start_domain + [('user_id', '=', employee.user_id.id)]
-                do_loop()
+            # Specific variables for local offices
+            sql_operation_id = operation_id.id
+            sql_occasion_ids = "AND cor.occasion_1 IS NULL AND cor.occasion_2 IS NULL" if no_occasions == 1 else ""
+
+            sql_query = f"""SELECT user_id, start::date as start_date, start::time as start_time, array_agg(DISTINCT(id))
+                            FROM calendar_occasion co
+                                LEFT JOIN calendar_occasion_related cor
+                                    ON cor.occasion_1 = co.id
+                                        OR cor.occasion_2 = co.id
+                            WHERE appointment_id IS NULL 
+                                AND additional_booking = 'f'
+                                {sql_occasion_ids}
+                                AND type_id = {sql_type_id}
+                                AND start >= '{sql_start}'
+                                AND start <= '{sql_stop}'
+                                AND operation_id = {sql_operation_id}
+                                AND state = 'ok'
+                            GROUP BY start::time, start::date, user_id
+                            ORDER BY user_id ASC, start_date DESC, start_time ASC;"""
+            self._cr.execute(sql_query)
+            sql_res = self._cr.fetchall()
+
+            # handle 30 min meetings
+            if type_id.duration == 30:
+                prev_user_id = False
+                prev_date = False
+                day_num = 0
+                for dt_occ_pair in sql_res:
+                    curr_user_id = dt_occ_pair[0]
+                    curr_date = dt_occ_pair[1]
+                    curr_starts = dt_occ_pair[3]
+                    if not prev_date:
+                        prev_date = curr_date
+                        prev_user_id = curr_user_id
+                    if curr_user_id != prev_user_id:
+                        day_num = 0
+                        prev_date = curr_date
+                        prev_user_id = curr_user_id
+                    if curr_date != prev_date:
+                        day_num =+ 1
+                    occasions = []
+                    if len(occ_lists[day_num]) < max_depth:
+                        for i in range(min(max_depth, len(curr_starts))):
+                            occ_id = self.env['calendar.occasion'].browse(curr_starts[i])
+                            occasions.append(occ_id)
+                    occ_lists[day_num].append(occasions)
+                    prev_date = curr_date
+                    prev_user_id = curr_user_id
+            # hardcoded for 60 min meetings for now...
+            else:
+                count_prev_starts = 0
+                prev_starts = []
+                prev_user_id = False
+                prev_date = False
+                day_num = 0
+                # find occasions for each slot, starting with last day
+                for dt_occ_pair in sql_res:
+                    curr_user_id = dt_occ_pair[0]
+                    curr_date = dt_occ_pair[1]
+                    curr_starts = dt_occ_pair[3]
+                    if not prev_date:
+                        # for the first iteration, set variables and skip
+                        prev_date = curr_date
+                        prev_starts = curr_starts
+                        prev_user_id = curr_user_id
+                        count_prev_starts = 0
+                        # skip first iteration
+                        continue
+                    if curr_user_id != prev_user_id:
+                        day_num = 0
+                        prev_date = curr_date
+                        prev_user_id = curr_user_id
+                        # skip first iteration for each user
+                        continue
+                    if curr_date != prev_date:
+                        # new day, reset count_prev_starts.
+                        count_prev_starts = 0
+                        day_num =+ 1
+                    else:
+                        count_prev_starts = max(len(curr_starts)-count_prev_starts,0)
+                    limit = min(count_prev_starts, max_depth)
+                    if limit != 0:
+                        occasions = []
+                        for i in range(limit):
+                            first_occ = self.env['calendar.occasion'].browse(prev_starts[i])
+                            second_occ = self.env['calendar.occasion'].browse(curr_starts[i])
+                            first_occ |= second_occ
+                            occasions.append(first_occ)
+                        occ_lists[day_num].append(occasions)
+                    prev_date = curr_date
+                    prev_starts = curr_starts
+                    prev_user_id = curr_user_id
+        # Do PDM search
         else:
-            do_loop()
+            sql_query = f"""SELECT start::date as start_date, start::time as start_time, array_agg(id)
+                            FROM calendar_occasion
+                            WHERE appointment_id IS NULL
+                                AND additional_booking = 'f' 
+                                AND type_id = {sql_type_id}
+                                AND start >= '{sql_start}'
+                                AND start <= '{sql_stop}'
+                                AND state = 'ok'
+                            GROUP BY start::time, start::date
+                            ORDER BY start_date DESC, start_time ASC;"""
+            self._cr.execute(sql_query)
+            sql_res = self._cr.fetchall()
+
+            # handle 30 min meetings
+            if type_id.duration == 30:
+                prev_date = False
+                day_num = 0
+                for dt_occ_pair in sql_res:
+                    curr_date = dt_occ_pair[0]
+                    curr_starts = dt_occ_pair[2]
+                    if not prev_date:
+                        prev_date = curr_date
+                    if curr_date != prev_date:
+                        day_num =+ 1
+                    occasions = []
+                    for i in range(min(max_depth, len(curr_starts))):
+                        occ_id = self.env['calendar.occasion'].browse(curr_starts[i])
+                        occasions.append(occ_id)
+                    occ_lists[day_num].append(occasions)
+                    prev_date = curr_date
+            # hardcoded for 60 min meetings for now...
+            else:
+                count_prev_starts = 0
+                prev_starts = []
+                prev_date = False
+                day_num = 0
+                # find occasions for each slot, starting with last day
+                for dt_occ_pair in sql_res:
+                    curr_date = dt_occ_pair[0]
+                    curr_starts = dt_occ_pair[2]
+                    if not prev_date:
+                        # for the first iteration, set variables and skip
+                        prev_date = curr_date
+                        prev_starts = curr_starts
+                        count_prev_starts = 0
+                        continue
+                    if curr_date != prev_date:
+                        # new day, reset count_prev_starts.
+                        count_prev_starts = 0
+                        day_num =+ 1
+                    else:
+                        count_prev_starts = max(len(curr_starts)-count_prev_starts,0)
+                    limit = min(count_prev_starts, max_depth)
+                    if limit != 0:
+                        occasions = []
+                        for i in range(limit):
+                            first_occ = self.env['calendar.occasion'].browse(prev_starts[i])
+                            second_occ = self.env['calendar.occasion'].browse(curr_starts[i])
+                            first_occ |= second_occ
+                            occasions.append(first_occ)
+                        occ_lists[day_num].append(occasions)
+                    prev_date = curr_date
+                    prev_starts = curr_starts
 
         # if type allows additional bookings and we didn't find any
         # free occasions, create new ones:
