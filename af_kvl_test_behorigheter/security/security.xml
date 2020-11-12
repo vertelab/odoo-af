@@ -1,33 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+    <!-- ##################################### -->
     <!-- Hantera Användare (Organisationsnivå) -->
+    <!-- ##################################### -->
     <record id="category_kvl_hantera_anvandare" model="ir.module.category">
         <field name="name">Hantera Användare</field>
         <field name="description">Category for handling users.</field>
-        <field name="sequence">41</field>
     </record>
 
-    <record id="group_kvl_hantera_anvandare_las" model="res.groups">
+    <record id="group_kvl_hantera_anvandare_read" model="res.groups">
         <field name="name">Hantera Användare (LÄS)</field>
         <field name="category_id" ref="category_kvl_hantera_anvandare"/>
     </record>
 
-    <record id="group_kvl_hantera_anvandare_skriv" model="res.groups">
-        <field name="name">Hantera Användare (Skriv)</field>
+    <record id="group_kvl_hantera_anvandare_write" model="res.groups">
+        <field name="name">Hantera Användare (SKRIV)</field>
         <field name="category_id" ref="category_kvl_hantera_anvandare"/>
-        <field name="implied_ids" eval="[4, ref('group_kvl_hantera_anvandare_las')]"/>
+        <field name="implied_ids" eval="[4, ref('group_kvl_hantera_anvandare_read')]"/>
     </record>
 
+
+    <!-- ################################################## -->
     <!-- Hantera Organisationsuppgifter (Organisationsnivå) -->
-    <record id="category_kvl_hantera_anvandare" model="ir.module.category">
+    <!-- ################################################## -->
+    <record id="category_kvl_hantera_organisationsuppgifter" model="ir.module.category">
         <field name="name">Hantera Organisationsuppgifter</field>
-        <field name="description">Category for handling users.</field>
-        <field name="sequence">41</field>
+        <field name="description">Category for handling overall organsation information (Just read rights).</field>
     </record>
 
-    <record id="group_kvl_hantera_anvandare_skriv" model="res.groups">
-        <field name="name">Hantera Användare (Skriv)</field>
-        <field name="category_id" ref="category_kvl_hantera_anvandare"/>
+    <record id="group_kvl_hantera_organisationsuppgifter_read" model="res.groups">
+        <field name="name">Hantera Organisationsuppgifter (LÄS)</field>
+        <field name="category_id" ref="category_kvl_hantera_organisationsuppgifter"/>
     </record>
 
+    
+    <!-- ############################################ -->
+    <!-- Hantera Deltagare (Utförandeverksamhetsnivå) -->
+    <!-- ############################################ -->
+    <record id="category_kvl_hantera_deltagare" model="ir.module.category">
+        <field name="name">Hantera Deltagare</field>
+        <field name="description">Category for handling information and tasks related to jobseekers.</field>
+    </record>
+
+    <record id="group_kvl_hantera_deltagare_read" model="res.groups">
+        <field name="name">Hantera Deltagare (LÄS)</field>
+        <field name="category_id" ref="category_kvl_hantera_deltagare"/>
+    </record>
+
+    <record id="group_kvl_hantera_deltagare_write" model="res.groups">
+        <field name="name">Hantera Deltagare (SKRIV)</field>
+        <field name="category_id" ref="category_kvl_hantera_deltagare"/>
+        <field name="implied_ids" eval="[4, ref('group_kvl_hantera_deltagare_read')]"/>
+    </record>
+
+
+    <!-- Hantera Ekonomi (Organisationsnivå) -->
+    <record id="category_kvl_hantera_ekonomi" model="ir.module.category">
+        <field name="name">Hantera Ekonomi</field>
+        <field name="description">Category for handling information related to company finances (Just read rights).</field>
+    </record>
+
+    <record id="group_kvl_hantera_ekonomi_read" model="res.groups">
+        <field name="name">Hantera Ekonomi (LÄS)</field>
+        <field name="category_id" ref="category_kvl_hantera_ekonomi"/>
+    </record>
 </odoo>
