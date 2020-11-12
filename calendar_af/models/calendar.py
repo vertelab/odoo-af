@@ -1141,6 +1141,7 @@ class CalendarOccasion(models.Model):
         :param stop: Stop search as this time.
         :param duration: Meeting length.
         :param type_id: Meeting type.
+        :param operation_id: The local office to filter for.
         :param max_depth: Number of bookable occasions per time slot.
         """
 
