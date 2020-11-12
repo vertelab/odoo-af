@@ -530,10 +530,6 @@ class CalendarAppointment(models.Model):
 
     @api.one
     def compute_suggestion_ids(self):
-        # TODO: REMOVE THIS LINE BEFORE MERGE OR WE BREAK THE SECURITY RULES
-        # BUG: DO NOT LET THIS SLIP THROUGH
-        # !!!!ALERT ALERT ALERT ALERT!!!!
-        return self.sudo()._compute_suggestion_ids()
         # Perform access control.
         if self.af_check_access():
             # Checks passed. Run inner function with sudo.
