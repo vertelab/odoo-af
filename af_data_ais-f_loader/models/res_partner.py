@@ -443,6 +443,7 @@ class ResPartner(models.Model):
                         'email': row['email'] if 'email' in row else False,
                         'phone': row['phone'] if 'phone' in row else False,
                     }
+                    partner = False
                     if not self.env['hr.department'].search([('office_code','=', office_code)]):
                         partner = self.env['res.partner'].create(partner_vals)
                     
