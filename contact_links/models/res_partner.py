@@ -29,7 +29,7 @@ class ResPartner(models.Model):
     def sync_link(self):
         for partner in self:
             # partner.write({'link_ids': [(5,)]})
-            partner.write({'link_target_ids': [(5,)]})
+            partner.link_target_ids = [(5,)]
             links = self.env['partner.links'].search(
                 [('type_smart', '=', 'tab')])
             for link in links:
