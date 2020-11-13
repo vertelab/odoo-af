@@ -1308,3 +1308,9 @@ msgstr "Handläggare"
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_operation_form_calendar_af_inherited
 msgid "Reserve time managers"
 msgstr "Reservtidshandläggare"
+
+#. Lokalkontor, valt kontor
+#. module: calendar_af
+#: model_terms:ir.ui.view,arch_db:calendar_af.view_operation_form_calendar_af_inherited
+msgid "Appointment warnings"
+msgstr "Mötesvarningar"

@@ -7,7 +7,7 @@
     <field name="arch" type="xml"> 
       <sheet position="inside">
         <group>
-          <field name="app_warn_emp_ids" widget="many2many_tags" domain="[('id', 'in', employee_ids)]"/>
+          <field name="app_warn_emp_ids" widget="many2many_tags" domain="[('id', 'in', employee_ids)]" string="Appointment warnings"/>
         </group>
         <notebook>
           <page name="employees" string="Case workers">
