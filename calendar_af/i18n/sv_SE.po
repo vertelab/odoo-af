@@ -422,7 +422,6 @@ msgstr "Skapa bokningsbar tid"
 #. module: calendar_af
 #: model:ir.actions.act_window,name:calendar_af.create_local_occasion_action
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_user_form
-#: model:ir.actions.act_window,name:calendar_af.create_local_occasion_action
 #: model:ir.ui.view,name:calendar_af.create_local_occasion_action
 #: model:ir.ui.menu,name:calendar_af.menu_action_create_local_occasion
 msgid "Create occasion"
@@ -654,15 +653,10 @@ msgstr "Lokalkontorsmöten"
 #. För att hantera knappar i Calendar/Handläggare separat
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_user_form
-#: model:ir.actions.act_window,name:calendar_af.action_local_appointment
 #: model:ir.ui.view,name:calendar_af.action_local_appointment
 #: model:ir.ui.menu,name:calendar_af.menu_action_local_appointment
 msgid "Local appointments"
 msgstr "Bokade möten"
-
-#. module: calendar_af
-msgid "Local occasions"
-msgstr "Bokningsbara tider"
 
 #. För att hantera knappar i Calendar/Handläggare separat
 #. module: calendar_af
