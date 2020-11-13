@@ -1278,3 +1278,33 @@ msgstr "Reservtidshandläggare och klocklsag"
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_operation_form_calendar_af_inherited
 msgid "Mapped dates"
 msgstr "Alternativa reservtidsdatum"
+
+#. Lokalkontor, valt kontor
+#. module: calendar_af
+#: model_terms:ir.ui.view,arch_db:calendar_af.view_operation_form_calendar_af_inherited
+msgid "Warning threshold"
+msgstr "Gränsvärden"
+
+#. Lokalkontor, valt kontor
+#. module: calendar_af
+#: model_terms:ir.ui.view,arch_db:calendar_af.view_operation_form_calendar_af_inherited
+msgid "Appointment type"
+msgstr "Mötestyp"
+
+#. Lokalkontor, valt kontor
+#. module: calendar_af
+#: model_terms:ir.ui.view,arch_db:calendar_af.view_operation_form_calendar_af_inherited
+msgid "Reserve time start"
+msgstr "Klockslag för reservtidsutfall"
+
+#. Lokalkontor, valt kontor
+#. module: calendar_af
+#: model_terms:ir.ui.view,arch_db:calendar_af.view_operation_form_calendar_af_inherited
+msgid "Case workers"
+msgstr "Handläggare"
+
+#. Lokalkontor, valt kontor
+#. module: calendar_af
+#: model_terms:ir.ui.view,arch_db:calendar_af.view_operation_form_calendar_af_inherited
+msgid "Reserve time managers"
+msgstr "Reservtidshandläggare"
