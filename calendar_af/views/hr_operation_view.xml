@@ -7,7 +7,7 @@
     <field name="arch" type="xml"> 
       <sheet position="inside">
         <group>
-          <field name="app_warn_emp_ids" widget="many2many_tags" domain="[('id', 'in', employee_ids)]"/>
+          <field name="app_warn_emp_ids" widget="many2many_tags" domain="[('id', 'in', employee_ids)]" string="Appointment warnings"/>
         </group>
         <notebook>
           <page name="employees" string="Case workers">
@@ -22,8 +22,8 @@
           <page name="type_operation" string="Appointment warning thresholds">
             <field name="type_operation_ids" mode="tree" nolabel="1">
               <tree editable="bottom">
-                <field name="type_id" domain="[('channel', '=', %(calendar_channel.channel_local)d)]"/>
-                <field name="warning_threshold"/>
+                <field name="type_id" domain="[('channel', '=', %(calendar_channel.channel_local)d)]" string="Appointment type" />
+                <field name="warning_threshold" string="Warning threshold"/>
               </tree>
             </field>
           </page>
@@ -39,8 +39,8 @@
           <page name="reserve_times" string="Reserve times">
             <group>
               <group>
-                <field name="reserve_admin_ids" widget="many2many_tags" domain="[('id', 'in', employee_ids)]"/>
-                <field name="reserve_time" widget="float_time"/>
+                <field name="reserve_admin_ids" widget="many2many_tags" domain="[('id', 'in', employee_ids)]" string="Reserve time managers"/>
+                <field name="reserve_time" widget="float_time" string="Reserve time start"/>
               </group>
               <group>
               </group>
