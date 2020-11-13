@@ -680,7 +680,6 @@ msgstr "Kontaktvägskod"
 
 #. module: calendar_af
 #: model:ir.actions.act_window,name:calendar_af.action_mapped_dates
-#: model:ir.model,name:calendar_af.model_calendar_mapped_dates
 #: model:ir.ui.menu,name:calendar_af.menu_mapped_dates
 msgid "Mapped dates"
 msgstr "Filtrerade datum"
@@ -1255,3 +1254,27 @@ msgstr "organisationsnummer"
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_operation_tree
 msgid "Select"
 msgstr "Välj"
+
+#. Lokalkontor, valt kontor
+#. module: calendar_af
+#: model_terms:ir.ui.view,arch_db:calendar_af.view_operation_form_calendar_af_inherited
+msgid "Employees"
+msgstr "Handläggaren"
+
+#. Lokalkontor, valt kontor
+#. module: calendar_af
+#: model_terms:ir.ui.view,arch_db:calendar_af.view_operation_form_calendar_af_inherited
+msgid "Appointment warning thresholds"
+msgstr "Gränsvärden återstående tider"
+
+#. Lokalkontor, valt kontor
+#. module: calendar_af
+#: model_terms:ir.ui.view,arch_db:calendar_af.view_operation_form_calendar_af_inherited
+msgid "Reserve times"
+msgstr "Reservtidshandläggare och klocklsag"
+
+#. Lokalkontor, valt kontor
+#. module: calendar_af
+#: model_terms:ir.ui.view,arch_db:calendar_af.view_operation_form_calendar_af_inherited
+msgid "Mapped dates"
+msgstr "Alternativa reservtidsdatum"
