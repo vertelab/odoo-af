@@ -788,11 +788,6 @@ msgstr "Måndag"
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_appointment_move_form
-msgid "Move"
-msgstr "Omboka"
-
-#. module: calendar_af
-#: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_appointment_move_form
 msgid "Move meeting"
 msgstr "Omboka möte"
 
