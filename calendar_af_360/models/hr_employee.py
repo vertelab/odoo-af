@@ -52,8 +52,10 @@ class HrEmployee(models.Model):
     @api.depends("user_id")
     def _get_records(self):
         for rec in self:
+            if not rec.user_id:
+                continue
             appointment_record = rec.env["calendar.appointment"].search(
-                [("user_id", "=", self.env.user.id)]
+                [("user_id", "=", rec.user_id.id)]
             )
             rec.appointment_ids = appointment_record
             rec.appointment_ids_ahead = appointment_record.filtered(
@@ -62,8 +64,8 @@ class HrEmployee(models.Model):
 
             appointment_record = rec.env["calendar.appointment"].search(
                 [
-                    ("user_id", "!=", self.env.user.id),
-                    ("office_id", "in", self.env.user.office_ids._ids),
+                    ("user_id", "!=", rec.user_id.id),
+                    ("office_id", "in", rec.user_id.office_ids._ids),
                 ]
             )
 

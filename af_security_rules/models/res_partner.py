@@ -35,10 +35,10 @@ _logger = logging.getLogger(__name__)
 LOCAL_TZ = timezone('Europe/Stockholm')
 WSDL_NYCKELTJANST = config.get(
     'bhtj_nyckeltjanst',
-    'https://bhtj.arbetsformedlingen.se/KeyService/ws/nyckeltjanst?wsdl')
+    'http://bhtj.arbetsformedlingen.se/KeyService/ws/nyckeltjanst?wsdl')
 WSDL_INITIERANDE_NYCKELTJANST = config.get(
     'bhtj_initierande_nyckeltjanst',
-    'https://bhtj.arbetsformedlingen.se/KeyService/ws/initierandenyckeltjanst?wsdl')
+    'http://bhtj.arbetsformedlingen.se/KeyService/ws/initierandenyckeltjanst?wsdl')
 NYCKELTJANST = None
 INITIERANDE_NYCKELTJANST = None
 INIT_HEADER_SYSTEM_ID = 'CRM'
@@ -78,6 +78,10 @@ class BHTJModel(models.AbstractModel):
 class ResPartnerNotes(models.Model):
     _name = 'res.partner.notes'
     _inherit = ['res.partner.notes', 'bhtj.model']
+
+class CalendarAppointment(models.Model):
+    _name = 'calendar.appointment'
+    _inherit = ['calendar.appointment', 'bhtj.model']
 
 
 class ResPartner(models.Model):
@@ -300,21 +304,22 @@ class User(models.Model):
 
         def normalize_pnr(pnr):
             return '%s-%s' % (pnr[:8], pnr[8:12])
+        keys = {'STARK': [], 'MYCKET_STARK': []}
         try:
             # Fetch keys from BHTJ
             response = bhtj.service.hamtaNyckelknippa(self.login)
             # Translate to a more usable structure.
-            keys = {'STARK': [], 'MYCKET_STARK': []}
             for key in response:
                 if key['nyckeltyp'] == 'Stark':
                     keys['STARK'].append(normalize_pnr(key['personnummer']))
                 elif key['nyckeltyp'] == 'Mycket stark':
                     keys['MYCKET_STARK'].append(
                         normalize_pnr(key['personnummer']))
-            return keys
         except BaseException:
-            # TODO: Log error properly.
-            raise Warning(_("Failed to connect to BHTJ!"))
+            # TODO: We should alert the user to the error, but throwing one here just
+            # results in a 500 Internal Server Error.
+            _logger.exception(_("Failed to connect to BHTJ!"))
+        return keys
 
     @api.model
     def _get_notes_edit_limit(self):
