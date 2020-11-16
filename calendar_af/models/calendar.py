@@ -224,7 +224,7 @@ class CalendarChannel(models.Model):
     _name = 'calendar.channel'
     _description = "Channel"
 
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', translate=True, required=True )
 
 
 class CalendarMappedDates(models.Model):

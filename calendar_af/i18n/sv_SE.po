@@ -641,11 +641,6 @@ msgid "Last allowed day for type"
 msgstr "Sista tillåtna dag för typ"
 
 #. module: calendar_af
-#: model:ir.ui.menu,name:calendar_af.menu_local
-msgid "Local"
-msgstr "Lokalkontor"
-
-#. module: calendar_af
 #: model:ir.actions.act_window,name:calendar_af.action_local_appointment
 msgid "Local appointments"
 msgstr "Lokalkontorsmöten"
@@ -1314,3 +1309,16 @@ msgstr "Reservtidshandläggare"
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_operation_form_calendar_af_inherited
 msgid "Appointment warnings"
 msgstr "Mötesvarningar"
+
+#. Namn på Kanal Lokalkontor
+#. module: calendar_af
+#: model:calendar.channel,name:calendar_channel.channel_local
+#: model:ir.ui.menu,name:calendar_af.menu_local
+msgid "Local"
+msgstr "Lokalkontor"
+
+#. Namn på Kanal PDM
+#. module: calendar_af
+#: model:ir.ui.menu,name:calendar_af.menu_pdm
+msgid "PDM"
+msgstr ""
