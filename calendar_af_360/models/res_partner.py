@@ -89,6 +89,7 @@ class ResPartner(models.Model):
             'res_model': 'calendar.appointment',
             'view_id': self.env.ref('calendar_af.view_calendar_appointment_form').id,
             'view_mode': 'form',
+            'target': 'main',
             'type': 'ir.actions.act_window',
         }
 
