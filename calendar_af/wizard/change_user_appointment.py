@@ -55,6 +55,9 @@ class ChangeUserAppointment(models.TransientModel):
     duration = fields.Float(
         string="Duration", related="appointment_id.duration", readonly=True
     )
+    type_id = fields.Many2one(
+        string="Meeting type", related="appointment_id.type_id", readonly=True
+    )
     now_user_id = fields.Many2one(
         string="Case worker",
         comodel_name="res.users",
