@@ -1322,3 +1322,9 @@ msgstr "Lokalkontor"
 #: model:ir.ui.menu,name:calendar_af.menu_pdm
 msgid "PDM"
 msgstr ""
+
+#. module: calendar_af
+#: code:addons/calendar_af/models/calendar.py:552
+#, python-format
+msgid "This duration is not allowed for the meeting type."
+msgstr "Denna tid är inte tillåten för denna mötestyp."
