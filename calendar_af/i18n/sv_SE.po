@@ -1328,3 +1328,30 @@ msgstr ""
 #, python-format
 msgid "This duration is not allowed for the meeting type."
 msgstr "Denna tid är inte tillåten för denna mötestyp."
+
+#. module: calendar_af
+#: model:calendar.appointment.cancel_reason,name:calendar_cancel_reason.work
+msgid "Work"
+msgstr "Arbete"
+
+#. module: calendar_af
+#: model:calendar.appointment.cancel_reason,name:calendar_cancel_reason.authority
+msgid "On the initiative of the authority"
+msgstr "Myndighetens initiativ"
+
+#. module: calendar_af
+#: model:calendar.appointment.cancel_reason,name:calendar_cancel_reason.impediment
+msgid "Impediment"
+msgstr "Förhinder"
+
+#. module: calendar_af
+#: model:calendar.appointment.cancel_reason,name:calendar_cancel_reason.interview
+msgid "Interview"
+msgstr "Intervju"
+
+#. module: calendar_af
+#: model:ir.actions.act_window,name:calendar_af.action_cancel_reason
+#: model:ir.ui.menu,name:calendar_af.menu_action_cancel_reason
+#: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_appointment_cancel_reason_tree
+msgid "Meeting cancel reasons"
+msgstr "Avbokningsorsaker"
