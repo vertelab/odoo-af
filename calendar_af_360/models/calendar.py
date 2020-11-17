@@ -69,7 +69,7 @@ class CalendarAppointmentSuggestion(models.Model):
                 "res_model": "res.partner",
                 "view_id": self.env.ref("partner_view_360.view_jobseeker_form").id,
                 "view_mode": "form",
-                "target": "main"
+                "target": "main",
                 "type": "ir.actions.act_window",
             }
         except:
