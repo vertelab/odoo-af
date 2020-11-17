@@ -7,6 +7,7 @@
         <field name="arch" type="xml">
             <form string="Change case worker">
                 <group>
+                    <field name="type_id" readonly="1"/>
                     <field name="appointment_id" readonly="1"/>
                     <field name="now_user_id" readonly="1"/>
                     <field name="duration" readonly="1"/>
