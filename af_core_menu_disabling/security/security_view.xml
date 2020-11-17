@@ -34,7 +34,7 @@
             <field name="groups_id" eval="[(6,0,[ref('group_hide_menu')])]"/>
         </record>
 
-<!-- Hides the main Employee-menu -->        
+        <!-- Hides the main Employee-menu -->        
         
         <record model="ir.ui.menu" id="hr.menu_hr_root">
             <field name="groups_id" eval="[(6,0,[ref('group_hide_menu')])]"/>
