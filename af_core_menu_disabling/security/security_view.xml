@@ -3,7 +3,7 @@
     <data>
 
         <record id="group_hide_menu" model="res.groups">
-            <field name="name">Hide Menus</field>
+            <field name="name">Show hidden Menus</field>
             <field name="category_id" ref="base.module_category_hidden"/>
             <field name="users" eval="[(4, ref('base.group_user'))]"/>
         </record>
@@ -24,5 +24,9 @@
             <field name="groups_id" eval="[(6,0,[ref('group_hide_menu')])]"/>
         </record>
 
+        <record model="ir.ui.menu" id="calendar.mail_menu_employee">
+            <field name="groups_id" eval="[(6,0,[ref('group_hide_menu')])]"/>
+        </record>
+        
     </data>
 </odoo>
