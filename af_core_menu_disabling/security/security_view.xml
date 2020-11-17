@@ -1,28 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-
+        
+        <!-- Members of this group are allowed to see the hidden menues -->
+        
         <record id="group_hide_menu" model="res.groups">
-            <field name="name">Hide Menus</field>
+            <field name="name">Show hidden Menus</field>
             <field name="category_id" ref="base.module_category_hidden"/>
             <field name="users" eval="[(4, ref('base.group_user'))]"/>
         </record>
-
+        
+        <!-- Hides the main Contact-menu -->
+        
         <record model="ir.ui.menu" id="contacts.menu_contacts">
             <field name="groups_id" eval="[(6,0,[ref('group_hide_menu')])]"/>
         </record>
 
+        <!-- Hides the main Discuss-menu -->        
+        
         <record model="ir.ui.menu" id="mail.menu_root_discuss">
             <field name="groups_id" eval="[(6,0,[ref('group_hide_menu')])]"/>
         </record>
 
+        <!-- Hides the main Website-menu -->                
+        
         <record model="ir.ui.menu" id="website.menu_website_configuration">
             <field name="groups_id" eval="[(6,0,[ref('group_hide_menu')])]"/>
         </record>
 
+        <!-- Hides the main Calendar-menu -->        
+        
         <record model="ir.ui.menu" id="calendar.mail_menu_calendar">
             <field name="groups_id" eval="[(6,0,[ref('group_hide_menu')])]"/>
         </record>
 
+        <!-- Hides the main Employee-menu -->        
+        
+        <record model="ir.ui.menu" id="hr.menu_hr_root">
+            <field name="groups_id" eval="[(6,0,[ref('group_hide_menu')])]"/>
+        </record>
+        
     </data>
 </odoo>
