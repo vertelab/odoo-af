@@ -819,7 +819,7 @@ class CalendarAppointmentCancelReason(models.Model):
     _name = 'calendar.appointment.cancel_reason'
     _description = "Cancellation reason for an appointment"
 
-    name = fields.Char(string='Name', required=True)
+    name = fields.Char(string='Name', required=True, translate=True)
     appointment_id = fields.One2many(comodel_name='calendar.appointment', inverse_name='cancel_reason')
 
 
