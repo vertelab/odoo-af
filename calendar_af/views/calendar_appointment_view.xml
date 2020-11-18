@@ -20,7 +20,7 @@
             <tree string="Appointments">
                 <field name="type_id"/>
                 <field name="start"/>
-                <field name="duration"/>
+                <field name="duration_selection"/>
                 <field name="stop" />
                 <field name="user_id" />
                 <field name="partner_id" />
@@ -91,7 +91,7 @@
                 <field name="type_id" />
                 <field name="weekday"/>
                 <field name="start" />
-                <field name="duration"/>
+                <field name="duration_selection"/>
                 <field name="user_id" />
                 <field name="partner_id" />
                 <field name="operation_id" />
@@ -162,7 +162,7 @@
                         <tree string="Bookable Occasions" limit="10">
                             <field name="weekday"/>
                             <field name="start" options="{'datepicker': {'hide': {'seconds': True}}}"/>
-                            <field name="duration"/>
+                            <field name="duration_text"/>
                             <field name="type_id"/>
                             <field name="occasion_ids" invisible="1"/>
                             <button name="select_suggestion" type="object" string="Book"/>
@@ -230,7 +230,7 @@
                         <tree string="Bookable Occasions" limit="10">
                             <field name="weekday"/>
                             <field name="start" options="{'datepicker': {'hide': {'seconds': True}}}"/>
-                            <field name="duration"/>
+                            <field name="duration_text"/>
                             <field name="type_id"/>
                             <field name="occasion_ids" invisible="1"/>
                             <button name="select_suggestion_move" type="object" string="Move"/>

@@ -245,6 +245,7 @@ class CalendarAppointmentSuggestion(models.Model):
     start = fields.Datetime()
     stop = fields.Datetime()
     duration = fields.Float(string='Duration')
+    duration_text = fields.Char(string="Duration", compute="compute_duration_text")
     occasion_ids = fields.Many2many(comodel_name='calendar.occasion', string="Occasions")
     type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type')
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
@@ -252,6 +253,16 @@ class CalendarAppointmentSuggestion(models.Model):
     office_id = fields.Many2one(comodel_name="hr.department", related="operation_id.department_id", string="Office", readonly=True)
     user_id = fields.Many2one(comodel_name='res.users', string="Case worker")
     weekday = fields.Char(string='Weekday', compute="_compute_weekday")
+
+    @api.one
+    def compute_duration_text(self):
+        _logger.info("duration %s" % self.duration)
+        if self.duration == 60:
+            _logger.info("60 min")
+            self.duration_text = "60 minutes"
+        elif self.duration == 30:
+            _logger.info("30 min")
+            self.duration_text = "30 minutes"
 
     @api.one
     def _compute_weekday(self):
