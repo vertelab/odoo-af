@@ -4,7 +4,7 @@
             <field name="name">Low occasions warning</field>
             <field name="model_id" ref="calendar_af.model_calendar_appointment"/>
             <field name="subject">Low occasions warning</field>
-            <field name="email_to">${object.operation_id.app_warn_user_ids.email | safe}</field>
+            <field name="email_to">${object.operation_id.app_warn_emp_ids.email | safe}</field>
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
                     <p style="margin: 0px; padding: 0px; font-size: 13px;">
