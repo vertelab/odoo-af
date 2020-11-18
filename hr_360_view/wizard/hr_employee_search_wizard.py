@@ -37,6 +37,13 @@ TIMEOUT = 60 * 3
 class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     _name = "hr.employee.jobseeker.search.wizard"
 
+    @api.model
+    def _get_default_social_sec_nr_search(self):
+        ssn_not_found = request.session.pop('ssn_not_found',False)
+        if ssn_not_found:
+            raise Warning(_("This jobseeker is not registered at Arbetsförmedlingen"))
+        return request.session.pop('ssn','')
+
     # gdpr_id = fields.Many2one('gdpr.inventory')
     # gdpr_reasons = fields.Many2one(related="gdpr_id.reasons?")
     employee_id = fields.Many2one(comodel_name='hr.employee', default=lambda self: self._default_hr_employee())
@@ -47,7 +54,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     # jobseekers_ids = fields.One2many(related='employee_id.jobseekers_ids')
     # case_ids = fields.One2many(related='employee_id.case_ids')
     # daily_note_ids = fields.One2many(related='employee_id.daily_note_ids')
-    social_sec_nr_search = fields.Char(string="Social security number",default=lambda self: '%s' % request.session.pop('ssn',''))
+    social_sec_nr_search = fields.Char(string="Social security number",default=lambda self: '%s' % self._get_default_social_sec_nr_search())
     bank_id_text = fields.Text(string=None)
     bank_id_ok = fields.Boolean(string=None,default=False)
 

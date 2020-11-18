@@ -33,6 +33,12 @@ msgid "Based on the needs of the authority"
 msgstr "Utifrån myndighetens behov"
 
 #. module: hr_360_view
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:44
+#, python-format
+msgid "This jobseeker is not registered at Arbetsförmedlingen"
+msgstr "Sökande är inte inskriven hos Arbetsförmedlingen"
+
+#. module: hr_360_view
 #: selection:hr.employee.jobseeker.search.wizard,search_reason:0
 msgid "Callback"
 msgstr "Återkalla"
