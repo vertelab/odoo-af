@@ -72,6 +72,7 @@ class ResUsers(models.Model):
         res["domain"] = [
             ("operation_id", "in", self.operation_ids._ids),
             ("user_id", "=", self.id),
+            ("state", "!=", "deleted"),
         ]
         return res
 
