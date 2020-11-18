@@ -102,7 +102,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             "domain": [
                 ("start", ">", datetime.now()),
                 ("user_id", "!=", self.env.user.id),
-                ("office_id", "in", self.env.user.office_ids),
+                ("office_id", "in", self.env.user.office_ids._ids),
             ],
             "view_type": "form",
             "res_model": "calendar.appointment",
