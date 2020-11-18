@@ -1,70 +1,39 @@
 from odoo import models, fields, api, _
+from odoo.http import request
 
+import logging
+_logger = logging.getLogger(__name__)
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    link_ids = fields.Many2many(
-        'partner.links', 'parnter_link_rel', 'partner_id', 'link_id', string="Links", compute='sync_link')
-
-    link_target_ids = fields.Many2many('partner.links.target', 'parnter_links_target_rel',
-                                       'partner_id', string="Target Links", compute='sync_link')
-
-    def action_partner_link(self):
-        kanban_view_id = self.env.ref(
-            'contact_links.view_partner_links_kanban').ids
+    @api.multi
+    def get_contact_links(self):
+        """ Generate link json data for this partner. Used by the ContactLinks widget.
+        """
+        self.ensure_one()
         links = self.env['partner.links'].search(
-            [('type_smart', '=', 'smart')])
-        return {
-            'name': self.name,
-            'view_mode': 'kanban',
-            'views': [[kanban_view_id, 'kanban']],
-            'res_model': 'partner.links',
-            'type': 'ir.actions.act_window',
-            'target': 'current',
-            'domain': [('id', 'in', links.ids)],
-        }
-
-    @api.depends('name')
-    def sync_link(self):
-        for partner in self:
-            # partner.write({'link_ids': [(5,)]})
-            partner.link_target_ids = [(5,)]
-            links = self.env['partner.links'].search(
-                [('type_smart', '=', 'tab')])
-            for link in links:
-                # partner.link_ids = [(4, link.id)]
-                # partner.link_target_ids = [(4, link.id)]
-
-                # Creates Recording After Searching
-                link_target_id = partner.env['partner.links.target']
-                search_link_target = link_target_id.search([('link_id', '=', link.id), ('partner_id', '=', partner.id)])
-                if search_link_target:
-                    partner.link_target_ids = [(4, search_link_target.id)]
-                else:
-                    create_link_target_id = link_target_id.create({
-                        'link_id': link.id,
-                        'inserted_field': partner.customer_id,
-                        'partner_id': partner.id
-                    })
-                    partner.link_target_ids = [(4, create_link_target_id.id)]
-
+            ['|', ('group_ids', '=', False), ('group_ids', 'in', self.env.user.groups_id.ids)])
+        if links:
+            return links.get_links(self)
 
 class PartnerLinks(models.Model):
     _name = 'partner.links'
     _description = "Partner Links"
 
-    partner_id = fields.Many2one('res.partner', string="Contact")
     name = fields.Char("Display Name")
-    static_url_1 = fields.Char("Static URL Part 1")
-    static_url_2 = fields.Char("Static URL Part 2")
-    inserted_field = fields.Char(string="Inserted Field")
+    link = fields.Char(
+        "Link",
+        help="Supports parameterization through pythons format function.\n"
+        "Example: https://example.com/arbetssokande?personnummer={partner.company_registry}&signatur={user.af_signature}\n"
+        "format receives the following input:\n"
+        "* partner: The current res.partner (Contakt, Job seeker, etc)\n"
+        "* user: The logged in user.")
     target = fields.Selection([('blank', '_blank'),
                                ('self', '_self'),
                                ('parent', '_parent'),
-                               ('top', '_top')], string="Target")
+                               ('top', '_top')], string="Target", default='_blank')
     group_ids = fields.Many2many('res.groups', string="Groups")
-    link = fields.Char("Link", compute='_compute_link', store=True)
     image = fields.Binary(
         string='Image',
         attachment=True,
@@ -72,72 +41,23 @@ class PartnerLinks(models.Model):
     type_smart = fields.Selection([('tab', 'Tab'),
                                    ('smart', 'Smart Button')], string="Type", default='tab')
 
-    @api.model
-    def search(self, args, offset=0, limit=None, order=None, count=False):
-        args = args or []
-        if not self.env.user.has_group('contact_links.group_partner_link'):
-            args += [('group_ids', 'in', self.env.user.groups_id.ids)]
-        res = super(PartnerLinks, self).search(args=args, offset=offset, limit=limit, order=order,
-                                               count=count)
-        return res
-
-    @api.depends('static_url_1', 'inserted_field', 'static_url_2')
-    def _compute_link(self):
-        for partner in self:
-            partner_link = ''
-            partner_link += partner.static_url_1 and partner.static_url_1 or ''
-            if partner.inserted_field:
-                partner_link += "/"
-            partner_link += partner.inserted_field and partner.inserted_field or ''
-            if partner.static_url_2:
-                partner_link += "/"
-            partner_link += partner.static_url_2 and partner.static_url_2 or ''
-            partner.link = partner_link
-
-
-class PartnerLinksTarget(models.Model):
-    _name = 'partner.links.target'
-
-    link_id = fields.Many2one('partner.links', string="Link")
-    partner_id = fields.Many2one('res.partner', string="Contact")
-    name = fields.Char(related='link_id.name', string="Name")
-    inserted_field = fields.Char(string="Inserted Field")
-    link = fields.Char("Link", compute='_compute_link', store=True)
-
-    static_url_1 = fields.Char("Static URL Part 1", related='link_id.static_url_1',)
-    static_url_2 = fields.Char("Static URL Part 2", related='link_id.static_url_2',)
-    target = fields.Selection([('blank', '_blank'),
-                               ('self', '_self'),
-                               ('parent', '_parent'),
-                               ('top', '_top')], string="Target", related='link_id.target',)
-    group_ids = fields.Many2many('res.groups', string="Groups", related='link_id.group_ids',)
-    image = fields.Binary(
-        string='Image',
-        attachment=True,
-        related='link_id.image',
-    )
-    type_smart = fields.Selection([('tab', 'Tab'),
-                                   ('smart', 'Smart Button')], string="Type", default='tab',
-                                  related='link_id.type_smart',)
-
-    @api.model
-    def search(self, args, offset=0, limit=None, order=None, count=False):
-        args = args or []
-        if not self.env.user.has_group('contact_links.group_partner_link'):
-            args += [('group_ids', 'in', self.env.user.groups_id.ids)]
-        res = super(PartnerLinksTarget, self).search(args=args, offset=offset, limit=limit, order=order,
-                                               count=count)
-        return res
-
-    @api.depends('link_id.static_url_1', 'inserted_field', 'link_id.static_url_2')
-    def _compute_link(self):
-        for partner in self:
-            partner_link = ''
-            partner_link += partner.static_url_1 and partner.static_url_1 or ''
-            if partner.inserted_field:
-                partner_link += "/"
-            partner_link += partner.inserted_field and partner.inserted_field or ''
-            if partner.static_url_2:
-                partner_link += "/"
-            partner_link += partner.static_url_2 and partner.static_url_2 or ''
-            partner.link = partner_link
+    @api.one
+    def get_links(self, partner):
+        """ Generate json data from this link object. Used by the ContactLinks widget.
+            :param partner: The partner to generate a link for.
+        """
+        url = None
+        try:
+            url = self.link.format(partner=partner, user=self.env.user)
+        except:
+            # TODO: Improve error feedback. This is pretty useless since the end users won't see the log.
+            # Use traceback to build message and return it in the result.
+            # Display the error message in the browser console or something.
+            # This way it becomes possible for the end users (such as support staff) to follow up on them.
+            _logger.exception(_("Could not compute Contact Link %s (id %s).") % (self.name, self.id))
+        return {
+            'url': url,
+            'target': self.target,
+            'icon': '/web/content/partner.links/%s/image' % self.id,
+            'name': self.name,
+        }
