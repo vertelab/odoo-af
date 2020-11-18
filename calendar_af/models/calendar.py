@@ -256,12 +256,9 @@ class CalendarAppointmentSuggestion(models.Model):
 
     @api.one
     def compute_duration_text(self):
-        _logger.info("duration %s" % self.duration)
         if self.duration == 60:
-            _logger.info("60 min")
             self.duration_text = "60 minutes"
         elif self.duration == 30:
-            _logger.info("30 min")
             self.duration_text = "30 minutes"
 
     @api.one
