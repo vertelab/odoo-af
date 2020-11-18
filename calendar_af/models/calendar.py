@@ -76,6 +76,7 @@ class CalendarSchedule(models.Model):
             self.active = True
         return self.active
 
+    @profile
     @api.multi
     def create_occasions(self):
         """Creates a number of occasions from schedules, depending on number of scheduled agents"""
@@ -104,9 +105,30 @@ class CalendarSchedule(models.Model):
         # recalculate possible start times
         self.sudo().comp_possible_starts()
 
+    # TODO: check why this takes ages
+    # or see how we can fix it
+    # TODO: rewrite as sql
     @api.multi
     def comp_possible_starts(self):
-        """Updates possible start times for appointments on a given day and meeting type"""
+        """Updates possible start times for appointments on a given day and meeting type
+        
+        SELECT start,COUNT(id) FROM calendar_occasion WHERE type_id = 2 AND start >= '2020-11-18 00:00:01' AND start <= '2020-11-18 23:59:59' AND state = 'ok' AND appointment_id IS NULL GROUP BY start ORDER BY start ASC;
+
+                start        | count
+        ---------------------+-------
+         2020-11-18 08:00:00 |   217
+         2020-11-18 08:30:00 |   226
+         2020-11-18 09:00:00 |   222
+         2020-11-18 09:30:00 |   223
+         2020-11-18 10:00:00 |   208
+         2020-11-18 11:30:00 |    74
+         2020-11-18 12:00:00 |   145
+         2020-11-18 12:30:00 |   177
+         2020-11-18 13:00:00 |   180
+         2020-11-18 13:30:00 |   190
+         2020-11-18 14:00:00 |   186
+
+        """
         # init start date and time
         loop_date = copy.copy(BASE_DAY_START).replace(
             year=self.start.year, month=self.start.month, day=self.start.day)
