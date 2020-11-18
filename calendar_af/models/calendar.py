@@ -146,6 +146,7 @@ class CalendarSchedule(models.Model):
         _logger.debug("Starting cron_get_schedules for meeting types: %s at %s" % (type_ids, datetime.now()))
         route = self.env.ref('edi_af_appointment.schedule')
         cal_schedule_ids = self.env['calendar.schedule']
+        days -= 1
 
         def _create_message(mes_start, mes_stop):
             vals = {
