@@ -7,47 +7,10 @@
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
             <div name="button_box" position="inside">
-                <!-- <button type="object" class="oe_stat_button fa fa-link 4x" name="action_partner_link"
-                        context="{'default_partner_id': active_id}">
-                    Links
-                </button> -->
             </div>
             <xpath expr="//notebook" position="inside">
                 <page name="partner_link" string="Links">
-                    <field name="link_target_ids" mode="kanban">
-                        <kanban>
-                            <field name="name"/>
-                            <field name='id'/>
-                            <field name='image'/>
-                            <field name='link'/>
-                            <templates>
-
-                                <t t-name="kanban-box">
-                                    <a t-att-href="record.link.raw_value" target="new" t-if="record.link.raw_value" style="flex:none;width:20em;">
-                                        <div t-att-class="oe_kanban_global_click" style="height:40px;width:40px">
-                                            <div class="o_kanban_image" style="height:100%">
-                                                <t t-if="record.image.raw_value">
-                                                    <img alt="" style="max-width:100%;height:100%"
-                                                         t-att-src="kanban_image('partner.links.target', 'image', record.id.raw_value)"/>
-                                                </t>
-                                                <t t-if="!record.image.raw_value">
-                                                    <img alt="Avatar" style="width:70px;max-height:60px"
-                                                         t-att-src="_s + &quot;/base/static/img/avatar.png&quot;"/>
-                                                </t>
-                                            </div>
-                                            <div class="oe_kanban_details">
-
-                                                <field name="name"/>
-
-                                            </div>
-                                        </div>
-                                    </a>
-                                </t>
-
-
-                            </templates>
-                        </kanban>
-                    </field>
+                    <div class="o-contact-links"/>
                 </page>
             </xpath>
         </field>
@@ -59,48 +22,10 @@
         <field name="inherit_id" ref="partner_view_360.view_partner_employer_form"/>
         <field name="arch" type="xml">
             <div name="button_box" position="inside">
-                <!-- <button type="object" class="oe_stat_button fa fa-link 4x" name="action_partner_link"
-                        context="{'default_partner_id': active_id}">
-                    Links
-                </button> -->
             </div>
             <xpath expr="//notebook" position="inside">
                 <page name="partner_link" string="Links">
-                    <field name="link_target_ids" mode="kanban">
-                        <kanban>
-                            <field name="name"/>
-                            <field name='id'/>
-                            <field name='image'/>
-                            <field name='link'/>
-                            <templates>
-
-                                <t t-name="kanban-box">
-                                    <a t-att-href="record.link.raw_value" target="new" t-if="record.link.raw_value"
-                                       style="flex:none;width:20em;">
-                                        <div t-att-class="oe_kanban_global_click" style="height:40px;width:40px">
-                                            <div class="o_kanban_image" style="height:100%">
-                                                <t t-if="record.image.raw_value">
-                                                    <img alt="" style="max-width:100%;height:100%"
-                                                         t-att-src="kanban_image('partner.links.target', 'image', record.id.raw_value)"/>
-                                                </t>
-                                                <t t-if="!record.image.raw_value">
-                                                    <img alt="Avatar" style="width:70px;max-height:60px"
-                                                         t-att-src="_s + &quot;/base/static/img/avatar.png&quot;"/>
-                                                </t>
-                                            </div>
-                                            <div class="oe_kanban_details">
-
-                                                <field name="name"/>
-
-                                            </div>
-                                        </div>
-                                    </a>
-                                </t>
-
-
-                            </templates>
-                        </kanban>
-                    </field>
+                    <div class="o-contact-links"/>
                 </page>
             </xpath>
         </field>
@@ -112,48 +37,10 @@
         <field name="inherit_id" ref="partner_view_360.view_jobseeker_form"/>
         <field name="arch" type="xml">
             <div name="button_box" position="inside">
-                <!-- <button type="object" class="oe_stat_button fa fa-link 4x" name="action_partner_link"
-                        context="{'default_partner_id': active_id}">
-                    Links
-                </button> -->
             </div>
             <xpath expr="//notebook" position="inside">
                 <page name="partner_link" string="Links">
-                    <field name="link_target_ids" mode="kanban">
-                        <kanban>
-                            <field name="name"/>
-                            <field name='id'/>
-                            <field name='image'/>
-                            <field name='link'/>
-                            <templates>
-
-                                <t t-name="kanban-box">
-                                    <a t-att-href="record.link.raw_value" target="new" t-if="record.link.raw_value"
-                                       style="flex:none;width:20em;">
-                                        <div t-att-class="oe_kanban_global_click" style="height:40px;width:40px">
-                                            <div class="o_kanban_image" style="height:100%">
-                                                <t t-if="record.image.raw_value">
-                                                    <img alt="" style="max-width:100%;height:100%"
-                                                         t-att-src="kanban_image('partner.links.target', 'image', record.id.raw_value)"/>
-                                                </t>
-                                                <t t-if="!record.image.raw_value">
-                                                    <img alt="Avatar" style="width:70px;max-height:60px"
-                                                         t-att-src="_s + &quot;/base/static/img/avatar.png&quot;"/>
-                                                </t>
-                                            </div>
-                                            <div class="oe_kanban_details">
-
-                                                <field name="name"/>
-
-                                            </div>
-                                        </div>
-                                    </a>
-                                </t>
-
-
-                            </templates>
-                        </kanban>
-                    </field>
+                    <div class="o-contact-links"/>
                 </page>
             </xpath>
         </field>
@@ -166,10 +53,6 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
-                <field name="partner_id"/>
-                <field name="static_url_1"/>
-                <field name="inserted_field" domain="[('model_id.model', '=', 'res.partner')]"/>
-                <field name="static_url_2"/>
                 <field name="target"/>
                 <field name="group_ids"/>
                 <field name="link"/>
@@ -188,10 +71,6 @@
                     <group>
                         <group>
                             <field name="name"/>
-                            <field name="partner_id"/>
-                            <field name="static_url_1"/>
-                            <field name="inserted_field" domain="[('model_id.model', '=', 'res.partner')]"/>
-                            <field name="static_url_2"/>
                             <field name="type_smart" widget='radio'/>
                         </group>
                         <group>
@@ -264,4 +143,10 @@
     <menuitem action="action_partner_links" id="menu_partner_links" groups="group_partner_link"
               parent="contacts.res_partner_menu_config" sequence="10" name="Links Administration"/>
 
+    <template id="assets_backend" inherit_id="web.assets_backend" name="Contact Links Assets">
+        <xpath expr="//script[@src='/web/static/src/js/views/form/form_renderer.js']" position="after">
+            <script src="/contact_links/static/src/js/contact_links.js" type="text/javascript"></script>
+            <script src="/contact_links/static/src/js/form_renderer.js" type="text/javascript"></script>
+        </xpath>
+    </template>
 </odoo>

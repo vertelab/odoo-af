@@ -30,11 +30,12 @@ v12.0.1.4 - Made sure the contact links are computed with the customer number
         'security/security.xml',
         'views/res_partner_view.xml',
         'security/ir.model.access.csv',
-        # 'data/server_action.xml',
         'data/partner.links.csv',
-        # 'data/sync_link.xml'
     ],
     'demo': [
+    ],
+    'qweb': [
+        'static/src/xml/contact_links.xml'
     ],
     'application': False,
     'installable': True,

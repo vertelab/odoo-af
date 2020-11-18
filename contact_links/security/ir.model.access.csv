@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_partner_link,partner.link.access.user,model_partner_links,base.group_user,1,1,1,1
-access_partner_link_target,partner.link.target.access.user,model_partner_links_target,base.group_user,1,1,1,1
+access_partner_link,partner.link.access.user,model_partner_links,base.group_user,1,0,0,0
+access_partner_link_admin,partner.link.access.admin,model_partner_links,group_partner_link,1,1,1,1
+
