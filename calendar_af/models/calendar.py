@@ -175,8 +175,9 @@ class CalendarSchedule(models.Model):
                 cal_schedule_ids |= _create_message(start, start + timedelta(days=days))
             else:
                 i = 0
-                loop_times = days / 30
-                while i < loop_times:
+                # int() will always round down
+                loop_times = int(days / 30)
+                while i <= loop_times:
                     # handle last loop different
                     if i == loop_times:
                         cal_schedule_ids |= _create_message(start + timedelta(days=(30 * i)),
