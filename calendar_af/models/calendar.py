@@ -930,9 +930,22 @@ class CalendarOccasion(models.Model):
         while loop_date < date_stop:
             # do not check saturday or sunday
             # if loop_date.weekday() not in [5,6]:
-            # make sure we don't book meetings during lunch (11:00-12:30)
-            if (loop_date.hour != BASE_DAY_LUNCH.hour) and (
-                    (loop_date.hour != BASE_DAY_LUNCH.hour + 1) and (loop_date.minute == 0)):
+            # make sure we don't book meetings during lunch (11:00-12:00)
+            if (loop_date.hour != BASE_DAY_LUNCH.hour) and not (
+                type_id.duration == 60
+                and 
+                (
+                    (
+                        loop_date.hour == BASE_DAY_LUNCH.hour - 1
+                        and loop_date.minute == 30
+                    ) 
+                    or 
+                    (
+                        loop_date.hour == date_stop.hour - 1 
+                        and loop_date.minute == 30
+                    )
+                )
+            ):
                 occ_time[loop_date.strftime("%Y-%m-%dT%H:%M:%S")] = self.env['calendar.occasion'].search_count(
                     [('start', '=', loop_date), ('type_id', '=', type_id.id)])
             loop_date = loop_date + timedelta(minutes=BASE_DURATION)
