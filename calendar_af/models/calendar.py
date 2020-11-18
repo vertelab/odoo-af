@@ -719,8 +719,8 @@ class CalendarAppointment(models.Model):
                 ('operation_id', '=', self.operation_id.id)])
 
             if occ_num < min_num:
-                if self.operation_id.app_warn_user_ids:
-                    for user in self.operation_id.app_warn_user_ids:
+                if self.operation_id.app_warn_emp_ids:
+                    for user in self.operation_id.app_warn_emp_ids:
                         template = self.env.ref('calendar_af.email_template_low_occasion_warning')
                         template.email_to = user.work_email
                         template.send_mail(self.id, force_send=True)
