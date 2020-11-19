@@ -85,11 +85,9 @@ class CalendarAppointment(models.Model):
         result = []
         for app in self:
             try:
-                name = _("Meeting with %s") % (
-                    app.partner_id.company_registry,
-                )
+                name = _("Book meeting") 
             except:
-                name = _("Meeting")
+                name = _("Book meeting")
             result.append((app.id, name))
         return result
 
