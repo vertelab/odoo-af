@@ -85,12 +85,11 @@ class CalendarAppointment(models.Model):
         result = []
         for app in self:
             try:
-                name = _("Meeting with %s at %s") % (
+                name = _("Meeting with %s") % (
                     app.partner_id.company_registry,
-                    pytz.timezone(LOCAL_TZ).localize(app.start),
                 )
             except:
-                name = _("Meeting at %s") % pytz.timezone(LOCAL_TZ).localize(app.start)
+                name = _("Meeting")
             result.append((app.id, name))
         return result
 
