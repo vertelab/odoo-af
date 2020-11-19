@@ -108,11 +108,23 @@ class CalendarSchedule(models.Model):
     # TODO: check why this takes ages
     # or see how we can fix it
     # TODO: rewrite as sql
+    @profile
     @api.multi
     def comp_possible_starts(self):
         """Updates possible start times for appointments on a given day and meeting type
         
-        SELECT start,COUNT(id) FROM calendar_occasion WHERE type_id = 2 AND start >= '2020-11-18 00:00:01' AND start <= '2020-11-18 23:59:59' AND state = 'ok' AND appointment_id IS NULL GROUP BY start ORDER BY start ASC;
+        I will leave this SQL here in case we want to use it in the future.
+        For now I'm not implementing it since in my early tests the gain
+        from implementing it seemed marginal in this case. 
+
+        SELECT start,COUNT(id) 
+        FROM calendar_occasion 
+        WHERE type_id = 2 
+            AND start >= '2020-11-18 00:00:01' 
+            AND start <= '2020-11-18 23:59:59' 
+            AND state = 'ok' 
+            AND appointment_id IS NULL 
+        GROUP BY start ORDER BY start ASC;
 
                 start        | count
         ---------------------+-------
@@ -128,7 +140,48 @@ class CalendarSchedule(models.Model):
          2020-11-18 13:30:00 |   190
          2020-11-18 14:00:00 |   186
 
+        SELECT start,array_agg(DISTINCT(id)) 
+        FROM calendar_occasion 
+        WHERE type_id = 2 
+            AND start >= '2020-11-18 00:00:01' 
+            AND start <= '2020-11-18 23:59:59' 
+            AND state = 'ok' 
+            AND appointment_id IS NULL 
+        GROUP BY start ORDER BY start ASC;
+        
+        returns a list of ids instead of COUNT(id)
+
         """
+        
+        # TODO: in my tests the gain of rewriting the code like 
+        # this was marginal. using .write to batch update the records
+        # seems to have been the largest gain. So I will leave it at that.
+
+        # sql_start = self.start.replace(hour=0, minute=1)
+        # sql_stop = self.start.replace(hour=23, minute=59)
+
+        # sql_query = f"""SELECT start,array_agg(DISTINCT(id)) 
+        #                 FROM calendar_occasion 
+        #                 WHERE type_id = 2 
+        #                     AND start >= '{sql_start}' 
+        #                     AND start <= '{sql_stop}' 
+        #                     AND state = 'ok' 
+        #                     AND appointment_id IS NULL 
+        #                 GROUP BY start 
+        #                 ORDER BY start ASC;"""
+        # self._cr.execute(sql_query)
+        # sql_res = self._cr.fetchall()
+
+        # for dt_occ_pair in sql_res:
+        #     _logger.warn("DAER: %s" % dt_occ_pair[0])
+        #     if self.type_id.duration == 60:
+        #         pass
+        #         # TODO: continue
+        #     else:
+        #         # if 30 min meeting length all occs are possible starts
+        #         occasions_true = self.env['calendar.occasion'].search([('id', 'in', dt_occ_pair[1])])
+        #         occasions_true.write({'is_possible_start': '1'})
+
         # init start date and time
         loop_date = copy.copy(BASE_DAY_START).replace(
             year=self.start.year, month=self.start.month, day=self.start.day)
@@ -149,15 +202,18 @@ class CalendarSchedule(models.Model):
                 if no_possible_starts != 0:
                     occasions_true = self.env['calendar.occasion'].search(search_domain, limit=no_possible_starts)
                     occasions_false = self.env['calendar.occasion'].search(search_domain + [('id', 'not in', occasions_true._ids)], limit=no_possible_starts)
-                    for occ_true in occasions_true:
-                        occ_true.is_possible_start = '1'
-                    for occ_false in occasions_false:
-                        occ_false.is_possible_start = '0'
+                    occasions_true.write({'is_possible_start': '1'})
+                    occasions_false.write({'is_possible_start': '0'})
+                    # for occ_true in occasions_true:
+                    #     occ_true.is_possible_start = '1'
+                    # for occ_false in occasions_false:
+                    #     occ_false.is_possible_start = '0'
             else:
                 # if 30 min meeting length all occs are possible starts
                 occasions_true = self.env['calendar.occasion'].search(search_domain)
-                for occ_true in occasions_true:
-                    occ_true.is_possible_start = '1'
+                occasions_true.write({'is_possible_start': '1'})
+                # for occ_true in occasions_true:
+                #     occ_true.is_possible_start = '1'
 
             # move ahead by 30 mins
             loop_date += timedelta(minutes=BASE_DURATION)
@@ -213,7 +269,9 @@ class CalendarSchedule(models.Model):
         self.env.cr.commit()
         route.run()
         cal_schedule_ids.inactivate()
+        self.env.cr.commit()
         _logger.debug("Completed cron_get_schedules for meeting types: %s at %s" % (type_ids, datetime.now()))
+        _logger.warn("Completed cron_get_schedules for meeting types: %s at %s" % (type_ids, datetime.now()))
 
 
 class CalendarAppointmentType(models.Model):
