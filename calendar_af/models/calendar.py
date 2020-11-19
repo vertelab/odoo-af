@@ -231,7 +231,6 @@ class CalendarSchedule(models.Model):
         cal_schedule_ids.inactivate()
         self.env.cr.commit()
         _logger.debug("Completed cron_get_schedules for meeting types: %s at %s" % (type_ids, datetime.now()))
-        _logger.warn("Completed cron_get_schedules for meeting types: %s at %s" % (type_ids, datetime.now()))
 
 
 class CalendarAppointmentType(models.Model):
