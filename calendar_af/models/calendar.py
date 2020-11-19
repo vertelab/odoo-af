@@ -27,7 +27,6 @@ from datetime import datetime, timedelta, date
 from odoo.exceptions import Warning
 
 from odoo import models, fields, api, _
-from odoo.tools.profiler import profile
 
 _logger = logging.getLogger(__name__)
 
@@ -106,7 +105,49 @@ class CalendarSchedule(models.Model):
 
     @api.multi
     def comp_possible_starts(self):
-        """Updates possible start times for appointments on a given day and meeting type"""
+        """Updates possible start times for appointments 
+        on a given day and meeting type
+        
+        I will leave this SQL here in case we want to use it in the future.
+        For now I'm not implementing it since in my early tests the gain
+        from implementing it seemed marginal in this case. 
+
+        SELECT start,COUNT(id) 
+        FROM calendar_occasion 
+        WHERE type_id = 2 
+            AND start >= '2020-11-18 00:00:01' 
+            AND start <= '2020-11-18 23:59:59' 
+            AND state = 'ok' 
+            AND appointment_id IS NULL 
+        GROUP BY start ORDER BY start ASC;
+
+                start        | count
+        ---------------------+-------
+         2020-11-18 08:00:00 |   217
+         2020-11-18 08:30:00 |   226
+         2020-11-18 09:00:00 |   222
+         2020-11-18 09:30:00 |   223
+         2020-11-18 10:00:00 |   208
+         2020-11-18 11:30:00 |    74
+         2020-11-18 12:00:00 |   145
+         2020-11-18 12:30:00 |   177
+         2020-11-18 13:00:00 |   180
+         2020-11-18 13:30:00 |   190
+         2020-11-18 14:00:00 |   186
+
+        SELECT start,array_agg(DISTINCT(id)) 
+        FROM calendar_occasion 
+        WHERE type_id = 2 
+            AND start >= '2020-11-18 00:00:01' 
+            AND start <= '2020-11-18 23:59:59' 
+            AND state = 'ok' 
+            AND appointment_id IS NULL 
+        GROUP BY start ORDER BY start ASC;
+        
+        returns a list of ids instead of COUNT(id)
+
+        """
+
         # init start date and time
         loop_date = copy.copy(BASE_DAY_START).replace(
             year=self.start.year, month=self.start.month, day=self.start.day)
@@ -127,15 +168,12 @@ class CalendarSchedule(models.Model):
                 if no_possible_starts != 0:
                     occasions_true = self.env['calendar.occasion'].search(search_domain, limit=no_possible_starts)
                     occasions_false = self.env['calendar.occasion'].search(search_domain + [('id', 'not in', occasions_true._ids)], limit=no_possible_starts)
-                    for occ_true in occasions_true:
-                        occ_true.is_possible_start = '1'
-                    for occ_false in occasions_false:
-                        occ_false.is_possible_start = '0'
+                    occasions_true.write({'is_possible_start': '1'})
+                    occasions_false.write({'is_possible_start': '0'})
             else:
                 # if 30 min meeting length all occs are possible starts
                 occasions_true = self.env['calendar.occasion'].search(search_domain)
-                for occ_true in occasions_true:
-                    occ_true.is_possible_start = '1'
+                occasions_true.write({'is_possible_start': '1'})
 
             # move ahead by 30 mins
             loop_date += timedelta(minutes=BASE_DURATION)
@@ -193,6 +231,7 @@ class CalendarSchedule(models.Model):
         self.env.cr.commit()
         route.run()
         cal_schedule_ids.inactivate()
+        self.env.cr.commit()
         _logger.debug("Completed cron_get_schedules for meeting types: %s at %s" % (type_ids, datetime.now()))
 
 
@@ -1151,7 +1190,6 @@ class CalendarOccasion(models.Model):
 
         return ret
 
-    @profile
     @api.model
     def get_bookable_occasions(self, start, stop, duration, type_id, operation_id=False, max_depth=1):
         """Returns a list of occasions matching the defined parameters of the appointment. Creates additional 
