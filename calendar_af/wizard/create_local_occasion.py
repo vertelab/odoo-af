@@ -58,10 +58,13 @@ class CreateLocalOccasion(models.TransientModel):
         comodel_name="calendar.appointment.type",
         string="Type",
         required=True,
-        domain="[('channel', '=', 'Local')]"
+        domain="[('channel', '=', 'Local')]",
     )
     channel = fields.Many2one(
-        string="Channel", comodel_name="calendar.channel", related="type_id.channel", readonly=True
+        string="Channel",
+        comodel_name="calendar.channel",
+        related="type_id.channel",
+        readonly=True,
     )
     channel_name = fields.Char(string="Channel", related="channel.name")
     user_ids = fields.Many2many(
@@ -71,7 +74,11 @@ class CreateLocalOccasion(models.TransientModel):
         required=True,
     )
     operation_id = fields.Many2one(comodel_name="hr.operation", string="Operation")
-    location_ids = fields.Many2many(comodel_name='hr.location', string="Allowed Locations", default=lambda self: self.default_location_ids())
+    location_ids = fields.Many2many(
+        comodel_name="hr.location",
+        string="Allowed Locations",
+        default=lambda self: self.default_location_ids(),
+    )
     # fields describing how to create occasions:
     create_type = fields.Selection(
         string="Type",
@@ -92,7 +99,7 @@ class CreateLocalOccasion(models.TransientModel):
 
     @api.model
     def default_location_ids(self):
-        return self.env.user.mapped('employee_ids.office_ids.operation_ids.location_id')
+        return self.env.user.mapped("employee_ids.office_ids.operation_ids.location_id")
 
     @api.onchange("type_id")
     def set_duration_selection(self):
@@ -120,9 +127,9 @@ class CreateLocalOccasion(models.TransientModel):
     @api.multi
     def check_access_planner_locations(self, locations):
         """Check if current user is planner with access to these locations."""
-        if not self.env.user.has_group('af_security.af_meeting_planner'):
+        if not self.env.user.has_group("af_security.af_meeting_planner"):
             return False
-        if not self.mapped('operation_id.location_id') in locations:
+        if not self.mapped("operation_id.location_id") in locations:
             return False
         return True
 
@@ -131,21 +138,25 @@ class CreateLocalOccasion(models.TransientModel):
         # Perform access control.
         allowed = False
         denied = False
-        locations = self.env.user.mapped('employee_ids.office_ids.operation_ids.location_id')
+        locations = self.env.user.mapped(
+            "employee_ids.office_ids.operation_ids.location_id"
+        )
         # Check access for Meeting Planner
         if self.check_access_planner_locations(locations):
             allowed = True
         if allowed and not denied:
             # Checks passed. Run inner function with sudo.
             return self.sudo()._action_create_occasions()
-        raise Warning(_('You are not allowed to create these occasions.'))
+        raise Warning(_("You are not allowed to create these occasions."))
 
     def _action_create_occasions(self):
         if not (
             (self.start.minute in [0, 30] and self.stop.second == 0)
             and (self.stop.minute in [0, 30] and self.stop.second == 0)
         ):
-            raise Warning("Start or stop time is not and exacly an hour or halfhour.")
+            raise Warning(
+                _("Start or stop time is not and exacly an hour or halfhour.")
+            )
 
         # Check how many 30min occasions we need
         no_occ = int(self.duration / 0.5)
@@ -155,12 +166,24 @@ class CreateLocalOccasion(models.TransientModel):
             if not self.env["calendar.appointment"]._check_resource_calendar_date(
                 self.start
             ):
-                raise Warning("This day is a holiday.")
+                raise Warning(_("This day is a holiday."))
 
             for user_id in self.user_ids:
                 for curr_occ in range(no_occ):
                     curr_start = self.start + timedelta(minutes=curr_occ * 30)
                     if user_id.check_resource_calendar_occasion(curr_start):
+                        curr_occ_user = self.env["calendar.occasion"].search_count(
+                            [
+                                ("user_id", "=", user_id.id),
+                                ("start", "=", curr_start),
+                                ("state", "in", ["request", "ok", "booked"]),
+                            ]
+                        )
+                        if curr_occ_user:
+                            raise Warning(
+                                _("User %s has conflicting occasions")
+                                % user_id.af_signature
+                            )
                         occ = self.env["calendar.occasion"]._force_create_occasion(
                             30,
                             curr_start,
@@ -176,9 +199,9 @@ class CreateLocalOccasion(models.TransientModel):
                         else:
                             # connect related occasions
                             occ.occasion_ids |= first_occ
-                            first_occ.occasion_ids |= occ 
+                            first_occ.occasion_ids |= occ
                     else:
-                        raise Warning("Worker not working this date and time.")
+                        raise Warning(_("Worker not working this date and time."))
             res = self.env.ref("calendar_af.action_calendar_local_occasion").read()[0]
             res["domain"] = [
                 ("user_id", "in", self.user_ids._ids),
@@ -218,7 +241,23 @@ class CreateLocalOccasion(models.TransientModel):
                         for curr_occ in range(no_occ):
                             curr_start = start_date + timedelta(minutes=curr_occ * 30)
                             if user_id.check_resource_calendar_occasion(curr_start):
-                                occ = self.env["calendar.occasion"]._force_create_occasion(
+                                curr_occ_user = self.env[
+                                    "calendar.occasion"
+                                ].search_count(
+                                    [
+                                        ("user_id", "=", user_id.id),
+                                        ("start", "=", curr_start),
+                                        ("state", "in", ["request", "ok", "booked"]),
+                                    ]
+                                )
+                                if curr_occ_user:
+                                    raise Warning(
+                                        _("User %s has conflicting occasions")
+                                        % user_id.af_signature
+                                    )
+                                occ = self.env[
+                                    "calendar.occasion"
+                                ]._force_create_occasion(
                                     30,
                                     curr_start,
                                     self.type_id.id,
@@ -233,7 +272,7 @@ class CreateLocalOccasion(models.TransientModel):
                                 else:
                                     # connect related occasions
                                     occ.occasion_ids |= first_occ
-                                    first_occ.occasion_ids |= occ 
+                                    first_occ.occasion_ids |= occ
             res = self.env.ref("calendar_af.action_calendar_local_occasion").read()[0]
             res["domain"] = [
                 ("user_id", "in", self.user_ids._ids),
