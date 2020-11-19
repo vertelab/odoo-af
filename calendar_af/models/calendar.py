@@ -93,7 +93,12 @@ class CalendarSchedule(models.Model):
                     'additional_booking': False,
                     'state': 'ok',
                 }
-                for occasion in range(schedule.scheduled_agents - no_occasions):
+                # get booked additional occasions
+                no_occasions_add = self.env['calendar.occasion'].search_count(
+                    [('start', '=', schedule.start), ('type_id', '=', schedule.type_id.id),
+                    ('additional_booking', '=', True), ('appointment_id', '!=', False)])
+                # Consider reserve bookings before creating new occasions
+                for occasion in range(schedule.scheduled_agents - no_occasions - no_occasions_add):
                     self.env['calendar.occasion'].create(vals)
 
             elif (schedule.scheduled_agents - no_occasions) < 0:
