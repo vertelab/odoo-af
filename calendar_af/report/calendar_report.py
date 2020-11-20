@@ -108,29 +108,29 @@ class CalendarAppointmentReport(models.Model):
     def _select(self):
         select_str = """
              SELECT
-                    COUNT(DISTINCT ca.id) as app_count,
-                    (case is_possible_start when '1' then 1 else 0 end) as occ_count,
-                    COUNT(case co.additional_booking when 't' then 1 else null end) as add_book_count,
-                    COUNT(DISTINCT ca.id) - COUNT(case co.additional_booking when 't' then 1 else null end) as booked_from_cal,
-                    COUNT(DISTINCT co.id) - COUNT(ca.id) as free_occ,
-                    case when COUNT(case co.additional_booking when 'f' then 1 else null end) - COUNT(ca.id) > 0 then 0 else -(COUNT(case co.additional_booking when 'f' then 1 else null end) - COUNT(ca.id)) end as no_overbooked,
-                    co.id as id,
-                    ca.id as app_id,
-                    co.start as occ_start,
-                    co.stop as occ_stop,
-                    co.duration as duration,
-                    co.user_id as user_id,
-                    ca.partner_id as partner_id,
-                    co.name as name,
-                    co.state as occ_state,
-                    ca.state as app_state,
-                    ca.operation_id as operation_id,
-                    co.type_id as type_id,
-                    co.additional_booking as additional_booking,
-                    ca.start as app_start,
-                    ca.stop as app_stop,
-                    ca.start_time as app_start_time,
-                    co.start_time as occ_start_time
+                COUNT(DISTINCT distinct_co.app_id) as app_count,
+                (case is_possible_start when '1' then 1 else 0 end) as occ_count,
+                COUNT(case co.additional_booking when 't' then 1 else null end) as add_book_count,
+                COUNT(DISTINCT ca.id) - COUNT(case co.additional_booking when 't' then 1 else null end) as booked_from_cal,
+                (case is_possible_start when '1' then 1 else 0 end) - COUNT(ca.id) as free_occ,
+                case when COUNT(case co.additional_booking when 'f' then 1 else null end) - COUNT(ca.id) > 0 then 0 else -(COUNT(case co.additional_booking when 'f' then 1 else null end) - COUNT(ca.id)) end as no_overbooked,
+                co.id as id,
+                ca.id as app_id,
+                co.start as occ_start,
+                co.stop as occ_stop,
+                co.duration as duration,
+                co.user_id as user_id,
+                ca.partner_id as partner_id,
+                co.name as name,
+                co.state as occ_state,
+                ca.state as app_state,
+                ca.operation_id as operation_id,
+                co.type_id as type_id,
+                co.additional_booking as additional_booking,
+                ca.start as app_start,
+                ca.stop as app_stop,
+                ca.start_time as app_start_time,
+                co.start_time as occ_start_time
         """
         #
         return select_str
@@ -141,7 +141,6 @@ class CalendarAppointmentReport(models.Model):
                     co.id,
                     ca.id,
                     co.start,
-                    co.stop,
                     co.duration,
                     co.user_id,
                     ca.partner_id,
@@ -153,7 +152,6 @@ class CalendarAppointmentReport(models.Model):
                     co.type_id,
                     co.additional_booking,
                     ca.start,
-                    ca.stop,
                     ca.start_time,
                     co.start_time
         """
@@ -167,14 +165,28 @@ class CalendarAppointmentReport(models.Model):
             CREATE view %s as
               %s
               FROM calendar_occasion co
-                LEFT JOIN calendar_appointment ca ON ca.id = co.appointment_id
-                    %s
+                LEFT JOIN calendar_appointment ca 
+                    ON ca.id = co.appointment_id
+                LEFT JOIN (
+                    SELECT DISTINCT(appointment_id) app_id, MIN(id) id 
+                    FROM calendar_occasion 
+                    WHERE appointment_id IS NOT NULL 
+                    GROUP BY appointment_id
+                    ) as distinct_co 
+                    ON co.id = distinct_co.id
+              %s
         """
             % (self._table, self._select(), self._group_by())
         )
 
     @api.model
     def comp_possible_starts(self, start=datetime.now(), days_ahead=30):
+        """ This method is currently not in use. It's intented to be used
+            in connection with server actions to debug or similar.
+            
+            comp_possible_starts() on model calendar.schedule as defined 
+            in calendar_af module is used instead.
+        """
         app_types = self.env["calendar.appointment.type"].search(
             [("channel", "=", self.env.ref("calendar_channel.channel_pdm").id)]
         )
