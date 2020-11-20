@@ -19,16 +19,13 @@
     </record>
 
         <!-- Custom reports (aka filters) -->
-        <!-- This is a good template to be used when its needed, 
-             I suspect that this filter will be needed in the future  -->
-        <!-- <record id="filter_calendar_report_overview" model="ir.filters">
-            <field name="name">Overview PDM</field>
+        <record id="filter_calendar_report_from_today" model="ir.filters">
+            <field name="name">From today</field>
             <field name="model_id">report.calendar.appointment</field>
             <field name="user_id" eval="False"/>
-            <field name="is_default" eval="True"/>
-            <field name="domain">[('app_state', '=', 'confirmed'), ('occ_state', '=', 'ok')]</field>
-            <field name="context">{'pivot_measures': ['occ_count', 'app_count', 'add_book_count', 'booked_from_cal', 'free_occ', 'no_overbooked'], 'pivot_column_groupby': ['type_id'], 'pivot_row_groupby': ['occ_start', 'occ_start:week', 'occ_start:day', 'occ_start_time']}</field>
-        </record> -->
+            <field name="is_default" eval="False"/>
+            <field name="context">{'timeRangeMenuData': {'timeRange': [['occ_start', '>=', current_date]], 'timeRangeDescription': 'Framåt!', 'comparisonTimeRange': []}}</field>
+        </record>
 
     <record id="view_calendar_report_search" model="ir.ui.view">
         <field name="name">report.calendar.appointment.search</field>
