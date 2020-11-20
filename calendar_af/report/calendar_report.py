@@ -174,9 +174,12 @@ class CalendarAppointmentReport(models.Model):
                     GROUP BY appointment_id
                     ) as distinct_co 
                     ON co.id = distinct_co.id
+                LEFT JOIN calendar_appointment_type cat
+                    on co.type_id = cat.id
+              WHERE cat.channel = %s 
               %s
         """
-            % (self._table, self._select(), self._group_by())
+            % (self._table, self._select(), self.env.ref("calendar_channel.channel_pdm").id, self._group_by())
         )
 
     @api.model
