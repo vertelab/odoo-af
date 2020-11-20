@@ -129,12 +129,17 @@ msgstr "Aktiv"
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_occasion__additional_booking
 #: model:ir.model.fields,field_description:calendar_af.field_report_calendar_appointment__additional_booking
 msgid "Additional Booking"
-msgstr "Ytterligare bokning"
+msgstr "Reservtid"
+
+#. module: calendar_af
+#: model:ir.filters,name:calendar_af.filter_calendar_report_from_today
+msgid "From today"
+msgstr "From. idag"
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_report_search
 msgid "Additional bookings"
-msgstr "Ytterligare bokningar"
+msgstr "Reservtider"
 
 #. module: calendar_af
 #: model:ir.ui.menu,name:calendar_af.menu_admin
