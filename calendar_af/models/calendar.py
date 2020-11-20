@@ -1331,6 +1331,7 @@ class CalendarOccasion(models.Model):
                     if curr_user_id != prev_user_id:
                         day_num = 0
                         count_prev_starts = 0
+                        prev_starts = curr_starts
                         prev_date = curr_date
                         prev_user_id = curr_user_id
                         # skip first iteration for each user
