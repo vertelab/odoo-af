@@ -2,7 +2,7 @@
 
 {
     "name": "Af Install all modules",
-    "version": "12.0.1.4",
+    "version": "12.0.1.3",
     "author": "Vertel AB",
     "description": """
         This module installs all AF-modules at one go.\n
