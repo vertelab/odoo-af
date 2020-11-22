@@ -29,6 +29,7 @@
         "auth_saml_ol_groups",
         "auth_signup",
         "auth_saml_af",
+        "audit_logger",
         "edi_af_officer",
         "res_drivers_license",
         "partner_view_360", 
