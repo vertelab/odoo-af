@@ -18,5 +18,8 @@
     "data": [
         'views/assets.xml',
         'views/template.xml',
+    ],
+    'qweb': [
+        "static/src/xml/menu.xml",
     ]
 }
