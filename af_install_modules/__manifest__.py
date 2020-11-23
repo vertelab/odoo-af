@@ -22,7 +22,6 @@
         # These modules needs to be installed for Customer Card functionality
         "af_gui_disabeling",
         "af_hide_top_todo_icons",
-        "af_backend_tema", # should be replaced with web_backend_theme_af as soon as it is tested
         "af_core_menu_disabling", # should be replaced by 
         "af_security_rules",
         "auth_admin",
@@ -44,6 +43,7 @@
         "edi_af_officer",
         "edi_af_bar_arbetsuppgifter",
         "mail_bot", #These might be installed automatically
+        "web_backend_theme_af",
         "web_autocomplete_off",
         "base_import", #These might be installed automatically
         "bus", #These might be installed automatically
