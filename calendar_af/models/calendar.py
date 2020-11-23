@@ -77,34 +77,61 @@ class CalendarSchedule(models.Model):
 
     @api.multi
     def create_occasions(self):
-        """Creates a number of occasions from schedules, depending on number of scheduled agents"""
+        """Creates a number of occasions from schedules, depending on 
+        number of scheduled agents"""
         for schedule in self:
-            no_occasions = self.env['calendar.occasion'].search_count(
-                [('start', '=', schedule.start), ('type_id', '=', schedule.type_id.id),
-                 ('additional_booking', '=', False)])
-            if (schedule.scheduled_agents - no_occasions) > 0:
+            no_occasions = self.env["calendar.occasion"].search_count(
+                [
+                    ("start", "=", schedule.start),
+                    ("type_id", "=", schedule.type_id.id),
+                    ("additional_booking", "=", False),
+                    ("state", "=", "ok"),
+                ]
+            )
+            occasions_delta = schedule.scheduled_agents - no_occasions
+            if occasions_delta > 0:
                 vals = {
-                    'name': _('%sm @ %s') % (schedule.duration, pytz.timezone(LOCAL_TZ).localize(schedule.start)),
-                    'duration': schedule.duration,
-                    'start': schedule.start,
-                    'stop': schedule.stop,
-                    'type_id': schedule.type_id.id,
-                    'channel': schedule.channel,
-                    'additional_booking': False,
-                    'state': 'ok',
+                    "name": _("%sm @ %s")
+                    % (
+                        schedule.duration,
+                        pytz.timezone(LOCAL_TZ).localize(schedule.start),
+                    ),
+                    "duration": schedule.duration,
+                    "start": schedule.start,
+                    "stop": schedule.stop,
+                    "type_id": schedule.type_id.id,
+                    "channel": schedule.channel,
+                    "additional_booking": False,
+                    "state": "ok",
                 }
                 # get booked additional occasions
-                no_occasions_add = self.env['calendar.occasion'].search_count(
-                    [('start', '=', schedule.start), ('type_id', '=', schedule.type_id.id),
-                    ('additional_booking', '=', True), ('appointment_id', '!=', False)])
+                no_occasions_add = self.env["calendar.occasion"].search_count(
+                    [
+                        ("start", "=", schedule.start),
+                        ("type_id", "=", schedule.type_id.id),
+                        ("additional_booking", "=", True),
+                        ("appointment_id", "!=", False),
+                        ("state", "=", "ok"),
+                    ]
+                )
                 # Consider reserve bookings before creating new occasions
-                for occasion in range(schedule.scheduled_agents - no_occasions - no_occasions_add):
-                    self.env['calendar.occasion'].create(vals)
+                for occasion in range(occasions_delta - no_occasions_add):
+                    self.env["calendar.occasion"].create(vals)
 
-            elif (schedule.scheduled_agents - no_occasions) < 0:
-                # TODO: handle this case better
-                pass
-        
+            elif occasions_delta < 0:
+                occ_del = self.env["calendar.occasion"].search(
+                    [
+                        ("start", "=", schedule.start),
+                        ("type_id", "=", schedule.type_id.id),
+                        ("additional_booking", "=", False),
+                        ("appointment_id", "=", False),
+                        ("state", "=", "ok"),
+                    ],
+                    limit=-occasions_delta,
+                )
+                # batch delete all 'extra' occasions
+                occ_del.sudo().write({"state": "deleted"})
+
         # recalculate possible start times
         self.sudo().comp_possible_starts()
 
@@ -1183,7 +1210,7 @@ class CalendarOccasion(models.Model):
         if self.af_check_access():
             # Checks passed. Run inner function with sudo.
             return self.sudo()._delete_occasion()
-        raise Warning(_('You are not allowed to accept these occasions.'))
+        raise Warning(_('You are not allowed to delete these occasions.'))
 
     @api.multi
     def _delete_occasion(self):
