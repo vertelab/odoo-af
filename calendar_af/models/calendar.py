@@ -523,7 +523,7 @@ class CalendarAppointment(models.Model):
 
     @api.one
     def compute_case_worker_name(self):
-        if self.channel_name == "PDM":
+        if self.channel == self.env.ref('calendar_channel.channel_pdm'):
             self.case_worker_name = _("Employment service officer")
         else:
             self.case_worker_name = self.user_id.login
@@ -621,7 +621,7 @@ class CalendarAppointment(models.Model):
     def _compute_suggestion_ids(self):
         if not all((self.duration, self.type_id, self.channel)):
             return
-        if self.channel_name != "PDM" and not self.operation_id:
+        if self.channel != self.env.ref('calendar_channel.channel_pdm') and not self.operation_id:
             return
         # checking if we allow meetings of this length
         allowed_durations = []

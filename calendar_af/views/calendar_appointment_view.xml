@@ -341,7 +341,7 @@
         <field name="res_model">calendar.appointment</field>
         <field name="view_mode">tree,calendar,kanban</field>
         <field name="view_id" ref="view_calendar_appointment_calendar"/>
-        <field name="domain">[('channel', '=', 'PDM')]</field>
+        <field name="domain" eval="[('channel', '=', ref('calendar_channel.channel_pdm'))]"/>
         <field name="context">{'default_channel': 'PDM'}</field>
         <field name="search_view_id" ref="calendar_appointment_search"/>
     </record>
@@ -351,8 +351,8 @@
         <field name="res_model">calendar.appointment</field>
         <field name="view_mode">tree,calendar,form,kanban</field>
         <field name="view_id" ref="view_calendar_appointment_local_calendar"/>
+        <field name="domain" eval="[('channel', '=', ref('calendar_channel.channel_local'))]"/>
         <!-- This should be a reference to the external id instead. -->
-        <field name="domain">[('channel', '=', 'Local')]</field>
         <!-- <field name="context">{'default_channel': %(calendar_channel.channel_local)d}</field> -->
         <field name="context">{'default_channel': 'Local'}</field>
         <field name="search_view_id" ref="calendar_appointment_local_search"/>
