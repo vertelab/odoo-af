@@ -256,10 +256,7 @@ class CalendarAppointmentSuggestion(models.Model):
 
     @api.one
     def compute_duration_text(self):
-        if self.duration == 60:
-            self.duration_text = "60 minutes"
-        elif self.duration == 30:
-            self.duration_text = "30 minutes"
+        self.duration_text = "%s minutes" % int(self.duration)
 
     @api.one
     def _compute_weekday(self):
@@ -394,6 +391,7 @@ class CalendarAppointment(models.Model):
     stop = fields.Datetime(string='Stop', required=True, help="Stop date of an appointment")
     duration_selection = fields.Selection(string="Duration",
                                           selection=[('30 minutes', '30 minutes'), ('1 hour', '1 hour')])
+    duration_text = fields.Char(string="Duration", compute="compute_duration_text")
     duration = fields.Float('Duration')
     user_id = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker")
     user_id_local = fields.Many2one(string='Case worker', comodel_name='res.users', help="Booked case worker",
@@ -427,6 +425,10 @@ class CalendarAppointment(models.Model):
     show_suggestion_ids = fields.Boolean(string="Show suggestions", default=False)
     weekday = fields.Char(string="Weekday", compute="_compute_weekday")
     start_time = fields.Char(string='Appointment start time', readonly=True, compute='_app_start_time_calc', store=True)
+
+    @api.one
+    def compute_duration_text(self):
+        self.duration_text = "%s minutes" % int(self.duration)
 
     @api.depends('start')
     def _app_start_time_calc(self):
@@ -833,6 +835,7 @@ class CalendarOccasion(models.Model):
     duration_selection = fields.Selection(string="Duration",
                                           selection=[('30 minutes', '30 minutes'), ('1 hour', '1 hour')])
     duration = fields.Float('Duration')
+    duration_text = fields.Char('Duration', compute="compute_duration_text")
     appointment_id = fields.Many2one(comodel_name='calendar.appointment', string="Appointment", index=True)
     type_id = fields.Many2one(comodel_name='calendar.appointment.type', string='Type', index=True)
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel', related='type_id.channel',
@@ -865,6 +868,10 @@ class CalendarOccasion(models.Model):
         string="Related occasions",
         readonly=True,
     )
+
+    @api.one
+    def compute_duration_text(self):
+        self.duration_text = "%s minutes" % int(self.duration)
 
     @api.one
     def _compute_weekday(self):

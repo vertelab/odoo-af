@@ -12,7 +12,7 @@
                         <tree>
                             <field name="type_id"/>
                             <field name="start"/>
-                            <field name="duration_selection"/>
+                            <field name="duration_text"/>
                             <field name="user_id"/>
                             <field name="partner_id"/>
                             <field name="operation_id"/>
