@@ -95,10 +95,8 @@ class CalendarOccasion(models.Model):
             _logger.info("creating row: %s" % transformed_row)
             if 'occasion_ids' in transformed_row:
                 obj = self.env['calendar.appointment'].create(transformed_row)
-
             else:
                 obj = self.env['calendar.occasion'].create(transformed_row)
-
             self.env['ir.model.data'].create({
                 'name': external_xmlid.split('.')[1],
                 'module': external_xmlid.split('.')[0],
@@ -154,7 +152,7 @@ class CalendarOccasion(models.Model):
                             "could not find person corresponding to %s, skipping" %
                             row[key])
                         create = False
-                elif key == 'occasion_idss':
+                elif key == 'occasion_ids':
                     xmlid = "%s.%s%s" % (
                         self.xmlid_module, transform, row[key])
                     occasion_ids = self.env['ir.model.data'].xmlid_to_res_id(

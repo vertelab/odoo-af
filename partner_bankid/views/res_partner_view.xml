@@ -64,7 +64,7 @@
                     <field string="Case" name="case_count" widget="statinfo"/>
                 </button>
             </div>
-            <xpath expr="//page[@name='apply_for_jobs']" position="after">
+            <xpath expr="//page[@name='contacts_addresses']" position="after">
                 <page string="Case">
                     <group>
                         <field name="case_ids" mode="tree" nolabel="1">
