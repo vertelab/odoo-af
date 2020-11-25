@@ -24,7 +24,7 @@
               <field name="weekday"/>
               <field name="type_id" options="{'no_create_edit': True}" />
               <field name="start" options="{'format':'%Y-%m-%d %H:%M'}" />
-              <field name="duration_selection" />
+              <field name="duration_text" />
               <field name="case_worker_name" />
               <field name="channel_name" />
               <field name="operation_id" />
@@ -39,7 +39,7 @@
               <field name="weekday"/>
               <field name="type_id" options="{'no_create_edit': True}" />
               <field name="start" options="{'format':'%Y-%m-%d %H:%M'}" />
-              <field name="duration_selection" />
+              <field name="duration_text" />
               <field name="case_worker_name" />
               <field name="channel_name" />
               <field name="operation_id" />
