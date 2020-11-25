@@ -92,8 +92,8 @@
                 <field name="weekday"/>
                 <field name="start" />
                 <field name="duration_text"/>
-                <field name="user_id" />
-                <field name="partner_id" />
+                <field name="case_worker_name" />
+                <field name="partner_pnr" />
                 <field name="operation_id" />
             </tree>
         </field>
