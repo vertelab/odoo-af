@@ -45,4 +45,3 @@
 	"application": False,
 	"installable": True,
 }
-
