@@ -34,16 +34,15 @@
 	"edi_af_krom_postcode",
 	"edi_af_officer",
 	"hr_org_chart",
-        "hr_employee_lastnames",
-        "web_a11y_report",
+	"hr_employee_lastnames",
+	"web_a11y_report",
 	"web_employee_views_fenix",
-        "web_employee_views_user-credentials-tab",
+	"web_employee_views_user-credentials-tab",
 	"web_autocomplete_off",
-        "web_backend_theme_af",
-        "web_dashboard_fenix",
+	"web_backend_theme_af",
+	"web_dashboard_fenix",
 	],
-
-    "application": False,
-    "installable": True,
+	"application": False,
+	"installable": True,
 }
 
