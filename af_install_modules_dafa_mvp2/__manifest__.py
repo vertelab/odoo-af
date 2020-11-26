@@ -20,8 +20,10 @@
         # These modules needs to be installed for  MVP2 functionality
         #
         "af_sale_orders",
+	"af_sale_filters",
         # "af_sales_report",
         # "hr_af_holidays",
+	  "hr_employee_customers_tab",
         # "send_mail_nadim",
         # "mail_oe_chatter_user_groups",
         "project_jobseeker_views",
