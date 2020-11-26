@@ -57,6 +57,7 @@
         # These modules needs to be installed for Book Meeting functionality
         "af_calendar_reports",
         "calendar_af_360",
+        "calendar_af_report",
         "edi_af_appointment",
         "hr_af_holidays", 
             ],

@@ -93,7 +93,7 @@
                 <field name="start" />
                 <field name="duration_text"/>
                 <field name="case_worker_name" />
-                <field name="partner_pnr" />
+                <field name="partner_id" />
                 <field name="operation_id" />
             </tree>
         </field>

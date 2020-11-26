@@ -72,7 +72,7 @@
         <field name="help">This report allows you to analyse planned meetings, free occasions, etc.</field>
     </record>
 
-    <menuitem action="action_calendar_report_tree" id="menu_action_calendar_report" parent="menu_reports" sequence="10"
+    <menuitem action="action_calendar_report_tree" id="menu_action_calendar_report" parent="calendar_af.menu_reports" sequence="10"
               groups="af_security.af_employers_editor,af_security.af_jobseekers_editor,af_security.af_meeting_admin"/>
 
 </odoo>
