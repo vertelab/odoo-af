@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_report_calendar_appointment,access_report_calendar_appointment,model_report_calendar_appointment,base.group_user,1,0,0,0
+access_report_calendar_appointment_local,access_report_calendar_appointment_local,model_report_calendar_appointment_local,base.group_user,1,0,0,0
