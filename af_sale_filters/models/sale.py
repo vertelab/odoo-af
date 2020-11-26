@@ -9,7 +9,7 @@ def _lang_get(self):
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    lang = fields.Selection(_lang_get, related='partner_id.lang', store=True, string="Client's Lanhuage")
+    lang = fields.Selection(_lang_get, related='partner_id.lang', store=True, string="Client's Language")
     employee_id = fields.Many2one('hr.employee', string="Employee")
     skill_ids = fields.One2many('hr.employee.skill.sale', 'sale_order_id', string="Employee skills",
                                 compute='_get_employee_skills', store=True)
