@@ -4,7 +4,7 @@
     "version": "12.0001",
     "author": "Aden Hassan",
     "license": "AGPL-3",
-    "description": "Åtkomsträttigheter inom kvl.",
+    "description": "Åtkomsträttigheter inom kvl. Innehåller exempel på access-rättigheter men är bort-kommenterade.",
     "website": "https://vertel.se/",
     "category": "Security",
     "depends": [
