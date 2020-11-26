@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+        <record id="inherit_sale_search_to_add_filters" model="ir.ui.view">
+            <field name="name">Inherit Sale Search - AF</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="lang"/>
+                    <field name="skill_ids" string="Skill"
+                           filter_domain="[('skill_ids.skill_id', 'ilike', self)]"/>
+                </field>
+                <filter name="my_sale_orders_filter" position="after">
+                    <filter string="My Language" domain="[('lang','=', lang)]"
+                            name="my_lang_sale_orders_filter"/>
+                </filter>
+                <xpath expr="//group" position="inside">
+                    <filter string="Clients Language" name="language"
+                            context="{'group_by':'lang'}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="inherit_sale_view_filters" model="ir.ui.view">
+            <field name="name">Inherit Sale for filters - AF</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="user_id" position="after">
+                    <field name="employee_id" invisible="1"/>
+                    <field name="skill_ids" invisible="1">
+                        <tree>
+                            <field name="employee_id"/>
+                            <field name="skill_id"/>
+                            <field name="level"/>
+                        </tree>
+                    </field>
+                </field>
+            </field>
+        </record>
+
+        <record id="update_employee_in_sale" model="ir.actions.server">
+            <field name="name">Update employee in sale</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
+            <field name="state">code</field>
+            <field name="code">records.update_employee()</field>
+        </record>
+
+    </data>
+
+</odoo>

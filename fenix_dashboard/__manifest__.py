@@ -1,6 +1,6 @@
 {
-    "name": "Fenix Dashboard",
-    "version": "12.0.0.0",
+    "name": "Depreciated Fenix Dashboard",
+    "version": "12.0.0.x",
     "description": """
      This module shows the dashbord of an employee´s daily work.
 """,
@@ -18,5 +18,5 @@
     ],
     'post_init_hook': 'post_init_hook',
     "application": False,
-    "installable": True,
+    "installable": False,
 }
