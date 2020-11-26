@@ -18,16 +18,15 @@
 	"website": "https://vertel.se/",
 	"category": "Tools",
 	"depends": [
-        # These modules needs to be installed for  MVP2 functionality
-        # 
-        # 
-        #"af_sale_orders",
+	# These modules needs to be installed for  MVP2 functionality
+	#
+	#"af_sale_orders",
 	#"af_sales_report",
 	"hr_af_holidays",
 	#"send_mail_nadim",
 	#"mail_oe_chatter_user_groups",
 	#"project_jobseeker_views",
-	#"api_project_odoo_xmlrpc", 		        
+	#"api_project_odoo_xmlrpc",
 	],
 	"application": False,
 	"installable": True,
