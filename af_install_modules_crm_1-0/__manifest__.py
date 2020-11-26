@@ -19,14 +19,14 @@
     "website": "https://vertel.se/",
     "category": "Tools",
     "depends": [
-        # These modules needs to be installed for Customer Card functionality
-        # 
-		"af_core_menu_disabling", # should be replaced by web_core_menu_disabling
-		"af_gui_disabeling", # will be replaced by web_hide-about-user-settings
-		"af_hide_top_todo_icons", #will be replaced by hide_hide-top-todo-icons
-		"af_security_rules", # should be replaced later
+     # These modules needs to be installed for Customer Card functionality
+     #
+	"af_core_menu_disabling", # should be replaced by web_core_menu_disabling
+	"af_gui_disabeling", # will be replaced by web_hide-about-user-settings
+	"af_hide_top_todo_icons", #will be replaced by hide_hide-top-todo-icons
+	"af_security_rules", # should be replaced later
         "audit_logger",
-		"auth_saml_ol_groups",
+	"auth_saml_ol_groups",
         "auth_signup",
         "auth_saml_af",
         "audit_timeout",
@@ -48,8 +48,7 @@
         "res_drivers_license",
         "web_backend_theme_af",
         "web_autocomplete_off",
-
-            ],
+        ],
 
     "application": False,
     "installable": True,
