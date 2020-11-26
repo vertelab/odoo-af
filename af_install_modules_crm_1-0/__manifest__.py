@@ -48,8 +48,7 @@
         "web_backend_theme_af",
         "web_autocomplete_off",
         ],
-
-    "application": False,
-    "installable": True,
+	"application": False,
+	"installable": True,
 }
 
