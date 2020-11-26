@@ -21,7 +21,8 @@ AFC-1385 Data för rask integration (V12.0.1.0.2)
         "data/customer_data.xml",
         "data/ais_a_data.xml",
         "data/planning_data.xml",
-        "data/rask_data.xml"
+        "data/rask_data.xml",
+        "security/ir.model.access.csv",
     ],
     "application": True,
     "installable": True,

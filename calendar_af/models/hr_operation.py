@@ -84,8 +84,9 @@ class AppointmentTypeOperation(models.Model):
         comodel_name="calendar.appointment.type",
         string="Appointment type",
         required=True,
+        index=True,
     )
     operation_id = fields.Many2one(
-        comodel_name="hr.operation", string="Operation", required=True
+        comodel_name="hr.operation", string="Operation", required=True, index=True
     )
     warning_threshold = fields.Integer(string="Warning threshold")
