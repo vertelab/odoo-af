@@ -21,15 +21,13 @@
          Once the module is installed, please de-install it to avoid depencency-problems.\n
          \n
     """,
-    
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
     "depends": [
         # These modules needs to be installed for Customer Card functionality
-        "base", 
+        "base",
     ],
     "application": False,
     "installable": True,
 }
-

@@ -14,7 +14,6 @@
 		 Once the module is installed, please de-install it to avoid depencency-problems.\n
          \n
     """,
-    
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
@@ -23,11 +22,10 @@
         "af_calendar_reports",
         "calendar_af_360",
         "edi_af_appointment",
-        "hr_af_holidays", 
+        "hr_af_holidays",
         "partner_daily_notes_edi",
+        "calendar_af_report",
     ],
-
     "application": False,
     "installable": True,
 }
-
