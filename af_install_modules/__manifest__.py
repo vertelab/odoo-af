@@ -60,6 +60,7 @@
         "calendar_af_report",
         "edi_af_appointment",
         "hr_af_holidays", 
+        "af_core_menu_disabling", 
             ],
 
     "application": False,
