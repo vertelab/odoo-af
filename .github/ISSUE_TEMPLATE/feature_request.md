@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 **Userstory:** 
-As a user, I do ....
+As a user, I want/do ...., Because... 
 
 **Screen-shots old GUI:** (illustrations of the old system)
 
@@ -16,29 +16,28 @@ As a user, I do ....
 
 **Screen-shots from development:** (plese add screen-shots of the development in the comment below)
 
-
-**Bugreport:** (only for Issues about bugs)
+**Bugreport:** (only for Bug-Issues)
 Steps to reproduce and where in the system the defect is located...
 
 **Module name:** (added by Nils or Fredrik)
 odoo-xx/xx_ (name convention: [supplier-function]/[function-functionality-specialization] ) 
 
 **Branch name:** 
-Dev-12.0-[CRM/Fenix]-Sprint-[number]-AFC-1XXX-...
+Dev-12.0-[CRM/DAFA]-Sprint-[number]-AFC-1XXX-...
 
 **Module type:** 
-Application/Property/Resource/Glue module/API [see https://github.com/vertelab/odoo-af/issues/178 for more info]
+Application/Property/Resource/Glue/API module [see https://github.com/vertelab/odoo-af/issues/178 for more info]
 
-**Integration:**
+**Integrations:**
 
 **Test-steps:**
 
 **Test-data:**
 
 **Description to the manifest:** 
-This module 
+This module/update...
 
-**Estimate:** (added by developers only)
+**Estimate:** (@developers: Add your times here, not in comments please)
 Estimated Hours: 
 Estimated Date: 
 Actual Hours:
