@@ -49,7 +49,7 @@ class hr_operation(models.Model):
         inverse_name="operation_id",
         string="Mapped dates",
     )
-    reserve_time = fields.Float(string='Reserve time start')
+    reserve_time = fields.Float(string="Reserve time start")
 
     @api.one
     def compute_user_ids(self):
@@ -67,11 +67,14 @@ class hr_operation(models.Model):
             "target": "current",
             "type": "ir.actions.act_window",
         }
+
     @api.multi
     def open_users_tree(self):
-        res = self.env['ir.actions.act_window'].for_xml_id('calendar_af', 'action_calendar_user') 
+        res = self.env["ir.actions.act_window"].for_xml_id(
+            "calendar_af", "action_calendar_user"
+        )
         if self.user_ids:
-            res['domain'] = [('id', 'in', self.user_ids._ids)]
+            res["domain"] = [("id", "in", self.user_ids._ids)]
         else:
             raise Warning(_("No administrative officers on this operation"))
         return res

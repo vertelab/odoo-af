@@ -8,14 +8,14 @@
     "website": "https://vertel.se/",
     "category": "Tools",
     "summary": "Module for synchronous integrations to IPF",
-    'description': """
+    "description": """
 Jira
 ===========================================
 AFC-734 Integration till IPF(V12.0.1.0.1)
 AFC-1385 Data för rask integration (V12.0.1.0.2)
 """,
     "depends": ["af_security"],
-    "external_dependencies": {'python': ['requests']},
+    "external_dependencies": {"python": ["requests"]},
     "data": [
         "views/ipf_views.xml",
         "data/customer_data.xml",
