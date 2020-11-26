@@ -11,7 +11,7 @@
         ],
     "data": [
         'security/security.xml',
-        'security/ir.model.access.csv',
+        #'security/ir.model.access.csv',
     ],
     "application": False,
     "installable": True,
