@@ -26,10 +26,9 @@
     "website": "https://vertel.se/",
     "category": "Tools",
     "depends": [
-        # These modules needs to be installed for Customer Card functionality
-        "base", 
-            ],
-
+    # These modules needs to be installed for Customer Card functionality
+    "base", 
+          ],
     "application": False,
     "installable": True,
 }
