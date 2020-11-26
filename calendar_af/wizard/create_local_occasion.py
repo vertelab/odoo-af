@@ -185,7 +185,7 @@ class CreateLocalOccasion(models.TransientModel):
                                 % user_id.af_signature
                             )
                         occ = self.env["calendar.occasion"]._force_create_occasion(
-                            30,
+                            0.5,
                             curr_start,
                             self.type_id.id,
                             self.channel.id,
@@ -258,7 +258,7 @@ class CreateLocalOccasion(models.TransientModel):
                                 occ = self.env[
                                     "calendar.occasion"
                                 ]._force_create_occasion(
-                                    30,
+                                    0.5,
                                     curr_start,
                                     self.type_id.id,
                                     self.channel.id,
