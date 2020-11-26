@@ -19,12 +19,12 @@
     "website": "https://vertel.se/",
     "category": "Tools",
     "depends": [
-    # These modules needs to be installed for Book Meeting functionality
-    "af_calendar_reports",
-    "calendar_af_360",
-    "edi_af_appointment",
-    "hr_af_holidays", 
-    "partner_daily_notes_edi",
+        # These modules needs to be installed for Book Meeting functionality
+        "af_calendar_reports",
+        "calendar_af_360",
+        "edi_af_appointment",
+        "hr_af_holidays", 
+        "partner_daily_notes_edi",
     ],
 
     "application": False,
