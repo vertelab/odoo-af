@@ -19,14 +19,15 @@
     "depends": [
         # These modules needs to be installed for  MVP2 functionality
         #
-        "af_sale_orders",
-	"af_sale_filters",
-        # "af_sales_report",
-        # "hr_af_holidays",
+        "af_sale_orders", #odoo-af
+	"af_sale_filters", #odoo-af
+        # "af_sales_report", #odoo-af
+        # "hr_af_holidays", 
 	  "hr_employee_customers_tab",
-        # "send_mail_nadim",
+        # "send_mail_nadim", #odoo-mail
         # "mail_oe_chatter_user_groups",
-        "project_jobseeker_views",
+        "partner_desired_jobs", #odoo-base
+	"project_jobseeker_views",
         # "api_project_odoo_xmlrpc",
     ],
     "application": False,
