@@ -12,16 +12,16 @@ class HR(models.Model):
     jobseekers_ids = fields.One2many('res.partner', compute='_get_records')
     #this may be used in the future, but in that case move this code to partner_daily_notes and the partner_af_case module respectively instead
     # case_ids = fields.One2many('res.partner.case', compute='_get_records')
-    # daily_note_ids = fields.One2many('res.partner.notes', compute='_get_records')
+    #daily_note_ids = fields.One2many('res.partner.notes', compute='_get_records')
 
-    # @api.depends('user_id')
-    # def _get_records(self):
-    #     for rec in self:
-    #         if rec.user_id:
-    #             rec.jobseekers_ids = rec.env['res.partner'].search([('user_id', '=', rec.user_id.id)])
-    #             # rec.case_ids = rec.env['res.partner.case'].search([('administrative_officer', '=', rec.user_id.id)])
-    #             rec.daily_note_ids = rec.env['res.partner.notes'].search(
-    #                 [('administrative_officer', '=', rec.user_id.id)])
+    @api.depends('user_id')
+    def _get_records(self):
+        for rec in self:
+            if rec.user_id:
+                rec.jobseekers_ids = rec.env['res.partner'].search([('user_id', '=', rec.user_id.id)])
+                # rec.case_ids = rec.env['res.partner.case'].search([('administrative_officer', '=', rec.user_id.id)])
+                #rec.daily_note_ids = rec.env['res.partner.notes'].search(
+                #    [('administrative_officer', '=', rec.user_id.id)])
 
     @api.multi
     def search_jobseeker_action(self):

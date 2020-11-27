@@ -76,14 +76,14 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     search_domain = fields.Char(string="Search Filter")
     other_reason = fields.Char(string="Other reason")
 
-    # @api.depends('employee_id')
-    # def _get_records(self):
-    #     for rec in self:
-    #         if rec.employee_id.user_id:
-    #             rec.jobseekers_ids = rec.env['res.partner'].search([('user_id', '=', rec.employee_id.user_id.id)])
-    #             # rec.case_ids = rec.env['res.partner.case'].search([('administrative_officer', '=', rec.employee_id.user_id.id)])
-    #             rec.daily_note_ids = rec.env['res.partner.notes'].search(
-    #                 [('administrative_officer', '=', rec.employee_id.user_id.id)])
+    @api.depends('employee_id')
+    def _get_records(self):
+        for rec in self:
+            if rec.employee_id.user_id:
+                rec.jobseekers_ids = rec.env['res.partner'].search([('user_id', '=', rec.employee_id.user_id.id)])
+                # rec.case_ids = rec.env['res.partner.case'].search([('administrative_officer', '=', rec.employee_id.user_id.id)])
+                # rec.daily_note_ids = rec.env['res.partner.notes'].search(
+                #     [('administrative_officer', '=', rec.employee_id.user_id.id)])
 
     def _default_hr_employee(self):
         return self.env.user.employee_ids
