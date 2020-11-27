@@ -5,7 +5,7 @@
     "author": "Aden Hassan",
     "license": "AGPL-3",
     "description": "Åtkomsträttigheter inom kvl. Innehåller exempel på access-rättigheter men är bort-kommenterade.",
-    "website": "https://vertel.se/",
+    "website": "https://arbetsformedlingen.se/",
     "category": "Security",
     "depends": [
         ],
