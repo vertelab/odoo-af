@@ -38,7 +38,8 @@
 	"hr_employee_ciam_client",
 	"hr_employee_lastnames",
 	"hr_employee_legacy_id", #OCA
-        "hr_org_chart",
+        "hr_employee_views_fenix",
+	"hr_org_chart",
         # "web_a11y_filter_view",   
 	# "web_a11y_report",  
         "web_autocomplete_off",
