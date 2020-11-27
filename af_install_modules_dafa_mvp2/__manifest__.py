@@ -26,7 +26,8 @@
 	  "hr_employee_customers_tab",
         # "send_mail_nadim", #odoo-mail
         # "mail_oe_chatter_user_groups",
-        "partner_desired_jobs", #odoo-base
+        "outplacement",
+	"partner_desired_jobs", #odoo-base
 	"project_jobseeker_views",
         # "api_project_odoo_xmlrpc",
     ],
