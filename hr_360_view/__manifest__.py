@@ -24,8 +24,6 @@ v12.0.1.1 AFC-0185, 199 \n
     'depends': [
         'hr',
         'partner_view_360',
-        # 'partner_af_case',
-        'partner_daily_notes',
         'hr_employee_firstname_extension',
         'af_ipf',
     ],
