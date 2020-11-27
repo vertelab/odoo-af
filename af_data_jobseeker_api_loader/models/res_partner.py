@@ -19,135 +19,67 @@
 #
 ##############################################################################
 
-import gc
-import tempfile
+import logging
 import os
-import csv
+
 from odoo.tools import config
 from odoo import models, fields, api, _
-import logging
 from odoo.tools.profiler import profile
 
 _logger = logging.getLogger(__name__)
-
-
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
     @api.model
     def create_jobseekers(self):
-        header = ['SOKANDE_ID']
         path = os.path.join(
             config.options.get('data_dir'),
             'AIS-F/arbetssokande.csv')
         path = "/usr/share/odoo-af/af_data_jobseeker_api_loader/data/test_dumps/arbetssokande.csv" # testing purposes only
-        self.create_partners_from_api(header, path)
+        self.create_partners_from_api('SOKANDE_ID', path)
 
     @api.model
-    def create_partners_from_api(self, header, path):
-        reader = ReadCSV(path, header)
+    def create_partners_from_api(key, path):
+        db_con = self.env.ref('af_ipf.ipf_endpoint_rask').sudo()
+        db_values = {'res.country.state': search('res.country.state', 'code', 'id'),
+                     'hr.departement': search('hr_department', 'office_code', 'id'),
+                     'res.sun': search('res.sun', 'code', 'id'),
+                     'res.partner.skat': search('res.partner.skat', 'code', 'id'),
+                     'res.partner.education_level': search('res.partner.education_level', 'name', 'id'),
+                     'res.users': search('res.users', 'login', 'id'),
+                     'res.country': search('res_country', 'name', 'id', 'lang="sv_SE"'),}
+        index = 0
         iterations = 0
-        for row in reader.get_data():
-            customer_id = row[header[0]]
-            if not self.env['res.partner'].search([('customer_id','=',customer_id)]):
-                self.env['res.partner'].rask_as_get(customer_id)
-            iterations += 1
-            if iterations > 500:
-                self.env.cr.commit()
-                iterations = 0
-        reader.close()
+        with open(path) as fh:
+            for row in fh:
+                if index == 0:
+                    header = {key.strip():index for index, key in
+                              enumerate(row.strip().split(','))}
+                    try:
+                        id_index = header[key]
+                    except KeyError:
+                        _logger.error(
+                            f'Failed to find {key} in {", ".join(header)}')
+                        raise
+                    continue
+                customer_id = row.strip.split(',')[id_index]
+                if not self.env['res.partner'].search_count(['customer_id',
+                                                             '=',
+                                                             customer_id]):
+                    self.env['res.partner'].rask_as_get(
+                        customer_id, db_con, db_values)
 
+                iterations += 1
+                if iterations > 500:
+                    self.env.cr.commit()
+                    iterations = 0
 
-class ReadCSV(object):
-    def __init__(self, path, header):
-        self.header = header
-        try:
-            self.f = open(path)
-            self.f.seek(0)
-            reader = csv.DictReader(self.f, delimiter=",")
-
-            self.data = reader
-        except IOError as e:
-            _logger.error(u'Could not read CSV file at path %s' % path)
-            raise ValueError(e)
-
-        row = next(self.data)
-        self.f.seek(0)
-        next(self.data)
-        for i in range(len(self.header)):
-            if not self.header[i] in row.keys():
-                _logger.error(u'Row 0 could not find "%s"' % self.header[i])
-                raise ValueError(
-                    "Missing column '%s', columns found: %s" %
-                    (self.header[i], list(
-                        row.keys())))
-
-    def get_data(self):
-        return self.data
-
-    def get_header(self):
-        return self.header
-
-    def close(self):
-        self.f.close()
-
-    def seek_zero(self):
-        self.f.seek(0)
-
-    def parse(self, field_map):
-        csvIter = CSVIterator(
-            self.data, len(
-                self.data), list(
-                field_map.keys()), field_map)
-        pairs = []
-        while csvIter.hasNext():
-            #_logger.info("appending row %s" % csvIter.getRow())
-            pairs.append(csvIter.getRow())
-            csvIter.next()
-        return pairs
-
-    def parse_header(self):
-        field_map = {}
-        for i in range(len(self.header)):
-            field_map.update({self.header[i]: self.header[i]})
-        rows = []
-        self.seek_zero()
-        for row in self.data:
-            rows.append(row)
-        self.seek_zero()
-        csvIter = CSVIterator(rows, len(rows), self.header, field_map)
-        pairs = []
-        while csvIter.hasNext():
-            csvIter.next()
-            #_logger.info("appending header row %s" % csvIter.getRow())
-            pairs.append(csvIter.getRow())
-
-        return pairs
-
-
-class CSVIterator(object):
-    def __init__(self, data, nrows, header, field_map):
-        self.nrows = nrows
-        self.row = 0
-        self.data = data
-        self.rows = nrows - 2
-        self.header = header
-        self.field_map = field_map
-
-    def next(self):
-        if self.hasNext():
-            self.row += 1
-
-    def hasNext(self):
-        return self.row <= self.rows
-
-    def getRow(self):
-        r = {}
-        for i in range(len(self.header)):
-            if self.header[i] in self.field_map:
-                #_logger.info("Updating row nr %s of %s %s : %s" % (self.row, self.rows, self.header[i], self.data[self.row][self.field_map[self.header[i]]]))
-                r.update({self.header[i]: self.data[self.row]
-                          [self.field_map[self.header[i]]]})
-
-        return r
+def search(obj, key, field_name, context=None):
+    """Build dicts with key: field_name"""
+    if context:
+        return {res[key]: res[field_name] for res in
+                self.env[obj].with_context(eval(context)).search_read(
+                    [], [key, field_name])}
+    return {res[key]: res[field_name] for res in
+            self.env[obj].search_read([], [key, field_name])}
