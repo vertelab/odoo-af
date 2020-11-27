@@ -29,6 +29,7 @@
         "outplacement",
 	"partner_desired_jobs", #odoo-base
 	"project_jobseeker_views",
+	"sale_suborder_ipf_client",
         # "api_project_odoo_xmlrpc",
     ],
     "application": False,
