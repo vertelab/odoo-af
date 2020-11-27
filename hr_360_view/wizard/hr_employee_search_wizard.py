@@ -39,12 +39,15 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     # gdpr_reasons = fields.Many2one(related="gdpr_id.reasons?")
     employee_id = fields.Many2one(comodel_name='hr.employee', default=lambda self: self._default_hr_employee())
     jobseekers_ids = fields.One2many('res.partner', compute='_get_records')
+    
+    #this may be used in the future, but in that case move this code to partner_daily_notes and the partner_af_case module respectively instead
     # case_ids = fields.One2many('res.partner.case', compute='_get_records')
-    daily_note_ids = fields.One2many('res.partner.notes', compute='_get_records')
+    # daily_note_ids = fields.One2many('res.partner.notes', compute='_get_records')
     # Looks like related doesn't work on computed fields :(
     # jobseekers_ids = fields.One2many(related='employee_id.jobseekers_ids')
     # case_ids = fields.One2many(related='employee_id.case_ids')
     # daily_note_ids = fields.One2many(related='employee_id.daily_note_ids')
+
     social_sec_nr_search = fields.Char(string="Social security number",default=lambda self: '%s' % request.session.pop('ssn',''))
     bank_id_text = fields.Text(string=None)
 
@@ -71,14 +74,14 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     search_domain = fields.Char(string="Search Filter")
     other_reason = fields.Char(string="Other reason")
 
-    @api.depends('employee_id')
-    def _get_records(self):
-        for rec in self:
-            if rec.employee_id.user_id:
-                rec.jobseekers_ids = rec.env['res.partner'].search([('user_id', '=', rec.employee_id.user_id.id)])
-                # rec.case_ids = rec.env['res.partner.case'].search([('administrative_officer', '=', rec.employee_id.user_id.id)])
-                rec.daily_note_ids = rec.env['res.partner.notes'].search(
-                    [('administrative_officer', '=', rec.employee_id.user_id.id)])
+    # @api.depends('employee_id')
+    # def _get_records(self):
+    #     for rec in self:
+    #         if rec.employee_id.user_id:
+    #             rec.jobseekers_ids = rec.env['res.partner'].search([('user_id', '=', rec.employee_id.user_id.id)])
+    #             # rec.case_ids = rec.env['res.partner.case'].search([('administrative_officer', '=', rec.employee_id.user_id.id)])
+    #             rec.daily_note_ids = rec.env['res.partner.notes'].search(
+    #                 [('administrative_officer', '=', rec.employee_id.user_id.id)])
 
     def _default_hr_employee(self):
         return self.env.user.employee_ids
