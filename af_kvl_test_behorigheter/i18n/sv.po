@@ -38,12 +38,12 @@ msgstr "Hantera Ekonomi (Läs)"
 #. module: af_kvl_test_behorigheter
 #: model:res.groups,name:af_kvl_test_behorigheter.group_dafa_emplyees_read
 msgid "DAFA Admin (Read)"
-msgstr "Hantera Handledare (Läs)"
+msgstr "Hantera Anställda (Läs)"
 
 #. module: af_kvl_test_behorigheter
 #: model:res.groups,name:af_kvl_test_behorigheter.group_dafa_employees_write
 msgid "DAFA Admin (Write)"
-msgstr "Hantera Handledare (Skriv)"
+msgstr "Hantera Anställda (Skriv)"
 
 #. module: af_kvl_test_behorigheter
 #: model:ir.module.category,name:af_kvl_test_behorigheter.category_dafa_handle_department_info
