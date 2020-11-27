@@ -330,9 +330,12 @@ class CalendarAppointmentSuggestion(models.Model):
     @api.one
     def compute_duration_text(self):
         if self.duration == 0.5:
-            self.duration_text = '30 minutes'
+            self.duration_text = _("30 minutes")
         elif self.duration == 1.0:
-            self.duration_text = '1 hour'
+            self.duration_text = _("1 hour")
+        # this else should not be reachable with new data
+        else:
+            self.duration_text = "Error: %s" % self.duration 
 
     @api.one
     def _compute_weekday(self):
@@ -505,9 +508,12 @@ class CalendarAppointment(models.Model):
     @api.one
     def compute_duration_text(self):
         if self.duration == 0.5:
-            self.duration_text = '30 minutes'
+            self.duration_text = _("30 minutes")
         elif self.duration == 1.0:
-            self.duration_text = '1 hour'
+            self.duration_text = _("1 hour")
+        # this else should not be reachable with new data
+        else:
+            self.duration_text = "Error: %s" % self.duration 
 
     @api.depends('start')
     def _app_start_time_calc(self):
@@ -963,7 +969,13 @@ class CalendarOccasion(models.Model):
 
     @api.one
     def compute_duration_text(self):
-        self.duration_text = "%s minutes" % int(self.duration)
+        if self.duration == 0.5:
+            self.duration_text = _("30 minutes")
+        elif self.duration == 1.0:
+            self.duration_text = _("1 hour")
+        # this else should not be reachable with new data
+        else:
+            self.duration_text = "Error: %s" % self.duration 
 
     @api.one
     def _compute_weekday(self):
