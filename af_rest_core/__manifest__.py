@@ -1,7 +1,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 {
-    "name": "AF REST Core",
+    "name": "AF REST Core - DEPRECIATED",
     "version": "12.0.1.0.0",
     "author": "Vertel AB",
     "license": "AGPL-3",
@@ -11,6 +11,6 @@
     "data": [
         "views/res_config_settings_view.xml",
     ],
-    "application": True,
-    "installable": True,
+    "application": False,
+    "installable": False,
 }

@@ -40,9 +40,10 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     @api.model
     def _get_default_social_sec_nr_search(self):
         ssn_not_found = request.session.pop('ssn_not_found',False)
+        ssn = request.session.pop('ssn','')
         if ssn_not_found:
-            raise Warning(_("This jobseeker is not registered at Arbetsförmedlingen"))
-        return request.session.pop('ssn','')
+            ssn = _("%s [This jobseeker is not registered at Arbetsförmedlingen]") % ssn
+        return ssn
 
     # gdpr_id = fields.Many2one('gdpr.inventory')
     # gdpr_reasons = fields.Many2one(related="gdpr_id.reasons?")

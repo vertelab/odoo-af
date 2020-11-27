@@ -2,7 +2,7 @@
 
 {
     "name": "Calendar management - AF",
-    "version": "12.0.1.0.6",
+    "version": "12.0.1.0.7",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
