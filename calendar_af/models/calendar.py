@@ -560,6 +560,19 @@ class CalendarAppointment(models.Model):
         elif self.duration == 1.0:
             self.duration_selection = '1 hour'
 
+    # Accurate Duration based on Selected Type
+    @api.onchange('type_id')
+    def set_duration_type(self):
+        if self.type_id:
+            if self.type_id.duration_30 is True:
+                self.duration_selection = '30 minutes'
+            elif self.type_id.duration_60:
+                self.duration_selection = '1 hour'
+            else:
+                self.duration_selection = False
+        else:
+            self.duration_selection = False
+
     @api.onchange('duration_selection')
     def set_duration(self):
         if self.duration_selection == "30 minutes":
