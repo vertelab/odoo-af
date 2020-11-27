@@ -25,7 +25,7 @@
         "data/mail_template.xml",
         "data/calendar_schedule_cron.xml",
         "security/ir.model.access.csv",
-        "views/hr_operation_view.xml",
+        #"views/hr_operation_view.xml",
         "views/res_users_view.xml",
         "views/calendar_af_view.xml",
         "views/calendar_schedule_view.xml",
