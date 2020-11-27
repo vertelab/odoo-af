@@ -43,6 +43,7 @@
 	"hr_org_chart",
         # "web_a11y_filter_view",   
 	# "web_a11y_report",  
+	'partner_identification", #OCA
         "web_autocomplete_off",
 	"web_backend_theme_af",
         "web_employee_views_fenix",
