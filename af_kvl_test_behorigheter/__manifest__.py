@@ -8,6 +8,7 @@
     "website": "https://arbetsformedlingen.se/",
     "category": "Security",
     "depends": [
+        "web",
         ],
     "data": [
         'security/security.xml',
