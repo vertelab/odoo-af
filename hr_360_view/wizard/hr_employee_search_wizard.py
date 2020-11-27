@@ -42,7 +42,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
         ssn_not_found = request.session.pop('ssn_not_found',False)
         ssn = request.session.pop('ssn','')
         if ssn_not_found:
-            ssn = "%s [This jobseeker is not registered at Arbetsförmedlingen]" % ssn
+            ssn = _("%s [This jobseeker is not registered at Arbetsförmedlingen]") % ssn
         return ssn
 
     # gdpr_id = fields.Many2one('gdpr.inventory')
