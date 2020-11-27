@@ -196,9 +196,8 @@ class CalendarOccasion(models.Model):
                             '7': 'fail',
                         }
                     row[key] = translation_dict[row[key]]
-                elif key == 'location_id': #location is found through user_id.location_id, this might be needed in the future
-                    row[key] = self.env['hr.location'].search([('location_code', '=', row[key])]).id
-                    keys_to_delete.append(key)
+                elif key == 'operation_id': #location is found through user_id.location_id, this might be needed in the future
+                    row[key] = self.env['hr.operation'].search([('location_code', '=', row[key])]).id
                 elif key == 'user_id':
                     row[key] = self.env['res.users'].search(
                         [('login', '=', row[key])]).id
@@ -208,8 +207,6 @@ class CalendarOccasion(models.Model):
                         'Nej': False,
                     }
                     row[key] = translation_dict[row[key]]
-
-
                 keys_to_delete.append("date")
 
         for i in range(len(keys_to_update)):
