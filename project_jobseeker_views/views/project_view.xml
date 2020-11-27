@@ -1,0 +1,26 @@
+<odoo>
+    <data>
+        <record id="project_jobseeker_tree_view" model="ir.ui.view">
+            <field name="name">project.project.tree</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.view_project"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='user_id']" position="attributes">
+                    <attribute name="string">Coach</attribute>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="string">Jobseeker</attribute>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="case_number"/>
+                    <field name="service"/>
+                    <field name="date_start"/>
+                    <field name="date"/>
+                    <field name="project_next_task"/>
+                    <field name="project_next_task_due_date"/>
+                    <field name="task_new_event"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -19,10 +19,12 @@
 #
 ##############################################################################
 
-import logging
 from datetime import date
-from zeep.client import CachingClient
 import json
+import logging
+import time
+from zeep.client import CachingClient
+
 
 from odoo import models, fields, api, _
 from odoo.exceptions import Warning
@@ -30,7 +32,7 @@ from odoo.tools.safe_eval import safe_eval
 from odoo.http import request
 
 _logger = logging.getLogger(__name__)
-
+TIMEOUT = 60 * 3
 
 class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     _name = "hr.employee.jobseeker.search.wizard"
@@ -238,24 +240,36 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
 
     @api.multi
     def do_bankid(self):
-        bankid = CachingClient(self.env['ir.config_parameter'].sudo().get_param('hr_360_view.bankid_wsdl', 'http://bhipws.arbetsformedlingen.se/Integrationspunkt/ws/mobiltbankidinterntjanst?wsdl'))  # create a Client instance
-        res = bankid.service.startaIdentifiering(self.social_sec_nr_search.replace('-',''),'crm')
+        """Send BankID request and wait for user verification."""
+        bankid = CachingClient(
+            self.env['ir.config_parameter'].sudo().get_param('hr_360_view.bankid_wsdl',
+            'http://bhipws.arbetsformedlingen.se/Integrationspunkt/ws/mobiltbankidinterntjanst?wsdl')) # create a Client instance
+        res = bankid.service.startaIdentifiering(
+            self.social_sec_nr_search.replace('-',''),
+            'crm')
+        _logger.warn("res: %s" % res)
         try:
             orderRef = res['orderRef']
             if not orderRef:
                 try:
-                    status = res['felStatusKod']
-                except:
-                    status = _("Error in communication with BankID")
-        except:
-                    status = _("Error in communication with BankID")
+                    self.bank_id_text = res['felStatusKod']
+                except KeyError:
+                    self.bank_id_text = _("Error in communication with BankID")
+        except KeyError:
+            self.bank_id_text = _("Error in communication with BankID")
+
         if orderRef:
-            res = bankid.service.verifieraIdentifiering(orderRef,'crm')
-            try:
-                status = res['statusText']
-            except:
-                try:
-                    status = res['felStatusKod']
-                except:
-                    status = _("Error in communication with BankID")
-        self.bank_id_text = '%s' % status
+            deadline = time.monotonic() + TIMEOUT
+            time.sleep(9) # Give user time to react before polling.
+            while deadline > time.monotonic():
+                res = bankid.service.verifieraIdentifiering(orderRef,'crm')
+                _logger.warn("res: %s" % res)
+                if 'statusText' in res and res['statusText'] == 'OK':
+                    self.bank_id_text = res['statusText']
+                    break
+                elif 'felStatusKod' in res and self.bank_id_text['felStatusKod']:
+                    self.bank_id_text = res['felStatusKod']
+                    break
+                time.sleep(3)
+            else:
+                self.bank_id_text = _("User timeout")

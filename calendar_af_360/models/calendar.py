@@ -36,28 +36,41 @@ class CalendarAppointmentSuggestion(models.Model):
     def select_suggestion(self):
         # check state of appointment
         super(CalendarAppointmentSuggestion, self).select_suggestion()
+        try:
+            # TODO: We should only get here when going through Arbetsyta.
+            # When not going through Arbetsyta, jobseeker access can not be guaranteed.
+            # This is an ugly hack to prevent read errors when not going through Arbetsyta.
+            self.appointment_id.partner_id.name
+            return {
+                "name": _("Jobseekers"),
+                "res_id": self.appointment_id.partner_id.id,
+                "res_model": "res.partner",
+                "view_id": self.env.ref("partner_view_360.view_jobseeker_form").id,
+                "view_mode": "form",
+                "type": "ir.actions.act_window",
+            }
+        except:
+            pass
 
-        return {
-            "name": _("Jobseekers"),
-            "res_id": self.appointment_id.partner_id.id,
-            "res_model": "res.partner",
-            "view_id": self.env.ref("partner_view_360.view_jobseeker_form").id,
-            "view_mode": "form",
-            "type": "ir.actions.act_window",
-        }
     @api.multi
     def select_suggestion_move(self):
         # check state of appointment
         super(CalendarAppointmentSuggestion, self).select_suggestion_move()
-
-        return {
-            "name": _("Jobseekers"),
-            "res_id": self.appointment_id.partner_id.id,
-            "res_model": "res.partner",
-            "view_id": self.env.ref("partner_view_360.view_jobseeker_form").id,
-            "view_mode": "form",
-            "type": "ir.actions.act_window",
-        }
+        try:
+            # TODO: We should only get here when going through Arbetsyta.
+            # When not going through Arbetsyta, jobseeker access can not be guaranteed.
+            # This is an ugly hack to prevent read errors when not going through Arbetsyta.
+            self.appointment_id.partner_id.name
+            return {
+                "name": _("Jobseekers"),
+                "res_id": self.appointment_id.partner_id.id,
+                "res_model": "res.partner",
+                "view_id": self.env.ref("partner_view_360.view_jobseeker_form").id,
+                "view_mode": "form",
+                "type": "ir.actions.act_window",
+            }
+        except:
+            pass
 
 
 class CalendarAppointment(models.Model):

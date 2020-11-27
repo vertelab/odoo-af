@@ -58,16 +58,29 @@
             <field name="perm_unlink" eval="True"/>
         </record>
 
-        <!-- AF Offices and Employees -->
-        <record id="af_rule_offices" model="ir.rule">
-            <field name="name">res.partner - AF Offices / Employees - Internal User</field>
-            <field ref="base.model_res_partner" name="model_id"/>
-            <field name="domain_force">['|', '|', '|',
-                ('type', '=', 'af office'),
-                ('employee', '=', True),
-                ('is_jobseeker', '=', True),
-                ('user_ids', '=', user.id)]
+        <!-- Appointments Rule -->
+        <record id="af_rule_appointment_user" model="ir.rule">
+            <field name="name">calendar.appointment - Internal User</field>
+            <field ref="calendar_af.model_calendar_appointment" name="model_id"/>
+            <field name="domain_force">['|',
+                ('partner_id.is_jobseeker', '=', False),
+                '&amp;',
+                ('partner_id.is_jobseeker', '=', True),
+                ('partner_id.jobseeker_access', 'in', ('STARK', 'MYCKET_STARK'))]
             </field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record id="af_rule_appointment_same_office" model="ir.rule">
+            <field name="name">calendar.appointment - Same Office</field>
+            <field ref="calendar_af.model_calendar_appointment" name="model_id"/>
+            <field name="domain_force">['|', 
+                ('user_id.employee_ids.office_ids.operation_ids.location_id', 'in', user.mapped('employee_ids.office_ids.operation_ids.location_id.id')),
+                ('user_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('base.group_user'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="False"/>
@@ -76,21 +89,6 @@
         </record>
 
         <!-- =====AF rules for Employers Officer===== -->
-
-        <!-- Employers -->
-        <record id="af_rule_partner_employers_officer" model="ir.rule">
-            <field name="name">res.partner - Employers Officer</field>
-            <field ref="base.model_res_partner" name="model_id"/>
-            <field name="domain_force">[
-                ('is_employer', '=', True),
-                ('office_id', 'in', user.mapped('employee_ids.office_ids.id'))]
-            </field>
-            <field name="groups" eval="[(4, ref('af_security.af_employers_officer'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_unlink" eval="False"/>
-        </record>
 
         <!-- Daily notes -->
         <record id="af_rule_notes_employers_officer" model="ir.rule">
@@ -122,35 +120,6 @@
             <field name="perm_unlink" eval="False"/>
         </record>
 
-        <!-- Appointments -->
-        <record id="af_rule_appointments_employers_officer" model="ir.rule">
-            <field name="name">calendar.appointment - Employers Officer</field>
-            <field ref="calendar_af.model_calendar_appointment" name="model_id"/>
-            <field name="domain_force">[
-                ('partner_id.is_employer', '=', True)]
-            </field>
-            <field name="groups" eval="[(4, ref('af_security.af_employers_officer'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="True"/>
-        </record>
-
-        <!-- Appointments of coworkers in the same office -->
-        <record id="af_rule_appointments_employees_employers_officer" model="ir.rule">
-            <field name="name">calendar.appointment (employees) - Employers Officer</field>
-            <field ref="calendar_af.model_calendar_appointment" name="model_id"/>
-            <field name="domain_force">[
-                ('user_id.employee', '=', True),
-                ('user_id.employee_ids.office_id', 'in', user.mapped('employee_ids.office_ids.id'))]
-            </field>
-            <field name="groups" eval="[(4, ref('af_security.af_employers_officer'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_unlink" eval="False"/>
-        </record>
-
         <!-- =====AF rules for Employers Editor===== -->
 
         <!-- Employers -->
@@ -159,7 +128,7 @@
             <field ref="base.model_res_partner" name="model_id"/>
             <field name="domain_force">[('is_employer', '=', True)]</field>
             <field name="groups" eval="[(4, ref('af_security.af_employers_editor'))]"/>
-            <field name="perm_read" eval="True"/>
+            <field name="perm_read" eval="False"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_unlink" eval="True"/>
@@ -177,18 +146,6 @@
             <field name="perm_unlink" eval="False"/>
         </record>
 
-        <!-- Appointments -->
-        <!-- <record id="af_rule_appointments_employers_editor" model="ir.rule">
-            <field name="name">calendar.appointment - Employers Editor</field>
-            <field ref="calendar_af.model_calendar_appointment" name="model_id"/>
-            <field name="domain_force">[('partner_id.is_employer', '=', True)]</field>
-            <field name="groups" eval="[(4, ref('af_security.af_employers_editor'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="True"/>
-        </record> -->
-
         <!-- Appointments of coworkers -->
         <record id="af_rule_appointments_employees_employers_editor" model="ir.rule">
             <field name="name">calendar.appointment (employees) - Employers Officer</field>
@@ -203,18 +160,6 @@
 
         <!-- =====AF rules for Jobseekers Officer===== -->
 
-        <!-- Jobseekers -->
-        <record id="af_rule_jobseekers_officer" model="ir.rule">
-            <field name="name">res.partner - Jobseekers Officer</field>
-            <field ref="base.model_res_partner" name="model_id"/>
-            <field name="domain_force">[('is_jobseeker', '=', True)]</field>
-            <field name="groups" eval="[(4, ref('af_security.af_jobseekers_officer'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_unlink" eval="False"/>
-        </record>
-
         <!-- Daily notes -->
         <record id="af_rule_notes_jobseekers_officer" model="ir.rule">
             <field name="name">res.partner.notes - Jobseekers Officer</field>
@@ -227,34 +172,6 @@
             <field name="perm_unlink" eval="False"/>
         </record>
 
-        <!-- Appointments -->
-        <!-- Tricky. partner_ids could yield hits for two different partners that don't match individually, but do match together. Might have to make this a function. -->
-        <record id="af_rule_appointments_jobseekers_officer" model="ir.rule">
-            <field name="name">calendar.appointment - Jobseekers Officer</field>
-            <field ref="calendar_af.model_calendar_appointment" name="model_id"/>
-            <field name="domain_force">[('partner_id.is_jobseeker', '=', True)]</field>
-            <field name="groups" eval="[(4, ref('af_security.af_jobseekers_officer'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="True"/>
-        </record>
-
-        <!-- Appointments of coworkers in the same office -->
-        <record id="af_rule_appointments_employees_jobseekers_officer" model="ir.rule">
-            <field name="name">calendar.appointment (employees) - Jobseekers Officer</field>
-            <field ref="calendar_af.model_calendar_appointment" name="model_id"/>
-            <field name="domain_force">[
-                ('user_id.employee', '=', True),
-                ('user_id.employee_ids.office_id', 'in', user.mapped('employee_ids.office_ids.id'))]
-            </field>
-            <field name="groups" eval="[(4, ref('af_security.af_jobseekers_officer'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
-            <field name="perm_create" eval="False"/>
-            <field name="perm_unlink" eval="False"/>
-        </record>
-
         <!-- =====AF rules for Jobseekers Editor===== -->
 
         <!-- Jobseekers -->
@@ -263,7 +180,7 @@
             <field ref="base.model_res_partner" name="model_id"/>
             <field name="domain_force">[('is_jobseeker', '=', True)]</field>
             <field name="groups" eval="[(4, ref('af_security.af_jobseekers_editor'))]"/>
-            <field name="perm_read" eval="True"/>
+            <field name="perm_read" eval="False"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_unlink" eval="True"/>
@@ -281,33 +198,30 @@
             <field name="perm_unlink" eval="True"/>
         </record>
 
-        <!-- Appointments -->
-        <!-- TODO: Is this how it should work? Not how it's specified. -->
-        <!-- <record id="af_rule_appointments_jobseekers_editor" model="ir.rule">
-            <field name="name">calendar.appointment - Jobseekers Officer</field>
-            <field ref="calendar_af.model_calendar_appointment" name="model_id"/>
-            <field name="domain_force">[('partner_id.is_jobseeker', '=', True)]</field>
-            <field name="groups" eval="[(4, ref('af_security.af_jobseekers_editor'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="False"/>
-        </record> -->
+        <!-- =====Planeringshandläggare mötesbokning===== -->
 
-        <record id="af_rule_appointments_employees_jobseekers_editor" model="ir.rule">
-            <field name="name">calendar.appointment (employees) - Jobseekers Officer</field>
+        <record id="af_rule_appointment_meeting_planner" model="ir.rule">
+            <field name="name">calendar.appointment - Meeting Planner</field>
             <field ref="calendar_af.model_calendar_appointment" name="model_id"/>
-            <field name="domain_force">[('partner_id.employee', '=', True)]</field>
-            <field name="groups" eval="[(4, ref('af_security.af_jobseekers_editor'))]"/>
+            <field name="domain_force">[('user_id.employee_ids.office_ids.operation_ids.location_id', 'in', user.mapped('employee_ids.office_ids.operation_ids.location_id.id'))]</field>
+            <field name="groups" eval="[(4, ref('af_security.af_meeting_planner'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="False"/>
             <field name="perm_create" eval="False"/>
             <field name="perm_unlink" eval="False"/>
         </record>
 
-        <!-- =====Planeringshandläggare mötesbokning===== -->
-
         <!-- =====Bemanningshandläggare mötesbokning===== -->
+        <record id="af_rule_resource_leaves_meeting_admin" model="ir.rule">
+            <field name="name">resource.calendar.leaves - Meeting Admin</field>
+            <field ref="resource.model_resource_calendar_leaves" name="model_id"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('af_security.af_meeting_admin'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
 
         <!-- =====Overwritten rules===== -->
         <!-- Resource leaves access rights -->

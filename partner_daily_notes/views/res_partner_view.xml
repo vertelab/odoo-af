@@ -1,0 +1,23 @@
+<odoo>
+    <data>
+        <record id="partner_daily_notes_form_view" model="ir.ui.view">
+            <field name="name">res.partner</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="partner_view_360.view_jobseeker_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/div[hasclass('oe_button_box')]" position="inside">
+                    <button name="action_view_next_event"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-calendar-plus-o"
+                        string="Daily notes"/>
+                </xpath>
+                <field name="jobseeker_category" position="after">
+                    <field name="next_contact"/>
+                    <field name="last_contact"/>
+                </field>
+            </field>
+
+        </record>
+    </data>
+</odoo>
