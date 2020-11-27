@@ -8,6 +8,7 @@
     "website": "https://vertel.se/",
     "category": "Security",
     "depends": [
+        "web",
         ],
     "data": [
         'security/security.xml',
