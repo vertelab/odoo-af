@@ -161,10 +161,12 @@ class CalendarOccasion(models.Model):
                 elif key == 'start' or key == 'stop':
                     row[key] = "%s %s" % (row['date'].split(' ')[0], row[key])
                 elif key == 'duration_selection':
-                    if row['duration'] == "60":
+                    if row[key] == "60":
                         row[key] = "1 hour"
-                    elif row['duration'] == "30":
+                        row['duration'] = 1
+                    elif row[key] == "30":
                         row[key] = "30 minutes"
+                        row['duration'] = 0.5
                     else:
                         create = False
                 elif key == 'type_id':
