@@ -8,6 +8,7 @@
     "website": "https://vertel.se/",
     "category": "Tools",
     "description": """
+	 This module adds a template for sending meeting confirmations to the participants. 
 	 v12.0.1.3 KPD-516 - Change sortorder in Meetings-tab
     """,
     "depends": ["calendar_af"],
