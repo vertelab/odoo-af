@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <!-- ##################################### -->
+    <!-- Manage Users, Emplyees, Contacts Organization wide -->
     <!-- Hantera Användare och Org-uppgifter (Organisationsnivå) -->
     <!-- ##################################### -->
+    
     <record id="category_dafa_handle_org_info" model="ir.module.category">
         <field name="name">DAFA - Organisational Admin Roles</field>
         <field name="description">Category for handling employee rights on organisational level.</field>
@@ -19,24 +21,22 @@
         <field name="implied_ids" eval="[4, ref('group_dafa_emplyees_read')]"/>
     </record>
 
-
-    <!-- Hantera Organisationsuppgifter -->
+    <!-- Superadmin (Read) -->
+    <!-- Hantera Organisationsuppgifter (Läs) -->
     <record id="group_dafa_org_admin_read" model="res.groups">
         <field name="name">DAFA Org Admin (Read)</field>
         <field name="category_id" ref="category_dafa_handle_org_info"/>
     </record>
 
 
-    <!-- Superadmin -->
+    <!-- Superadmin (Write) -->
     <record id="group_dafa_superadmin" model="res.groups">
         <field name="name">DAFA Superadmin</field>
         <field name="category_id" ref="category_dafa_handle_org_info"/>
     </record>
 
-    
-
-
     <!-- ############################################ -->
+    <!-- Manage Users, Emplyees, Contacts Department level -->
     <!-- Hantera Deltagare och Ekonomi (Utförandeverksamhetsnivå) -->
     <!-- ############################################ -->
     <record id="category_dafa_handle_department_info" model="ir.module.category">
@@ -55,10 +55,7 @@
         <field name="implied_ids" eval="[4, ref('group_dafa_participants_read')]"/>
     </record>
 
-
-
-
-
+    <!-- Manage Accounting -->
     <!-- Hantera Ekonomi -->
     <record id="group_dafa_admin_accounting_read" model="res.groups">
         <field name="name">DAFA Accounting (Read)</field>
