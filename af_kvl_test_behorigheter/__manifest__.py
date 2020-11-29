@@ -1,10 +1,10 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 {
-    "name": "AF-KVL Security",
+    "name": "DAFA User Groups",
     "version": "12.0001",
-    "author": "Aden Hassan",
+    "author": "Arbetsformedlingen",
     "license": "AGPL-3",
-    "description": "Åtkomsträttigheter inom kvl. Innehåller exempel på access-rättigheter men är bort-kommenterade.",
+    "description": "User groups for the DAFA server. Access rules are added in each module.",
     "website": "https://arbetsformedlingen.se/",
     "category": "Security",
     "depends": [
