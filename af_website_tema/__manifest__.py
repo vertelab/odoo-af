@@ -1,5 +1,5 @@
 {
-    "name": "AF Website Tema V12",
+    "name": "Depreciated AF Website Tema V12",
     "summary": "Depreciated AF Website Theme V12	",
     "version": "12.0.0.2",
     "category": "Theme/Website",
