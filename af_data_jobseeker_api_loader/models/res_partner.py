@@ -32,10 +32,11 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
     @api.model
-    def create_jobseekers(self):
-        path = os.path.join(
-            config.options.get('data_dir'),
-            'AIS-F/arbetssokande.csv')
+    def create_jobseekers(self, path):
+        if not path:
+            path = os.path.join(
+                config.options.get('data_dir'),
+                'AIS-F/arbetssokande.csv')
         path = "/usr/share/odoo-af/af_data_jobseeker_api_loader/data/test_dumps/arbetssokande.csv" # testing purposes only
         self.create_partners_from_api('SOKANDE_ID', path)
 
@@ -43,12 +44,12 @@ class ResPartner(models.Model):
     def create_partners_from_api(self, key, path):
         db_con = self.env.ref('af_ipf.ipf_endpoint_rask').sudo()
         db_values = {'res.country.state': self.search('res.country.state', 'code', 'id'),
-                     'hr.departement': self.search('hr_department', 'office_code', 'id'),
+                     'hr.departement': self.search('hr.department', 'office_code', 'id'),
                      'res.sun': self.search('res.sun', 'code', 'id'),
                      'res.partner.skat': self.search('res.partner.skat', 'code', 'id'),
                      'res.partner.education_level': self.search('res.partner.education_level', 'name', 'id'),
                      'res.users': self.search('res.users', 'login', 'id'),
-                     'res.country': self.search('res_country', 'name', 'id', 'lang="sv_SE"'),}
+                     'res.country': self.search('res.country', 'name', 'id', 'lang="sv_SE"'),}
         index = 0
         iterations = 0
         with open(path) as fh:
