@@ -40,15 +40,15 @@ class ResPartner(models.Model):
         self.create_partners_from_api('SOKANDE_ID', path)
 
     @api.model
-    def create_partners_from_api(key, path):
+    def create_partners_from_api(self, key, path):
         db_con = self.env.ref('af_ipf.ipf_endpoint_rask').sudo()
-        db_values = {'res.country.state': search('res.country.state', 'code', 'id'),
-                     'hr.departement': search('hr_department', 'office_code', 'id'),
-                     'res.sun': search('res.sun', 'code', 'id'),
-                     'res.partner.skat': search('res.partner.skat', 'code', 'id'),
-                     'res.partner.education_level': search('res.partner.education_level', 'name', 'id'),
-                     'res.users': search('res.users', 'login', 'id'),
-                     'res.country': search('res_country', 'name', 'id', 'lang="sv_SE"'),}
+        db_values = {'res.country.state': self.search('res.country.state', 'code', 'id'),
+                     'hr.departement': self.search('hr_department', 'office_code', 'id'),
+                     'res.sun': self.search('res.sun', 'code', 'id'),
+                     'res.partner.skat': self.search('res.partner.skat', 'code', 'id'),
+                     'res.partner.education_level': self.search('res.partner.education_level', 'name', 'id'),
+                     'res.users': self.search('res.users', 'login', 'id'),
+                     'res.country': self.search('res_country', 'name', 'id', 'lang="sv_SE"'),}
         index = 0
         iterations = 0
         with open(path) as fh:
@@ -75,11 +75,11 @@ class ResPartner(models.Model):
                     self.env.cr.commit()
                     iterations = 0
 
-def search(obj, key, field_name, context=None):
-    """Build dicts with key: field_name"""
-    if context:
+    def search(self, obj, key, field_name, context=None):
+        """Build dicts with key: field_name"""
+        if context:
+            return {res[key]: res[field_name] for res in
+                    self.env[obj].with_context(eval(context)).search_read(
+                        [], [key, field_name])}
         return {res[key]: res[field_name] for res in
-                self.env[obj].with_context(eval(context)).search_read(
-                    [], [key, field_name])}
-    return {res[key]: res[field_name] for res in
-            self.env[obj].search_read([], [key, field_name])}
+                self.env[obj].search_read([], [key, field_name])}
