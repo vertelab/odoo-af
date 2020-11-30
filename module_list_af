@@ -1,6 +1,10 @@
-List of modules for the AF-projects
-Instructions: 
-1 add translation
+<h1>List of modules for the AF-projects</h1>
+<b>Instructions: </b>
+1 add "name", "summary" for users, "description"- for server admins, "index-file" for users + developers , "translation"-files, 
+2 When a module is replaced: Add "Depreciated/Replaced as the first word in the "name"-field, change "installable" to "False". Add a note of reason and if it is replaced, with what module.
+
+Qustions? Ask Fredrik Arvas.
+<hr>
 
 af_core_menu_disabling
 #af_backend_tema - replaced 2020-11-25 by web_backend_theme_af
