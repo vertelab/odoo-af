@@ -220,6 +220,8 @@ class CreateLocalOccasion(models.TransientModel):
                 repeat_list.append(3)
             if self.repeat_fri:
                 repeat_list.append(4)
+            if not (self.repeat_mon or self.repeat_tue or self.repeat_wed or self.repeat_thu or self.repeat_fri):
+                raise Warning(_("No weekday has been selected for repeating occasions"))
             # create a list of all days in start-end-range.
             date_list = [
                 self.start + timedelta(days=x)
