@@ -6,7 +6,7 @@
         <field name="state">code</field>
         <field name="code">
 path=False
-env.ref['res.partner'].create_jobseekers(path)
+env['res.partner'].create_jobseekers(path)
         </field>
     </record>
 </odoo>
