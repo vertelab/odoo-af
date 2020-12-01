@@ -37,7 +37,7 @@ class ResPartner(models.Model):
             path = os.path.join(
                 config.options.get('data_dir'),
                 'AIS-F/arbetssokande.csv')
-        path = "/usr/share/odoo-af/af_data_jobseeker_api_loader/data/test_dumps/arbetssokande.csv" # testing purposes only
+            path = "/usr/share/odoo-af/af_data_jobseeker_api_loader/data/test_dumps/arbetssokande.csv" # testing purposes only
         self.create_partners_from_api('SOKANDE_ID', path)
 
     @api.model
@@ -49,25 +49,28 @@ class ResPartner(models.Model):
                      'res.partner.skat': self.search_model('res.partner.skat', 'code', 'id'),
                      'res.partner.education_level': self.search_model('res.partner.education_level', 'name', 'id'),
                      'res.users': self.search_model('res.users', 'login', 'id'),
-                     'res.country': self.search_model('res.country', 'name', 'id', 'lang="sv_SE"'),}
-        index = 0
+                     'res.country': self.search_model('res.country', 'name', 'id', {'lang':'sv_SE'})
+                     }
+        rownr = 0
         iterations = 0
         with open(path) as fh:
             for row in fh:
-                if index == 0:
+                if rownr == 0:
                     header = {key.strip():index for index, key in
                               enumerate(row.strip().split(','))}
                     try:
+                        _logger.info("header: %s" % header)
                         id_index = header[key]
                     except KeyError:
                         _logger.error(
                             f'Failed to find {key} in {", ".join(header)}')
                         raise
+                    rownr += 1
                     continue
-                customer_id = row.strip.split(',')[id_index]
-                if not self.env['res.partner'].search_count(['customer_id',
+                customer_id = row.strip().split(',')[id_index]
+                if not self.env['res.partner'].search_count([('customer_id',
                                                              '=',
-                                                             customer_id]):
+                                                             customer_id)]):
                     self.env['res.partner'].rask_as_get(
                         customer_id, db_con, db_values)
 
@@ -80,7 +83,7 @@ class ResPartner(models.Model):
         """Build dicts with key: field_name"""
         if context:
             return {res[key]: res[field_name] for res in
-                    self.env[obj].with_context(eval(context)).search_read(
+                    self.env[obj].with_context(**context).search_read(
                         [], [key, field_name])}
         return {res[key]: res[field_name] for res in
                 self.env[obj].search_read([], [key, field_name])}
