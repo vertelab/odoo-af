@@ -44,7 +44,7 @@ class ResPartner(models.Model):
     def create_partners_from_api(self, key, path):
         db_con = self.env.ref('af_ipf.ipf_endpoint_rask').sudo()
         db_values = {'res.country.state': self.search_model('res.country.state', 'code', 'id'),
-                     'hr.departement': self.search_model('hr.department', 'office_code', 'id'),
+                     'hr.department': self.search_model('hr.department', 'office_code', 'id'),
                      'res.sun': self.search_model('res.sun', 'code', 'id'),
                      'res.partner.skat': self.search_model('res.partner.skat', 'code', 'id'),
                      'res.partner.education_level': self.search_model('res.partner.education_level', 'name', 'id'),
