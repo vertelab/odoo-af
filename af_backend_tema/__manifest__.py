@@ -2,7 +2,7 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html).
 
 {
-    "name": "AF Backend Tema V12",
+    "name": "Depreciated AF Backend Tema V12",
     "summary": "AF Backend Theme V12	",
     "version": "12.0.0.6",
     "category": "Theme/Backend",
@@ -11,9 +11,9 @@
     """,
     "author": "Vertel AB",
     "license": "LGPL-3",
-    "installable": True,
+    "installable": "False",
     "depends": [
-        'base', 'portal', 'web'
+        "base", 'web'
     ],
     "qweb": [
         "static/src/xml/*.xml",
