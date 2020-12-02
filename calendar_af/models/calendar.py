@@ -505,9 +505,9 @@ class CalendarAppointment(models.Model):
     @api.one
     def compute_duration_text(self):
         if self.duration == 0.5:
-            self.duration_text = '30 minutese'
+            self.duration_text = '30 minutes'
         elif self.duration == 1.0:
-            self.duration_text = '1 houre'
+            self.duration_text = '1 hour'
 
     @api.depends('start')
     def _app_start_time_calc(self):
