@@ -1,8 +1,8 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 {
-    "name": "Af Dava MVP 2.0 Install all modules ",
-    "version": "12.0.1.1",
+    "name": "DAFA MVP 2.0 Install all modules ",
+    "version": "12.0.1.2",
     "author": "Vertel AB",
     "description": """
 	This module installs all Dafa MVP2-modules at one go.\n
@@ -11,6 +11,7 @@
 	\n
 	v12.0.1.1  - First release\n
 	Once the module is installed, please de-install it to avoid depencency-problems.\n
+	v12.0.1.2  - Uncommented xmlrpc\n
 	\n
 	""",
     "license": "AGPL-3",
@@ -30,7 +31,7 @@
 	"partner_desired_jobs", #odoo-base
 	"project_jobseeker_views",
 	"sale_suborder_ipf_client",
-        # "api_project_odoo_xmlrpc",
+        "api_project_odoo_xmlrpc",
     ],
     "application": False,
     "installable": True,
