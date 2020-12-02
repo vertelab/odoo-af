@@ -1,8 +1,8 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 {
-    "name": "Af Dava MVP 1.0 Install all modules ",
-    "version": "12.0.1.2",
+    "name": "DAFA MVP 1.0 Install all modules ",
+    "version": "12.0.1.3",
     "author": "Vertel AB",
     "description": """
 	This module installs all Dafa MVP1-modules at one go.\n
@@ -11,6 +11,7 @@
 	\n
 	v12.0.1.1  - First release\n
 	v12.0.1.2  - Updates in the list\n
+	v12.0.1.3  - Added Auth_user_rights_wizard and CIAM-modules, corrected spelling of auth_timeout\n
 	
 	Once the module is installed, please de-install it to avoid depencency-problems.\n
 	
@@ -23,8 +24,9 @@
         # These modules needs to be installed for  MVP1 functionality
         "auth_saml_ol_groups",
         "auth_saml_af",
+	"auth_user_rights_wizard", # adds functionality to assign user-credentials to coaches.
         "audit_logger",
-        "audit_timeout",  # odoo-auth
+        "auth_timeout",  # odoo-auth
         "partner_view_360",
         # "partner_legacy_id",
         "contact_links",  # Dependancy to hr_360_view, that has an old dependency to partner_notes
@@ -37,6 +39,7 @@
         "edi_af_officer",
         "hr_employee_ciam_client",
         "hr_employee_lastnames",
+	# "hr_employee_firstname_extension", # is missing in DAFA-repo and is dependent on hr_employee_lastnames
         "hr_employee_legacy_id",  # OCA
         "hr_employee_views_fenix",
         # "hr_departments_partner" #AFC-1329
@@ -47,9 +50,9 @@
         "res_drivers_license",
         "web_autocomplete_off",
         "web_backend_theme_af",
-        "web_employee_views_fenix",
-        "web_employee_views_user-credentials-tab",
+        # "web_employee_views_user-credentials-tab", - depreciated. Replaced by user-create-wizard.
         "web_dashboard_fenix",
+	    
     ],
     "application": False,
     "installable": True,
