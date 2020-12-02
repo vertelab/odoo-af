@@ -22,7 +22,8 @@
     "category": "Tools",
     "depends": [
         # These modules needs to be installed for  MVP1 functionality
-        "auth_saml_ol_groups",
+	"api_ipf_tlr_client", # adds api to be used for fetching company-details from TLR
+	"auth_saml_ol_groups",
         "auth_saml_af",
 	"auth_user_rights_wizard", # adds functionality to assign user-credentials to coaches.
         "audit_logger",
