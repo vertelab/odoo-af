@@ -8,7 +8,10 @@
     "website": "https://vertel.se/",
     'category': 'Tools',
     'version': '12.0.1.2',
-    'depends': ['calendar','website','contacts'],
+    'depends': [
+        'calendar',
+        #'website', disabled until moved to a different module.
+        'contacts'],
     "description": """
         This module adds a hides core menues for users in the group internal-users.\n
         It also adds a group to Show the hidden menues. \n
