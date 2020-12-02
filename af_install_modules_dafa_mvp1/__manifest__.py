@@ -23,33 +23,33 @@
         # These modules needs to be installed for  MVP1 functionality
         "auth_saml_ol_groups",
         "auth_saml_af",
-        "audit_logger", 
-        "audit_timeout", #odoo-auth
+        "audit_logger",
+        "audit_timeout",  # odoo-auth
         "partner_view_360",
-	#"partner_legacy_id", 
-        "contact_links", # Dependancy to hr_360_view, that has an old dependency to partner_notes
-	# "partner_mq_ipf", This should not be installed automatically, since it consumes a liste of changes
+        # "partner_legacy_id",
+        "contact_links",  # Dependancy to hr_360_view, that has an old dependency to partner_notes
+        # "partner_mq_ipf", This should not be installed automatically, since it consumes a liste of changes
         "edi_af_aisf_rask_get_jobseeker",
         "edi_af_aisf_rask",
         # "edi_af_aisf_trask", #field signature does not exist in partner_daily_notes
         "edi_af_facility",
         "edi_af_krom_postcode",
         "edi_af_officer",
-	"hr_employee_ciam_client",
-	"hr_employee_lastnames",
-	"hr_employee_legacy_id", #OCA
+        "hr_employee_ciam_client",
+        "hr_employee_lastnames",
+        "hr_employee_legacy_id",  # OCA
         "hr_employee_views_fenix",
-	#"hr_departments_partner" #AFC-1329
-	"hr_org_chart",
-        # "web_a11y_filter_view",   
-	# "web_a11y_report",  
-	# "partner_legacy_id", 
+        # "hr_departments_partner" #AFC-1329
+        "hr_org_chart",
+        # "web_a11y_filter_view",
+        # "web_a11y_report",
+        # "partner_legacy_id",
         "res_drivers_license",
-	"web_autocomplete_off",
-	"web_backend_theme_af",
+        "web_autocomplete_off",
+        "web_backend_theme_af",
         "web_employee_views_fenix",
         "web_employee_views_user-credentials-tab",
-        "web_dashboard_fenix",   
+        "web_dashboard_fenix",
     ],
     "application": False,
     "installable": True,
