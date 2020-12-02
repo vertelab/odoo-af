@@ -505,9 +505,9 @@ class CalendarAppointment(models.Model):
     @api.one
     def compute_duration_text(self):
         if self.duration == 0.5:
-            self.duration_text = '30 minutes'
+            self.duration_text = '30 minutese'
         elif self.duration == 1.0:
-            self.duration_text = '1 hour'
+            self.duration_text = '1 houre'
 
     @api.depends('start')
     def _app_start_time_calc(self):
@@ -927,7 +927,7 @@ class CalendarOccasion(models.Model):
     duration_selection = fields.Selection(string="Duration",
                                           selection=[('30 minutes', '30 minutes'), ('1 hour', '1 hour')])
     duration = fields.Float('Duration')
-    duration_text = fields.Char('Duration', compute="compute_duration_text")
+    duration_text = fields.Char('Duration', compute="compute_duration_text", store=True)
     appointment_id = fields.Many2one(comodel_name='calendar.appointment', string="Appointment", index=True)
     type_id = fields.Many2one(comodel_name='calendar.appointment.type', string='Type', index=True)
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel', related='type_id.channel',
