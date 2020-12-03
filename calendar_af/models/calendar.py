@@ -963,7 +963,10 @@ class CalendarOccasion(models.Model):
 
     @api.one
     def compute_duration_text(self):
-        self.duration_text = "%s minutes" % int(self.duration)
+        if self.duration == 0.5:
+            self.duration_text = '30 minutes'
+        elif self.duration == 1.0:
+            self.duration_text = '1 hour'
 
     @api.one
     def _compute_weekday(self):
