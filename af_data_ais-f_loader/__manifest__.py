@@ -2,7 +2,7 @@
 
 {
     "name": "AIS-F Data Loader",
-    "version": "12.0.1.3",
+    "version": "12.0.1.4",
     "description": """
 
 AIS-F Data Loader
@@ -12,7 +12,7 @@ Database dump files must be located in AIS-F/filename.csv in 'data_dir' director
 There are test dump files located in data/test_dumps\n
 v12.0.1.2  - added version -explanation\n
 v12.0.1.3  - removed state-partner.csv\n
-\n
+v12.0.1.4  - replaced loading during install with a server action\n
 \n
 """,
 
@@ -29,8 +29,7 @@ v12.0.1.3  - removed state-partner.csv\n
 		#"partner_desired_jobs",
     ],
     "data": [
-        #"data/res.country.state.csv",
-        "data/res_partner.xml",
+        "views/res_partner.xml",
     ],
     "application": False,
     "installable": True,

@@ -110,7 +110,10 @@
                            statusbar_visible="free,reserved,confirmed,done,canceled"/>
                 </header>
                 <sheet>
-                    <group string="Book meeting">
+                    <h1>
+                        <div class="oe_edit_only">Book meeting</div>
+                    </h1>
+                    <group>
                         <group>
                             <field name="name" invisible="1"/>
                             <field string="Meeting channel" name="channel" readonly="0"
@@ -155,7 +158,7 @@
                         </page>
                     </notebook>
                     <span aria-atomic="true" class="btn-group oe-right oe_button_box">
-                        <button name="compute_suggestion_ids" type="object" string="Next"/>
+                        <button class="oe_edit_only" name="compute_suggestion_ids" type="object" string="Next"/>
                     </span>
                     <field name="suggestion_ids" readonly="1"
                            attrs="{'invisible':[('show_suggestion_ids','=',False)]}">
