@@ -2,7 +2,7 @@
 
 {
     "name": "DAFA MVP 1.0 Install all modules ",
-    "version": "12.0.1.3",
+    "version": "12.0.1.4",
     "author": "Vertel AB",
     "description": """
 	This module installs all Dafa MVP1-modules at one go.\n
@@ -12,6 +12,7 @@
 	v12.0.1.1  - First release\n
 	v12.0.1.2  - Updates in the list\n
 	v12.0.1.3  - Added Auth_user_rights_wizard and CIAM-modules, corrected spelling of auth_timeout\n
+	v12.0.1.4  - Removed items outside of MVP1 \n
 	
 	Once the module is installed, please de-install it to avoid depencency-problems.\n
 	
@@ -22,37 +23,40 @@
     "category": "Tools",
     "depends": [
         # These modules needs to be installed for  MVP1 functionality
+	"af_statistics",  # will be renamed to web_matomo
 	"api_ipf_tlr_client", # adds api to be used for fetching company-details from TLR
 	"auth_saml_ol_groups",
         "auth_saml_af",
 	"auth_user_rights_wizard", # adds functionality to assign user-credentials to coaches.
         "audit_logger",
-        "auth_timeout",  # odoo-auth
-        "partner_view_360",
+        "auth_timeout",  
+        # "partner_view_360",
         # "partner_legacy_id",
-        "contact_links",  # Dependancy to hr_360_view, that has an old dependency to partner_notes
+        # "contact_links",  # Dependancy to hr_360_view, that has an old dependency to partner_notes
         # "partner_mq_ipf", This should not be installed automatically, since it consumes a liste of changes
-        "edi_af_aisf_rask_get_jobseeker",
-        "edi_af_aisf_rask",
+        # "edi_af_aisf_rask_get_jobseeker",
+        # "edi_af_aisf_rask",
         # "edi_af_aisf_trask", #field signature does not exist in partner_daily_notes
-        "edi_af_facility",
-        "edi_af_krom_postcode",
-        "edi_af_officer",
+        # "edi_af_facility",
+        # "edi_af_krom_postcode",
+        # "edi_af_officer",
         "hr_employee_ciam_client",
-        "hr_employee_lastnames",
-	# "hr_employee_firstname_extension", # is missing in DAFA-repo and is dependent on hr_employee_lastnames
+        "hr_employee_firstname", # is required by hr_employee_firstname_extension
+	"hr_employee_firstname_extension", # is dependent on hr_employee_firstname
         "hr_employee_legacy_id",  # OCA
-        "hr_employee_views_fenix",
+        # "hr_employee_views_fenix",
         # "hr_departments_partner" #AFC-1329
-        "hr_org_chart",
+	"hr_office", #Adds
+	"hr_org_chart",
         # "web_a11y_filter_view",
         # "web_a11y_report",
         # "partner_legacy_id",
-        "res_drivers_license",
+        # "res_drivers_license",
         "web_autocomplete_off",
         "web_backend_theme_af",
         # "web_employee_views_user-credentials-tab", - depreciated. Replaced by user-create-wizard.
         "web_dashboard_fenix",
+	"web_environment_ribbon", # Adds a ribbon with db- and version info in the left corner.
 	    
     ],
     "application": False,
