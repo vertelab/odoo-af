@@ -124,7 +124,7 @@
         <record id="3_line_support" model="res.groups">
             <field name="name">3rd Line</field>
             <field name="category_id" ref="module_category_af_support"/>
-            <field name="implied_ids" eval="[(4, ref('2_line_support'))]"/>
+            <field name="implied_ids" eval="[(4, ref('2_line_support')), (4, ref('base.group_system'))]"/>
             <field name="comment"></field>
         </record>
 
