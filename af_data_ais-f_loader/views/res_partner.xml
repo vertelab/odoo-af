@@ -7,8 +7,8 @@
         <field name="code">
 offices_path="/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/kontor.csv"
 officers_path="/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/handlaggare.csv"
-env['res.partner'].create_offices(path)
-env['res.partner'].create_officers(path)
+env['res.partner'].create_offices(offices_path)
+env['res.partner'].create_officers(officers_path)
         </field>
     </record>
 </odoo>
