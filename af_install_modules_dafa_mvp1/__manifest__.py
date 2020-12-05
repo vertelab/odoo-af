@@ -40,7 +40,7 @@
         # "edi_af_facility",
         # "edi_af_krom_postcode",
         # "edi_af_officer",
-        # "hr_departments_partner" #AFC-1329
+        "hr_departments_partner" 
 	"hr_employee_ciam_client",
         "hr_employee_firstname", # is required by hr_employee_firstname_extension
 	"hr_employee_firstname_extension", # is dependent on hr_employee_firstname
