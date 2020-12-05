@@ -40,12 +40,13 @@
         # "edi_af_facility",
         # "edi_af_krom_postcode",
         # "edi_af_officer",
-        "hr_employee_ciam_client",
+        # "hr_departments_partner" #AFC-1329
+	"hr_employee_ciam_client",
         "hr_employee_firstname", # is required by hr_employee_firstname_extension
 	"hr_employee_firstname_extension", # is dependent on hr_employee_firstname
         "hr_employee_legacy_id",  # OCA
         # "hr_employee_views_fenix",
-        # "hr_departments_partner" #AFC-1329
+	# "hr_employee_views_user-credentials-tab", - depreciated. Replaced by user-create-wizard.	    
 	"hr_office", #Adds
 	"hr_org_chart",
         # "web_a11y_filter_view",
@@ -54,7 +55,6 @@
         # "res_drivers_license",
         "web_autocomplete_off",
         "web_backend_theme_af",
-        # "web_employee_views_user-credentials-tab", - depreciated. Replaced by user-create-wizard.
         "web_dashboard_fenix",
 	"web_environment_ribbon", # Adds a ribbon with db- and version info in the left corner.
 	    
