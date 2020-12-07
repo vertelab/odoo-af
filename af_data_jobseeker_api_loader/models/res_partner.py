@@ -77,9 +77,9 @@ class ResPartner(models.Model):
                         customer_id, db_con, db_values)
 
                 iterations += 1
-                if iterations > 500:
+                if not iteterations % 500:
                     self.env.cr.commit()
-                    iterations = 0
+                    _logger.info('%s Users added' % iterations)
 
     def search_model(self, obj, key, field_name, context=None):
         """Build dicts with key: field_name"""
