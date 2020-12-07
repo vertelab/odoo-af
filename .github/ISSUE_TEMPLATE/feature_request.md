@@ -22,15 +22,21 @@ Steps to reproduce and where in the system the defect is located...
 **Module name:** (added by Nils or Fredrik)
 odoo-xx/xx_ (name convention: [supplier-function]/[function-functionality-specialization] ) 
 
-**Branch name:** 
+**Development Branch name:** 
 Dev-12.0-[CRM/DAFA]-Sprint-[number]-AFC-1XXX-...
+
+**Target Branch name:** 
+https://github.com/vertelab/odoo-xxx/tree/...
 
 **Module type:** 
 Application/Property/Resource/Glue/API module [see https://github.com/vertelab/odoo-af/issues/178 for more info]
 
-**Integrations:**
+**Integrations used in this module:**
 
 **Test-steps:**
+Install the module...
+Login with...
+Click...
 
 **Test-data:**
 
