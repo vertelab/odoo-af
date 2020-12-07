@@ -33,12 +33,14 @@ class ResPartner(models.Model):
 
     @api.model
     def create_jobseekers(self, path):
+        _logger.info("LOAD AIS-F Jobseekers - START")
         if not path:
             path = os.path.join(
                 config.options.get('data_dir'),
                 'AIS-F/arbetssokande.csv')
             path = "/usr/share/odoo-af/af_data_jobseeker_api_loader/data/test_dumps/arbetssokande.csv" # testing purposes only
         self.create_partners_from_api('SOKANDE_ID', path)
+        _logger.info("LOAD AIS-F Jobseekers - END")
 
     @api.model
     def create_partners_from_api(self, key, path):
@@ -75,9 +77,9 @@ class ResPartner(models.Model):
                         customer_id, db_con, db_values)
 
                 iterations += 1
-                if iterations > 500:
+                if not iterations % 500:
                     self.env.cr.commit()
-                    iterations = 0
+                    _logger.info('%s Users added' % iterations)
 
     def search_model(self, obj, key, field_name, context=None):
         """Build dicts with key: field_name"""
