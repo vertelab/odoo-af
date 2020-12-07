@@ -18,15 +18,13 @@
     "category": "Tools",
     "depends": [
         # These modules needs to be installed for Customer Card functionality
-        "af_core_menu_disabling",  # should be replaced by web_core_menu_disabling
-        "af_gui_disabeling",  # will be replaced by web_hide-about-user-settings
         "af_hide_top_todo_icons",  # will be replaced by hide_hide-top-todo-icons
         "af_security_rules",  # should be replaced later
         "audit_logger",
         "auth_saml_ol_groups",
         "auth_signup",
         "auth_saml_af",
-        "audit_timeout",
+        "auth_timeout",
         "contact_links",
         "edi_af_aisf_rask_get_jobseeker",
         "edi_af_aisf_rask",
@@ -37,13 +35,15 @@
         "edi_af_bar_arbetsuppgifter",
         "ipf_ais_a",
         "ipf_planning",
-        "hr_360_view" "hr_org_chart",
+        "hr_360_view",
+	"hr_org_chart",
         "hr_employee_lastnames",
         "partner_view_360",
         "partner_mq_ipf",
         "res_drivers_license",
         "web_backend_theme_af",
         "web_autocomplete_off",
+	# "web_hide-about-user-settings", new module to replace af_core_menu_disabling
     ],
     "application": False,
     "installable": True,
