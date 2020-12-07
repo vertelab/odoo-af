@@ -37,7 +37,7 @@
         "ipf_planning",
         "hr_360_view",
 	"hr_org_chart",
-        "hr_employee_lastnames",
+        "hr_employee_firstname",
         "partner_view_360",
         "partner_mq_ipf",
         "res_drivers_license",
