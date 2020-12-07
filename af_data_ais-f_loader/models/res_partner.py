@@ -411,7 +411,7 @@ class ResPartner(models.Model):
                 if transform == 'skip':
                     create = False
                     _logger.warning(
-                        "Skipping partner, contains skipping flag %s" % row[transformations[key]])
+                        "Skipping partner, contains skipping flag")
                     break
                 elif transform == 'skip_if_u':
                     if row[key].lower() == 'u':
