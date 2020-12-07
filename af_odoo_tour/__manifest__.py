@@ -14,7 +14,8 @@
     'data': [
         'data/data.xml',
         'wizard/intoduction_wizard.xml',
-        'security/ir.model.access.csv'
+        'security/ir.model.access.csv',
+        'views/assets.xml'
     ],
     'installable': True,
 }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_backend" name="af_odoo_tour assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <!-- Include the new tour in the JavaScript assets -->
+            <script type="text/javascript" src="/af_odoo_tour/static/src/js/tour.js"/>
+        </xpath>
+    </template>
+</odoo>
