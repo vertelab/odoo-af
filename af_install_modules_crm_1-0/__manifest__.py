@@ -20,7 +20,8 @@
         # These modules needs to be installed for Customer Card functionality
         "af_hide_top_todo_icons",  # will be replaced by hide_hide-top-todo-icons
         "af_security_rules",  # should be replaced later
-        "audit_logger",
+        "af_statistics",
+	"audit_logger",
         "auth_saml_ol_groups",
         "auth_signup",
         "auth_saml_af",
