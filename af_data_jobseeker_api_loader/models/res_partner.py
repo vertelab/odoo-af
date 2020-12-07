@@ -33,18 +33,20 @@ class ResPartner(models.Model):
 
     @api.model
     def create_jobseekers(self, path):
+        _logger.info("LOAD AIS-F Jobseekers - START")
         if not path:
             path = os.path.join(
                 config.options.get('data_dir'),
                 'AIS-F/arbetssokande.csv')
             path = "/usr/share/odoo-af/af_data_jobseeker_api_loader/data/test_dumps/arbetssokande.csv" # testing purposes only
         self.create_partners_from_api('SOKANDE_ID', path)
+        _logger.info("LOAD AIS-F Jobseekers - END")
 
     @api.model
     def create_partners_from_api(self, key, path):
         db_con = self.env.ref('af_ipf.ipf_endpoint_rask').sudo()
         db_values = {'res.country.state': self.search_model('res.country.state', 'code', 'id'),
-                     'hr.departement': self.search_model('hr.department', 'office_code', 'id'),
+                     'hr.department': self.search_model('hr.department', 'office_code', 'id'),
                      'res.sun': self.search_model('res.sun', 'code', 'id'),
                      'res.partner.skat': self.search_model('res.partner.skat', 'code', 'id'),
                      'res.partner.education_level': self.search_model('res.partner.education_level', 'name', 'id'),
