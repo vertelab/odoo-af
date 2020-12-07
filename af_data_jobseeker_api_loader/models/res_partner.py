@@ -77,7 +77,7 @@ class ResPartner(models.Model):
                         customer_id, db_con, db_values)
 
                 iterations += 1
-                if not iteterations % 500:
+                if not iterations % 500:
                     self.env.cr.commit()
                     _logger.info('%s Users added' % iterations)
 
