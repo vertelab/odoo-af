@@ -411,7 +411,7 @@ class ResPartner(models.Model):
                 if transform == 'skip':
                     create = False
                     _logger.warning(
-                        "Skipping partner, contains skipping flag")
+                        "Skipping partner, contains skipping flag %s" % row)
                     break
                 elif transform == 'skip_if_u':
                     if row[key].lower() == 'u':
@@ -744,10 +744,11 @@ class ResPartner(models.Model):
        #_logger.info("keys to delete: %s" % keys_to_delete)
         for i in range(len(keys_to_delete)):
             row.pop(keys_to_delete[i], None)
-        id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
-        if id_check:
-            create = False
-            #_logger.warning("external id already in database, skipping")
+        if "login" not in row:
+            id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
+            if id_check:
+                create = False
+                #_logger.warning("external id already in database, skipping")
 
        #_loger.info('create?: %s' % create)
         if create:
