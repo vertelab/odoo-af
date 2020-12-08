@@ -2,7 +2,7 @@
 
 {
     "name": "Af CRM 1.0 Install all modules ",
-    "version": "12.0.1.1",
+    "version": "12.0.1.2",
     "author": "Vertel AB",
     "description": """
 	This module installs all AF-modules at one go.\n
@@ -10,6 +10,7 @@
 	Please see the depend-tab (with debug-mode) for a list of which modules are installed.\n
 	\n
 	v12.0.1.1  - First release\n
+	v12.0.1.2  - First release\n
 	Once the module is installed, please de-install it to avoid depencency-problems.\n
 	\n
 	""",
