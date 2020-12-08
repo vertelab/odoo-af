@@ -42,7 +42,8 @@
 	# "module_chart", #the module displays a graphical view of the modules dependencies
         "partner_view_360",
         "partner_mq_ipf",
-        "web_backend_theme_af",
+        "web_a11y_filter_view", # adds descriptions to create and edit-buttons
+	"web_backend_theme_af",
         "web_autocomplete_off",
 	# "web_core_menu_disabling", # new module to replace af_core_menu_disabling
 	# "web_hide-about-user-settings", # module that hides the users-page in the top right corner.
