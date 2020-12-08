@@ -19,6 +19,7 @@
     "category": "Tools",
     "depends": [
         # These modules needs to be installed for Customer Card functionality
+	"af_core_menu_disabling", # will be repolaced by web_core_menu_disabling
         "af_hide_top_todo_icons",  # will be replaced by web_hide-top-todo-icons
         "af_security_rules",  # should be replaced later
         "af_statistics",
