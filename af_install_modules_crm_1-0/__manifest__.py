@@ -39,6 +39,7 @@
         "hr_360_view",
 	"hr_org_chart",
         "hr_employee_firstname",
+	# "module_chart", #the module displays a graphical view of the modules dependencies
         "partner_view_360",
         "partner_mq_ipf",
         "res_drivers_license",
