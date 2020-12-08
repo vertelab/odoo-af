@@ -48,6 +48,7 @@
 	"web_backend_theme_af",
         "web_autocomplete_off",
 	# "web_core_menu_disabling", # new module to replace af_core_menu_disabling
+	"web_gui_disabeling_af", # disables 
 	# "web_hide-about-user-settings", # module that hides the users-page in the top right corner.
 	# "web_hide-top-todo-icons", # module that hides the icon for the todo-items.
     ],
