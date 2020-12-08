@@ -79,18 +79,6 @@ class CalendarAppointmentSuggestion(models.Model):
 class CalendarAppointment(models.Model):
     _inherit = "calendar.appointment"
 
-    @api.multi
-    @api.depends("partner_id", "start")
-    def name_get(self):
-        result = []
-        for app in self:
-            try:
-                name = _("Book meeting") 
-            except:
-                name = _("Book meeting")
-            result.append((app.id, name))
-        return result
-
     partner_pnr = fields.Char(
         string="Attendee SSN",
         related="partner_id.company_registry",

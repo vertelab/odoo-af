@@ -141,8 +141,10 @@
                         <page name="page_details" string="Meeting Details">
                             <group>
                                 <group>
-                                    <field name="start" invisible="1" options="{'datepicker': {'hide': {'seconds': True}}}"/>
-                                    <field name="stop" invisible="1"/>
+                                    <label for="start" string="start" class="oe_read_only"/>
+                                    <label for="stop" string="stop" class="oe_read_only"/>
+                                    <field name="start" class="oe_read_only" nolabel="1" options="{'datepicker': {'hide': {'seconds': True}}}"/>
+                                    <field name="stop" class="oe_read_only" nolabel="1"/>
                                     <field name="duration_selection" widget="radio"/>
                                     <field name="duration" invisible="1"/>
                                 </group>
@@ -160,7 +162,7 @@
                     <span aria-atomic="true" class="btn-group oe-right oe_button_box">
                         <button class="oe_edit_only" name="compute_suggestion_ids" type="object" string="Next"/>
                     </span>
-                    <field name="suggestion_ids" readonly="1"
+                    <field name="suggestion_ids" class="oe_edit_only"
                            attrs="{'invisible':[('show_suggestion_ids','=',False)]}">
                         <tree string="Bookable Occasions" limit="10">
                             <field name="weekday"/>
