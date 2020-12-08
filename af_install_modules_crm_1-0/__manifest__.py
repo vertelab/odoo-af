@@ -42,7 +42,6 @@
 	# "module_chart", #the module displays a graphical view of the modules dependencies
         "partner_view_360",
         "partner_mq_ipf",
-        "res_drivers_license",
         "web_backend_theme_af",
         "web_autocomplete_off",
 	# "web_core_menu_disabling", # new module to replace af_core_menu_disabling
