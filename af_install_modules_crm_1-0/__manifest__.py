@@ -18,7 +18,7 @@
     "category": "Tools",
     "depends": [
         # These modules needs to be installed for Customer Card functionality
-        "af_hide_top_todo_icons",  # will be replaced by hide_hide-top-todo-icons
+        "af_hide_top_todo_icons",  # will be replaced by web_hide-top-todo-icons
         "af_security_rules",  # should be replaced later
         "af_statistics",
 	"audit_logger",
@@ -45,7 +45,9 @@
         "res_drivers_license",
         "web_backend_theme_af",
         "web_autocomplete_off",
-	# "web_hide-about-user-settings", new module to replace af_core_menu_disabling
+	# "web_core_menu_disabling", # new module to replace af_core_menu_disabling
+	# "web_hide-about-user-settings", # module that hides the users-page in the top right corner.
+	# "web_hide-top-todo-icons", # module that hides the icon for the todo-items.
     ],
     "application": False,
     "installable": True,
