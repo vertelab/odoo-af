@@ -49,7 +49,7 @@
 	# "hr_employee_views_user-credentials-tab", - depreciated. Replaced by user-create-wizard.	    
 	"hr_office", #Adds
 	"hr_org_chart",
-        # "web_a11y_filter_view",
+        "web_a11y_filter_view", # adds description to create and edit buttons
         # "web_a11y_report",
         # "partner_legacy_id",
         # "res_drivers_license",
