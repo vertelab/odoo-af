@@ -42,7 +42,7 @@
         # "edi_af_krom_postcode",
         # "edi_af_officer",
         "hr_departments_partner",
-	"hr_employee_ciam_client",
+	"hr_user_ciam_update", # adds users to the CIAM-server
         "hr_employee_firstname", # is required by hr_employee_firstname_extension
 	"hr_employee_firstname_extension", # is dependent on hr_employee_firstname
         "hr_employee_legacy_id",  # OCA
@@ -50,6 +50,7 @@
 	# "hr_employee_views_user-credentials-tab", - depreciated. Replaced by user-create-wizard.	    
 	"hr_office", #Adds
 	"hr_org_chart",
+	"partner_tlr_update",
         "web_a11y_filter_view", # adds description to create and edit buttons
         # "web_a11y_report",
         # "partner_legacy_id",
