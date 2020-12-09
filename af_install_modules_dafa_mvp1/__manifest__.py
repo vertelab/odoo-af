@@ -41,7 +41,7 @@
         # "edi_af_facility",
         # "edi_af_krom_postcode",
         # "edi_af_officer",
-        "hr_departments_partner" 
+        "hr_departments_partner",
 	"hr_employee_ciam_client",
         "hr_employee_firstname", # is required by hr_employee_firstname_extension
 	"hr_employee_firstname_extension", # is dependent on hr_employee_firstname
@@ -54,9 +54,9 @@
         # "web_a11y_report",
         # "partner_legacy_id",
         # "res_drivers_license",
-        "web_autocomplete_off",
+        # "web_autocomplete_off",
         "web_backend_theme_af",
-        "web_dashboard_fenix",
+        "web_dashboard_dafa",
 	"web_environment_ribbon", # Adds a ribbon with db- and version info in the left corner.
 	    
     ],
