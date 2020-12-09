@@ -59,6 +59,6 @@
 	"web_environment_ribbon", # Adds a ribbon with db- and version info in the left corner.
 	    
     ],
-    "application": False,
-    "installable": True,
+    "application": "False",
+    "installable": "True",
 }
