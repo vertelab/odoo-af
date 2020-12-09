@@ -2,7 +2,7 @@
 
 {
     "name": "DAFA MVP 1.0 Install all modules ",
-    "version": "12.0.1.4",
+    "version": "12.0.1.5",
     "author": "Vertel AB",
     "description": """
 	This module installs all Dafa MVP1-modules at one go.\n
@@ -13,6 +13,7 @@
 	v12.0.1.2  - Updates in the list\n
 	v12.0.1.3  - Added Auth_user_rights_wizard and CIAM-modules, corrected spelling of auth_timeout\n
 	v12.0.1.4  - Removed items outside of MVP1 \n
+	v12.0.1.5  - Added more modules \n
 	
 	Once the module is installed, please de-install it to avoid depencency-problems.\n
 	
