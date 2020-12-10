@@ -14,7 +14,6 @@
 	v12.0.1.3  - Added Auth_user_rights_wizard and CIAM-modules, corrected spelling of auth_timeout\n
 	v12.0.1.4  - Removed items outside of MVP1 \n
 	v12.0.1.5  - Added more modules \n
-	
 	Once the module is installed, please de-install it to avoid depencency-problems.\n
 	
 	\n
@@ -31,16 +30,6 @@
 	"auth_user_rights_wizard", # adds functionality to assign user-credentials to coaches.
         "audit_logger",
         "auth_timeout",  
-        # "partner_view_360",
-        # "partner_legacy_id",
-        # "contact_links",  # Dependancy to hr_360_view, that has an old dependency to partner_notes
-        # "partner_mq_ipf", This should not be installed automatically, since it consumes a liste of changes
-        # "edi_af_aisf_rask_get_jobseeker",
-        # "edi_af_aisf_rask",
-        # "edi_af_aisf_trask", #field signature does not exist in partner_daily_notes
-        # "edi_af_facility",
-        # "edi_af_krom_postcode",
-        # "edi_af_officer",
         "hr_departments_partner",
 	"hr_user_ciam_update", # adds users to the CIAM-server
         "hr_employee_firstname", # is required by hr_employee_firstname_extension
@@ -52,9 +41,8 @@
 	"hr_org_chart",
 	"partner_tlr_update",
         "web_a11y_filter_view", # adds description to create and edit buttons
-        # "web_a11y_report",
-        # "partner_legacy_id",
-        # "res_drivers_license",
+        "web_a11y_report",      # adds a report with status of the Accessibility-status
+        "partner_legacy_id",	# adds a field used to store the TLR lev_id and the employees id in other salary-systems.
         # "web_autocomplete_off",
         "web_backend_theme_af",
         "web_dashboard_dafa",
