@@ -33,14 +33,14 @@ class ResPartner(models.Model):
 
     @api.model
     def create_jobseekers(self, path):
-        _logger.info("LOAD AIS-F Jobseekers - START")
+        _logger.info("LOAD AIS-F Jobseekers %s - START" % path)
         if not path:
             path = os.path.join(
                 config.options.get('data_dir'),
                 'AIS-F/arbetssokande.csv')
             path = "/usr/share/odoo-af/af_data_jobseeker_api_loader/data/test_dumps/arbetssokande.csv" # testing purposes only
         self.create_partners_from_api('SOKANDE_ID', path)
-        _logger.info("LOAD AIS-F Jobseekers - END")
+        _logger.info("LOAD AIS-F Jobseekers %s - END" % path)
 
     @api.model
     def create_partners_from_api(self, key, path):
