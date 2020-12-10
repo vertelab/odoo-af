@@ -19,7 +19,7 @@
     # 'demo': ['data/project_demo_se.xml'],
     'test': [
     ],
-    'installable': True,
+    'installable': False,
     'auto_install': False,
-    'application': True,
+    'application': False,
 }
