@@ -2,7 +2,7 @@
 
 {
     "name": "DAFA MVP 2.0 Install all modules ",
-    "version": "12.0.1.3",
+    "version": "12.0.1.4",
     "author": "Vertel AB",
     "description": """
 	This module installs all Dafa MVP2-modules at one go.\n
@@ -13,6 +13,7 @@
 	Once the module is installed, please de-install it to avoid depencency-problems.\n
 	v12.0.1.2  - Uncommented xmlrpc\n
 	v12.0.1.3  - Fixed name on api_odoo_xmlrpc\n
+	v12.0.1.4  - Moved modules about the Jobseeker to MVP2\n
 	\n
 	""",
     "license": "AGPL-3",
@@ -21,20 +22,31 @@
     "depends": [
         # These modules needs to be installed for  MVP2 functionality
         #
-        "af_sale_orders", #odoo-af
-	"af_sale_filters", #odoo-af
-        # "af_sales_report", #odoo-af
+	"af_sale_orders", 	#odoo-af
+	"af_sale_filters", 	#odoo-af
+        # "af_sales_report",	#odoo-af
 	"api_odoo_xmlrpc",
+        # "edi_af_aisf_rask_get_jobseeker",
+        # "edi_af_aisf_rask",
+        # "edi_af_aisf_trask", 	# field signature does not exist in partner_daily_notes
+        # "edi_af_facility",
+        # "edi_af_krom_postcode",
+        # "edi_af_officer",
         # "hr_af_holidays", 
-	  "hr_employee_customers_tab",
-        # "send_mail_nadim", #odoo-mail
-        # "mail_oe_chatter_user_groups",
-        "outplacement",
-	"partner_desired_jobs", #odoo-base
+	"hr_employee_customers_tab",
+	# "mail_oe_chatter_user_groups",
+	# "partner_view_360",	# stored in odoo-base
+        # "partner_legacy_id",	# stored in odoo-base
+        # "contact_links",  # Dependancy to hr_360_view, that has an old dependency to partner_notes
+        # "partner_mq_ipf", 	# This should not be installed automatically, since it consumes a liste of changes
+        # "send_mail_nadim", 	#  stored in odoo-mail
+        # "outplacement", 	# module to create an envelope around the TLR-activities.
+	"partner_desired_jobs", # stored in odoo-base
 	"project_jobseeker_views",
+        # "res_drivers_license",
 	"sale_suborder_ipf_client",
 
     ],
-    "application": False,
-    "installable": True,
+    "application": "False",
+    "installable": "True",
 }
