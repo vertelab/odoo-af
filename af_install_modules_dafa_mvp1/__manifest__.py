@@ -25,6 +25,7 @@
     "depends": [
         # These modules needs to be installed for  MVP1 functionality
 	"af_statistics",  # will be renamed to web_matomo
+	"api_ipf",  # Configuration of API:s that goes towards IPF.
 	"api_ipf_tlr_client", # adds api to be used for fetching company-details from TLR
 	"auth_saml_ol_groups",
         "auth_saml_af",
@@ -40,7 +41,7 @@
 	# "hr_employee_views_user-credentials-tab", - depreciated. Replaced by user-create-wizard.	    
 	"hr_office", #Adds
 	"hr_org_chart",
-	"partner_tlr_update",
+	"partner_tlr_update", 	# dependant on: partner_legacy_id, partner_firstname, api_ipf_tlr_client, hr_departments_partner
         "web_a11y_filter_view", # adds description to create and edit buttons
         "web_a11y_report",      # adds a report with status of the Accessibility-status
         "partner_legacy_id",	# adds a field used to store the TLR lev_id and the employees id in other salary-systems.
