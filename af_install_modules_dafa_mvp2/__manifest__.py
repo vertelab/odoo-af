@@ -26,6 +26,7 @@
 	"af_sale_filters", 	#odoo-af
         # "af_sales_report",	#odoo-af
 	"api_odoo_xmlrpc",
+        # "contact_links",  # Dependancy to hr_360_view, that has an old dependency to partner_notes
         # "edi_af_aisf_rask_get_jobseeker",
         # "edi_af_aisf_rask",
         # "edi_af_aisf_trask", 	# field signature does not exist in partner_daily_notes
@@ -35,13 +36,17 @@
         # "hr_af_holidays", 
 	"hr_employee_customers_tab",
 	# "mail_oe_chatter_user_groups",
+	# "outplacement", 	# module to create an envelope around the TLR-activities.
+	"outplacement_order_interpretor", # is dependant on project
+	# "partner_education_views", # stored in odoo-base
 	# "partner_view_360",	# stored in odoo-base
         # "partner_legacy_id",	# stored in odoo-base
-        # "contact_links",  # Dependancy to hr_360_view, that has an old dependency to partner_notes
         # "partner_mq_ipf", 	# This should not be installed automatically, since it consumes a liste of changes
-        # "send_mail_nadim", 	#  stored in odoo-mail
-        # "outplacement", 	# module to create an envelope around the TLR-activities.
-	"partner_desired_jobs", # stored in odoo-base
+	# "res_joint_planning_af", # sale_outplacement is dependant on this module
+        "sale_outplacement",
+	"sale_suborder_ipf_client",
+	# "send_mail_nadim", 	#  stored in odoo-mail
+        "partner_desired_jobs", # stored in odoo-base
 	"project_jobseeker_views",
         # "res_drivers_license",
 	"sale_suborder_ipf_client",
