@@ -2,7 +2,7 @@
 
 {
     "name": "Af CRM 1.0 Install all modules ",
-    "version": "12.0.1.2",
+    "version": "12.0.1.3",
     "author": "Vertel AB",
     "description": """
 	This module installs all AF-modules at one go.\n
@@ -11,6 +11,7 @@
 	\n
 	v12.0.1.1  - First release\n
 	v12.0.1.2  - First release\n
+	v12.0.1.3   Disabled auth_timeout due to conflict with auth_saml_ol AFC-1547\n
 	Once the module is installed, please de-install it to avoid depencency-problems.\n
 	\n
 	""",
@@ -27,7 +28,7 @@
         "auth_saml_ol_groups",
         "auth_signup",
         "auth_saml_af",
-        "auth_timeout",
+        # "auth_timeout",  # Disabled due to conflict with auth_saml_ol AFC-1547
         "contact_links",
         "edi_af_aisf_rask_get_jobseeker",
         "edi_af_aisf_rask",
