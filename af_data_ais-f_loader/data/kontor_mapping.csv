@@ -17,7 +17,6 @@
 "KOMMUN_KOD",,,
 "UPPDAT_DATUM",,,
 "UPPDAT_SIGN",,,
-"ANMARKNING",,,
 "KONTAKTPERSON_ANNONSDIREKT",,,
 "RADERAD","probably not working as of 2020-09-13 rewrite to hr.department","skip_if_j,skip","skip_if_j"
 "LOGGMARKERING",,,

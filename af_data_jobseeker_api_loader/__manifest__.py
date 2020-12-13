@@ -2,7 +2,7 @@
 
 {
     "name": "AIS-F Jobseeker Loader",
-    "version": "12.0.1.0",
+    "version": "12.0.1.1",
     "description": """
 
 AIS-F Jobseeker Loader
@@ -18,8 +18,7 @@ calls api to load all jobseekers according to file of customer ids
 		"edi_af_aisf_rask_get_jobseeker", 
     ],
     "data": [
-        #"data/res.country.state.csv",
-        "data/res_partner.xml",
+        "views/res_partner.xml",
     ],
     "application": False,
     "installable": True,

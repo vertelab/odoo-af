@@ -115,7 +115,7 @@
         <field name="model">calendar.occasion</field>
         <field name="priority" eval="2"/>
         <field name="arch" type="xml">
-            <tree string="Occasions" create="false" delete="true">
+            <tree string="Occasions" create="false" delete="false">
                 <field name="name" invisible="1"/>
                 <field name="type_id"/>
                 <field name="weekday"/>

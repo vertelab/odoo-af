@@ -306,7 +306,7 @@ msgstr "Kalenderrapport"
 #: model_terms:ir.ui.view,arch_db:calendar_af.cancel_appointment_view_form
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_create_local_occasion_form
 msgid "Cancel"
-msgstr "Avboka"
+msgstr "Avbryt"
 
 #. module: calendar_af
 #: model:ir.actions.act_window,name:calendar_af.cancel_appointment_action
@@ -430,7 +430,7 @@ msgstr "Skapa bokningsbar tid"
 #: model:ir.ui.view,name:calendar_af.create_local_occasion_action
 #: model:ir.ui.menu,name:calendar_af.menu_action_create_local_occasion
 msgid "Create occasion"
-msgstr "Publicera"
+msgstr "Publicera Skapa"
 
 #. module: calendar_af
 #: model:ir.actions.act_window,name:calendar_af.create_local_occasion_form_action

@@ -2,7 +2,7 @@
 
 {
     "name": "Af CRM 1.0 Install all modules ",
-    "version": "12.0.1.1",
+    "version": "12.0.1.3",
     "author": "Vertel AB",
     "description": """
 	This module installs all AF-modules at one go.\n
@@ -10,6 +10,8 @@
 	Please see the depend-tab (with debug-mode) for a list of which modules are installed.\n
 	\n
 	v12.0.1.1  - First release\n
+	v12.0.1.2  - First release\n
+	v12.0.1.3   Disabled auth_timeout due to conflict with auth_saml_ol AFC-1547\n
 	Once the module is installed, please de-install it to avoid depencency-problems.\n
 	\n
 	""",
@@ -18,15 +20,15 @@
     "category": "Tools",
     "depends": [
         # These modules needs to be installed for Customer Card functionality
-        "af_core_menu_disabling",  # should be replaced by web_core_menu_disabling
-        "af_gui_disabeling",  # will be replaced by web_hide-about-user-settings
-        "af_hide_top_todo_icons",  # will be replaced by hide_hide-top-todo-icons
+	"af_core_menu_disabling", # will be repolaced by web_core_menu_disabling
+        "af_hide_top_todo_icons",  # will be replaced by web_hide-top-todo-icons
         "af_security_rules",  # should be replaced later
-        "audit_logger",
+        "af_statistics",
+	"audit_logger",
         "auth_saml_ol_groups",
         "auth_signup",
         "auth_saml_af",
-        "audit_timeout",
+        # "auth_timeout",  # Disabled due to conflict with auth_saml_ol AFC-1547
         "contact_links",
         "edi_af_aisf_rask_get_jobseeker",
         "edi_af_aisf_rask",
@@ -37,13 +39,19 @@
         "edi_af_bar_arbetsuppgifter",
         "ipf_ais_a",
         "ipf_planning",
-        "hr_360_view" "hr_org_chart",
-        "hr_employee_lastnames",
+        "hr_360_view",
+	"hr_org_chart",
+        "hr_employee_firstname",
+	# "module_chart", #the module displays a graphical view of the modules dependencies
         "partner_view_360",
         "partner_mq_ipf",
-        "res_drivers_license",
-        "web_backend_theme_af",
+        "web_a11y_filter_view", # adds descriptions to create and edit-buttons
+	"web_backend_theme_af",
         "web_autocomplete_off",
+	# "web_core_menu_disabling", # new module to replace af_core_menu_disabling
+	"web_gui_disabeling_af", # disables 
+	# "web_hide-about-user-settings", # module that hides the users-page in the top right corner.
+	# "web_hide-top-todo-icons", # module that hides the icon for the todo-items.
     ],
     "application": False,
     "installable": True,

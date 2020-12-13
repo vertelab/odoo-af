@@ -1,601 +1,831 @@
-// Increase width and change color of line divider
-.o_cp_switch_buttons .btn-secondary:not(:disabled):not(.disabled):active, .o_cp_switch_buttons .btn-secondary:not(:disabled):not(.disabled).active, .show > .btn-secondary.dropdown-toggle {
-    color: white !important;
-    background-color: #00005a !important;
-}
-
-.o_form_view .oe_button_box .oe_stat_button {
-    width: 155px !important;
-}
-
-.o_form_view .o_group .o_td_label {
-    border-right: 1.5px solid #00005a;
-}
-
-// Increase width and change color of tab(Page) line
-.nav-tabs .nav-link {
-    border: 1.5px solid transparent;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-}
-
-.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
-    color: #00005a;
-    background-color: #fff;
-    border-color: #00005a #00005a #00005a;
-}
-
-.nav-tabs {
-    border-bottom: 1.5px solid #00005a;
-}
-
-// Increase width and change color of kanban record border
-
-.o_kanban_view .o_kanban_record {
-    position: relative;
-    display: inline-block;
-    border-color: #00005a;
-    min-width: 150px;
-    margin: 0 0 -1px;
-}
-.o_kanban_view .o_kanban_record, .o_kanban_view .o_kanban_quick_create {
-    padding: 8px 8px;
-    border: 1.5px solid #00005a;
-    background-color: white;
-}
-
-// Increase width of white area
-
-.o_form_view .o_form_sheet_bg > .o_form_sheet {
-    max-width: 1240px;
-}
-
-// Increase width of field label column
-.o_form_view .o_group.o_inner_group > tbody > tr > td.o_td_label {
-    min-width: 200px;
-}
-
-// Increase height between fields 
-
-.o_form_view .o_form_label {
-    margin-bottom: 10px;
-}
-
-.o_form_view.o_form_editable .o_row > .o_field_widget, .o_form_view.o_form_editable .o_row > div {
-    margin-bottom: 10px;
-}
-
-
-// Font
-//------------------------
-
+/* Fontes */
+/* font for regulat text */
 @font-face {
   font-family: OpenSans-Regular;
-  src: url(/af_backend_tema/static/src/font/OpenSans-Regular.ttf);
+  src: url(/web_backend_theme_af/static/src/font/OpenSans-Regular.ttf);
 }
 
-//------------------------
-
-// AF Colors
-//------------------------
-
-$brand-primary: #00005a; // Färgytor, infografik, diagram, primär knapp, nyhetspuff, skjutreglage , grafik
-$brand-primary-20: #ccccde;
-$brand-secondary: #b7ee4a; // Viktiga ingångar, endast mot profilblå bakgrund
-$brand-secondary-hover: #caff62;
-$brand-symbol: #95c23e; // Grafik på vit/ljus bakgrund
-$brand-symbol-40: #d5e6b2;
-$brand-symbol-10: #f4f8eb;
-$brand-green-40: #d5e6b2;
-$brand-pink: #d43372; // Kampanjyta, grafiska element
-$brand-pink-40: #eeadc7;
-$brand-white: #ffffff; // Bakgrundsfärg
-$brand-black: #000000;
-$brand-grey-90: #000000;  // bytt från #333333;  för att Mira säger att vi behöver högre kontrast.
-$brand-grey-70: #666666;
-$brand-grey-50: #999999;
-$brand-grey-30: #d1d1d1;
-$brand-grey-20: #efefef; // Hover på dropdown
-$brand-grey-10: #f5f5f5; // Bakgrundsfärg om inte vitt fungerar
-
-
-// Funktionsfärger
-
-$brand-blue: #1616b2; // Viktig information, länkar, länkikoner, primära knappars och e-tjänsteingångars hover
-$brand-blue-hover: #f1f8fe;
-$brand-blue-light: #f1f8fe; // Sekundära knappars och e-tjänsteingångars hover
-$brand-green: #058470; // Kryssruta, checkbox, radiobutton, OK, även komplementfärg
-$brand-green-10: #f4f8eb; // Positiv validering meddelande, bakgrundsplatta
-$brand-yellow: #fddc41; // Varningsmeddelande och status
-$brand-yellow-light: #fff8d9; // Varningsmeddelande
-$brand-red: #e21c50; // Endast felmeddelande
-$brand-red-light: #fdedf3; // Endast felmeddelande
-$brand-link-hover: #424ae0;
-$brand-link-visited: #822998;
-
-//------------------------
-
-body {
+BODY {
   font-family: "OpenSans-Regular";
 }
 
-.o_loading {
-  background-color: $brand-primary;
+/* Logo */
+/* Add AF logo */
+.o_menu_apps .dropdown I {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABAEAIAAAB1mzrKAAAACXBIWXMAAAsTAAALEwEAmpwYAAAF92lUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDggNzkuMTY0MDM2LCAyMDE5LzA4LzEzLTAxOjA2OjU3ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6cGhvdG9zaG9wPSJodHRwOi8vbnMuYWRvYmUuY29tL3Bob3Rvc2hvcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgMjEuMCAoTWFjaW50b3NoKSIgeG1wOkNyZWF0ZURhdGU9IjIwMjAtMDUtMTBUMTY6MDE6MzIrMDI6MDAiIHhtcDpNb2RpZnlEYXRlPSIyMDIwLTA1LTEwVDE4OjIwOjM0KzAyOjAwIiB4bXA6TWV0YWRhdGFEYXRlPSIyMDIwLTA1LTEwVDE4OjIwOjM0KzAyOjAwIiBkYzpmb3JtYXQ9ImltYWdlL3BuZyIgcGhvdG9zaG9wOkNvbG9yTW9kZT0iMyIgcGhvdG9zaG9wOklDQ1Byb2ZpbGU9InNSR0IgSUVDNjE5NjYtMi4xIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOmI1NDBiOTAwLWQ2YjItNDg5My05MGRlLTA2MzRmMzg5NDBlYSIgeG1wTU06RG9jdW1lbnRJRD0iYWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOjdiNDViOWQ5LWJlNzAtYTY0NS04NmU5LTUxYmVmNGJlZTI2NyIgeG1wTU06T3JpZ2luYWxEb2N1bWVudElEPSJ4bXAuZGlkOmE4NzdhM2Y1LTFiNjEtNDA2ZS04ZWU1LTUxYjkzMjc1NjMzYiI+IDx4bXBNTTpIaXN0b3J5PiA8cmRmOlNlcT4gPHJkZjpsaSBzdEV2dDphY3Rpb249ImNyZWF0ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6YTg3N2EzZjUtMWI2MS00MDZlLThlZTUtNTFiOTMyNzU2MzNiIiBzdEV2dDp3aGVuPSIyMDIwLTA1LTEwVDE2OjAxOjMyKzAyOjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgMjEuMCAoTWFjaW50b3NoKSIvPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6YjU0MGI5MDAtZDZiMi00ODkzLTkwZGUtMDYzNGYzODk0MGVhIiBzdEV2dDp3aGVuPSIyMDIwLTA1LTEwVDE4OjIwOjM0KzAyOjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgMjEuMCAoTWFjaW50b3NoKSIgc3RFdnQ6Y2hhbmdlZD0iLyIvPiA8L3JkZjpTZXE+IDwveG1wTU06SGlzdG9yeT4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6BSnGQAAAMJElEQVR42u1ca1QT1xaGZBhCCEMIIQR80VapWkW0SpFyfT+KUktVsFgrWMpDraIVVESkCAiISJUqAsuKWlCvrS9qVXyUWnD5oNZSi9ZSoAgBQgjDEJIQQ7hnmHbd3uW9ciYPcN3O94PFj8lMMt85e3/723vG3Axg6VIzBgMEc4YAhgCGAIYAhgCGAAYMAQwBzwMmTJg2TaVe/l5srFyuViuVLBb519ysvUMmYyPNTXWPLZBmaV0dG6mvr6pC0erq+/dR9ImmS23OEGAc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);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 70%;
 }
 
-::placeholder{
-  color: $brand-grey-50;
+/* Remove menu app icon */
+.o_menu_apps .dropdown I::before {
+  content: none; 
+}
+
+/* Brand name */
+/* adjusting position of barand name */
+.o_menu_brand {
+  font-family: OpenSans-Bold;
+  margin-left: -10px !important;
+}
+
+
+
+/* 
+Header 
+*/
+
+.o_control_panel {
+  //background-color: aliceblue;
+}
+
+.o_control_panel > .breadcrumb {
+  min-width: 200px;
+  width: 50% !important;
+  display: none;
+}
+
+.o_breadcrumb_full  > .breadcrumb {
+  display: block;
+}
+
+
+
+.o_control_panel > .o_cp_searchview {
+  width: 5%;
+  min-width: 345px;
+  margin-right: 0%;
+}
+
+
+
+.o_control_panel > .o_cp_left {
+  width: auto;
+  position: absolute;
+  right: 0px;
+  margin-top: 0px !important;
+  margin-left: 100px;
+}
+
+.o_control_panel > .o_cp_left o_cp_buttons {
+  
+}
+
+.o_control_panel > .o_cp_right {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.o_cp_pager {
+  width: auto !important;
+  margin-left: auto !important;
+  display: inline-block !important;
+}
+
+/* hide help button */
+.o_help_online_buttons {
+  display: none;
+}
+
+
+/* Titles */
+
+H1 {
+  font-family: OpenSans-Bold;
+  font-size: 1.7em;
+  border-radius: 5px 5px 0px 0px;
+  height: 45px;
+  padding: 8px 20px 20px 20px;
+  margin-bottom: 0px;
+}
+
+.o_kanban_record_title {
+  font-family: OpenSans-Bold;
+}
+
+.o_form_view H1,
+.o_form_nosheet H1,
+.o_form_editable H1 {
+  background-color: #028470;
+  font-family: OpenSans-Bold;
+  font-size: 1.7em;
+  color: #fff !important;
+  border-radius: 5px 5px 0px 0px;
+  height: 45px;
+  padding: 8px 20px 20px 20px;
+  margin-bottom: 0px;
+}
+
+.o_form_sheet H1 {
+  background-color: transparent;
+  color: black !important;
+}
+
+
+
+/*
+Buttons 
+*/
+
+.btn {
+  border-radius: 16px;
+  margin-right: 5px;
+  margin-left: 0px;
+  min-width: 60px;
+}
+
+.btn-primary {
+  color: #ffffff;
+  background-color: #00005a;
+  border-color: #00005a;
+  border-width: 1.5px;
+}
+
+.btn-primary:hover {
+  color: #ffffff;
+  background-color: #1616b2;
+  border-color: #1616b2;
+  border-width: 1.5px;
+}
+
+.btn-primary:active {
+  background-color: #1616b2;
+  border-color: #1616b2;
+  border-width: 1.5px;
+}
+
+.btn-secondary {
+  color: #00005a;
+  border-color: #00005a;
+  border-width: 1.5px;
+}
+
+.btn-secondary:hover {
+  color: #00005a;
+  background-color: #f1f8fe;
+  border-color: #00005a;
+  border-width: 1.5px;
+}
+
+.btn-secondary:disabled {
+  border-color: #ccc;
+  color: #ccc;
+}
+
+.oe_stat_button {
+   background-color: #00005a;
+   color: #fff;
+   padding-right: 15px;
+   height: 31px;
+   margin-bottom: 15px;
+}
+
+.o_button_icon {
+  margin-right: 5px;
+}
+
+BUTTON[name="search_jobseeker"] {
+  margin-left: 20px;
+}
+
+BUTTON[name="create_appointment"]{
+  margin-left: 20px;
+}
+
+BUTTON[name="open_others_appointments_ahead"] {
+  margin-left: 20px;
+}
+
+/* Button group */
+
+.btn-group > .btn-group:not(:first-child) > .btn {
+  border-top-left-radius: 16px;
+  border-bottom-left-radius: 16px;
+}
+
+
+/* Button switch */
+
+.o_cp_switch_buttons BUTTON {
+  border-radius: 0px;
+}
+
+.o_cp_switch_buttons BUTTON:first-child {
+  border-radius: 16px 16px 16px 16px;
+}
+
+.o_cp_switch_buttons BUTTON:last-child {
+  border-radius: 16px 16px 16px 16px;
+}
+
+/* Pager button */
+.o_cp_pager > span:first-child {
+  margin-left: 100%;
+}
+
+/* statusbar button */
+.o_form_view .o_form_statusbar > .o_statusbar_status > .o_arrow_button {
+  font-family: OpenSans-Semibold;
+  font-size: 14px;
+  letter-spacing: 30x !important;
+  margin-left: -5px;
+  color: #999 !important;
+}
+
+
+.o_form_view .o_form_statusbar > .o_statusbar_status > .o_arrow_button.btn-primary {
+ font-size: 14px !important;
+ color: #333 !important;
+}
+
+
+/* Dropdown */
+.o_dropdown_toggler_btn {
+  border-radius: 16px 16px 16px 16px !impartant;
+  margin-right: 10px;
+}
+
+.o_dropdown .dropdown-toggle:first-child {
+  border-radius: 16px 16px 16px 16px !impartant;
+}
+
+/* Search box */
+.o_searchview {
+  border-color: #00005a;
+  height:31px;
+}
+
+/* input */
+.o_required_modifier INPUT.o_input {
+  background-color: white !important;
+}
+
+/* Kanban card view */
+
+.o_kanban_view.o_kanban_ungrouped .o_kanban_record {
+  border-radius: 5px;
+  margin-top: 8px;
+  border-color: #aaa;
+}
+
+.oe_kanban_details span:first-child {
+  font-family: "OpenSans-Bold"; 
+}
+
+
+/* Lists */
+
+TD.o_list_record_selector .custom-control {
+  padding-left: 35px;
+}
+
+
+
+/* Modales */
+
+.modal-header {
+  background-color: #028470;
+  border-radius: 7px 7px 0px 0px !important; 
+}
+
+.modal-dialog .o_horizontal_separator {
+  display: none;
+}
+
+.modal-title {
+  font-family: OpenSans-Bold;
+  font-size: 1.7em;
+  color: #fff !important;
+}
+
+.modal-header H4 {
+  font-size: 1.5em;
+  margin-left: 5px;
+}
+
+.modal-header .close {
+  font-family: OpenSans-Bold;
+  font-size: 2.2em;
+  color: #fff !important;
+  opacity: 1;
+  margin-right: -5px;
+}
+
+.modal-dialog .o_form_sheet .o_group {
+  background-color: #CEE6E2;
+}
+
+.modal-dialog .o_form_sheet .o_notebook .o_group{
+  background-color: white;
+}
+
+.modal-dialog .o_form_sheet .o_group {
+  margin: 0px;
+  padding: 20px;
+}
+
+.modal-dialog .o_form_sheet {
+  padding: 0px !important;
+}
+
+.modal-dialog .tab-pane {
+  //border: 0px solid white !important;
+  border-radius: 0px;
+}
+
+.modal .o_form_view .o_form_sheet_bg > .o_form_sheet {
+  border: 0px;
+  border-radius: 0px;
+}
+.modal-dialog .o_field_widget {
+  margin-bottom: 0px
+}
+
+/* This not a pretty solution */
+.modal-dialog .o_form_sheet {
+  /* margin-top: -70px !important; */
+}
+
+.modal-body {
+  border-radius: 0px 0px 7px 7px !important;
+}
+
+.modal-footer {
+  padding: 0px;
+  border-top: 1px solid #e9ecef;
+  display: none;
+}
+
+
+/* 
+Singel card view 
+*/
+
+.o_form_view .o_form_sheet_bg > .o_form_sheet {
+    background-color: white !important;
+    /* border: 1px solid #aaa !important; */
+    box-shadow: none !important;
+    max-width: calc(100% - 32px);
+    border-radius: 7px;
+}
+
+.o_form_view .o_form_sheet_bg .oe_button_box + .oe_title {
+  min-width: 100%;
+  background-color: #028470;
+  width: 100%;
+  border-radius: 5px 5px 0px 0px;
+  margin-top: -20px;
+}
+
+.o_form_view .o_form_sheet_bg .oe_button_box + .oe_title H1 {
+  color: white !important;
+}
+
+
+/* Close button single card view */
+
+.o_form_view .o_form_sheet {
+  padding: 0px !important;
+}
+
+.o_form_view .o_form_sheet_bg > .o_form_sheet > DIV:first-child {
+  /* background-color:transparent; */
+  width: 100%;
+  display: inline-block;
+  /* float: right; */
+}
+
+.o_form_view .o_form_sheet_bg > .o_form_sheet > DIV:first-child > BUTTON[name="close_view"] {
+  border: none;
+  color: transparent;
+  background-color: transparent;
+  border-radius: 0px;
+  padding-right: 12px !important;
+  margin-right: 0px !important;
+  margin-top: 0px;
+  top: -5px;
+  right: 20px;
+  height: 40px;
+  position: absolute;
+}
+
+
+.o_form_view .o_form_sheet_bg > .o_form_sheet > DIV:first-child > BUTTON::after {
+  font-family: OpenSans-Bold;
+  font-size: 2.2em;
+  color: white;
+  opacity: 1;
+  content: "×";
+}
+
+.o_form_view DIV.o_group {
+  width: 100%;
+  margin: 0px;
+  margin-left: 0px;
+  padding-left: 20px;
+  padding-bottom: 20px;
+  margin-right: -16px;
+  background-color:#D0E3DF;
+  display: block;
+}
+
+.o_form_view DIV.o_group TABLE.o_inner_group {
+  width: 45%;
+  display: inline-block;
+}
+
+.o_form_view .o_form_sheet_bg .o_horizontal_separator {
+  padding-bottom: 0px ;
+}
+
+.o_form_view .o_form_sheet_bg .oe_button_box + .oe_title, 
+.o_form_view .o_form_sheet_bg .oe_button_box + .oe_avatar + .oe_title {
+    //max-width: calc(100%) !important;
+}
+
+.o_form_view .o_form_sheet_bg .o_notebook {
+  background-color: #028470;
+  border: none;
+  padding-top: 0px;
+  margin-top: 0px;
+  border-radius: 0px;
+}
+
+
+
+
+/*
+Remove card-view
+*/
+@media (min-width: 100px) {
+.o_form_view .o_form_sheet_bg > .o_form_sheet {
+    width: 100% !important;
+}
+} 
+
+/*
+Contact modal card
+*/
+
+.o_form_readonly HR,
+.o_form_readonly .o_required_modifier {
+  display: none !important;
+}
+
+.o_invisible_modifie {
+  display: none !important;
+}
+
+
+/* Boka möte */
+.o_form_editable .o_horizontal_separator {
+  background-color: #028470;
+  color: white !important;
+  font-family: OpenSans-Bold;
+  font-size: 1.7em;
+  border-radius: 7px 7px 0px 0px;
+  margin-left: -20px;
+  margin-top: -5px;
+  padding-left: 20px;
+  width: calc(100% + 20px);
+  padding-top: 4px;
+  height: 40px;
+}
+
+.o_form_editable BUTTON[name="compute_suggestion_ids"] {
+  margin-bottom: 20px;
+  margin-right: -10px;
+}
+
+
+.o_form_view .oe_button_box {
+  width: auto;
+  margin-right: 30px;
+}
+
+.o_form_buttons_view {
+  margin-left: -20px;
+}
+
+.btn-group BUTTON {
+  float: right !important;
+}
+
+.o_form_button_cancel {
+  display: none;
+}
+
+
+.o_td_label {
+  font-family: OpenSans-Bold;
+  font-size: 2.2em;
+}
+
+.modal-content {
+  border-radius: 8px !important;
+}
+
+.o_content {
+  background-color: #F5F5F5;
+}
+
+.o_form_view.o_form_nosheet {
+  background-color: transparent;
+}
+
+.o_cp_switch_buttons .btn-secondary:not(:disabled):not(.disabled):active, .o_cp_switch_buttons .btn-secondary:not(:disabled):not(.disabled).active, .show > .btn-secondary.dropdown-toggle {
+  color: white !important;
+  background-color: #00005a !important;
+}
+
+.o_form_view .oe_button_box .oe_stat_button {
+  width: 155px !important;
+}
+
+.o_form_view .o_group .o_td_label {
+  border-right: 1.5px solid #00005a;
+}
+
+
+
+.o_group {
+  /*
+  background-color: #028470;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding-top: 40px;
+  */
+}
+
+.o_notebook {
+  background-color: #00005a;
+  padding-top: 40px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.o_notebook:nth-child(2) {
+  background-color: #028470;
+  padding-top: 0px;
+  border-radius: 0px 0px 5px 5px;
+  border-top: 0px;
+  margin-top: 0px;
+}
+
+.tab-pane {
+  background-color: #fff;
+  border-radius: 0px 0px 4px 4px;
+}
+
+.nav-tabs {
+  background-color: rgba(256,256,256,0.76);
+  padding-top: 20px;
+  padding-left: 20px;
+  border-bottom-width: 0px;
+}
+
+ .o_form_view .tab-content DIV.o_group {
+  background-color: transparent;
+}
+
+.nav-tabs A.nav-link {
+  background-color: #00005a;
+  border: none;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  margin-right:10px;
+  font-family: OpenSans-Semibold;
+  color: #fff; 
+}
+
+.o_notebook:nth-child(2) .o_form_view .nav-tabs A.nav-link {
+  background-color: #028470;
+}
+
+.o_notebook:nth-child(2) .nav-tabs A.nav-link {
+  background-color: #028470;
+} 
+
+.o_notebook:nth-child(2) .nav-tabs A.nav-link.active,
+.nav-tabs A.nav-link.active {
+  background-color: #fff;
+  color: #00005a;
+  border: none;
+  border-bottom: none;
+}
+
+.o_list_view tfoot {
+  background-color: #fff;
+}
+
+.o_kanban_view .o_kanban_record {
+  position: relative;
+  display: inline-block;
+  border-color: #00005a;
+  min-width: 150px;
+  margin: 0 0 -1px;
+}
+
+.o_kanban_view .o_kanban_record, .o_kanban_view .o_kanban_quick_create {
+  padding: 8px 8px;
+  border: 1.5px solid #00005a;
+  background-color: white;
+}
+
+.o_form_view .o_form_sheet_bg > .o_form_sheet {
+  max-width: 1240px;
+}
+
+.o_form_view .o_group.o_inner_group > tbody > tr > td.o_td_label {
+  min-width: 200px;
+}
+
+.o_form_view .o_form_label {
+  margin-bottom: 10px;
+  float: right;
+}
+
+.o_form_view .o_group .o_td_label {
+  border: NONE;
+}
+
+.o_form_view.o_form_editable .o_row > .o_field_widget, .o_form_view.o_form_editable .o_row > div {
+  margin-bottom: 10px;
+}
+
+.o_inner_group {
+  background-color: transparent;
+  border: none;
+  border-radius: 0px;
+}
+
+.o_td_label {
+  padding: 0px;
+}
+
+.o_form_view .o_form_label  {
+  margin-bottom: 0px;
+}
+
+.o_form_view .o_group {
+    margin-bottom: 0px;
+}
+
+@media (min-width: 1200px)
+.o_form_view .o_form_sheet_bg > .o_form_sheet {
+    width: 1140px;
+}
+
+
+
+
+
+.o_loading {
+  background-color: #00005a;
+}
+
+::placeholder {
+  color: #999999;
 }
 
 .o_main_navbar {
-  background-color: $brand-primary;
+  background-color: #00005a;
 }
 
 .o_main_navbar > a:hover,
 .o_main_navbar > a:focus,
 .o_main_navbar > button:hover,
 .o_main_navbar > button:focus {
-  background-color: $brand-blue-hover;
-  color: $brand-primary;
+  background-color: #f1f8fe;
+  color: #00005a;
 }
 
 .o_main_navbar > ul > li > a:hover,
 .o_main_navbar > ul > li > label:hover,
 .o_main_navbar > a > [role="button"]:hover {
-  background-color: $brand-blue-hover;
-  color: $brand-primary;
+  background-color: #f1f8fe;
+  color: #00005a;
 }
 
 .o_main_navbar .show .dropdown-toggle {
-  background-color: $brand-blue-hover;
-  color: $brand-primary;
+  background-color: #f1f8fe;
+  color: #00005a;
 }
 
 .o_mail_discuss_sidebar {
-  background-color: $brand-primary;
+  background-color: #00005a;
 }
 
 .o_notification_counter.badge.badge-pill {
-  background-color: $brand-blue-hover; 
-  color: $brand-primary;
-  border: 1.4px solid $brand-primary;
+  background-color: #f1f8fe;
+  color: #00005a;
+  border: 1.4px solid #00005a;
 }
 
-// .o_main_navbar > ul > li > a > i.fa.fa-comments:hover {
-//   background-color: $brand-red;
-//   color: $brand-red;
-// }
-
 .o_main_navbar > ul > li > a:hover .o_notification_counter.badge.badge-pill {
-  background-color: $brand-blue-hover;
-  color: $brand-primary;
-  border: 1.3px solid $brand-primary;
+  background-color: #f1f8fe;
+  color: #00005a;
+  border: 1.3px solid #00005a;
 }
 
 .o_main_navbar > a.o_menu_brand:hover {
-  background-color: $brand-blue-hover;
-  color: $brand-primary;
+  background-color: #f1f8fe;
+  color: #00005a;
 }
 
-// // Fix color Add file button
-// .o_control_panel .o_cp_sidebar .o_hidden_input_file .o_form_binary_form span {
-//     color: $grey-dark !important;
-// }
-
-// // Buttons
-
-.btn {
-  border-radius: 15px;
+.o_form_buttons_view {
+  margin-left: 0px;
 }
 
-.btn-primary {
-  color: $brand-white;
-  background-color: $brand-primary;
-  border-color: $brand-primary;
-  border-width: 1.5px;
+.o_pager_next {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+ 
 }
 
-.btn-primary:hover {
-  color: $brand-white;
-  background-color: $brand-blue;
-  border-color: $brand-blue;
-  border-width: 1.5px;
-}
 
-.btn-primary:active {
-  background-color: $brand-blue;
-  border-color: $brand-blue;
-  border-width: 1.5px;
-}
-
-.btn-secondary {
-  color: $brand-primary;
-  border-color: $brand-primary;
-  border-width: 1.5px;
-}
-
-.btn-secondary:hover {
-  color: $brand-primary;
-  background-color: $brand-blue-hover;
-  border-color: $brand-primary;
-  border-width: 1.5px;
-}
 
 .o_main > main > button > i.o_button_icon {
-  color: $brand-primary;
+  color: #00005a;
 }
 
 .o_main > main > div > ol > li > a {
-  color: $brand-blue;
+  color: #1616b2;
 }
 
-.o_main >  main > div > ol > li.breadcrumb-item{
-  color: $brand-grey-90;
+.o_main > main > div > ol > li.breadcrumb-item {
+  color: #333;
 }
 
 .o_form_label {
-  color: $brand-grey-90;
+  font-family: OpenSans-Semibold;;
+  color: #333;
+}
+
+.table-striped TH:first-child,
+.table-striped .o_data_cell:first-child {
+  padding-left: 20px;
+}
+
+.table-striped TH {
+  font-family: OpenSans-Semibold;
 }
 
 .o_group > table > tbody > tr > td > div.o_horizontal_separator {
-  color: $brand-grey-90;
+  color: #000000;
 }
 
 .o_group > table > tbody > tr > td > span.o_field_char.o_field_widget {
-  color: $brand-black;
-  margin-bottom: 20px;
+  color: #000000;
+  margin-bottom: 0px;
 }
 
 .o_group > table > tbody > tr > td > div > span {
-  color: $brand-black;
+  color: #000000;
 }
 
 .o_group > table > tbody > tr > td > span {
-  color: $brand-black;
+  color: #000000;
 }
 
 .o_group > table > tbody > tr > td > a.o_form_uri.o_field_widget {
-  color: $blue;
+  color: #007bff;
 }
 
 .o_notebook > div > div > page > table > tbody > tr > td > a.o_form_uri.o_field_widget {
-  color: $blue;
+  color: #007bff;
 }
-
-// .fa.fa-filter.o_searchview_facet_label {
-//     background-color: $brand-primary;
-// }
 
 .btn:active, .btn.active {
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    background-color: $brand-grey-20 !important;
-    border-color: $brand-primary !important;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  background-color: #efefef !important;
+  border-color: #00005a !important;
 }
-
-// .btn-group.open .dropdown-toggle {
-//     -webkit-box-shadow: none;
-//     box-shadow: none;
-//     background-color: $brand-pink !important;
-// }
-
-// .btn-link {
-//     color: $brand-secondary;
-// }
 
 .fc-content {
-  background-color: $brand-primary;
-  color: $brand-white;
+  background-color: #00005a;
+  color: #ffffff;
 }
 
-
-// .o_form_view .o_form_statusbar > .o_statusbar_status > .o_arrow_button.btn-primary.disabled {
-//     color: $brand-primary;
-// }
-
-// .o_form_view .o_form_statusbar > .o_statusbar_status > .o_arrow_button:not(.disabled):hover {
-//     color: $brand-primary;
-// }
-
-// .o_dropdown_toggler_btn, .o_dropdown_toggler_btn:hover, .o_dropdown_toggler_btn:focus, .o_dropdown_toggler_btn:hover, .o_dropdown_toggler_btn:focus, .btn-icon, .o_graph_button {
-//     text-transform: none !important;
-//     color: $grey-dark !important;
-//     background-color: transparent !important;
-//     border: none !important;
-// }
-
-// .dropdown-menu {
-//     border-radius: 0px;
-// }
-
-// oe_highlight {
-//     color: #ffffff !important;
-//     background-color: $brand-primary !important;
-// }
-
-// .o_external_button {
-//     color: $brand-primary !important;
-//     background: #ffffff;
-// }
-
-// .o_button_icon {
-//     color: $brand-primary !important;
-// }
-
-// // Calendar
-
-// .o_calendar_container .o_calendar_sidebar_container .ui-datepicker table .ui-state-active {
-//     background: none;
-//     background-color: $brand-primary !important;
-//     color: #ffffff !important;
-// }
-// .o_calendar_container .o_calendar_sidebar_container .ui-datepicker table .ui-state-default {
-//     color: $brand-primary;
-// }
-
-// .datepicker {
-//     .table-sm {
-//         > thead {
-//             color: white;
-//             background-color: $brand-primary;
-
-//             > tr {
-//                 &:first-child {
-//                     th:hover {
-//                         color: white;
-//                         background-color: darken($brand-primary, 10%);
-//                     }
-//                 }
-
-//                 &:last-child {
-//                     color: $o-datepicker-week-color;
-//                     background-color: $o-datepicker-week-bg-color;
-//                 }
-//                 > th {
-//                     border-radius: 0;
-//                 }
-//             }
-//         }
-
-//         > tbody {
-//             > tr {
-//                 > td {
-//                     &.active, .active {
-//                         background-color: $o-brand-primary;
-//                         border-radius: 100px;
-//                     }
-
-//                     &.today:before {
-//                         border-bottom-color: $o-brand-primary;
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }
-
-// .datepicker .table-sm > tbody > tr > td.active, .datepicker .table-sm > tbody > tr > td .active {
-//     background-color: $brand-primary;
-// 	border-radius: 0;
-// }
-
 .o_calendar_container .o_calendar_view .o_calendar_widget .fc-view-container .fc-view > table > tbody > tr > td > div > div > div .fc-content-skeleton > table > tbody .fc-event-container > a .fc-content {
-  background-color: $brand-primary;
-  color: $brand-white;
+  background-color: #00005a;
+  color: #ffffff;
   padding: 2px;
 }
 
-// // Filter search label
-
-// .o_searchview {
-//     .o_searchview_facet {
-
-//          background-color: #ffffff;
-
-//         .o_searchview_facet_label {
-//             background-color: $brand-primary;
-//         }
-//     }
-// }
-
-// a {
-
-//     color: $brand-secondary;
-//     text-decoration: none;
-//     background-color: transparent;
-//     -webkit-text-decoration-skip: objects;
-
-// }
-
-// a:hover {
-
-//     color: $brand-secondary-dark;
-//     text-decoration: none;
-
-// }
-
-// .o_control_panel {
-//     background-color: #ffffff;
-// }
-
-// .breadcrumb {
-//     background-color: inherit;
-// }
-
-// // Input
-
-// input[type="text"], input[type="password"], input[type="number"],
-// textarea, select, .o_form_view.o_form_editable .o_form_field_many2manytags,
-// .o_searchview
-// {
-//     border: 0;
-//     border-radius: 0;
-//     border-bottom: 1px solid #ccc;
-// }
-
-// .o_web_client input:focus, .o_web_client textarea:focus, .o_web_client select:focus {
-//     outline: none;
-//     border-bottom: 2px solid $brand-primary;
-// }
-
 .o_input {
-  border: 1px solid $brand-grey-70;
-}
-
-// .o_input_dropdown {
-//   padding-bottom: 0.5rem;
-// }
-
-// .o_field_char {
-//   padding-bottom: 0.5rem;
-// }
-
-
-// .o_field_widget {
-//     &.o_field_many2one .o_external_button {
-//         color: $brand-secondary
-//     }
-// }
-
-// .o_required_modifier {
-//     &.o_input, .o_input {
-//         background-color: lighten($brand-primary, 35%) ! important;
-//     }
-// }
-
-// .input-group-text {
-// 	background-color: transparent;
-// 	color: #fff;
-// 	border: 0px;
-// }
-
-// // Listview
-
-// .o_list_view.table {
-//     border: none;
-// }
-// .o_list_view.table thead, .o_list_view.table tfoot, .o_list_view.table td,.o_list_view.table th {
-//     border: none;
-// }
-
-// .o_list_view.table thead {
-//     background-color: #e2e2e0;
-// }
-
-// .o_list_view.table thead > tr > th.o_column_sortable:hover {
-//     background-color: #D6D6D3;
-// }
-
-// .o_list_view.table tbody tr.o_group_header {
-//     background-color: #dfdfdf;
-//     background-image: none;
-//     border-top: 1px solid #e2e2e0;
-// }
-
-// .table-striped > tbody > tr:nth-of-type(2n+1) {
-//     background-color: #eef0f0;
-// }
-
-// .o_list_view tfoot tr:nth-child(1) td {
-//     background-color: $brand-primary !important;
-//     color: #fff !important;
-// }
-
-// .ui-autocomplete .ui-menu-item.ui-state-focus {
-//     background-color: #dee2e6;
-// }
-
-// .ui-menu-item a:hover,.ui-menu-item a:focus {
-//     color: #666666 !important;
-// }
-// .ui-autocomplete .ui-menu-item.ui-state-focus a{
-//     color: #666666 !important;
-// }
-
-// .o_form_view .oe_button_box .oe_stat_button .o_stat_info .o_stat_value {
-//     color: $brand-primary;
-// }
-
-.o_form_view .o_horizontal_separator {
-    color: $brand-primary;
-    padding-bottom: 2rem;
+  border: 1px solid #666666;
 }
 
 .o_form_view .o_horizontal_separator {
-  color: $brand-primary;
+  color: #00005a;
   padding-bottom: 2rem;
 }
 
-// // Forms
+.o_form_view .o_horizontal_separator {
+  color: #00005a;
+  padding-bottom: 2rem;
+}
 
-// .o_form_view {
-
-//      .o_form_sheet_bg {
-//         background: none !important;
-//         background-color: #F9F9F9 !important;
-//         padding: 0px;
-//         .o_form_sheet {
-//             border: 1px solid #d9d7d7;
-//             box-shadow: 0 5px 20px -15px black;
-//         }
-//     }
-
-//     .o_form_statusbar {
-//         //margin: -16px;
-
-//         .o_statusbar_status {
-//             > .o_arrow_button {
-//                 background: #ffffff;
-//             }
-//         }
-//     }
-// }
-
-// // App Dashboard
-
-// .o_menu_apps .dropdown-menu.show {
-// 	background: transparent url('/dashboard') no-repeat scroll center center / cover;
-
-// }
-
-// .fa-th-large::before {
-//     content: "\f00a";
-// }
-
-// .o_menu_apps .full {
-//     width: 46px;
-//     font-size: 18px;
-//     text-align: center;
-// }
-
-// .o-app-name {
-// 	color: #fff;
-//     font-size: 15px;
-//     font-weight: 400;
-//     text-overflow: ellipsis;
-//     white-space: nowrap;
-// 	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
-// }
-
-// .o_menu_apps .dropdown-menu.show .o-app-icon {
-// 	padding: 20px 0 0;
-// }
-
-// .o_menu_apps .dropdown-menu.show .o-app-icon:hover {
-// 	box-shadow: 0 8px 15px -10px black;
-//     transform: translateY(-1px);
-// }
-
-// .dropdown-item.o_app {
-//     background: transparent;
-// }
-
-// .o-menu-search-result {
-// 	color: #fff;
-// }
-
-// // Chat window
-
-// .o_thread_window .o_thread_window_header {
-// 	background-color: $brand-primary;
-// }

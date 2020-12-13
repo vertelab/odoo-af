@@ -69,20 +69,22 @@ class ResPartner(models.Model):
         # self.create_partners(headers_header_jobs, path_jobs, header_path_jobs)
 
     @api.model
-    def create_offices(self):
+    def create_offices(self, path):
         headers_header = ['kontor.csv', 'Notering', 'Trans', 'Odoo']
-        path = os.path.join(config.options.get('data_dir'), 'AIS-F/kontor.csv')
-        # testing purposes only
-        path = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/kontor.csv"
+        if not path:
+            path = os.path.join(config.options.get('data_dir'), 'AIS-F/kontor.csv')
+            # testing purposes only
+            path = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/kontor.csv"
         header_path = "/usr/share/odoo-af/af_data_ais-f_loader/data/kontor_mapping.csv"
         self.create_partners(headers_header, path, header_path)
 
     @api.model
-    def create_officers(self):
+    def create_officers(self, path):
         headers_header = ['handlaggare.csv', 'Notering', 'Trans', 'Odoo']
-        path = os.path.join(config.options.get('data_dir'), 'AIS-F/handlaggare.csv')
-        # testing purposes only
-        path = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/handlaggare.csv"
+        if not path:
+            path = os.path.join(config.options.get('data_dir'), 'AIS-F/handlaggare.csv')
+            # testing purposes only
+            path = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/handlaggare.csv"
         header_path = "/usr/share/odoo-af/af_data_ais-f_loader/data/handlaggare_mapping.csv"
         self.create_partners(headers_header, path, header_path)
 
@@ -409,7 +411,7 @@ class ResPartner(models.Model):
                 if transform == 'skip':
                     create = False
                     _logger.warning(
-                        "Skipping partner, contains skipping flag %s" % row[transformations[key]])
+                        "Skipping partner, contains skipping flag %s" % row)
                     break
                 elif transform == 'skip_if_u':
                     if row[key].lower() == 'u':
@@ -742,10 +744,11 @@ class ResPartner(models.Model):
        #_logger.info("keys to delete: %s" % keys_to_delete)
         for i in range(len(keys_to_delete)):
             row.pop(keys_to_delete[i], None)
-        id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
-        if id_check:
-            create = False
-            #_logger.warning("external id already in database, skipping")
+        if "login" not in row:
+            id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
+            if id_check:
+                create = False
+                #_logger.warning("external id already in database, skipping")
 
        #_loger.info('create?: %s' % create)
         if create:
