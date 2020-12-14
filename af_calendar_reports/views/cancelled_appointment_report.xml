@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="cancelled_calendar_appointment_report_doc">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <!-- <t t-set="o" t-value="o.with_context(lang=lang)" /> -->
+                    <!-- <div class="row col-12" style="display: flex; justify-content: flex-start; flex-direction: column; ">
+                        <img src='/web/binary/company_logo' class="float-right" style="width: 200px; height: 150px" alt="Logo"/>
+                        <span t-field="o.operation_id" />
+                    </div> -->
+
+                    <div class="page">
+                        <div class="col-12">
+                            <h1>Avbokat planeringsmöte</h1>
+                        </div>
+                        <div class="col-12">
+                            <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                                Hej!
+                                <br/><br/>
+                                Det här mötet är avbokat:
+                                <br/><br/>
+                            </p>
+                            <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                                <strong>Datum:</strong>     <span t-esc="o.start.strftime('%A %d %B %Y')"/> <br/>
+                                <strong>Plats:</strong>     <span t-esc="o.operation_id.name"/> <br/>
+                                <strong>Tid:</strong>       <span t-esc="o.start_time"/> <br/>
+                                <strong>Längd:</strong>     <span t-esc="o.duration_selection"/><br/>  
+                                <strong>Mötestyp:</strong>  <span t-esc="o.type_id.name"/>
+                                <br/><br/>
+                                Om du har frågor om det avbokade mötet kan du höra av dig till oss. 
+                                Gå in på arbetsformedlingen.se och chatta med oss eller ring 0771-416 416.
+                                <br /><br />
+                            </p>
+                            <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                                Hälsningar <br/><br/>
+                                <span t-esc="o.company_id.name"/>
+                            </p>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <report id="cancelled_calendar_appointment_report" model="calendar.appointment" string="Cancelled Calendar Appointment"
+            report_type="qweb-pdf"
+            name="af_calendar_reports.cancelled_calendar_appointment_report_doc"
+            file="af_calendar_reports.cancelled_calendar_appointment_report_doc"
+    />
+</odoo>
