@@ -15,6 +15,22 @@
 	v12.0.1.3  - Fixed name on api_odoo_xmlrpc\n
 	v12.0.1.4  - Moved modules about the Jobseeker to MVP2\n
 	\n
+	
+    odooupdm  af_sale_orders,af_sale_filters,api_odoo_xmlrpc,hr_employee_customers_tab,outplacement_order_interpretor,sale_outplacement,sale_suborder_ipf_server,partner_desired_jobs,project_jobseeker_views,sale_suborder_ipf_client
+    
+    
+    git@github.com:OCA/mis-builder.git
+    reporting-engine
+    server-ux
+    web
+    
+    
+    outplacement
+    sale_outplacement
+    sale_managemant
+    
+    
+    
 	""",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
