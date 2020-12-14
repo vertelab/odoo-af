@@ -17,7 +17,9 @@
         'views/calendar_appointment.xml',
         'views/appointment_report.xml',
         'views/updated_appointment_report.xml',
+        'views/cancelled_appointment_report.xml',
         'data/mail_template.xml',
+        'data/mail_template_users.xml',
 
     ],
     "application": True,
