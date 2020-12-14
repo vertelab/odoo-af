@@ -2,7 +2,7 @@
 
 {
     "name": "DAFA MVP 1.0 Install all modules ",
-    "version": "12.0.1.6",
+    "version": "12.0.1.7",
     "author": "Vertel AB",
     "description": """
 	This module installs all Dafa MVP1-modules at one go.\n
@@ -15,6 +15,7 @@
 	v12.0.1.4  - Removed items outside of MVP1 \n
 	v12.0.1.5  - Added more modules \n
 	v12.0.1.6  - Removed auth_login \n
+	v12.0.1.7  - Added my customer_tab and hr_holidays \n
 	Once the module is installed, please de-install it to avoid depencency-problems.\n
 	
 	\n
@@ -34,11 +35,13 @@
         # "auth_timeout",  # Disabled due to conflict with auth_saml_ol AFC-1547
         "hr_departments_partner",
 	"hr_user_ciam_update", # adds users to the CIAM-server
-        "hr_employee_firstname", # is required by hr_employee_firstname_extension
+        "hr_employee_customers_tab", # adds my-customers-tab-to-employee-view
+	"hr_employee_firstname", # is required by hr_employee_firstname_extension
 	"hr_employee_firstname_extension", # is dependent on hr_employee_firstname
         "hr_employee_legacy_id",  # OCA
         # "hr_employee_views_fenix",
 	# "hr_employee_views_user-credentials-tab", - depreciated. Replaced by user-create-wizard.	    
+	# "hr_af_holidays", # dependant on hr_holidays
 	"hr_office", #Adds
 	"hr_org_chart",
 	"partner_tlr_update", 	# dependant on: partner_legacy_id, partner_firstname, api_ipf_tlr_client, hr_departments_partner
