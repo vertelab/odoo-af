@@ -67,5 +67,5 @@ v12.0.0.1.10 AFC-704 Changed target for "Close-button".\n
         'static/src/xml/systray.xml',
     ],
     'application': False,
-    'installable': True,
+    'installable': False,
 }
