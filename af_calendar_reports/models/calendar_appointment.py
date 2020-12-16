@@ -10,12 +10,13 @@ class CalendarAppointment(models.Model):
 
     @api.model
     def create(self, vals):
+        print("print enandf")
         res = super(CalendarAppointment, self).create(vals)
         template = self.env.ref(
             'af_calendar_reports.email_template_calendar_appointment').sudo()
         template.send_mail(res.id, force_send=True)
         return res
-
+    
     @api.multi
     def write(self, vals):
         res = super(CalendarAppointment, self).write(vals)
@@ -26,8 +27,19 @@ class CalendarAppointment(models.Model):
         for appointment in self:
             template.send_mail(appointment.id, force_send=True)
         return res
-
-
+    
+    
+    # @api.multi
+    # def select_suggestion_move(self, vals):
+    #     print("sending mail")
+    #     res = super(CalendarAppointment, self).create(vals)
+    #     template_id = self.env.ref(
+    #         'af_calendar_reports.email_template_updated_calendar_appointment')
+    #     print(template_id)
+    #     template = self.env['mail.template'].browse(template_id)
+    #     template.send_mail(res.id, force_send=True)
+    #     return res
+        
 class CancelAppointment(models.TransientModel):
     _inherit = 'calendar.cancel_appointment'
     _description = 'Cancel appointment'

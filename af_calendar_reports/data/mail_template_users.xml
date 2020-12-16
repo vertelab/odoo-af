@@ -1,0 +1,36 @@
+<odoo>
+    <data>
+        <record id="email_template_user_login" model="mail.template">
+            <field name="name">Get started</field>
+            <field name="model_id" ref="calendar_af.model_calendar_appointment"/>
+            <field name="subject">Inloggningsuppgifter till DAFA</field>
+            <field name="email_to">${object.partner_id.email | safe}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hej ${object.partner_id.name}! ${object.user_id.name or ''}
+                        <br/><br/>
+                            Här är dina inloggningsuppgifter till DAFA:                        
+                        <br/><br/>
+                        <strong>Användarnamn:</strong> ${object.user_id.login or ''} <br/>
+                        <strong>Lösenord:</strong> <em>BankId</em>
+
+                        <br/><br/>
+                            Om du har frågor om det avbokade mötet kan du höra av dig till oss.
+                            Gå in på arbetsformedlingen.se och chatta med oss eller ring 0771-416 416.
+                        <br/><br/>
+                    </p>
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hälsningar<br/>
+                        ${object.company_id.name}
+                    </p>
+                </div>
+            </field>
+            <field name="user_signature" eval="False"/>
+            <!-- <field name="report_template" ref="af_calendar_reports.calendar_appointment_report"/>
+            <field name="report_name">Calendar Appointment</field> -->
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>
