@@ -28,7 +28,7 @@
     
     outplacement
     sale_outplacement
-    sale_managemant
+    sale_management
     outplacement_order_interpretor
     outplacement_joint_planning
     
@@ -59,7 +59,7 @@
 	# "mail_oe_chatter_user_groups",
 	"outplacement", 	# module to create an envelope around the TLR-activities.
 	"outplacement_order_interpretor",
-    	"sale_outplaement",
+    	"sale_outplacement",
 	"sale_management",  # Gui for sale
         "outplacement_order_interpretor",
         "outplacement_joint_planning",
