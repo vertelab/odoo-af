@@ -15,67 +15,64 @@
 	v12.0.1.3  - Fixed name on api_odoo_xmlrpc\n
 	v12.0.1.4  - Moved modules about the Jobseeker to MVP2\n
 	\n
-	
-    odooupdm  af_sale_orders,af_sale_filters,api_odoo_xmlrpc,hr_employee_customers_tab,outplacement_order_interpretor,sale_outplacement,sale_suborder_ipf_server,partner_desired_jobs,project_jobseeker_views,sale_suborder_ipf_client
     
+    branch Dev-12.0-Fenix-Sprint-02 fallback 12.0
     
-    git@github.com:OCA/mis-builder.git
-    reporting-engine
-    server-ux
-    web
-    
-    Moduler att installera:
-    
-    outplacement
-    sale_outplacement
-    sale_management
-    outplacement_order_interpretor
-    outplacement_joint_planning
-    
-    
+    Vertel-projekt att installera 
 
-    
-    
+    odoo-account
+    odoo-af
+    odoo-api
+    odoo-auth
+    odoo-base
+    odoo-contract
+    odoo-edi
+    odoo-hr
+    odoo-l10n_se
+    odoo-outplacement
+    odoo-project
+    odoo-sale
+    odoo-server-tools
+    odoo-web
+
+    OCA-project att installera
+
+    odooext-OCA-contract
+    odooext-OCA-hr
+    odooext-OCA-mis-builder
+    odooext-OCA-partner-contact
+    odooext-OCA-reporting-engine
+    odooext-OCA-server-auth
+    odooext-OCA-server-ux
+    odooext-OCA-social
+    odooext-OCA-timesheet
+    odooext-OCA-web
+
+
+    Moduler att installera:
+        
+    outplacement
+    #outplacement_deviation_report
+    outplacement_joint_planning
+    outplacement_order_interpretor
+    outplacement_partner_education
+    outplacement_partner_jobs
+    sale_management
+    sale_outplacement
+
 	""",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
     "depends": [
-        # These modules needs to be installed for  MVP2 functionality
-        #
-	# "af_sale_orders", 	#odoo-af
-	# "af_sale_filters", 	#odoo-af
-        # "af_sales_report",	#odoo-af
-	# "api_odoo_xmlrpc",
-        # "contact_links",  # Dependancy to hr_360_view, that has an old dependency to partner_notes
-        # "edi_af_aisf_rask_get_jobseeker",
-        # "edi_af_aisf_rask",
-        # "edi_af_aisf_trask", 	# field signature does not exist in partner_daily_notes
-        # "edi_af_facility",
-        # "edi_af_krom_postcode",
-        # "edi_af_officer",
-        # "hr_af_holidays", 
-	# "hr_employee_customers_tab",
-	# "mail_oe_chatter_user_groups",
 	"outplacement", 	# module to create an envelope around the TLR-activities.
 	"outplacement_order_interpretor",
-    	"sale_outplacement",
+    "sale_outplacement",
 	"sale_management",  # Gui for sale
-        "outplacement_order_interpretor",
-        "outplacement_joint_planning",
-	# "partner_education_views", # stored in odoo-base
-	# "partner_view_360",	# stored in odoo-base
-        # "partner_legacy_id",	# stored in odoo-base
-        # "partner_mq_ipf", 	# This should not be installed automatically, since it consumes a liste of changes
-	# "res_joint_planning_af", # sale_outplacement is dependant on this module
-	# "sale_suborder_ipf_client", # should not be installed on DAFA, since it only sends sends dummy-values
-	# "sale_suborder_ipf_server", # Recieves suborders from BÄR
-	# "send_mail_nadim", 	#  stored in odoo-mail
-        #"partner_desired_jobs", # stored in odoo-base
-	#"project_jobseeker_views",
-        # "res_drivers_license",
-	#"sale_suborder_ipf_client",
-
+    "outplacement_joint_planning",
+    #"outplacement_deviation_report",
+    "outplacement_partner_education",
+    "outplacement_partner_jobs",
     ],
     "application": "False",
     "installable": "True",
