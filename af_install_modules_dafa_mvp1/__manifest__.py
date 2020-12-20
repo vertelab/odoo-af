@@ -46,7 +46,7 @@
 	"hr_office", #Adds
 	# "hr_org_chart", #Disabled since Emma did not want it.
 	"partner_tlr_update", 	# dependant on: partner_legacy_id, partner_firstname, api_ipf_tlr_client, hr_departments_partner
-        "web_a11y_filter_view", # adds description to create and edit buttons
+        # "web_a11y_filter_view", # adds description to create and edit buttons. Disabled since there is a bug 
         "web_a11y_report",      # adds a report with status of the Accessibility-status
         "partner_legacy_id",	# adds a field used to store the TLR lev_id and the employees id in other salary-systems.
         # "web_autocomplete_off",
