@@ -41,8 +41,7 @@
 		"hr_employee_firstname",  # is required by hr_employee_firstname_extension
 		"hr_employee_firstname_extension",  # is dependent on hr_employee_firstname
 		"hr_employee_legacy_id",  # OCA
-		# "hr_employee_views_fenix", # Depricated, renamed to hr_employee_views_dafa
-		# "hr_employee_views_dafa",
+		# "hr_employee_views_fenix",
 		# "hr_employee_views_user-credentials-tab", - depreciated. Replaced by user-create-wizard.
 		# "hr_af_holidays", # dependant on hr_holidays
 		"hr_office",  # Adds
