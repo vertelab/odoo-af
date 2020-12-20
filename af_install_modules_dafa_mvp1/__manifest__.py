@@ -25,38 +25,35 @@
     "website": "https://vertel.se/",
     "category": "Tools",
     "depends": [
-		# These modules needs to be installed for  MVP1 functionality
-		# "af_statistics",  # will be renamed to web_matomo. Disabled since there is a bug - the menu does not render every time.
-		"api_ipf",  # Configuration of API:s that goes towards IPF.
-		"api_ipf_tlr_client",  # adds api to be used for fetching company-details from TLR
-		"auth_saml_ol_groups",
-		"auth_saml_af",
-		# adds functionality to assign user-credentials to coaches.
-		"auth_user_rights_wizard",
-		"audit_logger",
-		# "auth_timeout",  # Disabled due to conflict with auth_saml_ol AFC-1547
-		"hr_departments_partner",
-		"hr_user_ciam_update",  # adds users to the CIAM-server
-		"hr_employee_customers_tab",  # adds my-customers-tab-to-employee-view
-		"hr_employee_firstname",  # is required by hr_employee_firstname_extension
-		"hr_employee_firstname_extension",  # is dependent on hr_employee_firstname
-		"hr_employee_legacy_id",  # OCA
-		# "hr_employee_views_fenix",
-		# "hr_employee_views_user-credentials-tab", - depreciated. Replaced by user-create-wizard.
-		# "hr_af_holidays", # dependant on hr_holidays
-		"hr_office",  # Adds
-		# "hr_org_chart", #Disabled since Emma did not want it.
-		# dependant on: partner_legacy_id, partner_firstname, api_ipf_tlr_client, hr_departments_partner
-		"partner_tlr_update",
-		# "web_a11y_filter_view", # adds description to create and edit buttons. Disabled since there is a bug
-		"web_a11y_report",      # adds a report with status of the Accessibility-status
-		# adds a field used to store the TLR lev_id and the employees id in other salary-systems.
-		"partner_legacy_id",
-		# "web_autocomplete_off",
-		"web_backend_theme_af",
-		"web_dashboard_dafa",
-		# Adds a ribbon with db- and version info in the left corner.
-		"web_environment_ribbon",
+        # These modules needs to be installed for  MVP1 functionality
+	# "af_statistics",  # will be renamed to web_matomo. Disabled since there is a bug - the menu does not render every time.
+	"api_ipf",  # Configuration of API:s that goes towards IPF.
+	"api_ipf_tlr_client", # adds api to be used for fetching company-details from TLR
+	"auth_saml_ol_groups",
+        "auth_saml_af",
+	"auth_user_rights_wizard", # adds functionality to assign user-credentials to coaches.
+        "audit_logger",
+        # "auth_timeout",  # Disabled due to conflict with auth_saml_ol AFC-1547
+        "hr_departments_partner",
+	"hr_user_ciam_update", # adds users to the CIAM-server
+        "hr_employee_customers_tab", # adds my-customers-tab-to-employee-view
+	"hr_employee_firstname", # is required by hr_employee_firstname_extension
+	"hr_employee_firstname_extension", # is dependent on hr_employee_firstname
+        "hr_employee_legacy_id",  # OCA
+        # "hr_employee_views_fenix",
+	# "hr_employee_views_user-credentials-tab", - depreciated. Replaced by user-create-wizard.	    
+	# "hr_af_holidays", # dependant on hr_holidays
+	"hr_office", #Adds
+	# "hr_org_chart", #Disabled since Emma did not want it.
+	"partner_tlr_update", 	# dependant on: partner_legacy_id, partner_firstname, api_ipf_tlr_client, hr_departments_partner
+        # "web_a11y_filter_view", # adds description to create and edit buttons. Disabled since there is a bug 
+        "web_a11y_report",      # adds a report with status of the Accessibility-status
+        "partner_legacy_id",	# adds a field used to store the TLR lev_id and the employees id in other salary-systems.
+        # "web_autocomplete_off",
+        "web_backend_theme_af",
+        "web_dashboard_dafa",
+	"web_environment_ribbon", # Adds a ribbon with db- and version info in the left corner.
+	    
     ],
     "application": "False",
     "installable": "True",
