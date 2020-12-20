@@ -2,7 +2,7 @@
 
 {
     "name": "DAFA MVP 2.0 Install all modules ",
-    "version": "12.0.1.4",
+    "version": "12.0.1.5",
     "author": "Vertel AB",
     "description": """
 	This module installs all Dafa MVP2-modules at one go.\n
@@ -14,12 +14,12 @@
 	v12.0.1.2  - Uncommented xmlrpc\n
 	v12.0.1.3  - Fixed name on api_odoo_xmlrpc\n
 	v12.0.1.4  - Moved modules about the Jobseeker to MVP2\n
+	v12.0.1.5  - Updated modules and projects to install\n
 	\n
     
-    branch Dev-12.0-Fenix-Sprint-02 fallback 12.0
+    Branch Dev-12.0-Fenix-Sprint-02 fallback 12.0
     
-    Vertel-projekt att installera 
-
+    #Vertels Odoo-projekts to install 
     odoo-account
     odoo-af
     odoo-api
@@ -35,8 +35,7 @@
     odoo-server-tools
     odoo-web
 
-    OCA-project att installera
-
+    #OCAs Odoo-projects to install
     odooext-OCA-contract
     odooext-OCA-hr
     odooext-OCA-mis-builder
@@ -49,30 +48,31 @@
     odooext-OCA-web
 
 
-    Moduler att installera:
-        
-    outplacement
-    #outplacement_deviation_report
-    outplacement_joint_planning
-    outplacement_order_interpretor
-    outplacement_partner_education
-    outplacement_partner_jobs
-    sale_management
-    sale_outplacement
-
+    #Modules for DAFA MVP2:
+    "outplacement",
+    #outplacement_deviation_report	# dependancy to outplacment, 
+    "outplacement_joint_planning",	# dependancy to outplacment, 
+    "outplacement_order_interpretor",  	# dependancy to outplacment, mail
+    "outplacement_partner_education",  	# dependancy to outplacment, res_sun, res_partner_drivers_licenses
+    "outplacement_partner_jobs",        # dependancy to outplacment, res_ssyk
+    "sale_management",
+    "sale_outplacement",                # dependancy to sale_managment
+   
 	""",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
     "depends": [
-	"outplacement", 	# module to create an envelope around the TLR-activities.
-	"outplacement_order_interpretor",
-    "sale_outplacement",
-	"sale_management",  # Gui for sale
-    "outplacement_joint_planning",
-    #"outplacement_deviation_report",
-    "outplacement_partner_education",
-    "outplacement_partner_jobs",
+    # Modules for DAFA MVP2:
+    "outplacement",
+    #outplacement_deviation_report	# dependancy to outplacment, 
+    "outplacement_joint_planning",	# dependancy to outplacment, 
+    "outplacement_order_interpretor",  	# dependancy to outplacment, mail
+    "outplacement_partner_education",  	# dependancy to outplacment, res_sun, res_partner_drivers_licenses
+    "outplacement_partner_jobs",        # dependancy to outplacment, res_ssyk
+    "sale_management",
+    "sale_outplacement",                # dependancy to sale_managment
+   
     ],
     "application": "False",
     "installable": "True",
