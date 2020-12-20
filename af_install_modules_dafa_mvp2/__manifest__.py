@@ -50,13 +50,16 @@
 
 
     Moduler att installera:
-        
+
+    hr_timesheet
     outplacement
     #outplacement_deviation_report
     outplacement_joint_planning
     outplacement_order_interpretor
     outplacement_partner_education
     outplacement_partner_jobs
+    outplacement_partner_ssn
+    outplacement_invoice
     sale_management
     sale_outplacement
 
@@ -71,8 +74,11 @@
 	"sale_management",  # Gui for sale
     "outplacement_joint_planning",
     #"outplacement_deviation_report",
+    "hr_timesheet",
     "outplacement_partner_education",
     "outplacement_partner_jobs",
+    "outplacement_partner_ssn",
+    "outplacement_invoice",
     ],
     "application": "False",
     "installable": "True",
