@@ -2,7 +2,8 @@
 
 {
     "name": "DAFA MVP 2.0 Install all modules ",
-    "version": "12.0.1.6",
+    "version": "12.0.1.0.7",
+    "category": 'Outplacement',
     "author": "Vertel AB",
     "description": """
 	This module installs all Dafa MVP2-modules at one go.\n
@@ -16,8 +17,8 @@
 	v12.0.1.4  - Moved modules about the Jobseeker to MVP2\n
 	v12.0.1.5  - Updated modules and projects to install\n
 	v12.0.1.6  - Added generic CoA\n	
-	\n
-    
+	v12.0.1.0.7  - Added category Outplacement\n
+   
     Branch Dev-12.0-Fenix-Sprint-02 fallback 12.0
     
     #Vertels Odoo-projekts to install 
