@@ -2,7 +2,7 @@
 
 {
     "name": "DAFA MVP 1.0 Install all modules ",
-    "version": "12.0.1.8",
+    "version": "12.0.1.0.9",
     "author": "Vertel AB",
     "description": """
 	This module installs all Dafa MVP1-modules at one go.\n
@@ -18,7 +18,7 @@
 	v12.0.1.7  - Added my customer_tab and hr_holidays \n
 	v12.0.1.8  - Disableded Matomo due to bug. Disabled hr_org_chart since Emma did not want it.\n
 	Once the module is installed, please de-install it to avoid depencency-problems.\n
-	
+	v12.0.1.0.9  - Added new version-numbers-standard. Added hr_af_holidays.\n	
 	\n
 	""",
     "license": "AGPL-3",
@@ -36,6 +36,7 @@
 		"audit_logger",
 		# "auth_timeout",  # Disabled due to conflict with auth_saml_ol AFC-1547
 		"hr_departments_partner",
+		"hr_af_holidays", # Adds non-working-days for Af. Should be name-changed to hr_holidays_af
 		"hr_user_ciam_update",  # adds users to the CIAM-server
 		"hr_employee_customers_tab",  # adds my-customers-tab-to-employee-view
 		"hr_employee_firstname",  # is required by hr_employee_firstname_extension
