@@ -79,11 +79,13 @@
         "outplacement_order_interpretor",   # dependancy to outplacment, mail
         "outplacement_partner_education",   # dependancy to outplacment, res_sun, res_partner_drivers_licenses
         "outplacement_partner_jobs",        # dependancy to outplacment, res_ssyk
+        "outplacement_partner_skills",
         "outplacement_partner_ssn",
         "outplacement_invoice",
         "sale_management",
         "sale_outplacement",                # dependancy to sale_managment
         "hr_timesheet",
+
     ],
     "application": "False",
     "installable": "True",
