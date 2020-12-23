@@ -10,20 +10,21 @@
             <div name="button_box" position="inside">
                 <button name="hello_world" type="object">Hello world button</button>
             </div>
-            <page name="internal_notes"
-                  position="after"> <!-- position can be before, after or inside (if applied to a notebook, page or similar)-->
+             <!-- position can be before, after or inside (if applied to a notebook, page or similar)-->
+            <page name="internal_notes" position="after">
                 <page name="a_page" string="A test page"/>
             </page>
-            <xpath expr="//field[@name='phone']/.."
-                   position="after"> <!--more specific xpath in case greater specificity is necessary, in this case <field name=phone position="after"> caused everything to end up inside the field for some reason -->
+            <!--more specific xpath in case greater specificity is necessary, in this case
+            <field name=phone position="after"> caused everything to end up inside the field for some reason -->
+            <xpath expr="//field[@name='phone']/.." position="after">
                 <label for="test_char_field" string="This is a custom label"/>
                 <field name="test_char_field" nolabel="1"/>
                 <field name="test_float_field"/>
                 <field name="test_integer_field"/>
                 <field name="test_datetime_field"/>
                 <field name="test_selection_field"/>
-                <field name="test_model_ids"
-                       widget="many2many_tags"/> <!--widgets can change the way a field is presented-->
+                <!--widgets can change the way a field is presented-->
+                <field name="test_model_ids" widget="many2many_tags"/>
                 <field name="test_related_field"/>
                 <field name="test_model_m2o_id"/>
             </xpath>
@@ -77,8 +78,8 @@
                 <field name="test_integer_field"/>
                 <field name="test_datetime_field"/>
                 <field name="test_selection_field"/>
-                <field name="test_model_ids"
-                       widget="many2many_tags"/> <!--widgets can change the way a field is presented-->
+                <!--widgets can change the way a field is presented-->
+                <field name="test_model_ids" widget="many2many_tags"/>
                 <field name="test_model_m2o_id"/>
             </tree>
         </field>
@@ -124,8 +125,8 @@
     <!--actions for each view type, to add other types just add the necessary view and another action like these for that type of view-->
     <record id="action_view_partner_test_tree" model="ir.actions.act_window.view">
         <field name="act_window_id" ref="action_partner_test"/> <!--the main action that can call this action-->
-        <field name="sequence"
-               eval="2"/> <!-- determines the priority of the views, lowest number is loaded by default from the main action-->
+         <!-- determines the priority of the views, lowest number is loaded by default from the main action-->
+        <field name="sequence" eval="2"/>
         <field name="view_mode">tree</field> <!--this needs to be consistent with the type of view that's pointed at below-->
         <field name="view_id" ref="view_partner_test_tree"/> <!--the view that this action points to-->
     </record>
