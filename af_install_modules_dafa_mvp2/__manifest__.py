@@ -49,17 +49,20 @@
 
 
     #Modules for DAFA MVP2:
-
-    "outplacement",
-    #outplacement_deviation_report	# dependancy to outplacment, 
-    "outplacement_joint_planning",	# dependancy to outplacment, 
-    "outplacement_order_interpretor",  	# dependancy to outplacment, mail
-    "outplacement_partner_education",  	# dependancy to outplacment, res_sun, res_partner_drivers_licenses
-    "outplacement_partner_jobs",        # dependancy to outplacment, res_ssyk
+        
+    outplacement
     outplacement_invoice
-    "sale_management",
-    "sale_outplacement",                # dependancy to sale_managment
+    outplacement_joint_planning
+    outplacement_order_interpretor
+    outplacement_partner_education
+    outplacement_partner_jobs
+    outplacement_partner_skills
+    outplacement_partner_ssn
+    res_joint_planning_af
+    sale_outplacement
     hr_timesheet
+
+    
 	""",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
@@ -72,11 +75,13 @@
     "outplacement_order_interpretor",  	# dependancy to outplacment, mail
     "outplacement_partner_education",  	# dependancy to outplacment, res_sun, res_partner_drivers_licenses
     "outplacement_partner_jobs",        # dependancy to outplacment, res_ssyk
+    "outplacement_partner_skills",
     "outplacement_partner_ssn",
     "outplacement_invoice",
     "sale_management",
     "sale_outplacement",                # dependancy to sale_managment
     "hr_timesheet",
+
     ],
     "application": "False",
     "installable": "True",
