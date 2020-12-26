@@ -2,9 +2,13 @@
 
 {
     "name": "DAFA MVP 2.0 Install all modules ",
+    "summary": "Adds more to DAFA MVP 1.0 Install all modules",
     "version": "12.0.1.1.0",
     "category": 'Outplacement',
     "author": "Vertel AB",
+    "license": "AGPL-3",
+    "website": "https://vertel.se/",
+
     "description": """
         This module installs all Dafa MVP2-modules at one go.\n
         \n
@@ -51,12 +55,7 @@
         odooext-OCA-social
         odooext-OCA-timesheet
         odooext-OCA-web
-
-
     """,
-    "license": "AGPL-3",
-    "website": "https://vertel.se/",
-    "category": "Tools",
     "depends": [
     # Modules for DAFA MVP2:
         "hr_skill",                         # dependancy to hr
