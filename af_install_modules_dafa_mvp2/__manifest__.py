@@ -65,7 +65,7 @@
 """,
     "depends": [
     # Modules for DAFA MVP2:
-        "api_odoo_xmlrpc"                   # dependency to base_setup (adds sync to an other Odoo-server)
+        "api_odoo_xmlrpc",                   # dependency to base_setup (adds sync to an other Odoo-server)
         "hr_skill",                         # dependancy to hr
         "hr_timesheet",                     # dependancy to hr, analytic, project, uom
         "outplacement",                     # dependancy to base, hr, mail 
@@ -80,7 +80,7 @@
         "outplacement_invoice",             # dependency to outplacement, account
         "partner_desired_jobs",             # depenedncy to base, hr_skill, res_ssyk, res_sun
         "partner_education_views",          # dependency to contacts
-        "res_joint_planning_af"             # dependency to outplacement,
+        "res_joint_planning_af",             # dependency to outplacement,
         "sale_outplacement",                # dependancy to outplacement, sale, (sale_managment), res_joint_planning_af, sale_suborder_ipf_server, l10n_se, project
         "sale_suborder_ipf_server",         # dependancy to outplacement, web
 
