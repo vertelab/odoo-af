@@ -83,6 +83,7 @@
         "res_joint_planning_af",             # dependency to outplacement,
         "sale_outplacement",                # dependancy to outplacement, sale, (sale_managment), res_joint_planning_af, sale_suborder_ipf_server, l10n_se, project
         "sale_suborder_ipf_server",         # dependancy to outplacement, web
+        "sale_management",
 
     ],
     "application": "False",
