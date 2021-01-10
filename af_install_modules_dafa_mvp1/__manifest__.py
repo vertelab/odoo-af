@@ -70,6 +70,7 @@
 		"api_ipf_tlr_client",  # adds api to be used for fetching company-details from TLR
 		"auth_saml_ol_groups",
 		"auth_saml_af",
+		"auth_session_timeout", # Adds ability to set session inactive timeout as system parameter
 		# adds functionality to assign user-credentials to coaches.
 		"auth_user_rights_wizard",
 		"audit_logger",
