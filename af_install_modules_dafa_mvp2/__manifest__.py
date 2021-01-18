@@ -3,7 +3,7 @@
 {
     "name": "DAFA MVP 2.0 Install all modules ",
     "summary": "Adds more to DAFA MVP 1.0 Install all modules",
-    "version": "12.0.1.1.1",
+    "version": "12.0.1.1.2",
     "category": 'Outplacement',
     "author": "Vertel AB",
     "license": "AGPL-3",
@@ -23,6 +23,7 @@
         v12.0.1.0.7  - Added category Outplacement and new number standard (Odoo version 12.0 and Major, Minor, Patch)\n
         v12.0.1.1.0  - Added a complete list of dependencies to modules\n
         v12.0.1.1.1  - outplacement_partner_ssn is moved into outplacment-module\n
+        v12.0.1.1.2  - api_odoo_xmlrpc is decpreciated because it sync errors\n
     
         Branch Dev-12.0-Fenix-Sprint-02 fallback 12.0
 # Vertel
@@ -66,7 +67,7 @@
 """,
     "depends": [
     # Modules for DAFA MVP2:
-        "api_odoo_xmlrpc",                   # dependency to base_setup (adds sync to an other Odoo-server)
+        # "api_odoo_xmlrpc",                   # dependency to base_setup (adds sync to an other Odoo-server) Depreciated until further notice
         "hr_skill",                         # dependancy to hr
         "hr_timesheet",                     # dependancy to hr, analytic, project, uom
         "outplacement",                     # dependancy to base, hr, mail 
