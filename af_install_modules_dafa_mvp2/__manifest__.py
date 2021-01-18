@@ -3,7 +3,7 @@
 {
     "name": "DAFA MVP 2.0 Install all modules ",
     "summary": "Adds more to DAFA MVP 1.0 Install all modules",
-    "version": "12.0.1.1.0",
+    "version": "12.0.1.1.1",
     "category": 'Outplacement',
     "author": "Vertel AB",
     "license": "AGPL-3",
@@ -22,6 +22,7 @@
         v12.0.1.6  - Added generic CoA\n    
         v12.0.1.0.7  - Added category Outplacement and new number standard (Odoo version 12.0 and Major, Minor, Patch)\n
         v12.0.1.1.0  - Added a complete list of dependencies to modules\n
+        v12.0.1.1.1  - outplacement_partner_ssn is moved into outplacment-module\n
     
         Branch Dev-12.0-Fenix-Sprint-02 fallback 12.0
 # Vertel
@@ -76,7 +77,6 @@
         "outplacement_partner_education",   # dependancy to outplacement, partner_education_views
         "outplacement_partner_jobs",        # dependancy to outplacement, partner_desired_jobs
         "outplacement_partner_skills",      # dependancy to outplacement, hr_skill
-        "outplacement_partner_ssn",         # dependency to outplacement, partner_ssn 
         "outplacement_invoice",             # dependency to outplacement, account
         "partner_desired_jobs",             # depenedncy to base, hr_skill, res_ssyk, res_sun
         "partner_education_views",          # dependency to contacts
