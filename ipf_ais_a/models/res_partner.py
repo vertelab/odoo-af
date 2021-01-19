@@ -47,7 +47,7 @@ class Partner(models.Model):
                 if personnummer:
                     try:
                         ipf = self.env.ref('af_ipf.ipf_endpoint_ais_a').sudo()
-                        res = ipf.call(personnummer=self.company_registry)
+                        res = ipf.call(personnummer=self.social_sec_nr)
                         record.ais_a_ids = record.env['res.partner.ais_a']
                         for arende in res.get('arenden', []):
                             record.ais_a_ids |= record.env['res.partner.ais_a'].create_arende(arende, record.id)
@@ -58,11 +58,11 @@ class Partner(models.Model):
     @api.multi
     def get_ais_a_pnr(self):
         try:
-            if self.company_registry:
-                pnr = self.company_registry.replace('-', '')
+            if self.social_sec_nr:
+                pnr = self.social_sec_nr.replace('-', '')
                 return pnr
         except:
-            _logger.warn("Invalid personal identification number: %s" % self.company_registry)
+            _logger.warn("Invalid personal identification number: %s" % self.social_sec_nr)
 
 
 class PartnerAisA(models.TransientModel):
