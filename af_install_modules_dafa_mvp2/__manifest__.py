@@ -75,12 +75,12 @@
         #"outplacement_deviation_report     # dependancy to outplacement, outplacement_deviationreport_ipf_client (which is not ready yet)
         "outplacement_joint_planning",      # dependancy to outplacement, res_joint_planning_af, outplacement_completion_report_ipf_client, project
         "outplacement_order_interpretor",   # dependancy to outplacement, mail, hr_timesheet, project, task_interpretor_ipf_client
-        "outplacement_partner_education",   # dependancy to outplacement, partner_education_views
+        "outplacement_partner_education",   # dependancy to outplacement, partner_education
         "outplacement_partner_jobs",        # dependancy to outplacement, partner_desired_jobs
         "outplacement_partner_skills",      # dependancy to outplacement, hr_skill
         "outplacement_invoice",             # dependency to outplacement, account
         "partner_desired_jobs",             # depenedncy to base, hr_skill, res_ssyk, res_sun
-        "partner_education_views",          # dependency to contacts
+        "partner_education",          # dependency to contacts
         "res_joint_planning_af",             # dependency to outplacement,
         "sale_outplacement",                # dependancy to outplacement, sale, (sale_managment), res_joint_planning_af, sale_suborder_ipf_server, l10n_se, project
         "sale_suborder_ipf_server",         # dependancy to outplacement, web
