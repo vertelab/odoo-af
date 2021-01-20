@@ -29,5 +29,5 @@
         "base",
     ],
     "application": False,
-    "installable": True,
+    "installable": False,
 }
