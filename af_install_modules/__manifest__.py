@@ -42,6 +42,6 @@
             ],
 
     "application": False,
-    "installable": True,
+    "installable": False,
 }
 
