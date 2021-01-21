@@ -32,7 +32,6 @@
 		"auth_saml_ol",				#
 		"auth_saml_create_user",	#
 		"af_security",				# Module for the security settings for AF
-
         "af_security_rules",  # should be replaced later
         "af_statistics",
         "audit_logger",
@@ -57,7 +56,6 @@
         # "hr_org_chart",
 		"ipf_ais_a", 				# Used to integrate to AIS-Å
         "ipf_planning",
-
         # "module_chart", #the module displays a graphical view of the modules dependencies
         "partner_desired_jobs",		#
         "partner_fax", 				# Adds fax-number for AG
