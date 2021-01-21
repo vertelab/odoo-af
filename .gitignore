@@ -19,3 +19,4 @@ base_afdemo/data/testdata_2020-04-07/res.user.csv
 # Translations
 *.mo
 *.pot
+module_list_af
