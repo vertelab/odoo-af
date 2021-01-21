@@ -48,7 +48,7 @@
         "edi_route", 			# odoo-edi/ Central Module with settings to Af IPF
         "hr_360_view",			# odoo-af/ 
         "hr_employee_firstname",	# OCA
-        "hr_employee_first_name_extension", # odoo-hr
+        "hr_employee_firstname_extension", # odoo-hr
         "hr_office", 			# odoo-hr
         # "hr_org_chart",		# OCA
         "ipf_ais_a", 			# Used to integrate to AIS-Å
