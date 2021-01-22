@@ -29,11 +29,10 @@
         "af_security",			# Module for the security settings for AF
         "af_security_rules",  		# should be replaced later
         "af_statistics",		# module to enable Matomo
-        "auth_saml",			# server-auth/
-	"auth_saml_af",			# odoo-af/ Login-module for SAML authentification
+        "auth_saml_af",			# odoo-af/ Login-module for SAML authentification
         "auth_saml_ol",			#
-	"auth_saml_ol_groups",		#
-	"auth_saml_create_user",	# server-auth/
+        "auth_saml_ol_create_user",	# server-auth/
+        "auth_saml_ol_groups",		#
         "auth_signup",			#
         # "auth_timeout",  		# odoo-auth/ Disabled due to conflict with auth_saml_ol AFC-1547
         "audit_logger",			# odoo-server-tools/ Adds JSON-Formated logging
@@ -46,7 +45,7 @@
         "edi_af_krom_postcode",		# odoo-edi/
         "edi_af_officer",		# odoo-edi/
         "edi_route", 			# odoo-edi/ Central Module with settings to Af IPF
-        "hr_360_view",			# odoo-af/ 
+        "hr_360_view",			# odoo-af/
         "hr_employee_firstname",	# OCA
         "hr_employee_firstname_extension", # odoo-hr
         "hr_office", 			# odoo-hr
@@ -64,12 +63,12 @@
         "res_ssyk",			# odoo-base/
         "res_sun",			# odoo-base/
         "partner_view_360", 		# odoo-base/
-	# "web_a11y_af", 		# ?
+        # "web_a11y_af", 		# ?
         "web_a11y_filter_view", 	# odoo-web/ adds descriptions to create and edit-buttons
-	"web_backend_theme_af", 	# odoo-web/ module for backendtheme developed in DAFA
+        "web_backend_theme_af", 	# odoo-web/ module for backendtheme developed in DAFA
         # "web_autocomplete_off",	# ?
         # "web_core_menu_disabling", 	# new module to replace af_core_menu_disabling
-        "web_gui_disabeling_af", 	# odoo-web/ disables 
+        "web_gui_disabeling_af", 	# odoo-web/ disables
         # "web_hide-about-user-settings", # module that hides the users-page in the top right corner.
         # "web_hide-top-todo-icons", 	# module that hides the icon for the todo-items.
     ],
