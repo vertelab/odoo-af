@@ -70,11 +70,11 @@
         # "api_odoo_xmlrpc",                   # dependency to base_setup (adds sync to an other Odoo-server) Depreciated until further notice
         "hr_skill",                         # dependancy to hr
         "hr_timesheet",                     # dependancy to hr, analytic, project, uom
-        "outplacement",                     # dependancy to base, hr, mail 
+        "outplacement",                     # dependancy to base, hr, mail
         "outplacement_completion_report_ipf_client",    # dependancy to res_joint_planning_af
-        #"outplacement_deviation_report     # dependancy to outplacement, outplacement_deviationreport_ipf_client (which is not ready yet)
+        # "outplacement_deviation_report",     # dependancy to outplacement, outplacement_deviationreport_ipf_client (which is not ready yet)
         "outplacement_joint_planning",      # dependancy to outplacement, res_joint_planning_af, outplacement_completion_report_ipf_client, project
-        "outplacement_order_interpretor",   # dependancy to outplacement, mail, hr_timesheet, project, task_interpretor_ipf_client
+        "outplacement_order_interpreter",   # dependancy to outplacement, mail, hr_timesheet, project, task_interpreter_ipf_client
         "outplacement_partner_education",   # dependancy to outplacement, partner_education
         "outplacement_partner_jobs",        # dependancy to outplacement, partner_desired_jobs
         "outplacement_partner_skills",      # dependancy to outplacement, hr_skill
