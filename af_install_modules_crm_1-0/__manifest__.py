@@ -57,6 +57,7 @@
         "partner_fax", 			# OCA Adds fax-number for AG
         "partner_firstname", 		# OCA
         # "partner_kpi_data", 		# odoo-base/ Needed only for AG 1.0
+	"partner_flip_firstname",	# odoo-base/ Flips firstname and lastname
         "partner_mq_ipf", 		# odoo-base/ Listens for changes in AIS-F
         "res_drivers_license",		# odoo-base/
         "res_sni",			# odoo-base/
