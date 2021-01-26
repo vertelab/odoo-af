@@ -2,7 +2,7 @@
 
 {
     "name": "DAFA MVP 1.0 Install all modules ",
-    "version": "12.0.1.0.9",
+    "version": "12.0.1.0.11",
     "author": "Vertel AB",
     "description": """
 	This module installs all Dafa MVP1-modules at one go.\n
@@ -20,7 +20,7 @@
 	Once the module is installed, please de-install it to avoid depencency-problems.\n
 	v12.0.1.0.9  - Added new version-numbers-standard. Added hr_af_holidays.\n	
 	v12.0.1.0.10  - Added list of Repos that needs to be installed.\n	
-	\n
+	v12.0.1.0.11  - AFC-1666 added partner_flip_firstname.\n	
 	\n	
 	\n
 
@@ -89,6 +89,7 @@
 		"hr_office",  # Adds
 		# "hr_org_chart", #Disabled since Emma did not want it.
 		# dependant on: partner_legacy_id, partner_firstname, api_ipf_tlr_client, hr_departments_partner
+		"partner_flip_firstname",	# Flips first-name and lastname in contact-view.
 		"partner_tlr_update",
 		# "web_a11y_filter_view", # adds description to create and edit buttons. Disabled since there is a bug
 		"web_a11y_report",      # adds a report with status of the Accessibility-status
