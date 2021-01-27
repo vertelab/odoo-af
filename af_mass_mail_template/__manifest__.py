@@ -4,7 +4,8 @@
     "version": "12.0.0.1",
     "category": "Email Marketing",
 	"description": """
-	 v12.0.0.1 AFC-86  Add Mass mailing template for AF newsletters.
+	 v12.0.0.1 AFC-86  Add Mass mailing template for AF newsletters.\n
+	 check if this module is worth having. mail_tracking_mass_mailing\n
     """,
     "license": "AGPL-3",
     "author": "Vertel AB",
