@@ -56,7 +56,7 @@
                                 <tr>
                                     <td style="min-width: 590px;padding:0px;">
                                         <div style="margin: 0px; padding: 5px; background-color:#ffffff">
-                                            <h3>Sa skriver du en annons</h3>
+                                            <h3>Header in Newsletter</h3>
                                             <hr width="30%"
                                                 style="background-color:#ffffff;margin:4px 0px 32px 0px;border-color:#0366d6"></hr>
                                             <p style="margin: 0px; font-size: 13px;">
@@ -83,33 +83,34 @@
                                         <hr width="100%"
                                             style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 4px 0px;"/>
                                         <b>
-                                            <h4>Följ oss</h4>
+                                            <h4>Follow us</h4>
                                         </b>
                                         <br/>
                                         <div style="color: #999999;">
                                             <img src="/web_editor/font_to_img/62000/rgb(69,71,72)/21"
-                                                 data-class="fa fa-facebook-official" data-style=""
-                                                 class=""
-                                                 style="border-style:none;vertical-align:middle;height: auto; width: 30px;margin-right:10px"/>
+                                                 data-class="fa fa-facebook-official" 
+                                                 data-style="padding: 0px; margin: 0px; height: 48px;" 
+                                                 style="border-style:none;vertical-align:middle;height: auto; width: 30px;margin-right:10px;"/>
                                             <img src="/web_editor/font_to_img/61569/rgb(69,71,72)/21"
-                                                 data-class="fa fa-twitter-square" data-style="" class=""
-                                                 style="border-style:none;vertical-align:middle;height: auto; width: 34px;margin-right:10px;"/>
+                                                 data-class="fa fa-twitter-square" 
+                                                 data-style="padding: 0px; margin: 0px; height: 48px;" 
+                                                 style="border-style:none;vertical-align:middle;height: auto; width: 30px;margin-right:10px;"/>
                                             <img src="/web_editor/font_to_img/61580/rgb(69,71,72)/48"
                                                  data-class="fa fa-linkedin-square"
-                                                 data-style="padding: 0px; margin: 0px; height: 48px;" class=""
-                                                 style="border-style:none;vertical-align:middle;padding: 0px; margin: 0px; height: auto; width: 33px;margin-right:10px"/>
+                                                 data-style="padding: 0px; margin: 0px; height: 48px;" 
+                                                 style="border-style:none;vertical-align:middle;height: auto; width: 30px;margin-right:10px;"/>
                                             <img src="/web_editor/font_to_img/61664/rgb(69,71,72)/21"
-                                                 data-class="fa fa-envelope" data-style=""
-                                                 class=""
-                                                 style="border-style:none;vertical-align:middle;height: auto; width: 35px;"/>
+                                                 data-class="fa fa-envelope" 
+                                                 data-style="padding: 0px; margin: 0px; height: 48px;" 
+                                                 style="border-style:none;vertical-align:middle;height: auto; width: 30px;margin-right:10px;"/>
                                         </div>
                                         <br/>
                                         <div style="color: #999999;">
-                                            <span>Telefon 0771-508 508 | <u>Fler kontakvagar</u> |
-                                                <u>Prenumerera</u>
+                                            <span>Phone 0771-508 508 | <u>More contact ways</u> |
+                                                <u>Subscribe</u>
                                             </span>
                                             <br/>
-                                            <span>Klicka har for att <u>avergistrera</u> dig
+                                            <span>Click to <a href="/unsubscribe_from_list">Unsubscripe</a>.
                                             </span>
                                         </div>
                                     </td>
