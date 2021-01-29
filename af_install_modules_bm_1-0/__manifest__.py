@@ -31,7 +31,7 @@
         "edi_af_as_notes", 		# /oeoo-edi
         "hr_skill", 			# /OCA	
         "ipf_planning", 		# /oodo-af
-        #"mail_calendar_report_crm"	# /odoo-mail This module should be installed to be able to send meeting-notifications
+        #"mail_calendar_report_crm",	# /odoo-mail (missing repo in script) This module should be installed to be able to send meeting-notifications
         "partner_daily_notes", 		# /odoo-base
         "partner_daily_notes_edi", 	# /odoo-base
     ],
