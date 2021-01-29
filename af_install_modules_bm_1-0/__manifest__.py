@@ -6,14 +6,14 @@
     "author": "Vertel AB",
     "description": """
         This module installs all Book Meeting-modules at one go.\n
-        \n
-        Please see the depend-tab (with debug-mode) for a list of which modules are installed.\n
-		See https://confluence.ams.se/pages/viewpage.action?pageId=69921599 for a full list \n
-        \n
+         \n
+         Please see the depend-tab (with debug-mode) for a list of which modules are installed.\n
+         See https://confluence.ams.se/pages/viewpage.action?pageId=69921599 for a full list \n
+         \n
          v12.0.1.1  - First release\n
-		 v12.0.1.2  - Updated version\n
-		 v12.0.1.0.3 - fixed version and dependencies\n
-         	Once the module is installed, please de-install it to avoid depencency-problems.\n
+         v12.0.1.2  - Updated version\n
+         v12.0.1.0.3 - fixed version and dependencies\n
+         Once the module is installed, please de-install it to avoid depencency-problems.\n
          \n
     """,
     "license": "AGPL-3",
@@ -33,7 +33,7 @@
         "ipf_planning", 		# /oodo-af
         #"mail_calendar_report_crm",	# /odoo-mail (missing repo in script) This module should be installed to be able to send meeting-notifications
         "partner_daily_notes", 		# /odoo-base
-        "partner_daily_notes_edi", 	# /odoo-base
+        "partner_daily_notes_edi" 	# /odoo-base
     ],
     "application": False,
     "installable": True,
