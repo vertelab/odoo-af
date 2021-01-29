@@ -25,7 +25,6 @@
     "category": "Tools",
     "depends": [
         # These modules needs to be installed for Customer Card functionality
-        "af_gui_disabeling",		# odoo-af/ Hides Odoo-settings in upper right corner. Will be moved to odoo-web
         "af_security",			# Module for the security settings for AF
         "af_security_rules",  		# should be replaced later
         "af_statistics",		# module to enable Matomo
@@ -65,7 +64,7 @@
         "res_sun",			# odoo-base/
         "partner_view_360", 		# odoo-base/
         # "web_a11y_af", 		# ?
-        "web_a11y_filter_view", 	# odoo-web/ adds descriptions to create and edit-buttons
+        # "web_a11y_create-buttons", 	# odoo-web/ adds descriptions to create and edit-buttons
         "web_backend_theme_af", 	# odoo-web/ module for backendtheme developed in DAFA
         # "web_autocomplete_off",	# ?
         # "web_core_menu_disabling", 	# new module to replace af_core_menu_disabling
