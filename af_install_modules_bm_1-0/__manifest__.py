@@ -21,7 +21,6 @@
     "category": "Tools",
     "depends": [
         # These modules needs to be installed for Book Meeting functionality
-        "af_calendar_reports",
         "af_install_modules_crm_1-0", 	# Depend to all CRM-modules to simplify install later.
         "hr_af_holidays",		# /odoo-hr
         "calendar", 			# /odoo
@@ -31,7 +30,8 @@
         "edi_af_appointment",		# /odoo-edi
         "edi_af_as_notes", 		# /oeoo-edi
         "hr_skill", 			# /OCA	
-        "ipf_planning", 		# /ood-af
+        "ipf_planning", 		# /oodo-af
+        #"mail_calendar_report_crm"	# /odoo-mail This module should be installed to be able to send meeting-notifications
         "partner_daily_notes", 		# /odoo-base
         "partner_daily_notes_edi", 	# /odoo-base
     ],
