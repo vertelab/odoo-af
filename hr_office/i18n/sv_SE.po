@@ -167,3 +167,12 @@ msgstr "Verksamhets ID"
 #: model_terms:ir.ui.view,arch_db:hr_office.view_location_tree
 msgid "Locations"
 msgstr "Platser"
+
+#. module: hr_office
+#: model:ir.actions.act_window,name:hr_office.action_operation
+#: model:ir.model.fields,field_description:hr_office.field_hr_department__operation_ids
+#: model:ir.model.fields,field_description:hr_office.field_hr_location__operation_ids
+#: model:ir.ui.menu,name:hr_office.operation_menu
+#: model_terms:ir.ui.view,arch_db:hr_office.view_operation_filter
+msgid "Operations"
+msgstr "Verksamhet"
