@@ -19,7 +19,7 @@
 #
 ##############################################################################
 {
-    'name': 'AF Vertel Demodata converter - depreciated',
+    'name': 'Depreciated AF Vertel Demodata converter',
     'version': '12.0.1.1',
     'license': 'AGPL-3',
     'description': """
