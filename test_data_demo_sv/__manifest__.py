@@ -18,7 +18,8 @@ v12.0.1.0.5 - tried to fix intendation error\n
 	     #'data/res_company_data_se.xml',
 	     #'data/res_company_data_se.xml',
 	     #'data/res_partner_image_demo_se.xml',
-	     #'data/res_users_demo_se.xml'],
+	     #'data/res_users_demo_se.xml'
+	    ],
     'application': False,
     'installable': True,
 }
