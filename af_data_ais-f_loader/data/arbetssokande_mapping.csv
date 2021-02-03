@@ -1,7 +1,7 @@
 arbetssokande.csv,Notering,Trans,Odoo
 SOKANDE_ID,,"external_id,part_jbskr_",external_id
 SOKANDE_ID,,,customer_id
-PERSONNR,,,company_registry
+PERSONNR,,,social_sec_nr
 TMSTAMP,,,
 REGDATUM,,,
 FODELSEDATUM,,,

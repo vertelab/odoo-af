@@ -81,7 +81,7 @@ class CalendarAppointment(models.Model):
 
     partner_pnr = fields.Char(
         string="Attendee SSN",
-        related="partner_id.company_registry",
+        related="partner_id.social_sec_nr",
         readonly=True,
         groups="af_security.af_jobseekers_officer",
     )
@@ -98,6 +98,6 @@ class CalendarOccasion(models.Model):
 
     app_partner_pnr = fields.Char(
         string="Attendee SSN",
-        related="appointment_id.partner_id.company_registry",
+        related="appointment_id.partner_id.social_sec_nr",
         readonly=True,
     )
