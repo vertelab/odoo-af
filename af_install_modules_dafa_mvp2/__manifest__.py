@@ -3,7 +3,7 @@
 {
     "name": "DAFA MVP 2.0 Install all modules ",
     "summary": "Adds more to DAFA MVP 1.0 Install all modules",
-    "version": "12.0.1.1.2",
+    "version": "12.0.1.1.3",
     "category": 'Outplacement',
     "author": "Vertel AB",
     "license": "AGPL-3",
@@ -24,8 +24,10 @@
         v12.0.1.1.0  - Added a complete list of dependencies to modules\n
         v12.0.1.1.1  - outplacement_partner_ssn is moved into outplacment-module\n
         v12.0.1.1.2  - api_odoo_xmlrpc is decpreciated because it sync errors\n
-    
-        Branch Dev-12.0-Fenix-Sprint-02 fallback 12.0
+        v12.0.1.1.3  - added hr_outplacement_tab \n    
+        \n    
+        Branch Dev-12.0-Fenix-Sprint-02 fallback 12.0\n    
+        
 # Vertel
 "odoo-account||https://github.com/vertelab/odoo-account.git" 
 "odoo-af||https://github.com/vertelab/odoo-af.git"
@@ -67,7 +69,8 @@
 """,
     "depends": [
     # Modules for DAFA MVP2:
-        # "api_odoo_xmlrpc",                   # dependency to base_setup (adds sync to an other Odoo-server) Depreciated until further notice
+        # "api_odoo_xmlrpc",                # dependency to base_setup (adds sync to an other Odoo-server) Depreciated until further notice
+        "hr_outplacement_tab",              # dependancy to hr, outplacment
         "hr_skill",                         # dependancy to hr
         "hr_timesheet",                     # dependancy to hr, analytic, project, uom
         "outplacement",                     # dependancy to base, hr, mail
@@ -80,8 +83,8 @@
         "outplacement_partner_skills",      # dependancy to outplacement, hr_skill
         "outplacement_invoice",             # dependency to outplacement, account
         "partner_desired_jobs",             # depenedncy to base, hr_skill, res_ssyk, res_sun
-        "partner_education",          # dependency to contacts
-        "res_joint_planning_af",             # dependency to outplacement,
+        "partner_education",                # dependency to contacts
+        "res_joint_planning_af",            # dependency to outplacement,
         "sale_outplacement",                # dependancy to outplacement, sale, (sale_managment), res_joint_planning_af, sale_suborder_ipf_server, l10n_se, project
         "sale_suborder_ipf_server",         # dependancy to outplacement, web
         "sale_management",
