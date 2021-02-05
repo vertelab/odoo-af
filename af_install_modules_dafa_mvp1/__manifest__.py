@@ -78,7 +78,6 @@
 		"hr_departments_partner",
 		"hr_af_holidays", # Adds non-working-days for Af. Should be name-changed to hr_holidays_af
 		"hr_user_ciam_update",  # adds users to the CIAM-server
-		"hr_employee_customers_tab",  # adds my-customers-tab-to-employee-view
 		"hr_employee_firstname",  # is required by hr_employee_firstname_extension
 		"hr_employee_firstname_extension",  # is dependent on hr_employee_firstname
 		"hr_employee_legacy_id",  # OCA
