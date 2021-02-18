@@ -108,7 +108,7 @@ class ResPartner(models.Model):
         for pnr in pnr_list:
             pnr_domain.append(pnr.get('pnr'))
         # get partners from pnr
-        partner_ids = self.env['res.partner'].sudo().search([('company_registry', 'in', pnr_domain)])
+        partner_ids = self.env['res.partner'].sudo().search([('social_sec_nr', 'in', pnr_domain)])
         # find our appointment types
         type_21 = self.env.ref('calendar_meeting_type.type_21')
         type_26 = self.env.ref('calendar_meeting_type.type_26')

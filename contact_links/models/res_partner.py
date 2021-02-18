@@ -25,7 +25,7 @@ class PartnerLinks(models.Model):
     link = fields.Char(
         "Link",
         help="Supports parameterization through pythons format function.\n"
-        "Example: https://example.com/arbetssokande?personnummer={partner.company_registry}&signatur={user.af_signature}\n"
+        "Example: https://example.com/arbetssokande?personnummer={partner.social_sec_nr}&signatur={user.af_signature}\n"
         "format receives the following input:\n"
         "* partner: The current res.partner (Contakt, Job seeker, etc)\n"
         "* user: The logged in user.")

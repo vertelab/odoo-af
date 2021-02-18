@@ -1,0 +1,5 @@
+<odoo>
+    <data>
+        <menuitem id="customer_dialogue_menu_id" name="Customer Dialogue"/>
+    </data>
+</odoo>
