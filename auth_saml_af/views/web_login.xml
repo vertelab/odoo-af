@@ -12,5 +12,50 @@
         <xpath expr="//button[@type='submit']" position="attributes">
             <attribute name="t-if">debug</attribute>
         </xpath>
+        <xpath expr="//button[@type='submit']" position="inside">
+            (debug)
+        </xpath>
+        <xpath expr="//div[@class='form-group field-db']" position="attributes">
+            <attribute name="hidden">true</attribute>
+        </xpath>
     </template>
+
+    <template id="login_logo" inherit_id="web.login_layout">
+        <xpath expr='//img' position="attributes">
+            <attribute name="t-attf-src"></attribute>
+            <attribute name="src">/auth_saml_dafa/static/description/src/login_logo.png</attribute>
+        </xpath>
+        <xpath expr="//div[contains(@t-attf-class,'border-bottom')]" position="attributes">
+            <attribute name="t-attf-class">text-center pb-3 {{'mb-3' if form_small else 'mb-4'}}</attribute>
+        </xpath>
+        <xpath expr="//div[@class='text-center small mt-4 pt-3 border-top']" position="attributes">
+            <attribute name="hidden">true</attribute>
+        </xpath>
+    </template>
+
+    <template id="assets__portal_login" inherit_id="web.assets_frontend">
+        <xpath expr="." position="inside">
+            <link rel='stylesheet' href="/web_backend_theme_af/static/src/scss/style.scss"/>
+        </xpath>
+    </template>
+
+    <template id="hide_signup_text" inherit_id="auth_signup.login">
+        <xpath expr="//div[@class='justify-content-between mt-2 d-flex small']//a[1]" position="attributes">
+            <attribute name="hidden">true</attribute>
+        </xpath>
+    </template>
+
+    <template id="change_auth_signup_button_css" inherit_id="auth_saml_ol.providers">
+        <xpath expr='//a' position="attributes">
+            <attribute name="class">btn btn-block btn-primary</attribute>
+        </xpath>
+    </template>
+
+    <!-- Center the element in the view -->
+    <template id="remove_pull_right" inherit_id="auth_saml_ol.login">
+        <xpath expr="//div[@class='pull-right']" position="attributes">
+            <attribute name="class"></attribute>
+        </xpath>
+    </template>
+
 </odoo>
