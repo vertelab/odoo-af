@@ -2,7 +2,7 @@
 
 {
     "name": "Af CRM 1.0 Install all modules ",
-    "version": "12.0.1.0.5",
+    "version": "12.0.1.0.6",
     "author": "Vertel AB",
     "description": """
 	This module installs all AF-modules at one go.\n
@@ -16,6 +16,7 @@
 	v12.0.1.3   Disabled auth_timeout due to conflict with auth_saml_ol AFC-1547\n
 	v12.0.1.0.4  -  Updated list and changed version number to four digits \n	
 	v12.0.1.0.5  -  Updates and added repo in comments \n	
+	v12.0.1.0.6  -  Disabled af_statistics to speed up theme-loading \n	
 	\n
 	Once the module is installed, please de-install it to avoid depencency-problems.\n
 	\n
@@ -27,7 +28,7 @@
         # These modules needs to be installed for Customer Card functionality
         "af_security",			# Module for the security settings for AF
         "af_security_rules",  		# should be replaced later
-        "af_statistics",		# module to enable Matomo
+        #"af_statistics",		# module to enable Matomo
         "auth_saml_af",			# odoo-af/ Login-module for SAML authentification
         "auth_saml_ol",			#
         "auth_saml_ol_create_user",	# server-auth/
