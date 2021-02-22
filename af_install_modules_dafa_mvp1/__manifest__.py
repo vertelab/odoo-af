@@ -71,7 +71,7 @@
         "audit_logger",     # Logging module
         "auth_admin",
         "auth_saml_dafa",
-        "auth_saml_ol_",
+        "auth_saml_ol",
         "auth_saml_ol_create_user",
         "auth_saml_ol_groups",
         "auth_saml_fix",
