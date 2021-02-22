@@ -86,13 +86,15 @@
         # "hr_employee_views_user-credentials-tab", - depreciated. Replaced by user-create-wizard.
         # "hr_af_holidays", # dependant on hr_holidays
         "hr_office",  # Adds
-        # "hr_org_chart", #Disabled since Emma did not want it.
+        # "hr_org_chart", # Disabled since Emma did not want it.
         # dependant on: partner_legacy_id, partner_firstname, api_ipf_tlr_client, hr_departments_partner
         "hr_outplacement_tab",              # dependancy to hr, outplacment
         "hr_skill",                         # dependancy to hr
         "hr_timesheet",                     # dependancy to hr, analytic, project, uom
         "outplacement",                     # dependancy to base, hr, mail
         "outplacement_completion_report_ipf_client",    # dependancy to res_joint_planning_af
+        # "outplacement_crmsync",           # Module to be installed at a DAFA server and communicate with outplacement_dafasync" 
+        "outplacement_dafa",                # 
         "outplacement_deviation_report",  # dependancy to outplacement, outplacement_deviationreport_ipf_client (which is not ready yet)
         "outplacement_deviation_report_ipf_client",  # dependancy to outplacement, outplacement_deviationreport_ipf_client (which is not ready yet)
         # "outplacement_final_report",      # Not ready
