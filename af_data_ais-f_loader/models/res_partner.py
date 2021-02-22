@@ -70,6 +70,8 @@ class ResPartner(models.Model):
 
     @api.model
     def create_offices(self, path):
+        _logger.info("create offices - START")
+        _logger.info("create offices - path: %s" % path)
         headers_header = ['kontor.csv', 'Notering', 'Trans', 'Odoo']
         if not path:
             path = os.path.join(config.options.get('data_dir'), 'AIS-F/kontor.csv')
@@ -77,9 +79,12 @@ class ResPartner(models.Model):
             path = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/kontor.csv"
         header_path = "/usr/share/odoo-af/af_data_ais-f_loader/data/kontor_mapping.csv"
         self.create_partners(headers_header, path, header_path)
+        _logger.info("create offices - END")
 
     @api.model
     def create_officers(self, path):
+        _logger.info("create officers - START")
+        _logger.info("create officers - path: %s" % path)
         headers_header = ['handlaggare.csv', 'Notering', 'Trans', 'Odoo']
         if not path:
             path = os.path.join(config.options.get('data_dir'), 'AIS-F/handlaggare.csv')
@@ -87,6 +92,7 @@ class ResPartner(models.Model):
             path = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/handlaggare.csv"
         header_path = "/usr/share/odoo-af/af_data_ais-f_loader/data/handlaggare_mapping.csv"
         self.create_partners(headers_header, path, header_path)
+        _logger.info("create officers - END")
 
     @api.model
     def create_contact_persons(self):
