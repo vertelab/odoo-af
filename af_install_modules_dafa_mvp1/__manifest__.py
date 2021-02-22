@@ -102,7 +102,7 @@
         # "outplacement_crmsync",           # Module to be installed at a DAFA server and communicate with outplacement_dafasync" 
         "outplacement_dafa",                # 
         "outplacement_deviation_report",  # dependancy to outplacement, outplacement_deviationreport_ipf_client (which is not ready yet)
-        "outplacement_deviation_report_ipf_client",  # dependancy to outplacement, outplacement_deviationreport_ipf_client (which is not ready yet)
+        "outplacement_deviationreport_ipf_client",  # dependancy to outplacement, outplacement_deviationreport_ipf_client (which is not ready yet)
         "outplacement_final_report",      # 
         "outplacement_final_report_ipf_client", # 
         "outplacement_final_report_send", # 
