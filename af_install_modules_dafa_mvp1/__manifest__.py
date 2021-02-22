@@ -1,8 +1,8 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 {
-    "name": "DAFA MVP 1.0 Install all modules ",
-    "version": "12.0.1.0.11",
+    "name": "DAFA 1.0 Install all modules ",
+    "version": "12.0.1.1.1",
     "author": "Vertel AB",
     "description": """
     This module installs all Dafa MVP1-modules at one go.\n
@@ -21,6 +21,7 @@
     v12.0.1.0.9  - Added new version-numbers-standard. Added hr_af_holidays.\n	
     v12.0.1.0.10  - Added list of Repos that needs to be installed.\n	
     v12.0.1.0.11  - AFC-1666 added partner_flip_firstname.\n	
+    v12.0.1.1.1  - Consolidation of MVP1 and MVP2 into DAFA 1.0\n	    
     \n	
     \n
 
@@ -33,7 +34,6 @@
 # "odoo-contract|master|https://github.com/vertelab/odoo-contract.git"
 "odoo-edi||https://github.com/vertelab/odoo-edi.git" # New branch Dev-12.0-Fenix-Sprint-02 based on Dev-12.0
 "odoo-hr||https://github.com/vertelab/odoo-hr.git"
-# "odoo-imagemagick||https://github.com/vertelab/odoo-imagemagick.git" # Not used in DAFA
 "odoo-l10n_se|12.0|https://github.com/vertelab/odoo-l10n_se.git" # Need to explicitly say 12.0 else it will use the default branch Dev-12.0-Fenix-Sprint-02. We want 12.0 for the moment
 "odoo-mail||https://github.com/vertelab/odoo-mail.git"
 "odoo-outplacement||https://github.com/vertelab/odoo-outplacement.git"
@@ -87,12 +87,29 @@
         "hr_office",  # Adds
         # "hr_org_chart", #Disabled since Emma did not want it.
         # dependant on: partner_legacy_id, partner_firstname, api_ipf_tlr_client, hr_departments_partner
-        "partner_flip_firstname",  # Flips first-name and lastname in contact-view.
+        "hr_outplacement_tab",              # dependancy to hr, outplacment
+        "hr_skill",                         # dependancy to hr
+        "hr_timesheet",                     # dependancy to hr, analytic, project, uom
+        "outplacement",                     # dependancy to base, hr, mail
+        "outplacement_completion_report_ipf_client",    # dependancy to res_joint_planning_af
+        # "outplacement_deviation_report",  # dependancy to outplacement, outplacement_deviationreport_ipf_client (which is not ready yet)
+        "outplacement_joint_planning",      # dependancy to outplacement, res_joint_planning_af, outplacement_completion_report_ipf_client, project
+        "outplacement_order_interpreter",   # dependancy to outplacement, mail, hr_timesheet, project, task_interpreter_ipf_client
+        "outplacement_partner_education",   # dependancy to outplacement, partner_education
+        "outplacement_partner_jobs",        # dependancy to outplacement, partner_desired_jobs
+        "outplacement_partner_skills",      # dependancy to outplacement, hr_skill
+        "outplacement_invoice",             # dependency to outplacement, account
+        "partner_desired_jobs",             # depenedncy to base, hr_skill, res_ssyk, res_sun
+        "partner_education",                # dependency to contacts
+        "partner_flip_firstname",           # Flips first-name and lastname in contact-view.
         "partner_tlr_update",
-        # "web_a11y_filter_view", # adds description to create and edit buttons. Disabled since there is a bug
-        "web_a11y_report",  # adds a report with status of the Accessibility-status
-        # adds a field used to store the TLR lev_id and the employees id in other salary-systems.
-        "partner_legacy_id",
+        # "web_a11y_filter_view",           # adds description to create and edit buttons. 
+        "web_a11y_report",                  # adds a report with status of the Accessibility-status
+        "partner_legacy_id",                # adds a field used to store the TLR lev_id and the employees id in other salary-systems.
+        "res_joint_planning_af",            # dependency to outplacement,
+        "sale_outplacement",                # dependancy to outplacement, sale, (sale_managment), res_joint_planning_af, sale_suborder_ipf_server, l10n_se, project
+        "sale_suborder_ipf_server",         # dependancy to outplacement, web
+        "sale_management",
         # "web_autocomplete_off",
         "web_backend_theme_af",
         "web_dashboard_dafa",
