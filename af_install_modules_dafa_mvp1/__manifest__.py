@@ -63,6 +63,7 @@
     "category": "Tools",
     "depends": [
         # These modules needs to be installed for  MVP1 functionality
+        "af_signature",  #.
         # "af_statistics",  # will be renamed to web_matomo. Disabled since there is a bug - the menu does not render every time.
         "api_ipf",  # Configuration of API:s that goes towards IPF.
         "api_ipf_tlr_client",  # adds api to be used for fetching company-details from TLR
@@ -92,13 +93,19 @@
         "hr_timesheet",                     # dependancy to hr, analytic, project, uom
         "outplacement",                     # dependancy to base, hr, mail
         "outplacement_completion_report_ipf_client",    # dependancy to res_joint_planning_af
-        # "outplacement_deviation_report",  # dependancy to outplacement, outplacement_deviationreport_ipf_client (which is not ready yet)
+        "outplacement_deviation_report",  # dependancy to outplacement, outplacement_deviationreport_ipf_client (which is not ready yet)
+        "outplacement_deviation_report_ipf_client",  # dependancy to outplacement, outplacement_deviationreport_ipf_client (which is not ready yet)
+        # "outplacement_final_report",      # Not ready
+        # "outplacement_final_report_send", # Not ready
+        # "outplacement_final_report_ipf_client", # Not ready
         "outplacement_joint_planning",      # dependancy to outplacement, res_joint_planning_af, outplacement_completion_report_ipf_client, project
         "outplacement_order_interpreter",   # dependancy to outplacement, mail, hr_timesheet, project, task_interpreter_ipf_client
+        "outplacement_partner_af_signature", # 
         "outplacement_partner_education",   # dependancy to outplacement, partner_education
         "outplacement_partner_jobs",        # dependancy to outplacement, partner_desired_jobs
         "outplacement_partner_skills",      # dependancy to outplacement, hr_skill
         "outplacement_invoice",             # dependency to outplacement, account
+        "partner_af_signature",             # 
         "partner_desired_jobs",             # depenedncy to base, hr_skill, res_ssyk, res_sun
         "partner_education",                # dependency to contacts
         "partner_flip_firstname",           # Flips first-name and lastname in contact-view.
@@ -106,10 +113,14 @@
         # "web_a11y_filter_view",           # adds description to create and edit buttons. 
         "web_a11y_report",                  # adds a report with status of the Accessibility-status
         "partner_legacy_id",                # adds a field used to store the TLR lev_id and the employees id in other salary-systems.
+        "res_interpreter_gender_preference", # Data repository for interpreter gender preference codes.
+        "res_interpreter_language",         # Data repository for interpreter language codes
+        "res_interpreter_remote_type",      # Data repository for interpreter type codes.
         "res_joint_planning_af",            # dependency to outplacement,
         "sale_outplacement",                # dependancy to outplacement, sale, (sale_managment), res_joint_planning_af, sale_suborder_ipf_server, l10n_se, project
         "sale_suborder_ipf_server",         # dependancy to outplacement, web
-        "sale_management",
+        "sale_management",                  # Odoo Module to display Sales
+        "task_interpreter_ipf_client",      # IntepreatorBookings integration for REST-calls from the client-module to the server-module.
         # "web_autocomplete_off",
         "web_backend_theme_af",
         "web_dashboard_dafa",
