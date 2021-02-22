@@ -63,7 +63,7 @@
     "category": "Tools",
     "depends": [
         # These modules needs to be installed for  MVP1 functionality
-        "af_signature",  #.
+        "account_period",  # Added period for accounting
         # "af_statistics",  # will be renamed to web_matomo. Disabled since there is a bug - the menu does not render every time.
         "api_ipf",  # Configuration of API:s that goes towards IPF.
         "api_ipf_tlr_client",  # adds api to be used for fetching company-details from TLR
@@ -78,6 +78,7 @@
         "hr_departments_partner",
         "hr_af_holidays",  # Adds non-working-days for Af. Should be name-changed to hr_holidays_af
         "hr_user_ciam_update",  # adds users to the CIAM-server
+        "hr_emploee_ciam_client", # CIAM Client for AF project, API module to handle communication between DAFA (formerly called Fenix) and CIAM
         "hr_employee_firstname",  # is required by hr_employee_firstname_extension
         "hr_employee_firstname_extension",  # is dependent on hr_employee_firstname
         "hr_employee_legacy_id",  # OCA
@@ -111,14 +112,17 @@
         "partner_desired_jobs",             # depenedncy to base, hr_skill, res_ssyk, res_sun
         "partner_education",                # dependency to contacts
         "partner_flip_firstname",           # Flips first-name and lastname in contact-view.
+        "partner_legacy_id",                # adds a field used to store the TLR lev_id and the employees id in other salary-systems.
         "partner_tlr_update",
         # "web_a11y_filter_view",           # adds description to create and edit buttons. 
         "web_a11y_report",                  # adds a report with status of the Accessibility-status
-        "partner_legacy_id",                # adds a field used to store the TLR lev_id and the employees id in other salary-systems.
         "res_interpreter_gender_preference", # Data repository for interpreter gender preference codes.
         "res_interpreter_language",         # Data repository for interpreter language codes
         "res_interpreter_remote_type",      # Data repository for interpreter type codes.
         "res_joint_planning_af",            # dependency to outplacement,
+        "res_drivers_license",
+        "res_ssyk",
+        "res_sun",
         "sale_outplacement",                # dependancy to outplacement, sale, (sale_managment), res_joint_planning_af, sale_suborder_ipf_server, l10n_se, project
         "sale_suborder_ipf_server",         # dependancy to outplacement, web
         "sale_management",                  # Odoo Module to display Sales
