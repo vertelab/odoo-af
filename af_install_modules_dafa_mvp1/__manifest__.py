@@ -69,9 +69,7 @@
         "api_ipf_tlr_client",  # adds api to be used for fetching company-details from TLR
         "auth_saml_ol_groups",
         "auth_saml_dafa",
-        # "auth_saml_af", # wrong saml module for dafa project
         # "auth_session_timeout", # Adds ability to set session inactive timeout as system parameter. There is a conflict with: levavrop
-        # adds functionality to assign user-credentials to coaches.
         "auth_user_rights_wizard",
         "audit_logger",
         # "auth_timeout",  # Disabled due to conflict with auth_saml_ol AFC-1547
@@ -82,13 +80,10 @@
         "hr_employee_firstname",  # is required by hr_employee_firstname_extension
         "hr_employee_firstname_extension",  # is dependent on hr_employee_firstname
         "hr_employee_legacy_id",  # OCA
-        # "hr_employee_views_fenix", # Depricated, renamed to hr_employee_views_dafa
         "hr_employee_views_dafa", # Mostly hides various fields and pages in the hr.employee form
-        # "hr_employee_views_user-credentials-tab", - depreciated. Replaced by user-create-wizard.
-        # "hr_af_holidays", # dependant on hr_holidays
+        "hr_holidays", # Odoo module for leaves management 
         "hr_office",  # Adds
         # "hr_org_chart", # Disabled since Emma did not want it.
-        # dependant on: partner_legacy_id, partner_firstname, api_ipf_tlr_client, hr_departments_partner
         "hr_outplacement_tab",              # dependancy to hr, outplacment
         "hr_skill",                         # dependancy to hr
         "hr_timesheet",                     # dependancy to hr, analytic, project, uom
@@ -127,11 +122,10 @@
         "sale_suborder_ipf_server",         # dependancy to outplacement, web
         "sale_management",                  # Odoo Module to display Sales
         "task_interpreter_ipf_client",      # IntepreatorBookings integration for REST-calls from the client-module to the server-module.
-        # "web_autocomplete_off",
         "web_backend_theme_af",
         "web_dashboard_dafa",
-        # Adds a ribbon with db- and version info in the left corner.
-        "web_environment_ribbon",
+        # "web_environment_ribbon",           # Adds a ribbon with db- and version info in the left corner.
+        
     ],
     "application": "False",
     "installable": "True",
