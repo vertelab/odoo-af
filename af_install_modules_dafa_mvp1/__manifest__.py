@@ -74,7 +74,7 @@
         "auth_saml_ol",
         "auth_saml_ol_create_user",
         "auth_saml_ol_groups",
-        "auth_saml_fix",
+        "auth_signup_fix",
         # "auth_session_timeout", # Adds ability to set session inactive timeout as system parameter. There is a conflict with: levavrop
         # "auth_timeout",  # Disabled due to conflict with auth_saml_ol AFC-1547
         "auth_user_rights_wizard",
