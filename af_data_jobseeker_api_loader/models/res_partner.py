@@ -49,7 +49,7 @@ class ResPartner(models.Model):
                      'hr.department': self.search_model('hr.department', 'office_code', 'id'),
                      'res.sun': self.search_model('res.sun', 'code', 'id'),
                      'res.partner.skat': self.search_model('res.partner.skat', 'code', 'id'),
-                     'res.partner.education_level': self.search_model('res.partner.education_level', 'name', 'id'),
+                     'education_level': self.search_model('res.partner.education.education_level', 'name', 'id'),
                      'res.users': self.search_model('res.users', 'login', 'id'),
                      'res.country': self.search_model('res.country', 'name', 'id', {'lang':'sv_SE'})
                      }
@@ -61,7 +61,7 @@ class ResPartner(models.Model):
                     header = {key.strip():index for index, key in
                               enumerate(row.strip().split(','))}
                     try:
-                        _logger.info("header: %s" % header)
+                        _logger.debug("header: %s" % header)
                         id_index = header[key]
                     except KeyError:
                         _logger.error(
@@ -70,6 +70,7 @@ class ResPartner(models.Model):
                     rownr += 1
                     continue
                 customer_id = row.strip().split(',')[id_index]
+                _logger.debug("sökande-id %s" % customer_id)
                 if not self.env['res.partner'].search_count([('customer_id',
                                                              '=',
                                                              customer_id)]):
