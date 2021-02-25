@@ -55,6 +55,7 @@ class ResPartner(models.Model):
                      }
         rownr = 0
         iterations = 0
+        call_to_rask_time = 0
         with open(path) as fh:
             for row in fh:
                 if rownr == 0:
@@ -74,13 +75,14 @@ class ResPartner(models.Model):
                 if not self.env['res.partner'].search_count([('customer_id',
                                                              '=',
                                                              customer_id)]):
-                    self.env['res.partner'].rask_as_get(
+                    call_to_rask_time += self.env['res.partner'].rask_as_get(
                         customer_id, db_con, db_values)
 
                 iterations += 1
                 if not iterations % 500:
                     self.env.cr.commit()
                     _logger.info('%s Users added' % iterations)
+        _logger.info('calls to RASK took %s seconds' % call_to_rask_time)
 
     def search_model(self, obj, key, field_name, context=None):
         """Build dicts with key: field_name"""
