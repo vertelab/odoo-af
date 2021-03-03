@@ -23,7 +23,7 @@
     <template id="login_logo" inherit_id="web.login_layout">
         <xpath expr='//img' position="attributes">
             <attribute name="t-attf-src"></attribute>
-            <attribute name="src">/auth_saml_dafa/static/description/src/login_logo.png</attribute>
+            <attribute name="src">/auth_saml_af/static/description/src/login_logo.png</attribute>
         </xpath>
         <xpath expr="//div[contains(@t-attf-class,'border-bottom')]" position="attributes">
             <attribute name="t-attf-class">text-center pb-3 {{'mb-3' if form_small else 'mb-4'}}</attribute>
