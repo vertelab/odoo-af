@@ -53,6 +53,7 @@
         "ipf_ais_a", 			# Used to integrate to AIS-Å
         "ipf_planning",			# odoo-af/
         # "module_chart", 		# odoo-base/ The module displays a graphical view of the modules dependencies
+	"monitoring_status",		# adds a monitoring value for automatic montitoring
         "partner_desired_jobs",		# odoo-base/
         "partner_fax", 			# OCA Adds fax-number for AG
         "partner_firstname", 		# OCA
