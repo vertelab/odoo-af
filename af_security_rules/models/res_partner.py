@@ -21,6 +21,7 @@
 
 from odoo import models, fields, api, _
 from odoo.tools import config
+from odoo.http import request
 from pytz import timezone
 from datetime import timedelta
 from zeep.client import CachingClient
@@ -44,49 +45,19 @@ INITIERANDE_NYCKELTJANST = None
 INIT_HEADER_SYSTEM_ID = 'CRM'
 INIT_HEADER_API_VERSION = '1.3'
 
-
-class BHTJModel(models.AbstractModel):
-    _name = 'bhtj.model'
-    _description = 'BHTJ Abstract Model'
-
-    # This model makes it so that BHTJ is called when checking access rules for the inheriting model.
-    # BHTJ data is then injected into context and used in field calculations for res.partner.
-    # This is useful for models that will trigger a check of res.partner access rules, such as res.users.
-    # The goal is to not call BHTJ more than once per server call.
-
-    @api.model
-    def _apply_ir_rules(self, query, mode='read'):
-        """ Inject BHTJ data into context so we only run it once per call,
-            instead of once per rule (or more!).
-        """
-        keys = self.env.user.sudo()._bhtj_get_user_keys()
-        return super(
-            BHTJModel, self.with_context(
-                bhtj_keys=keys))._apply_ir_rules(
-            query, mode=mode)
-
-    @api.multi
-    def check_access_rule(self, operation):
-        """ Inject BHTJ data into context so we only run it once per call,
-            instead of once per rule (or more!).
-        """
-        keys = self.env.user.sudo()._bhtj_get_user_keys()
-        return super(BHTJModel, self.with_context(
-            bhtj_keys=keys)).check_access_rule(operation)
-
-
-class ResPartnerNotes(models.Model):
-    _name = 'res.partner.notes'
-    _inherit = ['res.partner.notes', 'bhtj.model']
-
-class CalendarAppointment(models.Model):
-    _name = 'calendar.appointment'
-    _inherit = ['calendar.appointment', 'bhtj.model']
-
+def _get_request_object():
+    """ Fetch the current request object, if one exists."""
+    try:
+        # Poke the bear
+        request.env
+        # It's alive!
+        return request
+    except Exception:
+        # No request is available
+        return
 
 class ResPartner(models.Model):
-    _name = 'res.partner'
-    _inherit = ['res.partner', 'bhtj.model']
+    _inherit = 'res.partner'
 
     # Access rights to archive contacts. This is probably not good enough.
     # Can't specify read/write.
@@ -120,6 +91,13 @@ class ResPartner(models.Model):
                         partner.jobseeker_access = access_level
 
     @api.model
+    def _bhtj_get_user_keys(self, user=None):
+        if not user:
+            user = self._context.get('uid')
+            user = user and self.env['res.users'].browse(user) or self.env.user
+        return user._bhtj_get_user_keys()
+
+    @api.model
     def _search_jobseeker_access(self, op, value):
         """ Perform a search on the jobseeker_access field using data from BHTJ.
             :param op: the search operator.
@@ -128,21 +106,7 @@ class ResPartner(models.Model):
         """
         _logger.debug(self.env.user)
         _logger.debug(self.env.context)
-        #raise Warning('foobar')
-        # BHTJ data injected in _apply_ir_rules
-        if 'bhtj_keys' in self._context:
-            keys = self._context.get(
-                'bhtj_keys', {
-                    'STARK': [], 'MYCKET_STARK': []})
-        else:
-            # New exiting path to get here. Try to find original user and
-            # contact BHTJ.
-            _logger.info(_("No BHTJ data in context. Extra call made."
-                           "Additional models need to inherit bhtj.model."))
-            _logger.debug(''.join(traceback.format_stack()))
-            user = self._context.get('uid')
-            user = user and self.env['res.users'].browse(user) or self.env.user
-            keys = user._bhtj_get_user_keys()
+        keys = self._bhtj_get_user_keys()
         _logger.debug(keys)
         if op in ('=', '!='):
             if value in ('STARK', 'MYCKET_STARK'):
@@ -296,30 +260,42 @@ class User(models.Model):
     @api.model
     def _bhtj_get_user_keys(self):
         """Fetch the jobseeker access rights of this user from BHTJ."""
-        # TODO: This happens multiple times in one function call.
-        # We need to cache this or BHTJ will get swamped.
-        # DONE: Attempted to move to abstract model bhtj.model and inject
-        # result into context.
-        bhtj = self.partner_id._bhtj_get_nyckeltjanst()
-
         def normalize_pnr(pnr):
             return '%s-%s' % (pnr[:8], pnr[8:12])
-        keys = {'STARK': [], 'MYCKET_STARK': []}
-        try:
-            # Fetch keys from BHTJ
-            response = bhtj.service.hamtaNyckelknippa(self.login)
-            # Translate to a more usable structure.
-            for key in response:
-                if key['nyckeltyp'] == 'Stark':
-                    keys['STARK'].append(normalize_pnr(key['personnummer']))
-                elif key['nyckeltyp'] == 'Mycket stark':
-                    keys['MYCKET_STARK'].append(
-                        normalize_pnr(key['personnummer']))
-        except BaseException:
-            # TODO: We should alert the user to the error, but throwing one here just
-            # results in a 500 Internal Server Error.
-            _logger.exception(_("Failed to connect to BHTJ!"))
-        return keys
+        keys = None
+        # BHTJ keys are only available for AF employees.
+        if self.af_signature:
+            request = _get_request_object()
+            if request and hasattr(request, 'bhtj_keys') and request.bhtj_keys.get(self.af_signature):
+                # Found keys in cache.
+                return request.bhtj_keys.get(self.af_signature)
+            keys = {'STARK': [], 'MYCKET_STARK': []}
+            bhtj = self.partner_id._bhtj_get_nyckeltjanst()
+            try:
+                # Fetch keys from BHTJ
+                response = bhtj.service.hamtaNyckelknippa(self.af_signature)
+                # Translate to a more usable structure.
+                for key in response:
+                    if key['nyckeltyp'] == 'Stark':
+                        keys['STARK'].append(normalize_pnr(key['personnummer']))
+                    elif key['nyckeltyp'] == 'Mycket stark':
+                        keys['MYCKET_STARK'].append(
+                            normalize_pnr(key['personnummer']))
+            except BaseException:
+                # TODO: We should alert the user to the error, but throwing one here just
+                # results in a 500 Internal Server Error.
+                _logger.exception(_("Failed to connect to BHTJ!"))
+            if request:
+                # Cache keys on request object.
+                if not hasattr(request, 'bhtj_keys'):
+                    request.bhtj_keys = {}
+                request.bhtj_keys[self.af_signature] = keys
+            else:
+                # This could result in many calls if run outside of request chain.
+                # Working theory is that this is unlikely to happen.
+                # TODO: Follow up on this log output.
+                _logger.info(f"BHTJ: Requesting keys for {self.af_signature} outside of request chain.")
+        return keys or {'STARK': [], 'MYCKET_STARK': []}
 
     @api.model
     def _get_notes_edit_limit(self):
