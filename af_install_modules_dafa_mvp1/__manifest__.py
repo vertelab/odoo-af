@@ -63,20 +63,20 @@
     "category": "Tools",
     "depends": [
         # These modules needs to be installed for  MVP1 functionality
-        "account_period",  # Added period for accounting
-        "af_security",      # Security-rules for AF
-        # "af_statistics",  # will be renamed to web_matomo. Disabled since there is a bug - the menu does not render every time.
-        "api_ipf",  # Configuration of API:s that goes towards IPF.
-        "api_ipf_tlr_client",  # adds api to be used for fetching company-details from TLR
-        "audit_logger",     # Logging module
+        "account_period",        # Added period for accounting
+        "af_security",           # Security-rules for AF
+        # "af_statistics",      # will be renamed to web_matomo. Disabled since there is a bug - the menu does not render every time.
+        "api_ipf",                      # Configuration of API:s that goes towards IPF.
+        "api_ipf_tlr_client",           # adds api to be used for fetching company-details from TLR
+        "audit_logger",                  # Logging module
         "auth_admin",
         "auth_saml_dafa",
         "auth_saml_ol",
         "auth_saml_ol_create_user",
         "auth_saml_ol_groups",
         "auth_signup_fix",
-        # "auth_session_timeout", # Adds ability to set session inactive timeout as system parameter. There is a conflict with: levavrop
-        # "auth_timeout",  # Disabled due to conflict with auth_saml_ol AFC-1547
+        # "auth_session_timeout",       # Adds ability to set session inactive timeout as system parameter. There is a conflict with: levavrop
+        # "auth_timeout",            # Disabled due to conflict with auth_saml_ol AFC-1547
         "auth_user_rights_wizard",
         "base_user_groups_dafa",
         "hr_af_holidays",  # Adds non-working-days for Af. Should be name-changed to hr_holidays_af
@@ -91,12 +91,13 @@
         # "hr_org_chart", # Disabled since Emma did not want it.
         "hr_outplacement_tab",              # dependancy to hr, outplacment
         "hr_skill",                         # dependancy to hr
-        "hr_user_ciam_update",  # adds users to the CIAM-server
+        "hr_user_ciam_update",              # adds users to the CIAM-server
         "hr_timesheet",                     # dependancy to hr, analytic, project, uom
         "l10n_se",
         "l10n_se_mis",
         "mail_outplacement_report",
         "mis_builder",
+        "monitoring_status",		        # adds a monitoring value for automatic montitoring
         "outplacement",                     # dependancy to base, hr, mail
         "outplacement_completion_report_ipf_client",    # dependancy to res_joint_planning_af
         # "outplacement_crmsync",           # Module to be installed at a DAFA server and communicate with outplacement_dafasync" 
