@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Odoo, Open Source Management Solution, third party addon
-#    Copyright (C) 2020 Vertel AB (<http://vertel.se>).
+#    OpenERP, Open Source Management Solution, third party addon
+#    Copyright (C) 2021 Vertel AB (<http://vertel.se>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,23 +19,13 @@
 #
 ##############################################################################
 
-{
-    "name": "AF SAML Settings",
-    "version": "12.0.1.1.0",
-    "author": "Vertel AB",
-    "license": "AGPL-3",
-    "description": "SAML Settings for Arbetsförmedlingen.",
-    "website": "https://vertel.se/",
-    "category": "Tools",
-    "depends": [
-        "auth_saml_ol_create_user",
-        "auth_saml_ol_groups",
-        "af_security",
-        ],
-    "data": [
-        "data/af_saml.xml",
-        "views/web_login.xml",
-    ],
-    "application": True,
-    "installable": True,
-}
+from odoo import models, api
+
+
+class User(models.Model):
+    _inherit = 'res.users'
+
+    @api.depends('login', 'saml_uid')
+    def _compute_af_signature(self):
+        for record in self:
+            record.af_signature = record.saml_uid

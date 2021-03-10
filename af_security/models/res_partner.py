@@ -63,6 +63,7 @@ class User(models.Model):
     af_signature = fields.Char(
         string='AF signature',
         compute='_compute_af_signature',
+        compute_sudo=True,
         store=True)
 
     @api.depends('login')
