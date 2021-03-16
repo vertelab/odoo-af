@@ -14,9 +14,8 @@ Actions and search 'Update Link'. Open it and click on 'Create Contexual Action'
 
 v12.0.1.2	- Updated manifest and added Af-logo to description. \n
             - Updated the security-groups in the datafile to match new version of af_security-groups. \n
-v12.0.1.5	- Updated link URLs. \n
-\n
-v12.0.1.4 - Made sure the contact links are computed with the customer number
+v12.0.1.4   - Made sure the contact links are computed with the customer number\n
+v12.0.1.5   - Updated link URLs. \n
 """,
     'author': 'Vertel AB',
     'license': 'AGPL-3',
