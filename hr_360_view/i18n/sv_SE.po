@@ -224,6 +224,13 @@ msgid "Other reason selected but other reason field is not filled in"
 msgstr "Annan orsak vald men fältet för annan orsak är inte ifyllt"
 
 #. module: hr_360_view
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:141
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:216
+#, python-format
+msgid "Other reason has to be at least 20 characters long"
+msgstr "Annan orsak måste vara minst 20 tecken lång."
+
+#. module: hr_360_view
 #: model:ir.model.fields,help:hr_360_view.field_hr_employee__related_partner_id
 msgid "Partner-related data of the user"
 msgstr "Partner-relaterad data om användaren"

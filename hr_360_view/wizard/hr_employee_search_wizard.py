@@ -27,7 +27,7 @@ from zeep.client import CachingClient
 
 
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
+from odoo.exceptions import ValidationError
 from odoo.tools.safe_eval import safe_eval
 from odoo.http import request
 
@@ -57,7 +57,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     # jobseekers_ids = fields.One2many(related='employee_id.jobseekers_ids')
     # case_ids = fields.One2many(related='employee_id.case_ids')
     # daily_note_ids = fields.One2many(related='employee_id.daily_note_ids')
-    
+
     social_sec_nr_search = fields.Char(string="Social security number",default=lambda self: '%s' % self._get_default_social_sec_nr_search())
     bank_id_text = fields.Text(string=None)
     bank_id_ok = fields.Boolean(string=None,default=False)
@@ -123,7 +123,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                 domain.append(
                     ("social_sec_nr", "=", "%s-%s" % (self.social_sec_nr_search[:8], self.social_sec_nr_search[8:12])))
             else:
-                raise Warning(_("Incorrectly formated social security number: %s" % self.social_sec_nr_search))
+                raise ValidationError(_("Incorrectly formated social security number: %s" % self.social_sec_nr_search))
         if self.customer_id_search:
             domain.append(("customer_id", "=", self.customer_id_search))
         if self.email_search:
@@ -133,13 +133,16 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
         _logger.info("domain: %s" % domain)
 
         if self.identification == False:
-            raise Warning(_("Identification must be set before searching"))
-        elif self.search_reason == "other reason" and self.other_reason == False:
-            raise Warning(_("Other reason selected but other reason field is not filled in"))
+            raise ValidationError(_("Identification must be set before searching"))
+        elif self.search_reason == "other reason":
+            if not self.other_reason:
+                raise ValidationError(_("Other reason selected but other reason field is not filled in"))
+            if len(self.other_reason) < 20:
+                raise ValidationError(_("Other reason has to be at least 20 characters long"))
 
         partners = self.env['res.partner'].sudo().search(domain)
         if not partners:
-            raise Warning(_("No id found"))
+            raise ValidationError(_("No id found"))
         # TODO: Set correct access level. Probably varies with the reason for the search.
         partners._grant_jobseeker_access('MYCKET_STARK', user=self.env.user,
                                          reason=self.search_reason or self.identification)
@@ -185,7 +188,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                 domain.append(
                     ("social_sec_nr", "=", "%s-%s" % (self.social_sec_nr_search[:8], self.social_sec_nr_search[8:12])))
             else:
-                raise Warning(_("Incorrectly formated social security number: %s" % self.social_sec_nr_search))
+                raise ValidationError(_("Incorrectly formated social security number: %s" % self.social_sec_nr_search))
         if self.customer_id_search:
             ipf = self.env.ref('af_ipf.ipf_endpoint_customer').sudo()
             res = ipf.call(customer_id=self.customer_id_search)
@@ -205,13 +208,16 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
         _logger.info("domain: %s" % domain)
 
         if self.search_reason == False:
-            raise Warning(_("Search reason must be set before searching"))
-        elif self.search_reason == "other reason" and self.other_reason == False:
-            raise Warning(_("Other reason selected but other reason field is not filled in"))
+            raise ValidationError(_("Search reason must be set before searching"))
+        elif self.search_reason == "other reason":
+            if not self.other_reason:
+                raise ValidationError(_("Other reason selected but other reason field is not filled in"))
+            if len(self.other_reason) < 20:
+                raise ValidationError(_("Other reason has to be at least 20 characters long"))
 
         partners = self.env['res.partner'].sudo().search(domain)
         if not partners:
-            raise Warning(_("No id found"))
+            raise ValidationError(_("No id found"))
         # TODO: Set correct access level. Probably varies with the reason for the search.
         partners._grant_jobseeker_access('MYCKET_STARK', user=self.env.user,
                                          reason=self.search_reason or self.identification)
@@ -255,11 +261,11 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             self.env['ir.config_parameter'].sudo().get_param('hr_360_view.bankid_wsdl',
             'http://bhipws.arbetsformedlingen.se/Integrationspunkt/ws/mobiltbankidinterntjanst?wsdl')) # create a Client instance
         if not self.social_sec_nr_search:
-           raise Warning(_('Social security number missing'))
+           raise ValidationError(_('Social security number missing'))
         res = bankid.service.startaIdentifiering(
             self.social_sec_nr_search.replace('-',''),
             'crm')
-        _logger.warn("res: %s" % res)
+        _logger.warning("res: %s" % res)
         try:
             orderRef = res['orderRef']
             if not orderRef:
@@ -270,13 +276,13 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                     self.bank_id_text = _("Error in communication with BankID")
         except KeyError:
             self.bank_id_text = _("Error in communication with BankID")
-            self.bank_id_ok = False			
+            self.bank_id_ok = False
         if orderRef:
             deadline = time.monotonic() + TIMEOUT
             time.sleep(9) # Give user time to react before polling.
             while deadline > time.monotonic():
                 res = bankid.service.verifieraIdentifiering(orderRef,'crm')
-                _logger.warn("res: %s" % res)
+                _logger.warning("res: %s" % res)
                 if 'statusText' in res and res['statusText'] == 'OK':
                     self.bank_id_text = res['statusText']
                     self.bank_id_ok = True

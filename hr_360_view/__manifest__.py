@@ -3,7 +3,7 @@
     'summary': """
         A dashboard for employees to search for job seekers.
         """,
-    'version': '12.0.0.8',
+    'version': '12.0.1.2',
     'category': 'Human resources',
     'description': """
 Jiras
@@ -16,6 +16,7 @@ v12.0.0.3 AFC-0715 - Lagt till rubrik på vyn för Arbetsyta.\n
 v12.0.0.2 AFC-0713 - Bytt namn från Handläggaryta till Arbetsyta enligt beslut från Införandegruppen. Dolt menyn HR 360.\n
 v12.0.0.1 AFC-0667 - HR 360 View Module. Lägger till huvudsida för handläggare med sökyta samt flikar med uppgifter centrerade från handläggaren. \n
 v12.0.1.1 AFC-0185, 199 \n
+v12.0.1.2 AFC-1859 - Added more logic for verification of other_reason field. \n
 
 """,
     'author': 'Vertel AB',
@@ -28,9 +29,9 @@ v12.0.1.1 AFC-0185, 199 \n
         'af_ipf',
     ],
     'data': [
-        # 'views/menu.xml',
         'views/hr_view.xml',
         'wizard/hr_employee_search_wizard.xml'
     ],
     'installable': True,
+    'application': False,
 }
