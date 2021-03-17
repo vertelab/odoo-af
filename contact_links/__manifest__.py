@@ -2,7 +2,7 @@
 
 {
     'name': 'AF Contact Links',
-    'version': '12.0.1.4',
+    'version': '12.0.1.5',
     'category': '',
     'description': """
 Cases
@@ -13,9 +13,9 @@ Actions -> Update Link. If you can't see 'Update Link' inside Action then Go to 
 Actions and search 'Update Link'. Open it and click on 'Create Contexual Action' button then refresh browser.
 
 v12.0.1.2	- Updated manifest and added Af-logo to description. \n
-			- Updated the security-groups in the datafile to match new version of af_security-groups. \n
-\n
-v12.0.1.4 - Made sure the contact links are computed with the customer number
+            - Updated the security-groups in the datafile to match new version of af_security-groups. \n
+v12.0.1.4   - Made sure the contact links are computed with the customer number\n
+v12.0.1.5   - Updated link URLs. \n
 """,
     'author': 'Vertel AB',
     'license': 'AGPL-3',
