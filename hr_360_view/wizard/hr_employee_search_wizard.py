@@ -123,7 +123,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                 domain.append(
                     ("social_sec_nr", "=", "%s-%s" % (self.social_sec_nr_search[:8], self.social_sec_nr_search[8:12])))
             else:
-                raise ValidationError(_("Incorrectly formated social security number: %s" % self.social_sec_nr_search))
+                raise ValidationError(_("Incorrectly formated social security number: %s") % self.social_sec_nr_search)
         if self.customer_id_search:
             domain.append(("customer_id", "=", self.customer_id_search))
         if self.email_search:
@@ -188,7 +188,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                 domain.append(
                     ("social_sec_nr", "=", "%s-%s" % (self.social_sec_nr_search[:8], self.social_sec_nr_search[8:12])))
             else:
-                raise ValidationError(_("Incorrectly formated social security number: %s" % self.social_sec_nr_search))
+                raise ValidationError(_("Incorrectly formated social security number: %s") % self.social_sec_nr_search)
         if self.customer_id_search:
             ipf = self.env.ref('af_ipf.ipf_endpoint_customer').sudo()
             res = ipf.call(customer_id=self.customer_id_search)
@@ -265,7 +265,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
         res = bankid.service.startaIdentifiering(
             self.social_sec_nr_search.replace('-',''),
             'crm')
-        _logger.warning("res: %s" % res)
+        _logger.debug("res: %s" % res)
         try:
             orderRef = res['orderRef']
             if not orderRef:
@@ -282,7 +282,6 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             time.sleep(9) # Give user time to react before polling.
             while deadline > time.monotonic():
                 res = bankid.service.verifieraIdentifiering(orderRef,'crm')
-                _logger.warning("res: %s" % res)
                 if 'statusText' in res and res['statusText'] == 'OK':
                     self.bank_id_text = res['statusText']
                     self.bank_id_ok = True
