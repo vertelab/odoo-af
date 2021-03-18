@@ -27,12 +27,17 @@
                     <page string="Based on the needs of the authority">
                         <group>
                             <group>
-                                <field name="search_reason"/> <!--widget="radio" options="{'horizontal': true}"-->
-                                <field name="other_reason"
-                                       attrs="{'invisible': [('search_reason','!=','other reason')]}"/>
+                                <field name="search_reason"/>
+                                <field name="other_reason" widget="text" attrs="{'invisible': [('search_reason','!=','other reason')]}"/>
                                 <field name="social_sec_nr_search"/>
                                 <field name="customer_id_search"/>
                                 <field name="email_search"/>
+                            </group>
+                            <group>
+                                <p attrs="{'invisible': [('search_reason','!=','other reason')]}" style="color:red;">
+                                    <br/><br/>
+                                    Ange orsak att öppna personakt för att kunna fullgöra arbetsuppgift, i enlighet med förordning (2002:623), 20 b § och 20 c §.
+                                </p>
                             </group>
                         </group>
                         <group></group>
