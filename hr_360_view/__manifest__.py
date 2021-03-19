@@ -3,7 +3,7 @@
     'summary': """
         A dashboard for employees to search for job seekers.
         """,
-    'version': '12.0.1.2',
+    'version': '12.0.1.3',
     'category': 'Human resources',
     'description': """
 Jiras
@@ -17,6 +17,7 @@ v12.0.0.2 AFC-0713 - Bytt namn från Handläggaryta till Arbetsyta enligt beslut
 v12.0.0.1 AFC-0667 - HR 360 View Module. Lägger till huvudsida för handläggare med sökyta samt flikar med uppgifter centrerade från handläggaren. \n
 v12.0.1.1 AFC-0185, 199 \n
 v12.0.1.2 AFC-1859, AFC-1861, AFC-1870 - Added more logic for verification of other_reason field and fixed layout of form. \n
+v12.0.1.3 AFC-1988 - Better handling of bankid approvals. \n
 
 """,
     'author': 'Vertel AB',
