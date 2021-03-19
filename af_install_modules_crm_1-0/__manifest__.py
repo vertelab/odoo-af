@@ -36,7 +36,7 @@
         "auth_signup",			#
         # "auth_timeout",  		# odoo-auth/ Disabled due to conflict with auth_saml_ol AFC-1547
         "audit_logger",			# odoo-server-tools/ Adds JSON-Formated logging
-        #"contact_links", 		# odoo-af/ temporary removed due to a bug
+        "contact_links", 		# odoo-af/
         "edi_af_aisf_rask",		# odoo-edi/
         "edi_af_aisf_rask_get_jobseeker", # odoo-edi/
         "edi_af_aisf_trask",		# odoo-edi/
@@ -68,7 +68,7 @@
         # "web_a11y_af", 		# ?
         # "web_a11y_create-buttons", 	# odoo-web/ adds descriptions to create and edit-buttons
         "web_backend_theme_af", 	# odoo-web/ module for backendtheme developed in DAFA
-        # "web_autocomplete_off",	# ?
+        "web_autocomplete_off",		# ?
         # "web_core_menu_disabling", 	# new module to replace af_core_menu_disabling
         "web_gui_disabeling_af", 	# odoo-web/ disables
         # "web_hide-about-user-settings", # module that hides the users-page in the top right corner.
