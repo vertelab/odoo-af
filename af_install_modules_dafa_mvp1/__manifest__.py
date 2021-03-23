@@ -2,7 +2,7 @@
 
 {
     "name": "DAFA 1.0 Install all modules ",
-    "version": "12.0.1.1.1",
+    "version": "12.0.1.1.2",
     "author": "Vertel AB",
     "description": """
     This module installs all Dafa MVP1-modules at one go.\n
@@ -22,6 +22,7 @@
     v12.0.1.0.10  - Added list of Repos that needs to be installed.\n	
     v12.0.1.0.11  - AFC-1666 added partner_flip_firstname.\n	
     v12.0.1.1.1  - Consolidation of MVP1 and MVP2 into DAFA 1.0\n	    
+    v12.0.1.1.2  - test of version bump\n	    
     \n	
     \n
 
