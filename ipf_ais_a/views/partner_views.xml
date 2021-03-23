@@ -8,11 +8,13 @@
                 <field name="name"/>
                 <field name="res_officer"/>
                 <field name="status"/>
+                <field name="start"/>
+                <field name="stop"/>
                 <field name="atgard"/>
-
             </tree>
         </field>
     </record>
+
     <record id="view_jobseeker_form" model="ir.ui.view">
         <field name="name">res.partner.form.jobseeker.ais_a</field>
         <field name="model">res.partner</field>

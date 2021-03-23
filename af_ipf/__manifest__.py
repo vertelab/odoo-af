@@ -2,7 +2,7 @@
 
 {
     "name": "AF IPF Integration",
-    "version": "12.0.1.0.2",
+    "version": "12.0.1.0.3",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
@@ -11,8 +11,9 @@
     "description": """
 Jira
 ===========================================
-AFC-734 Integration till IPF(V12.0.1.0.1)
-AFC-1385 Data för rask integration (V12.0.1.0.2)
+v12.0.1.0.1 AFC-734: Integration till IPF
+v12.0.1.0.2 AFC-1385: Data för rask integration
+v12.0.1.0.3 AFC-2001: updated default IPF url
 """,
     "depends": ["af_security"],
     "external_dependencies": {"python": ["requests"]},

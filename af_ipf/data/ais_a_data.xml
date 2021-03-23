@@ -6,7 +6,7 @@
 			<field name="name">IPF AIS-Å</field>
 			<field name="environment">T2</field>
 			<field name="systemid">AFCRM</field>
-			<field name="url">https://ipfapi.arbetsformedlingen.se</field>
+			<field name="url">https://ipf-acc.arbetsformedlingen.se</field>
 			<field name="port">443</field>
 			<field name="enduserid">True</field>
 		</record>
