@@ -36,6 +36,8 @@
         "auth_signup",			#
         # "auth_timeout",  		# odoo-auth/ Disabled due to conflict with auth_saml_ol AFC-1547
         "audit_logger",			# odoo-server-tools/ Adds JSON-Formated logging
+	"af_data_ais-f_loader",
+	"af_data_jobseeker_api_loader",
         "contact_links", 		# odoo-af/
         "edi_af_aisf_rask",		# odoo-edi/
         "edi_af_aisf_rask_get_jobseeker", # odoo-edi/
