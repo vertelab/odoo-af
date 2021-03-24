@@ -19,12 +19,8 @@
 #
 ##############################################################################
 
-import json
 import logging
-import requests
-from odoo.exceptions import Warning
-from requests.auth import HTTPBasicAuth
-from uuid import uuid4
+from datetime import datetime
 
 from odoo import models, fields, api, _
 
@@ -76,11 +72,16 @@ class PartnerAisA(models.TransientModel):
     status = fields.Char(string='Status')
     status_change = fields.Char(string='Senaste Status Ändring')
     atgard = fields.Char(string='Åtgärd')
+    start = fields.Date(string='Start')
+    stop = fields.Date(string='Stop')
 
     partner_id = fields.Many2one(comodel_name="res.partner", string="Job seeker")
 
     @api.model
     def create_arende(self, vals, partner_id):
+        start_date = vals.get('beslutsperiod', {}).get('startdatum')
+        stop_date = vals.get('beslutsperiod', {}).get('slutdatum')
+
         return self.create({
             'partner_id': partner_id,
             'name': vals['arendenummer'],
@@ -90,5 +91,6 @@ class PartnerAisA(models.TransientModel):
             'status': vals.get('status', {}).get('benamning'),
             'status_change': vals['senasteStatusAndring'],
             'atgard': vals.get('atgard', {}).get('benamning'),
-
+            'start': datetime.strptime(start_date, '%Y-%m-%d') if start_date else False,
+            'stop': datetime.strptime(stop_date, '%Y-%m-%d') if stop_date else False
         })
