@@ -1,21 +1,31 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* hr_360_view
+#	* hr_360_view
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 12.0-20200508\n"
+"Project-Id-Version: Odoo Server 12.0-20210127\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-02 12:42+0000\n"
-"PO-Revision-Date: 2020-10-07 14:48+0200\n"
+"PO-Revision-Date: 2021-03-19 09:26+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-"Language: sv_SE\n"
-"X-Generator: Poedit 2.0.6\n"
+
+#. module: hr_360_view
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:45
+#, python-format
+msgid "%s [This jobseeker is not registered at Arbetsförmedlingen]"
+msgstr "%s [Denna arbetssökande finns inte registrerad hos Arbetsförmedlingen]"
+
+#. module: hr_360_view
+#: model_terms:ir.ui.view,arch_db:hr_360_view.search_jobseeker_form
+msgid "<br/><br/>\n"
+"                                    Ange orsak att öppna personakt för att kunna fullgöra arbetsuppgift, i enlighet med förordning (2002:623), 20 b § och 20 c §."
+msgstr ""
 
 #. module: hr_360_view
 #: model_terms:ir.actions.act_window,help:hr_360_view.open_view_employee_360_list
@@ -28,15 +38,24 @@ msgid "Administration of recruitment meeting/group activity/project"
 msgstr "Administration av rekryteringsmöte/grupp aktivitet/projekt"
 
 #. module: hr_360_view
+#: model:ir.model.fields,field_description:hr_360_view.field_hr_employee_jobseeker_search_wizard__bank_id_ok
+msgid "Bank Id Ok"
+msgstr ""
+
+#. module: hr_360_view
+#: model:ir.model.fields,field_description:hr_360_view.field_hr_employee_jobseeker_search_wizard__bank_id_text
+msgid "Bank Id Text"
+msgstr ""
+
+#. module: hr_360_view
+#: model_terms:ir.ui.view,arch_db:hr_360_view.search_jobseeker_form
+msgid "BankID"
+msgstr ""
+
+#. module: hr_360_view
 #: model_terms:ir.ui.view,arch_db:hr_360_view.search_jobseeker_form
 msgid "Based on the needs of the authority"
 msgstr "Utifrån myndighetens behov"
-
-#. module: hr_360_view
-#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:44
-#, python-format
-msgid "This jobseeker is not registered at Arbetsförmedlingen"
-msgstr "Sökande är inte inskriven hos Arbetsförmedlingen"
 
 #. module: hr_360_view
 #: selection:hr.employee.jobseeker.search.wizard,search_reason:0
@@ -62,12 +81,6 @@ msgstr "Skapad den"
 #: model:ir.model.fields,field_description:hr_360_view.field_hr_employee_jobseeker_search_wizard__customer_id_search
 msgid "Customer number"
 msgstr "Kundnummmer"
-
-#. module: hr_360_view
-#: model:ir.model.fields,field_description:hr_360_view.field_hr_employee__daily_note_ids
-#: model:ir.model.fields,field_description:hr_360_view.field_hr_employee_jobseeker_search_wizard__daily_note_ids
-msgid "Daily Note"
-msgstr "Daganteckning"
 
 #. module: hr_360_view
 #: selection:hr.employee.jobseeker.search.wizard,search_reason:0
@@ -106,20 +119,21 @@ msgid "Employees"
 msgstr "Anställda"
 
 #. module: hr_360_view
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:279
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:281
+#, python-format
+msgid "Error in communication with BankID"
+msgstr "Fel i kommunikationen med BankID"
+
+#. module: hr_360_view
 #: selection:hr.employee.jobseeker.search.wizard,search_reason:0
 msgid "Follow-up of job seekers' planning"
 msgstr "Uppföljning av arbetssökandes planering"
 
 #. module: hr_360_view
-#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:77
-#, python-format
-msgid "Handläggaryta"
-msgstr "Arbetsyta"
-
-#. module: hr_360_view
 #: model:ir.model.fields,field_description:hr_360_view.field_hr_employee_jobseeker_search_wizard__id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: hr_360_view
 #: selection:hr.employee.jobseeker.search.wizard,identification:0
@@ -137,7 +151,8 @@ msgid "Identification"
 msgstr "Identifikation"
 
 #. module: hr_360_view
-#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:100
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:136
+#: code:addons/hr_360_view/wizard/search_jobseeker_when_in_contact.py:91
 #, python-format
 msgid "Identification must be set before searching"
 msgstr "Identifikation måste fyllas i innan sökning"
@@ -148,8 +163,10 @@ msgid "Identified by certifier"
 msgstr "Identifierad genom intygsgivare"
 
 #. module: hr_360_view
-#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:90
-#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:135
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:126
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:191
+#: code:addons/hr_360_view/wizard/search_jobseeker_based_auth.py:92
+#: code:addons/hr_360_view/wizard/search_jobseeker_when_in_contact.py:84
 #, python-format
 msgid "Incorrectly formated social security number: %s"
 msgstr "Felformaterat personnummer: %s"
@@ -160,8 +177,13 @@ msgid "Investigation"
 msgstr "Utredning"
 
 #. module: hr_360_view
-#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:111
-#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:156
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:112
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:163
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:238
+#: code:addons/hr_360_view/wizard/search_jobseeker_based_auth.py:77
+#: code:addons/hr_360_view/wizard/search_jobseeker_based_auth.py:134
+#: code:addons/hr_360_view/wizard/search_jobseeker_when_in_contact.py:70
+#: code:addons/hr_360_view/wizard/search_jobseeker_when_in_contact.py:113
 #: model:ir.model.fields,field_description:hr_360_view.field_hr_employee__jobseekers_ids
 #: model:ir.model.fields,field_description:hr_360_view.field_hr_employee_jobseeker_search_wizard__jobseekers_ids
 #, python-format
@@ -204,11 +226,13 @@ msgid "My Jobseekers"
 msgstr "Mina arbetssökande"
 
 #. module: hr_360_view
-#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:106
-#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:151
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:145
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:220
+#: code:addons/hr_360_view/wizard/search_jobseeker_based_auth.py:118
+#: code:addons/hr_360_view/wizard/search_jobseeker_when_in_contact.py:95
 #, python-format
 msgid "No id found"
-msgstr "Inget id hittades"
+msgstr "Inget ID hittades"
 
 #. module: hr_360_view
 #: selection:hr.employee.jobseeker.search.wizard,search_reason:0
@@ -217,18 +241,19 @@ msgid "Other reason"
 msgstr "Annan orsak"
 
 #. module: hr_360_view
-#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:102
-#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:147
-#, python-format
-msgid "Other reason selected but other reason field is not filled in"
-msgstr "Annan orsak vald men fältet för annan orsak är inte ifyllt"
-
-#. module: hr_360_view
 #: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:141
 #: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:216
 #, python-format
 msgid "Other reason has to be at least 20 characters long"
 msgstr "Annan orsak måste vara minst 20 tecken lång."
+
+#. module: hr_360_view
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:139
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:214
+#: code:addons/hr_360_view/wizard/search_jobseeker_based_auth.py:114
+#, python-format
+msgid "Other reason selected but other reason field is not filled in"
+msgstr "Annan orsak valt, men ingen anledningen är given."
 
 #. module: hr_360_view
 #: model:ir.model.fields,help:hr_360_view.field_hr_employee__related_partner_id
@@ -267,15 +292,34 @@ msgid "Search reason"
 msgstr "Sökorsak"
 
 #. module: hr_360_view
-#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:145
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:211
+#: code:addons/hr_360_view/wizard/search_jobseeker_based_auth.py:112
 #, python-format
-msgid "Search reason or identification must be set before searching"
-msgstr "Du måste välja sökorsak eller identifieringsmetod före sökning"
+msgid "Search reason must be set before searching"
+msgstr "Sökorsak måste anges innan sökning"
 
 #. module: hr_360_view
 #: model:ir.model.fields,field_description:hr_360_view.field_hr_employee_jobseeker_search_wizard__social_sec_nr_search
 msgid "Social security number"
 msgstr "Personnummer"
+
+#. module: hr_360_view
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:264
+#, python-format
+msgid "Social security number missing"
+msgstr "Personnummer saknas"
+
+#. module: hr_360_view
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:267
+#, python-format
+msgid "Social security number not found in system"
+msgstr "Personnummret finns inte i systemet"
+
+#. module: hr_360_view
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:298
+#, python-format
+msgid "User timeout"
+msgstr ""
 
 #. module: hr_360_view
 #: model_terms:ir.ui.view,arch_db:hr_360_view.search_jobseeker_form
@@ -284,14 +328,22 @@ msgstr "Vid kontakt"
 
 #. module: hr_360_view
 #: model_terms:ir.actions.act_window,help:hr_360_view.open_view_employee_360_list
-msgid ""
-"With just a quick glance on the Odoo employee screen, you\n"
-"            can easily find all the information you need for each person;\n"
-"            contact data, job position, availability, etc."
-msgstr ""
-"Efter ett snabbt kik på Odoo anställdes vy, \n"
+msgid "With just a quick glance on the Odoo employee screen, you\n"
+"                can easily find all the information you need for each person;\n"
+"                contact data, job position, availability, etc."
+msgstr "Efter ett snabbt kik på Odoo anställdes vy, \n"
 "kan du enkelt få all information du behöver for varje person;\n"
 "kontakt information, anställnings roll, tillgänglighet, osv."
+
+#. module: hr_360_view
+#: model:ir.model,name:hr_360_view.model_auth_jobseeker_search_wizard
+msgid "auth.jobseeker.search.wizard"
+msgstr ""
+
+#. module: hr_360_view
+#: model:ir.model,name:hr_360_view.model_contact_jobseeker_search_wizard
+msgid "contact.jobseeker.search.wizard"
+msgstr ""
 
 #. module: hr_360_view
 #: model:ir.model,name:hr_360_view.model_hr_employee_jobseeker_search_wizard
@@ -302,3 +354,4 @@ msgstr "hr_360_view-sökvizard"
 #: model_terms:ir.ui.view,arch_db:hr_360_view.search_jobseeker_form
 msgid "search"
 msgstr "Sök"
+
