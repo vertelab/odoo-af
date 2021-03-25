@@ -286,6 +286,8 @@ class ResPartner(models.Model):
                             'user_id': user.id,
                             }
                 if not user:
+                    transformed_row['tz'] = 'Europe/Stockholm'
+                    transformed_row['lang'] = 'sv_SE'
                     user = self.env['res.users'].with_context(no_reset_password=True).create(transformed_row)
                     employee_vals['office_ids'] = [(4,office_id,0)]
                     employee_vals['user_id'] = user.id  
