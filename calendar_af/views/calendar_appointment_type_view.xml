@@ -5,6 +5,7 @@
         <field name="model">calendar.appointment.type</field>
         <field name="arch" type="xml">
             <tree string="Meeting types" editable="bottom">
+                <field name="sort_order"/>
                 <field name="ipf_num"/>
                 <field name="name"/>
                 <field name="duration"/>

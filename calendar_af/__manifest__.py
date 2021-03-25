@@ -2,13 +2,21 @@
 
 {
     "name": "Calendar management - AF",
-    "version": "12.0.1.0.7",
+    "version": "12.0.1.0.8",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
     "summary": "Calendar management",
-    "description": """ """,
+    'description': """
+Module for AF appointments
+================================================================================================
+This module adds new functionality regarding appointments functionality \n
+This functionality is tailored for AF. \n
+v12.0.1.0.7: versions before good version control \n
+v12.0.1.0.8 AFC-1771: added sort order for calendar.appointment.type \n
+\n
+""",
     "depends": [
         "calendar",
         "contacts",

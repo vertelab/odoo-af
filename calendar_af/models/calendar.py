@@ -270,8 +270,9 @@ class CalendarSchedule(models.Model):
 class CalendarAppointmentType(models.Model):
     _name = 'calendar.appointment.type'
     _description = "Meeting type"
-    _order = 'ipf_num'
+    _order = 'sort_order'
 
+    sort_order = fields.Integer(string='Sort order', required=True)
     name = fields.Char('Meeting type name', required=True)
     ipf_id = fields.Char('Teleopti competence id', required=True,
                          help="The IPF type id, if this is wrong the integration won't work")
