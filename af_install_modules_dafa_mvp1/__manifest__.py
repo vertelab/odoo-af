@@ -85,6 +85,7 @@
         "hr_employee_ciam_client", # CIAM Client for AF project, API module to handle communication between DAFA (formerly called Fenix) and CIAM
         "hr_employee_firstname",  # is required by hr_employee_firstname_extension
         "hr_employee_firstname_extension",  # is dependent on hr_employee_firstname
+        "hr_employee_views_dafa",   # hides a lot of fields in the hr_employee-view
         "hr_employee_legacy_id",  # OCA
         "hr_employee_ssn",
         "hr_holidays", # Odoo module for leaves management 
