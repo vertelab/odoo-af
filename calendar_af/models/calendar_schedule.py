@@ -67,7 +67,11 @@ class CalendarSchedule(models.Model):
     def create_occasions(self):
         """Creates a number of occasions from schedules, depending on
         number of scheduled agents"""
+
         for schedule in self:
+            duration = schedule.type_id.duration / 60.0
+            stop = schedule.start + timedelta(minutes=schedule.type_id.duration)
+
             no_occasions = self.env["calendar.occasion"].search_count(
                 [
                     ("start", "=", schedule.start),
@@ -76,17 +80,28 @@ class CalendarSchedule(models.Model):
                     ("state", "=", "ok"),
                 ]
             )
-            occasions_delta = schedule.scheduled_agents - no_occasions
+            if schedule.type_id.channel == self.env.ref("calendar_channel.channel_local"):
+                occasions_delta = schedule.scheduled_agents - no_occasions
+            elif schedule.type_id.channel == self.env.ref("calendar_channel.channel_pdm"):
+                occasions_delta = schedule.forecasted_agents - no_occasions
+            else:
+                occasions_delta = 0
+                _logger.warning(
+                    _(
+                        "Unhandled meeting type while creating occasions from schedules: %s"
+                    )
+                    % schedule.type_id
+                )
             if occasions_delta > 0:
                 vals = {
                     "name": _("%sm @ %s")
                     % (
-                        schedule.duration,
+                        schedule.type_id.duration,
                         pytz.timezone(LOCAL_TZ).localize(schedule.start),
                     ),
-                    "duration": schedule.duration,
+                    "duration": duration,
                     "start": schedule.start,
-                    "stop": schedule.stop,
+                    "stop": stop,
                     "type_id": schedule.type_id.id,
                     "channel": schedule.channel,
                     "additional_booking": False,
@@ -167,6 +182,12 @@ class CalendarSchedule(models.Model):
         returns a list of ids instead of COUNT(id)
 
         """
+
+        if self.type_id.channel == self.env.ref("calendar_channel.channel_pdm"):
+            # do not run for PDM-meetings for now.
+            # PDM meetings will now have 1 occasion per appointment
+            # with the same length. 1 = pdm occasion = one free start.
+            return
 
         # init start date and time
         loop_date = copy.copy(BASE_DAY_START).replace(

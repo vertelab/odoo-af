@@ -2,7 +2,7 @@
 
 {
     "name": "Calendar management - AF",
-    "version": "12.0.1.0.9",
+    "version": "12.0.2.0.0",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
@@ -16,6 +16,7 @@ This functionality is tailored for AF. \n
 v12.0.1.0.7: versions before good version control \n
 v12.0.1.0.8 AFC-1771: added sort order for calendar.appointment.type \n
 v12.0.1.0.9 AFC-1908: changed type_id Many2one to show 15 entries before showing "search more" option. \n
+v12.0.2.0.0 AFC-1805: Major overhaul of functionality. PDM occasions now handled differently. \n
 \n
 """,
     "depends": [

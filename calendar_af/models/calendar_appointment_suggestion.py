@@ -59,9 +59,9 @@ class CalendarAppointmentSuggestion(models.Model):
     @api.one
     def compute_duration_text(self):
         if self.duration == 0.5:
-            self.duration_text = "30 minutes"
+            self.duration_text = _("30 minutes")
         elif self.duration == 1.0:
-            self.duration_text = "1 hour"
+            self.duration_text = _("1 hour")
 
     @api.one
     def _compute_weekday(self):

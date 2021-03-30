@@ -153,9 +153,11 @@ class CalendarAppointment(models.Model):
     @api.one
     def compute_duration_text(self):
         if self.duration == 0.5:
-            self.duration_text = "30 minutes"
+            self.duration_text = _("30 minutes")
         elif self.duration == 1.0:
-            self.duration_text = "1 hour"
+            self.duration_text = _("1 hour")
+        else:
+            self.duration_text = self.duration
 
     @api.depends("start")
     def _app_start_time_calc(self):
@@ -203,7 +205,7 @@ class CalendarAppointment(models.Model):
             and "KROM" in self.type_id.name
         ):
             self.type_id = False
-            raise Warning("Jobseeker not KROM classified")
+            raise Warning(_("Jobseeker not KROM classified"))
 
     @api.onchange("type_id")
     def set_duration_selection(self):
@@ -339,7 +341,9 @@ class CalendarAppointment(models.Model):
                                 # Add occasions-data on suggestions
                                 "start": occasion[0].start,
                                 "stop": occasion[-1].stop,
-                                "duration": len(occasion) * 30,
+                                "duration": len(occasion) * 0.5
+                                if len(occasion) != 1
+                                else occasion[0].duration,
                                 "type_id": occasion[0].type_id.id,
                                 "channel": occasion[0].channel.id,
                                 "operation_id": occasion[0].operation_id.id,
@@ -490,7 +494,7 @@ class CalendarAppointment(models.Model):
     @api.multi
     def write(self, vals):
         if (
-            (self.occasion_ids != False)
+            self.occasion_ids
             and (self.channel == self.env.ref("calendar_channel.channel_local"))
             and (vals.get("start") or vals.get("stop") or vals.get("type_id"))
         ):

@@ -145,7 +145,8 @@
                                     <label for="stop" string="stop" class="oe_read_only"/>
                                     <field name="start" class="oe_read_only" nolabel="1" options="{'datepicker': {'hide': {'seconds': True}}}"/>
                                     <field name="stop" class="oe_read_only" nolabel="1"/>
-                                    <field name="duration_selection" widget="radio"/>
+                                    <field name="duration_selection" widget="radio"
+                                           attrs="{'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}"/>
                                     <field name="duration" invisible="1"/>
                                 </group>
                                 <group>
@@ -164,7 +165,7 @@
                     </span>
                     <field name="suggestion_ids" class="oe_edit_only"
                            attrs="{'invisible':[('show_suggestion_ids','=',False)]}">
-                        <tree string="Bookable Occasions" limit="10">
+                        <tree string="Bookable Occasions" limit="10" create="false">
                             <field name="weekday"/>
                             <field name="start" options="{'datepicker': {'hide': {'seconds': True}}}"/>
                             <field name="duration_text"/>
@@ -216,7 +217,8 @@
                                 <group>
                                     <field name="start" readonly="1" attrs="{'readonly': True}" options="{'datepicker': {'hide': {'seconds': True}}}"/>
                                     <field name="stop" invisible="1"/>
-                                    <field name="duration_selection" widget="radio"/>
+                                    <field name="duration_selection" widget="radio"
+                                           attrs="{'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}"/>
                                     <field name="duration" invisible="1"/>
                                 </group>
                                 <group>
@@ -232,7 +234,7 @@
                         <button name="compute_suggestion_ids" type="object" string="Next"/>
                     </span>
                     <field name="suggestion_ids" readonly="1" attrs="{'invisible':[('show_suggestion_ids','=',False)]}">
-                        <tree string="Bookable Occasions" limit="10">
+                        <tree string="Bookable Occasions" limit="10" create="false">
                             <field name="weekday"/>
                             <field name="start" options="{'datepicker': {'hide': {'seconds': True}}}"/>
                             <field name="duration_text"/>

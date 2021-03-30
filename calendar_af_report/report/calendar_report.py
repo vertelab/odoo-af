@@ -109,7 +109,7 @@ class CalendarAppointmentReport(models.Model):
         select_str = """
              SELECT
                 COUNT(DISTINCT distinct_co.app_id) as app_count,
-                (case is_possible_start when '1' then 1 else 0 end) as occ_count,
+                COUNT(co.id) as occ_count,
                 COUNT(case co.additional_booking when 't' then 1 else null end) as add_book_count,
                 COUNT(DISTINCT ca.id) - COUNT(case co.additional_booking when 't' then 1 else null end) as booked_from_cal,
                 (case is_possible_start when '1' then 1 else 0 end) - COUNT(ca.id) as free_occ,
