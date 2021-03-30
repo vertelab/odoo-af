@@ -265,6 +265,7 @@ class CalendarOccasion(models.Model):
         day_stop = day_stop.replace(
             year=int(date_list[0]), month=int(date_list[1]), day=int(date_list[2])
         )
+        res = self.env["calendar.occasion"]
         # Find when to create new occasion
         if (
             type_id.channel == self.env.ref("calendar_channel.channel_local")
@@ -276,41 +277,62 @@ class CalendarOccasion(models.Model):
                 days=type_id.days_last, hours=operation_id.reserve_time
             )
             start_date = date_now + datetime_offset
-        else:
-            start_date = self._get_min_occasions(type_id, day_start, day_stop)
-        # Calculate how many occasions we need
-        no_occasions = int(duration / BASE_DURATION)
-        if operation_id:
-            if operation_id.reserve_admin_ids:
-                # find employees listed as available for reserve bookings on operation
-                employee_ids = operation_id.reserve_admin_ids
-                # select random employee from the recordset
-                user_id = employee_ids[randint(0, len(employee_ids) - 1)].user_id
-            else:
-                # no user_id could be set.
-                raise Warning(
-                    _("No case worker could be set for operation %s")
-                    % operation_id.operation_code
-                )
+            # Calculate how many occasions we need
+            no_occasions = int(duration / BASE_DURATION)
+            if operation_id:
+                if operation_id.reserve_admin_ids:
+                    # find employees listed as available for reserve bookings on operation
+                    employee_ids = operation_id.reserve_admin_ids
+                    # select random employee from the recordset
+                    user_id = employee_ids[randint(0, len(employee_ids) - 1)].user_id
+                else:
+                    # no user_id could be set.
+                    raise Warning(
+                        _("No case worker could be set for operation %s")
+                        % operation_id.operation_code
+                    )
 
-        # Create new occasions.
-        res = self.env["calendar.occasion"]
-        for i in range(no_occasions):
+            # Create new occasions.
+            for i in range(no_occasions):
+                vals = {
+                    "name": "%sm @ %s" % (BASE_DURATION, start_date),
+                    "start": start_date,
+                    "stop": start_date + timedelta(minutes=BASE_DURATION),
+                    "duration": BASE_DURATION / 60,
+                    "appointment_id": False,
+                    "type_id": type_id.id,
+                    "channel": type_id.channel.id,
+                    "operation_id": operation_id.id if operation_id else False,
+                    "user_id": user_id.id if user_id else False,
+                    "additional_booking": True,
+                    "state": "ok",
+                }
+                res |= self.env["calendar.occasion"].create(vals)
+                start_date = start_date + timedelta(minutes=BASE_DURATION)
+        elif type_id.channel == self.env.ref("calendar_channel.channel_pdm"):
+            # Additional booking for PDM
+            start_date = self._get_min_occasions(type_id, day_start, day_stop)
             vals = {
                 "name": "%sm @ %s" % (duration, start_date),
                 "start": start_date,
-                "stop": start_date + timedelta(minutes=BASE_DURATION),
-                "duration": BASE_DURATION / 60,
+                "stop": start_date + timedelta(minutes=duration),
+                "duration": duration / 60,
                 "appointment_id": False,
                 "type_id": type_id.id,
                 "channel": type_id.channel.id,
-                "operation_id": operation_id.id if operation_id else False,
-                "user_id": user_id.id if user_id else False,
+                "operation_id": False,
+                "user_id": False,
                 "additional_booking": True,
                 "state": "ok",
             }
             res |= self.env["calendar.occasion"].create(vals)
-            start_date = start_date + timedelta(minutes=BASE_DURATION)
+        else:
+            raise Warning(
+                _("Could not create additional booking for operation %s")
+                % operation_id.operation_code
+                if operation_id.operation_code
+                else operation_id
+            )
         return res
 
     @api.multi

@@ -186,7 +186,7 @@ class CalendarSchedule(models.Model):
         if self.type_id.channel == self.env.ref("calendar_channel.channel_pdm"):
             # do not run for PDM-meetings for now.
             # PDM meetings will now have 1 occasion per appointment
-            # with the same length. 1 = pdm occasion = one free start.
+            # with the same length. 1 unbooked PDM occasion = 1 free start.
             return
 
         # init start date and time
