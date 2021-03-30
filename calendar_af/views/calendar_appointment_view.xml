@@ -122,7 +122,7 @@
                                    options="{'no_open': True}"/>
                             <field string="Meeting type" name="type_id"
                                    domain="[('channel', '=', channel)]"
-                                   options="{'no_quick_create':True,'no_create_edit':True,'no_create':True,'no_edit':True,
+                                   options="{'limit':15,'no_quick_create':True,'no_create_edit':True,'no_create':True,'no_edit':True,
                                'no_open':True}"
                                    context="{ 'default_channel': %(calendar_channel.channel_pdm)d }"/>
                             <field string="Meeting subject" name="name" placeholder="e.g. Business Lunch"
