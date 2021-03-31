@@ -175,7 +175,7 @@ class CalendarAppointmentReport(models.Model):
                     ) as distinct_co 
                     ON co.id = distinct_co.id
                 LEFT JOIN calendar_appointment_type cat
-                    on co.type_id = cat.id
+                    ON co.type_id = cat.id
               WHERE cat.channel = %s 
               %s
         """

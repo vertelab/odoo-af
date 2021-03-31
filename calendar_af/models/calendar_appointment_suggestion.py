@@ -22,7 +22,6 @@
 import logging
 
 from odoo.exceptions import Warning
-
 from odoo import models, fields, api, _
 
 from .calendar_constants import *
@@ -126,9 +125,7 @@ class CalendarAppointmentSuggestion(models.Model):
                             "No free occasions. This shouldn't happen. Please contact the system administrator."
                         )
                     )
-
                 occasions |= free_occasion
-
         app_vals = {}
 
         if self.channel == self.env.ref("calendar_channel.channel_local"):
@@ -172,7 +169,6 @@ class CalendarAppointmentSuggestion(models.Model):
                             "No free occasions. This shouldn't happen. Please contact the system administrator."
                         )
                     )
-
                 occasions |= free_occasion
         self.appointment_id.move_appointment(
             occasions, self.appointment_id.cancel_reason

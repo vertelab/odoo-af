@@ -22,6 +22,7 @@
 import logging
 
 from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
 
 from .calendar_constants import *
 
@@ -43,7 +44,6 @@ class CalendarAppointmentType(models.Model):
     ipf_name = fields.Char("Teleopti competence name")
     channel = fields.Many2one(string="Channel", comodel_name="calendar.channel")
     duration = fields.Float(string="Duration", compute="_comp_duration", store=True)
-    # duration = fields.Selection(string='Duration', selection=[('30', '30 min'), ('60', '60 min')])
     duration_30 = fields.Boolean(string="30 min")
     duration_60 = fields.Boolean(string="60 min")
     days_first = fields.Integer(string="First allowed day for type")
@@ -51,13 +51,32 @@ class CalendarAppointmentType(models.Model):
     ipf_num = fields.Integer(string="Meeting type id")
     additional_booking = fields.Boolean(string="Over booking")
     text = fields.Text(string="Comment")
-    # skill_ids = fields.Many2many(comodel_name='hr.skill', string='Skills')
 
     @api.depends("duration_30", "duration_60")
     def _comp_duration(self):
         for channel in self:
-            channel.duration = 30.0 if channel.duration_30 else 60.0
+            if channel.duration_30:
+                channel.duration = 30.0
+            elif channel.duration_60:
+                channel.duration = 60.0
+            else:
+                channel.duration = False
 
+    @api.one
+    @api.constrains("duration_30", "duration_60")
+    def _check_duration_30_60(self):
+        if self.duration_30 and self.duration_60:
+            raise ValidationError(
+                _(
+                    "Meeting type \"{type_name}\" can't have two different durations."
+                ).format(type_name=self.name)
+            )
+        if not (self.duration_30 or self.duration_60):
+            raise ValidationError(
+                _(
+                    "Meeting type \"{type_name}\" needs a duration."
+                ).format(type_name=self.name)
+            )
 
 class CalendarChannel(models.Model):
     _name = "calendar.channel"

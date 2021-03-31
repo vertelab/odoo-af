@@ -87,7 +87,7 @@ msgstr "Bokat från kalender"
 #: model:ir.actions.act_window,name:calendar_af_report.action_calendar_local_report_tree
 #: model:ir.ui.menu,name:calendar_af_report.menu_action_calendar_local_report
 msgid "Calendar appointment local report"
-msgstr "Kalender mötesrapport lokalkontor"
+msgstr "Mötesrapport lokalkontor"
 
 #. module: calendar_af_report
 #: model:ir.actions.act_window,name:calendar_af_report.action_calendar_report_tree
@@ -95,7 +95,7 @@ msgstr "Kalender mötesrapport lokalkontor"
 #: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_local_report_pivot
 #: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_report_pivot
 msgid "Calendar appointment report"
-msgstr "Kalender mötesrapport"
+msgstr "Mötesrapport PDM"
 
 #. module: calendar_af_report
 #: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_local_report_search

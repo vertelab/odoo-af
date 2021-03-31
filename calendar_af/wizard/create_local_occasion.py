@@ -49,9 +49,9 @@ class CreateLocalOccasion(models.TransientModel):
     stop = fields.Datetime(
         string="Stop", required=True, help="Stop date of an occasion"
     )
-    duration_selection = fields.Selection(
+    duration_text = fields.Char(
         string="Duration",
-        selection=[("30 minutes", "30 minutes"), ("1 hour", "1 hour")],
+        readonly=True,
     )
     duration = fields.Float("Duration", required=True)
     type_id = fields.Many2one(
@@ -102,22 +102,14 @@ class CreateLocalOccasion(models.TransientModel):
         return self.env.user.mapped("employee_ids.office_ids.operation_ids.location_id")
 
     @api.onchange("type_id")
-    def set_duration_selection(self):
+    def set_duration_text(self):
         self.name = (self.type_id.name,)
         self.duration = self.type_id.duration / 60.0
 
         if self.duration == 0.5:
-            self.duration_selection = "30 minutes"
+            self.duration_text = _("30 minutes")
         elif self.duration == 1.0:
-            self.duration_selection = "1 hour"
-
-    @api.onchange("duration_selection")
-    def set_duration(self):
-        if self.duration_selection == "30 minutes":
-            self.duration = 0.5
-        if self.duration_selection == "1 hour":
-            self.duration = 1.0
-        self.onchange_duration_start()
+            self.duration_text = _("1 hour")
 
     @api.onchange("duration", "start")
     def onchange_duration_start(self):
@@ -169,39 +161,31 @@ class CreateLocalOccasion(models.TransientModel):
                 raise Warning(_("This day is a holiday."))
 
             for user_id in self.user_ids:
-                for curr_occ in range(no_occ):
-                    curr_start = self.start + timedelta(minutes=curr_occ * 30)
-                    if user_id.check_resource_calendar_occasion(curr_start):
-                        curr_occ_user = self.env["calendar.occasion"].search_count(
-                            [
-                                ("user_id", "=", user_id.id),
-                                ("start", "=", curr_start),
-                                ("state", "in", ["request", "ok", "booked"]),
-                            ]
+                if user_id.check_resource_calendar_occasion(self.start):
+                    curr_occ_user = self.env["calendar.occasion"].search_count(
+                        [
+                            ("user_id", "=", user_id.id),
+                            ("start", "=", self.start),
+                            ("state", "in", ["request", "ok", "booked"]),
+                        ]
+                    )
+                    if curr_occ_user:
+                        raise Warning(
+                            _("User %s has conflicting occasions")
+                            % user_id.af_signature
                         )
-                        if curr_occ_user:
-                            raise Warning(
-                                _("User %s has conflicting occasions")
-                                % user_id.af_signature
-                            )
-                        occ = self.env["calendar.occasion"]._force_create_occasion(
-                            0.5,
-                            curr_start,
-                            self.type_id.id,
-                            self.channel.id,
-                            "request",
-                            user_id,
-                            self.operation_id,
-                            False,
-                        )
-                        if curr_occ == 0:
-                            first_occ = occ
-                        else:
-                            # connect related occasions
-                            occ.occasion_ids |= first_occ
-                            first_occ.occasion_ids |= occ
-                    else:
-                        raise Warning(_("Worker not working this date and time."))
+                    occ = self.env["calendar.occasion"]._force_create_occasion(
+                        self.duration,
+                        self.start,
+                        self.type_id.id,
+                        self.channel.id,
+                        "request",
+                        user_id,
+                        self.operation_id,
+                        False,
+                    )
+                else:
+                    raise Warning(_("Employee not working this date and time."))
             res = self.env.ref("calendar_af.action_calendar_local_occasion").read()[0]
             res["domain"] = [
                 ("user_id", "in", self.user_ids._ids),
@@ -240,41 +224,33 @@ class CreateLocalOccasion(models.TransientModel):
                 ]._check_resource_calendar_date(start_date):
                     # create only 30 min occasions (if duration is longer, create several occasions):
                     for user_id in self.user_ids:
-                        for curr_occ in range(no_occ):
-                            curr_start = start_date + timedelta(minutes=curr_occ * 30)
-                            if user_id.check_resource_calendar_occasion(curr_start):
-                                curr_occ_user = self.env[
-                                    "calendar.occasion"
-                                ].search_count(
-                                    [
-                                        ("user_id", "=", user_id.id),
-                                        ("start", "=", curr_start),
-                                        ("state", "in", ["request", "ok", "booked"]),
-                                    ]
+                        if user_id.check_resource_calendar_occasion(self.start):
+                            curr_occ_user = self.env[
+                                "calendar.occasion"
+                            ].search_count(
+                                [
+                                    ("user_id", "=", user_id.id),
+                                    ("start", "=", self.start),
+                                    ("state", "in", ["request", "ok", "booked"]),
+                                ]
+                            )
+                            if curr_occ_user:
+                                raise Warning(
+                                    _("User %s has conflicting occasions")
+                                    % user_id.af_signature
                                 )
-                                if curr_occ_user:
-                                    raise Warning(
-                                        _("User %s has conflicting occasions")
-                                        % user_id.af_signature
-                                    )
-                                occ = self.env[
-                                    "calendar.occasion"
-                                ]._force_create_occasion(
-                                    0.5,
-                                    curr_start,
-                                    self.type_id.id,
-                                    self.channel.id,
-                                    "request",
-                                    user_id,
-                                    self.operation_id,
-                                    False,
-                                )
-                                if curr_occ == 0:
-                                    first_occ = occ
-                                else:
-                                    # connect related occasions
-                                    occ.occasion_ids |= first_occ
-                                    first_occ.occasion_ids |= occ
+                            occ = self.env[
+                                "calendar.occasion"
+                            ]._force_create_occasion(
+                                self.duration,
+                                self.start,
+                                self.type_id.id,
+                                self.channel.id,
+                                "request",
+                                user_id,
+                                self.operation_id,
+                                False,
+                            )
             res = self.env.ref("calendar_af.action_calendar_local_occasion").read()[0]
             res["domain"] = [
                 ("user_id", "in", self.user_ids._ids),

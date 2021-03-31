@@ -118,3 +118,4 @@ class ChangeUserAppointment(models.TransientModel):
                 occasion.user_id = self.new_user_id.user_id
                 occasion.additional_booking = False
         return True
+
