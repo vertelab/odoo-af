@@ -818,7 +818,7 @@ msgstr ""
 #: code:addons/calendar_af/models/calendar_appointment_suggestion.py:171
 #, python-format
 msgid "No free occasions. This shouldn't happen. Please contact the system administrator."
-msgstr ""
+msgstr "Inga lediga tillfällen. Det här ska inte ske. Vänligen kontakta system administratören."
 
 #. module: calendar_af
 #: code:addons/calendar_af/models/calendar_appointment.py:552
@@ -1220,7 +1220,7 @@ msgstr "IPF typ ID, om detta ID är fel kommer integrationen inte att fungera"
 #: code:addons/calendar_af/models/calendar_appointment_suggestion.py:107
 #, python-format
 msgid "This appointment is already booked."
-msgstr ""
+msgstr "Det här mötet är redan bokat"
 
 #. module: calendar_af
 #: code:addons/calendar_af/wizard/create_local_occasion.py:169

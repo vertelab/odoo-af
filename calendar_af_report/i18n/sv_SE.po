@@ -1,0 +1,318 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* calendar_af_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0-20210127\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-03-31 08:39+0000\n"
+"PO-Revision-Date: 2021-03-31 08:39+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: calendar_af_report
+#: selection:report.calendar.appointment,occ_state:0
+#: selection:report.calendar.appointment.local,occ_state:0
+msgid "Accepted"
+msgstr "Accepterat"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment_local__occ_ok_count
+msgid "Accepted occasions"
+msgstr "Accepterade tillfällen"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__additional_booking
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment_local__additional_booking
+msgid "Additional Booking"
+msgstr "Reservtid"
+
+#. module: calendar_af_report
+#: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_local_report_search
+#: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_report_search
+msgid "Additional bookings"
+msgstr "Överbokningar"
+
+#. module: calendar_af_report
+#: model:ir.model,name:calendar_af_report.model_report_calendar_appointment
+msgid "Appointment report"
+msgstr "Mötesrapport"
+
+#. module: calendar_af_report
+#: model:ir.model,name:calendar_af_report.model_report_calendar_appointment_local
+msgid "Appointment report local"
+msgstr "Mötesrapport lokalkontor"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__app_start
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment_local__app_start
+msgid "Appointment start"
+msgstr "Möte start"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__app_start_time
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment_local__app_start_time
+msgid "Appointment start time"
+msgstr "Möte starttid"
+
+#. module: calendar_af_report
+#: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_local_report_search
+#: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_report_search
+msgid "Appointment state"
+msgstr "Mötesstatus"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__app_stop
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment_local__app_stop
+msgid "Appointment stop"
+msgstr "Möte slut"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__app_count
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment_local__app_count
+msgid "Booked appointments"
+msgstr "Bokade möten"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__booked_from_cal
+msgid "Booked from calendar"
+msgstr "Bokat från kalender"
+
+#. module: calendar_af_report
+#: model:ir.actions.act_window,name:calendar_af_report.action_calendar_local_report_tree
+#: model:ir.ui.menu,name:calendar_af_report.menu_action_calendar_local_report
+msgid "Calendar appointment local report"
+msgstr "Kalender mötesrapport lokalkontor"
+
+#. module: calendar_af_report
+#: model:ir.actions.act_window,name:calendar_af_report.action_calendar_report_tree
+#: model:ir.ui.menu,name:calendar_af_report.menu_action_calendar_report
+#: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_local_report_pivot
+#: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_report_pivot
+msgid "Calendar appointment report"
+msgstr "Kalender mötesrapport"
+
+#. module: calendar_af_report
+#: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_local_report_search
+#: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_report_search
+msgid "Calendar report"
+msgstr "Kalenderrapport"
+
+#. module: calendar_af_report
+#: selection:report.calendar.appointment,app_state:0
+#: selection:report.calendar.appointment.local,app_state:0
+msgid "Canceled"
+msgstr "Avbokat"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__user_id
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment_local__user_id
+#: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_local_report_search
+#: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_report_search
+msgid "Case worker"
+msgstr "Mötesansvarig"
+
+#. module: calendar_af_report
+#: selection:report.calendar.appointment,app_state:0
+#: selection:report.calendar.appointment.local,app_state:0
+msgid "Confirmed"
+msgstr "Bekräftat"
+
+#. module: calendar_af_report
+#: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_local_report_search
+#: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_report_search
+msgid "Confirmed appointment"
+msgstr "Bekräftat möte"
+
+#. module: calendar_af_report
+#: selection:report.calendar.appointment,occ_state:0
+#: selection:report.calendar.appointment.local,occ_state:0
+msgid "Deleted"
+msgstr "Borttagen"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__display_name
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment_local__display_name
+msgid "Display Name"
+msgstr "Visningsnamn"
+
+#. module: calendar_af_report
+#: selection:report.calendar.appointment,app_state:0
+#: selection:report.calendar.appointment.local,app_state:0
+msgid "Done"
+msgstr "Avslutat"
+
+#. module: calendar_af_report
+#: selection:report.calendar.appointment,app_state:0
+#: selection:report.calendar.appointment,occ_state:0
+#: selection:report.calendar.appointment.local,app_state:0
+#: selection:report.calendar.appointment.local,occ_state:0
+msgid "Draft"
+msgstr "Utkast"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__duration
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment_local__duration
+msgid "Duration"
+msgstr "Varaktighet"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__free_occ
+msgid "Free occasions"
+msgstr "Lediga tider"
+
+#. module: calendar_af_report
+#: model:ir.filters,name:calendar_af_report.filter_calendar_report_from_today
+msgid "From today"
+msgstr "FROM idag"
+
+#. module: calendar_af_report
+#: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_local_report_search
+#: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_report_search
+msgid "Group By"
+msgstr "Gruppera efter"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__id
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment_local__id
+msgid "ID"
+msgstr ""
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__partner_id
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment_local__partner_id
+msgid "Jobseeker"
+msgstr "Arbetssökande"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment____last_update
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment_local____last_update
+msgid "Last Modified on"
+msgstr "Senast redigerad"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__name
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment_local__name
+msgid "Name"
+msgstr "Namn"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__add_book_count
+msgid "No. additional occasions"
+msgstr "Antal överbokningar"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__app_id
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment_local__app_id
+msgid "Occasion id"
+msgstr "Tillfälle id"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__occ_start
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment_local__occ_start
+msgid "Occasion start"
+msgstr "Tillfälle start"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__occ_start_time
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment_local__occ_start_time
+msgid "Occasion start time"
+msgstr "Tillfälle starttid"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__occ_state
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment_local__occ_state
+#: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_local_report_search
+#: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_report_search
+msgid "Occasion state"
+msgstr "Mötesstatus"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__occ_stop
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment_local__occ_stop
+msgid "Occasion stop"
+msgstr "Tillfälle slut"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__operation_id
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment_local__operation_id
+msgid "Operation"
+msgstr "Lokalkontor"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__no_overbooked
+msgid "Overbooked occasions"
+msgstr "Överbokade tillfällen"
+
+#. module: calendar_af_report
+#: model:ir.filters,name:calendar_af_report.filter_calendar_local_report_overview
+msgid "Overview local operation"
+msgstr "Översikt Lokalkontor"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__occ_count
+msgid "Possible appointments"
+msgstr "Möjliga bokningar"
+
+#. module: calendar_af_report
+#: selection:report.calendar.appointment,occ_state:0
+#: selection:report.calendar.appointment.local,occ_state:0
+msgid "Published"
+msgstr "Publicerat"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment_local__occ_req_count
+msgid "Published occasions"
+msgstr "Publicerade tillfällen"
+
+#. module: calendar_af_report
+#: selection:report.calendar.appointment,occ_state:0
+#: selection:report.calendar.appointment.local,occ_state:0
+msgid "Rejected"
+msgstr "Avböjt"
+
+#. module: calendar_af_report
+#: selection:report.calendar.appointment,app_state:0
+#: selection:report.calendar.appointment.local,app_state:0
+msgid "Reserved"
+msgstr "Reserverad"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__app_state
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment_local__app_state
+msgid "State"
+msgstr "Status"
+
+#. module: calendar_af_report
+#: model:ir.model.fields,help:calendar_af_report.field_report_calendar_appointment__app_state
+#: model:ir.model.fields,help:calendar_af_report.field_report_calendar_appointment__occ_state
+#: model:ir.model.fields,help:calendar_af_report.field_report_calendar_appointment_local__app_state
+#: model:ir.model.fields,help:calendar_af_report.field_report_calendar_appointment_local__occ_state
+msgid "Status of the meeting"
+msgstr "Mötesstatus"
+
+#. module: calendar_af_report
+#: model_terms:ir.actions.act_window,help:calendar_af_report.action_calendar_local_report_tree
+#: model_terms:ir.actions.act_window,help:calendar_af_report.action_calendar_report_tree
+msgid "This report allows you to analyse planned meetings, free occasions, etc."
+msgstr ""
+
+#. module: calendar_af_report
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment__type_id
+#: model:ir.model.fields,field_description:calendar_af_report.field_report_calendar_appointment_local__type_id
+#: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_local_report_search
+#: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_report_search
+msgid "Type"
+msgstr "Typ"
+
+#. module: calendar_af_report
+#: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_local_report_search
+#: model_terms:ir.ui.view,arch_db:calendar_af_report.view_calendar_report_search
+msgid "Unassigned"
+msgstr "Otilldelad"
+

@@ -243,11 +243,11 @@ class CalendarSchedule(models.Model):
         cal_schedule_ids = self.env["calendar.schedule"]
         days -= 1
 
-        def _create_message(mes_start, mes_stop):
+        def _create_message(msg_start, msg_stop):
             vals = {
                 "name": "IPF request",
-                "start": mes_start,
-                "stop": mes_stop,
+                "start": msg_start,
+                "stop": msg_stop,
                 "type_id": type_id.id,
             }
             cal_schedule = self.env["calendar.schedule"].create(vals)
@@ -264,8 +264,8 @@ class CalendarSchedule(models.Model):
             msg.pack()
             return cal_schedule
 
+        start = datetime.now()
         for type_id in type_ids:
-            start = datetime.now()
             # if we request more than 30 days, split the requests
             if days <= 30:
                 cal_schedule_ids |= _create_message(start, start + timedelta(days=days))
