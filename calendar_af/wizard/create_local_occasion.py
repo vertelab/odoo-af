@@ -109,6 +109,8 @@ class CreateLocalOccasion(models.TransientModel):
             self.duration_text = _("30 minutes")
         elif self.duration == 1.0:
             self.duration_text = _("1 hour")
+        else:
+            self.duration_text = _("N/A")
 
     @api.onchange("duration", "start")
     def onchange_duration_start(self):

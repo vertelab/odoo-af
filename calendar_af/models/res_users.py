@@ -99,11 +99,15 @@ class ResUsers(models.Model):
         return res
 
     def check_resource_calendar_occasion(self, check_datetime, duration):
-        # We will assume that each user only 
+        # We will assume that each user only
         # has one employee connected for now.
         # TODO: This should be reviewed in the future.
         if self.employee_ids and self.employee_ids[0].resource_calendar_id:
-            count_work_hours = self.employee_ids[0].resource_calendar_id.get_work_hours_count(check_datetime, check_datetime + timedelta(minutes=duration*60))
+            count_work_hours = self.employee_ids[
+                0
+            ].resource_calendar_id.get_work_hours_count(
+                check_datetime, check_datetime + timedelta(hours=duration)
+            )
             if count_work_hours == duration:
                 return True
             else:
