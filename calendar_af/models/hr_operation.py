@@ -22,7 +22,7 @@
 from odoo import models, fields, api, _
 import logging
 
-from odoo.exceptions import Warning
+from odoo.exceptions import ValidationError
 
 _logger = logging.getLogger(__name__)
 
@@ -76,7 +76,7 @@ class hr_operation(models.Model):
         if self.user_ids:
             res["domain"] = [("id", "in", self.user_ids._ids)]
         else:
-            raise Warning(_("No administrative officers on this operation"))
+            raise ValidationError(_("No administrative officers on this operation"))
         return res
 
 

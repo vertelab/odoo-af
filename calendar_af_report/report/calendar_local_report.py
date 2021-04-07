@@ -139,8 +139,12 @@ class CalendarAppointmentLocalReport(models.Model):
             CREATE view %s as
               %s
               FROM calendar_occasion co
-                LEFT JOIN calendar_appointment ca ON ca.id = co.appointment_id
+                LEFT JOIN calendar_appointment ca 
+                    ON ca.id = co.appointment_id
+                LEFT JOIN calendar_appointment_type cat
+                    ON co.type_id = cat.id
+              WHERE cat.channel = %s 
                     %s
         """
-            % (self._table, self._select(), self._group_by())
+            % (self._table, self._select(), self.env.ref("calendar_channel.channel_local").id, self._group_by())
         )

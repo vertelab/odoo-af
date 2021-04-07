@@ -25,7 +25,7 @@ from random import randint
 from copy import copy
 
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
+from odoo.exceptions import ValidationError
 
 from .calendar_constants import *
 
@@ -104,14 +104,6 @@ class CalendarOccasion(models.Model):
     is_possible_start = fields.Selection(
         string="Is a possible start time",
         selection=[("", "Not set"), ("0", "No"), ("1", "Yes")],
-    )
-    occasion_ids = fields.Many2many(
-        comodel_name="calendar.occasion",
-        relation="calendar_occasion_related",
-        column1="occasion_1",
-        column2="occasion_2",
-        string="Related occasions",
-        readonly=True,
     )
 
     @api.one
@@ -245,7 +237,12 @@ class CalendarOccasion(models.Model):
 
     @api.model
     def _get_additional_booking(self, date, duration, type_id, operation_id=False):
-        """"Creates extra, additional, occasions. Iff overbooking is allowed. """
+        """"Creates extra, additional, occasions. Iff overbooking is allowed.
+        :param date: datetime object. Date to create occasion on.
+        :param duration: Integer duration of the meeting in minutes.
+        :param type_id: Object of type calendar.appointment.type.
+        :param operation_id: Operation object, only used for non PDM.
+        """
         user_id = False
         # Check if overbooking is allowed on this meeting type
         if not type_id.additional_booking:
@@ -278,7 +275,6 @@ class CalendarOccasion(models.Model):
             )
             start_date = date_now + datetime_offset
             # Calculate how many occasions we need
-            no_occasions = int(duration / BASE_DURATION)
             if operation_id:
                 if operation_id.reserve_admin_ids:
                     # find employees listed as available for reserve bookings on operation
@@ -287,57 +283,55 @@ class CalendarOccasion(models.Model):
                     user_id = employee_ids[randint(0, len(employee_ids) - 1)].user_id
                 else:
                     # no user_id could be set.
-                    raise Warning(
+                    raise ValidationError(
                         _("No case worker could be set for operation %s")
                         % operation_id.operation_code
                     )
-
-            # Create new occasions.
-            for i in range(no_occasions):
-                vals = {
-                    "name": "%sm @ %s" % (BASE_DURATION, start_date),
-                    "start": start_date,
-                    "stop": start_date + timedelta(minutes=BASE_DURATION),
-                    "duration": BASE_DURATION / 60,
-                    "appointment_id": False,
-                    "type_id": type_id.id,
-                    "channel": type_id.channel.id,
-                    "operation_id": operation_id.id if operation_id else False,
-                    "user_id": user_id.id if user_id else False,
-                    "additional_booking": True,
-                    "state": "ok",
-                }
-                res |= self.env["calendar.occasion"].create(vals)
-                start_date = start_date + timedelta(minutes=BASE_DURATION)
         elif type_id.channel == self.env.ref("calendar_channel.channel_pdm"):
+            if operation_id or user_id:
+                raise ValidationError(
+                    _("Trying to create an additional PDM occasion with operation_id or user_id.")
+                )
             # Additional booking for PDM
             start_date = self._get_min_occasions(type_id, day_start, day_stop)
-            vals = {
-                "name": "%sm @ %s" % (duration, start_date),
-                "start": start_date,
-                "stop": start_date + timedelta(minutes=duration),
-                "duration": duration / 60,
-                "appointment_id": False,
-                "type_id": type_id.id,
-                "channel": type_id.channel.id,
-                "operation_id": False,
-                "user_id": False,
-                "additional_booking": True,
-                "state": "ok",
-            }
-            res |= self.env["calendar.occasion"].create(vals)
         else:
-            raise Warning(
+            raise ValidationError(
                 _("Could not create additional booking for operation %s")
                 % operation_id.operation_code
                 if operation_id.operation_code
                 else operation_id
             )
+        vals = {
+            "name": "%sm @ %s" % (duration, start_date),
+            "start": start_date,
+            "stop": start_date + timedelta(minutes=duration),
+            "duration": duration / 60,
+            "appointment_id": False,
+            "type_id": type_id.id,
+            "channel": type_id.channel.id,
+            "operation_id": operation_id.id if operation_id else False,
+            "user_id": user_id.id if user_id else False,
+            "additional_booking": True,
+            "state": "ok",
+        }
+        res |= self.env["calendar.occasion"].create(vals)
+        # TODO: use this method instead. Test before enabling.
+        # res |= self._force_create_occasion(
+        #     duration,
+        #     start_date,
+        #     type_id.id,
+        #     type_id.channel.id,
+        #     "ok",
+        #     user_id.id if user_id else False,
+        #     operation_id.id if operation_id else False,
+        #     True,
+        # )
         return res
 
     @api.multi
     def check_access_planner_locations(self, locations):
-        """Check if current user is planner with access to these locations."""
+        """Check if current user is planner with access to these locations.
+        :param locations: recordset of locations."""
         if not self.env.user.has_group("af_security.af_meeting_planner"):
             return False
         for occasion in self:
@@ -368,20 +362,28 @@ class CalendarOccasion(models.Model):
         return False
 
     @api.multi
-    def publish_occasion(self):
+    def publish_occasion(self, records):
         """User publishes suggested occasion"""
-        # Perform access control.
-        if self.af_check_access():
-            # Checks passed. Run inner function with sudo.
-            return self.sudo()._publish_occasion()
-        raise Warning(_("You are not allowed to publish these occasions."))
+        # Added this stop since we don't want to allow batch handling.
+        if len(records) > 1:
+            raise ValidationError(_("You can't change the status of several occasions at the same time."))
+        for rec in records:
+            if rec.state == 'draft' or rec.state == 'fail':
+                # Perform access control.
+                if rec.af_check_access():
+                    # Checks passed. Run inner function with sudo.
+                    res = rec.sudo()._publish_occasion()
+                    if not res:
+                        raise ValidationError(_("One of your occasions is not a draft."))
+                    return res
+                raise ValidationError(_("You are not allowed to publish these occasions."))
+            else:
+                raise ValidationError(_("Only occasions in status Rejected or Draft can be published."))
 
     @api.multi
     def _publish_occasion(self):
         if self.state == "draft" or self.state == "fail":
             self.state = "request"
-            for occasion_id in self.occasion_ids:
-                occasion_id.state = "request"
             ret = True
         else:
             ret = False
@@ -389,19 +391,27 @@ class CalendarOccasion(models.Model):
         return ret
 
     @api.multi
-    def accept_occasion(self):
+    def accept_occasion(self, records):
         """User accepts suggested occasion"""
-        # Perform access control.
-        if self.af_check_access():
-            # Checks passed. Run inner function with sudo.
-            return self.sudo()._accept_occasion()
-        raise Warning(_("You are not allowed to accept these occasions."))
+        # Added this stop since we don't want to allow batch handling.
+        if len(records) > 1:
+            raise ValidationError(_("You can't change the status of several occasions at the same time."))
+        for rec in records:
+            if rec.state == 'request' or rec.state == 'fail':
+                # Perform access control.
+                if rec.af_check_access():
+                    # Checks passed. Run inner function with sudo.
+                    res = rec.sudo()._accept_occasion()
+                    if not res:
+                        raise ValidationError(_("One of your occasions is not a request."))
+                    return res
+                raise ValidationError(_("You are not allowed to accept these occasions."))
+            else:
+                raise ValidationError(_("Only occasions in status Rejected or Request can be accepted."))
 
     def _accept_occasion(self):
         if self.state == "request" or self.state == "fail":
             self.state = "ok"
-            for occasion_id in self.occasion_ids:
-                occasion_id.state = "ok"
             ret = True
         else:
             ret = False
@@ -409,20 +419,28 @@ class CalendarOccasion(models.Model):
         return ret
 
     @api.multi
-    def reject_occasion(self):
+    def reject_occasion(self, records):
         """User rejects suggested occasion"""
-        # Perform access control.
-        if self.af_check_access():
-            # Checks passed. Run inner function with sudo.
-            return self.sudo()._reject_occasion()
-        raise Warning(_("You are not allowed to accept these occasions."))
+        # Added this stop since we don't want to allow batch handling.
+        if len(records) > 1:
+            raise ValidationError(_("You can't change the status of several occasions at the same time."))
+        for rec in records:
+            if rec.state in ['request', 'ok']:
+                # Perform access control.
+                if rec.af_check_access():
+                    # Checks passed. Run inner function with sudo.
+                    res = rec.sudo()._reject_occasion()
+                    if not res:
+                        raise ValidationError(_("One of your occasions is not a request."))
+                    return res
+                raise ValidationError(_("You are not allowed to reject these occasions."))
+            else:
+                raise ValidationError(_("Only occasions in status Accepted or Request can be rejected."))
 
     @api.multi
     def _reject_occasion(self):
         if self.state in ["request", "ok"] and not self.appointment_id:
             self.state = "fail"
-            for occasion_id in self.occasion_ids:
-                occasion_id.state = "fail"
             ret = True
         else:
             ret = False
@@ -430,13 +448,21 @@ class CalendarOccasion(models.Model):
         return ret
 
     @api.multi
-    def delete_occasion(self):
+    def delete_occasion(self, records):
         """User deletes an occasion"""
-        # Perform access control.
-        if self.af_check_access():
-            # Checks passed. Run inner function with sudo.
-            return self.sudo()._delete_occasion()
-        raise Warning(_("You are not allowed to delete these occasions."))
+        # Added this stop since we don't want to allow batch handling.
+        if len(records) > 1:
+            raise ValidationError(_("You can't change the status of several occasions at the same time."))
+        for rec in records:
+            if not rec.appointment_id:
+                # Perform access control.
+                if rec.af_check_access():
+                    # Checks passed. Run inner function with sudo.
+                    res = rec.sudo()._delete_occasion()
+                    if not res:
+                        raise ValidationError(_("One of your occasions is already booked"))
+                    return res
+                raise ValidationError(_("You are not allowed to delete these occasions."))
 
     @api.multi
     def _delete_occasion(self):
@@ -499,9 +525,7 @@ class CalendarOccasion(models.Model):
         """
 
         # Calculate number of occasions needed to match booking duration
-        no_occasions = int(duration / BASE_DURATION)
         date_delta = stop - start
-        td_base_duration = timedelta(minutes=BASE_DURATION)
 
         occ_lists = []
         # declare lists for each day
@@ -511,7 +535,6 @@ class CalendarOccasion(models.Model):
         sql_type_id = type_id.id
         sql_start = start
         sql_stop = stop
-        sql_max_depth = max_depth
 
         # do search for local offices
         if (
@@ -520,123 +543,67 @@ class CalendarOccasion(models.Model):
         ):
             # Specific variables for local offices
             sql_operation_id = operation_id.id
-            sql_occasion_ids = (
-                "AND cor.occasion_1 IS NULL AND cor.occasion_2 IS NULL"
-                if no_occasions == 1
-                else ""
-            )
 
-            sql_query = f"""SELECT user_id, start::date as start_date, start::time as start_time, array_agg(DISTINCT(id))
+            sql_query = """SELECT user_id, start::date as start_date, start::time as start_time, array_agg(DISTINCT(id))
                             FROM calendar_occasion co
                                 LEFT JOIN calendar_occasion_related cor
                                     ON cor.occasion_1 = co.id
                                         OR cor.occasion_2 = co.id
                             WHERE appointment_id IS NULL 
                                 AND additional_booking = 'f'
-                                {sql_occasion_ids}
-                                AND type_id = {sql_type_id}
-                                AND start >= '{sql_start}'
-                                AND start <= '{sql_stop}'
-                                AND operation_id = {sql_operation_id}
+                                AND type_id = %s
+                                AND start >= %s
+                                AND start <= %s
+                                AND operation_id = %s
                                 AND state = 'ok'
                             GROUP BY start::time, start::date, user_id
                             ORDER BY user_id ASC, start_date DESC, start_time ASC;"""
             # TODO: use %s in query and tuple with values as argument
-            self._cr.execute(sql_query)
+            self._cr.execute(sql_query, (sql_type_id, sql_start, sql_stop, sql_operation_id))
             sql_res = self._cr.fetchall()
 
             # handle 30 min meetings
-            if type_id.duration == 30:
-                prev_user_id = False
-                prev_date = False
-                day_num = 0
-                for dt_occ_pair in sql_res:
-                    curr_user_id = dt_occ_pair[0]
-                    curr_date = dt_occ_pair[1]
-                    curr_starts = dt_occ_pair[3]
-                    if not prev_date:
-                        prev_date = curr_date
-                        prev_user_id = curr_user_id
-                    if curr_user_id != prev_user_id:
-                        day_num = 0
-                        prev_date = curr_date
-                        prev_user_id = curr_user_id
-                    if curr_date != prev_date:
-                        day_num = +1
-                    occasions = []
-                    if len(occ_lists[day_num]) < max_depth:
-                        for i in range(min(max_depth, len(curr_starts))):
-                            occ_id = self.env["calendar.occasion"].browse(
-                                curr_starts[i]
-                            )
-                            occasions.append(occ_id)
-                    occ_lists[day_num].append(occasions)
+            # if type_id.duration == 30:
+            # this is default behaviour now.
+            prev_user_id = False
+            prev_date = False
+            day_num = 0
+            for dt_occ_pair in sql_res:
+                curr_user_id = dt_occ_pair[0]
+                curr_date = dt_occ_pair[1]
+                curr_starts = dt_occ_pair[3]
+                if not prev_date:
                     prev_date = curr_date
                     prev_user_id = curr_user_id
-            # hardcoded for 60 min meetings for now...
-            else:
-                count_prev_starts = 0
-                prev_starts = []
-                prev_user_id = False
-                prev_date = False
-                day_num = 0
-                # find occasions for each slot, starting with last day
-                for dt_occ_pair in sql_res:
-                    curr_user_id = dt_occ_pair[0]
-                    curr_date = dt_occ_pair[1]
-                    curr_starts = dt_occ_pair[3]
-                    if not prev_date:
-                        # for the first iteration, set variables and skip
-                        prev_date = curr_date
-                        prev_starts = curr_starts
-                        prev_user_id = curr_user_id
-                        count_prev_starts = 0
-                        # skip first iteration
-                        continue
-                    if curr_user_id != prev_user_id:
-                        day_num = 0
-                        count_prev_starts = 0
-                        prev_starts = curr_starts
-                        prev_date = curr_date
-                        prev_user_id = curr_user_id
-                        # skip first iteration for each user
-                        continue
-                    if curr_date != prev_date:
-                        # new day, reset count_prev_starts.
-                        count_prev_starts = 0
-                        day_num = +1
-                    else:
-                        count_prev_starts = max(len(curr_starts) - count_prev_starts, 0)
-                    limit = min(count_prev_starts, max_depth)
-                    if limit != 0:
-                        occasions = []
-                        for i in range(limit):
-                            first_occ = self.env["calendar.occasion"].browse(
-                                prev_starts[i]
-                            )
-                            second_occ = self.env["calendar.occasion"].browse(
-                                curr_starts[i]
-                            )
-                            first_occ |= second_occ
-                            occasions.append(first_occ)
-                        occ_lists[day_num].append(occasions)
+                if curr_user_id != prev_user_id:
+                    day_num = 0
                     prev_date = curr_date
-                    prev_starts = curr_starts
                     prev_user_id = curr_user_id
+                if curr_date != prev_date:
+                    day_num = +1
+                occasions = []
+                if len(occ_lists[day_num]) < max_depth:
+                    for i in range(min(max_depth, len(curr_starts))):
+                        occ_id = self.env["calendar.occasion"].browse(
+                            curr_starts[i]
+                        )
+                        occasions.append(occ_id)
+                occ_lists[day_num].append(occasions)
+                prev_date = curr_date
+                prev_user_id = curr_user_id
         # Do PDM search
         else:
-            sql_query = f"""SELECT start::date as start_date, start::time as start_time, array_agg(id)
+            sql_query = """SELECT start::date as start_date, start::time as start_time, array_agg(id)
                             FROM calendar_occasion
                             WHERE appointment_id IS NULL
                                 AND additional_booking = 'f' 
-                                AND type_id = {sql_type_id}
-                                AND start >= '{sql_start}'
-                                AND start <= '{sql_stop}'
+                                AND type_id = %s
+                                AND start >= %s
+                                AND start <= %s
                                 AND state = 'ok'
                             GROUP BY start::time, start::date
                             ORDER BY start_date DESC, start_time ASC;"""
-            # TODO: use %s in query and tuple with values as argument
-            self._cr.execute(sql_query)
+            self._cr.execute(sql_query, (sql_type_id, sql_start, sql_stop))
             sql_res = self._cr.fetchall()
 
             # PDM meetings only need 1 occasion with same duration
@@ -670,11 +637,11 @@ class CalendarOccasion(models.Model):
 
     @api.model
     def reserve_occasion(self, occasion_ids):
-        """Reserves an occasion."""
+        """Reserves an occasion.
+        :param occasion_ids: Recordset of calendar.occasion objects."""
         start = occasion_ids[0].start
         stop = occasion_ids[len(occasion_ids) - 1].stop
         duration = (stop - start).seconds / 60 / 60
-        # type_id = self.env.ref('calendar_meeting_type.type_00').id
         type_id = occasion_ids[0].type_id
 
         # check that occasions are free and unreserved
@@ -719,6 +686,8 @@ class CalendarOccasion(models.Model):
 
     @api.model
     def autovacuum_additional_occasion(self):
+        """Called from scheduled action to clear system of unused
+        additional occasions"""
         del_occ = (
             self.env["calendar.occasion"]
             .sudo()

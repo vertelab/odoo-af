@@ -21,7 +21,7 @@
 
 import logging
 from datetime import timedelta
-from odoo.exceptions import Warning
+from odoo.exceptions import ValidationError
 
 from odoo import models, fields, api, _
 
@@ -205,7 +205,7 @@ class CalendarAppointment(models.Model):
             and "KROM" in self.type_id.name
         ):
             self.type_id = False
-            raise Warning(_("Jobseeker not KROM classified"))
+            raise ValidationError(_("Jobseeker not KROM classified"))
 
     @api.onchange("type_id")
     def set_duration_selection(self):
@@ -296,7 +296,7 @@ class CalendarAppointment(models.Model):
         if self.af_check_access():
             # Checks passed. Run inner function with sudo.
             return self.sudo()._compute_suggestion_ids()
-        raise Warning(_("You are not allowed to handle these meetings."))
+        raise ValidationError(_("You are not allowed to handle these meetings."))
 
     @api.one
     def _compute_suggestion_ids(self):
@@ -314,7 +314,7 @@ class CalendarAppointment(models.Model):
         if self.type_id.duration_30:
             allowed_durations += [0.5]
         if self.duration not in allowed_durations:
-            raise Warning(_("This duration is not allowed for the meeting type."))
+            raise ValidationError(_("This duration is not allowed for the meeting type."))
 
         start = self.start_meeting_search(self.type_id)
         stop = self.stop_meeting_search(start, self.type_id)
@@ -382,7 +382,7 @@ class CalendarAppointment(models.Model):
                 self.occasion_ids = [(6, 0, free_occ._ids)]
                 self.user_id = self.user_id_local
             else:
-                raise Warning(_("Case worker has no free occasions at that time."))
+                raise ValidationError(_("Case worker has no free occasions at that time."))
 
     def _check_resource_calendar_date(self, check_date):
         """Checks if a date is overlapping with a holiday from resource.calender.leaves """
@@ -455,7 +455,7 @@ class CalendarAppointment(models.Model):
         if self.af_check_access():
             # Checks passed. Run inner function with sudo.
             return self.sudo()._cancel(cancel_reason)
-        raise Warning(_("You are not allowed to cancel these meetings."))
+        raise ValidationError(_("You are not allowed to cancel these meetings."))
 
     def _cancel(self, cancel_reason):
         # Do not allow cancellation of meetings that have been sent to ACE
@@ -478,7 +478,7 @@ class CalendarAppointment(models.Model):
         if self.af_check_access():
             # Checks passed. Run inner function with sudo.
             return self.sudo()._confirm_appointment()
-        raise Warning(_("You are not allowed to confirm these meetings."))
+        raise ValidationError(_("You are not allowed to confirm these meetings."))
 
     def _confirm_appointment(self):
         for appointment in self:

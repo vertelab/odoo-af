@@ -1,8 +1,27 @@
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+# -*- coding: utf-8 -*-
+##############################################################################
+#
+#    Odoo, Open Source Management Solution, third party addon
+#    Copyright (C) 2004-2021 Vertel AB (<http://vertel.se>).
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as
+#    published by the Free Software Foundation, either version 3 of the
+#    License, or (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+##############################################################################
 
 {
     "name": "Calendar management - AF",
-    "version": "12.0.2.0.0",
+    "version": "12.0.3.0.0",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
@@ -17,6 +36,7 @@ v12.0.1.0.7: versions before good version control \n
 v12.0.1.0.8 AFC-1771: added sort order for calendar.appointment.type \n
 v12.0.1.0.9 AFC-1908: changed type_id Many2one to show 15 entries before showing "search more" option. \n
 v12.0.2.0.0 AFC-1805: Major overhaul of functionality. PDM occasions now handled differently. \n
+v12.0.3.0.0 AFC-2044: Major overhaul of functionality. All occasions now handled differently. \n
 \n
 """,
     "depends": [

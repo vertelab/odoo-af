@@ -23,10 +23,9 @@ import copy
 import logging
 import pytz
 from datetime import datetime, timedelta
-from odoo.exceptions import UserError
 
 from odoo import api, fields, models, _
-from odoo.exceptions import Warning
+from odoo.exceptions import ValidationError
 
 _logger = logging.getLogger(__name__)
 
@@ -49,9 +48,9 @@ class CreateLocalOccasion(models.TransientModel):
     stop = fields.Datetime(
         string="Stop", required=True, help="Stop date of an occasion"
     )
-    duration_selection = fields.Selection(
+    duration_text = fields.Char(
         string="Duration",
-        selection=[("30 minutes", "30 minutes"), ("1 hour", "1 hour")],
+        readonly=True,
     )
     duration = fields.Float("Duration", required=True)
     type_id = fields.Many2one(
@@ -102,22 +101,16 @@ class CreateLocalOccasion(models.TransientModel):
         return self.env.user.mapped("employee_ids.office_ids.operation_ids.location_id")
 
     @api.onchange("type_id")
-    def set_duration_selection(self):
+    def set_duration_text(self):
         self.name = (self.type_id.name,)
         self.duration = self.type_id.duration / 60.0
 
         if self.duration == 0.5:
-            self.duration_selection = "30 minutes"
+            self.duration_text = _("30 minutes")
         elif self.duration == 1.0:
-            self.duration_selection = "1 hour"
-
-    @api.onchange("duration_selection")
-    def set_duration(self):
-        if self.duration_selection == "30 minutes":
-            self.duration = 0.5
-        if self.duration_selection == "1 hour":
-            self.duration = 1.0
-        self.onchange_duration_start()
+            self.duration_text = _("1 hour")
+        else:
+            self.duration_text = _("N/A")
 
     @api.onchange("duration", "start")
     def onchange_duration_start(self):
@@ -147,61 +140,52 @@ class CreateLocalOccasion(models.TransientModel):
         if allowed and not denied:
             # Checks passed. Run inner function with sudo.
             return self.sudo()._action_create_occasions()
-        raise Warning(_("You are not allowed to create these occasions."))
+        raise ValidationError(_("You are not allowed to create these occasions."))
 
     def _action_create_occasions(self):
         if not (
-            (self.start.minute in [0, 30] and self.stop.second == 0)
-            and (self.stop.minute in [0, 30] and self.stop.second == 0)
+            (self.start.minute in [0, 15, 30, 45] and self.stop.second == 0)
+            and (self.stop.minute in [0, 15, 30, 45] and self.stop.second == 0)
         ):
-            raise Warning(
-                _("Start or stop time is not and exacly an hour or halfhour.")
+            raise ValidationError(
+                _("Start or stop needs to be a multiple of a quarter.")
             )
 
         # Check how many 30min occasions we need
-        no_occ = int(self.duration / 0.5)
         if self.create_type == "single":
             # check if date is a holiday
             # TODO: do we do this check in check_resource_calendar_occasion() now?
             if not self.env["calendar.appointment"]._check_resource_calendar_date(
                 self.start
             ):
-                raise Warning(_("This day is a holiday."))
+                raise ValidationError(_("This day is a holiday."))
 
             for user_id in self.user_ids:
-                for curr_occ in range(no_occ):
-                    curr_start = self.start + timedelta(minutes=curr_occ * 30)
-                    if user_id.check_resource_calendar_occasion(curr_start):
-                        curr_occ_user = self.env["calendar.occasion"].search_count(
-                            [
-                                ("user_id", "=", user_id.id),
-                                ("start", "=", curr_start),
-                                ("state", "in", ["request", "ok", "booked"]),
-                            ]
+                if user_id.check_resource_calendar_occasion(self.start, self.duration):
+                    curr_occ_user = self.env["calendar.occasion"].search_count(
+                        [
+                            ("user_id", "=", user_id.id),
+                            ("start", "=", self.start),
+                            ("state", "in", ["request", "ok", "booked"]),
+                        ]
+                    )
+                    if curr_occ_user:
+                        raise ValidationError(
+                            _("User %s has conflicting occasions")
+                            % user_id.af_signature
                         )
-                        if curr_occ_user:
-                            raise Warning(
-                                _("User %s has conflicting occasions")
-                                % user_id.af_signature
-                            )
-                        occ = self.env["calendar.occasion"]._force_create_occasion(
-                            0.5,
-                            curr_start,
-                            self.type_id.id,
-                            self.channel.id,
-                            "request",
-                            user_id,
-                            self.operation_id,
-                            False,
-                        )
-                        if curr_occ == 0:
-                            first_occ = occ
-                        else:
-                            # connect related occasions
-                            occ.occasion_ids |= first_occ
-                            first_occ.occasion_ids |= occ
-                    else:
-                        raise Warning(_("Worker not working this date and time."))
+                    occ = self.env["calendar.occasion"]._force_create_occasion(
+                        self.duration,
+                        self.start,
+                        self.type_id.id,
+                        self.channel.id,
+                        "request",
+                        user_id,
+                        self.operation_id,
+                        False,
+                    )
+                else:
+                    raise ValidationError(_("Employee not working this date and time."))
             res = self.env.ref("calendar_af.action_calendar_local_occasion").read()[0]
             res["domain"] = [
                 ("user_id", "in", self.user_ids._ids),
@@ -221,7 +205,7 @@ class CreateLocalOccasion(models.TransientModel):
             if self.repeat_fri:
                 repeat_list.append(4)
             if not repeat_list:
-                raise Warning(_("No weekday has been selected for repeating occasions"))
+                raise ValidationError(_("No weekday has been selected for repeating occasions"))
             # create a list of all days in start-end-range.
             date_list = [
                 self.start + timedelta(days=x)
@@ -240,41 +224,33 @@ class CreateLocalOccasion(models.TransientModel):
                 ]._check_resource_calendar_date(start_date):
                     # create only 30 min occasions (if duration is longer, create several occasions):
                     for user_id in self.user_ids:
-                        for curr_occ in range(no_occ):
-                            curr_start = start_date + timedelta(minutes=curr_occ * 30)
-                            if user_id.check_resource_calendar_occasion(curr_start):
-                                curr_occ_user = self.env[
-                                    "calendar.occasion"
-                                ].search_count(
-                                    [
-                                        ("user_id", "=", user_id.id),
-                                        ("start", "=", curr_start),
-                                        ("state", "in", ["request", "ok", "booked"]),
-                                    ]
+                        if user_id.check_resource_calendar_occasion(start_date, self.duration):
+                            curr_occ_user = self.env[
+                                "calendar.occasion"
+                            ].search_count(
+                                [
+                                    ("user_id", "=", user_id.id),
+                                    ("start", "=", start_date),
+                                    ("state", "in", ["request", "ok", "booked"]),
+                                ]
+                            )
+                            if curr_occ_user:
+                                raise ValidationError(
+                                    _("User %s has conflicting occasions")
+                                    % user_id.af_signature
                                 )
-                                if curr_occ_user:
-                                    raise Warning(
-                                        _("User %s has conflicting occasions")
-                                        % user_id.af_signature
-                                    )
-                                occ = self.env[
-                                    "calendar.occasion"
-                                ]._force_create_occasion(
-                                    0.5,
-                                    curr_start,
-                                    self.type_id.id,
-                                    self.channel.id,
-                                    "request",
-                                    user_id,
-                                    self.operation_id,
-                                    False,
-                                )
-                                if curr_occ == 0:
-                                    first_occ = occ
-                                else:
-                                    # connect related occasions
-                                    occ.occasion_ids |= first_occ
-                                    first_occ.occasion_ids |= occ
+                            occ = self.env[
+                                "calendar.occasion"
+                            ]._force_create_occasion(
+                                self.duration,
+                                start_date,
+                                self.type_id.id,
+                                self.channel.id,
+                                "request",
+                                user_id,
+                                self.operation_id,
+                                False,
+                            )
             res = self.env.ref("calendar_af.action_calendar_local_occasion").read()[0]
             res["domain"] = [
                 ("user_id", "in", self.user_ids._ids),
