@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0-20210127\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-25 07:33+0000\n"
-"PO-Revision-Date: 2021-03-24 15:35+0000\n"
+"PO-Revision-Date: 2021-03-30 06:50+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,35 +16,45 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:94
-#: code:addons/calendar_af/models/calendar.py:1017
+#: code:addons/calendar_af/models/calendar_occasion.py:180
+#: code:addons/calendar_af/models/calendar_schedule.py:97
 #, python-format
 msgid "%sm @ %s"
 msgstr ""
 
 #. module: calendar_af
+#: code:addons/calendar_af/models/calendar_appointment.py:158
+#: code:addons/calendar_af/models/calendar_appointment.py:216
+#: code:addons/calendar_af/models/calendar_appointment.py:225
+#: code:addons/calendar_af/models/calendar_appointment.py:235
 #: selection:calendar.appointment,duration_selection:0
 #: selection:calendar.create_local_occasion,duration_selection:0
 #: selection:calendar.occasion,duration_selection:0
+#, python-format
 msgid "1 hour"
 msgstr "60 minuter"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment_type__duration_30
 msgid "30 min"
-msgstr ""
+msgstr "30 minuter"
 
 #. module: calendar_af
+#: code:addons/calendar_af/models/calendar_appointment.py:156
+#: code:addons/calendar_af/models/calendar_appointment.py:214
+#: code:addons/calendar_af/models/calendar_appointment.py:223
+#: code:addons/calendar_af/models/calendar_appointment.py:233
 #: selection:calendar.appointment,duration_selection:0
 #: selection:calendar.create_local_occasion,duration_selection:0
 #: selection:calendar.occasion,duration_selection:0
+#, python-format
 msgid "30 minutes"
 msgstr "30 minuter"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment_type__duration_60
 msgid "60 min"
-msgstr ""
+msgstr "60 minuter"
 
 #. module: calendar_af
 #: model:mail.template,body_html:calendar_af.email_template_low_occasion_warning
@@ -58,7 +68,16 @@ msgid "<div style=\"margin: 0px; padding: 0px;\">\n"
 "                    </p>\n"
 "                </div>\n"
 "            "
-msgstr ""
+msgstr "<div style=\"margin: 0px; padding: 0px;\">\n"
+"                    <p style=\"margin: 0px; padding: 0px; font-size: 13px;\">\n"
+"                        Hej,\n"
+"                        <br/><br/>\n"
+"                        Ni börjar få slut på tillfällen för mötestypen ${object.type_id.name} vid lokalkontor \n"
+"                        ${object.operation_id.display_name}.\n"
+"                        <br/>\n"
+"                    </p>\n"
+"                </div>\n"
+"            "
 
 #. module: calendar_af
 #: model:ir.actions.server,name:calendar_af.action_occasion_accept
@@ -277,10 +296,10 @@ msgid "Cancel appointment"
 msgstr "Avboka mötet"
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:864
+#: code:addons/calendar_af/models/calendar_appointment.py:585
 #, python-format
 msgid "Cancel meeting"
-msgstr "Avboka möte"
+msgstr "Avboka mötet"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment__cancel_reason
@@ -324,10 +343,10 @@ msgid "Case worker"
 msgstr "Mötesansvarig"
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:707
+#: code:addons/calendar_af/models/calendar_appointment.py:385
 #, python-format
 msgid "Case worker has no free occasions at that time."
-msgstr "Handläggare har inga lediga tider vid det klockslaget"
+msgstr "Handläggaren har inga lediga tillfällen vid denna tid."
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_operation_form_calendar_af_inherited
@@ -494,10 +513,10 @@ msgid "Duration"
 msgstr "Varaktighet"
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:536
+#: code:addons/calendar_af/models/calendar_appointment.py:186
 #, python-format
 msgid "Employment service officer"
-msgstr "Arbetsförmedlare"
+msgstr "Handläggare"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_create_local_occasion__stop_range
@@ -520,9 +539,7 @@ msgid "Free occasions"
 msgstr "Lediga tider"
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:346
-#: code:addons/calendar_af/models/calendar.py:527
-#: code:addons/calendar_af/models/calendar.py:980
+#: code:addons/calendar_af/models/calendar_constants.py:35
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_create_local_occasion__repeat_fri
 #, python-format
 msgid "Friday"
@@ -565,6 +582,12 @@ msgstr ""
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_occasion__is_possible_start
 msgid "Is a possible start time"
 msgstr "Är en möjlig starttid"
+
+#. module: calendar_af
+#: code:addons/calendar_af/models/calendar_appointment.py:208
+#, python-format
+msgid "Jobseeker not KROM classified"
+msgstr "Arbetssökande är ej KROM-klassad"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment____last_update
@@ -723,9 +746,7 @@ msgid "Meeting types"
 msgstr "Mötestyper"
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:342
-#: code:addons/calendar_af/models/calendar.py:523
-#: code:addons/calendar_af/models/calendar.py:976
+#: code:addons/calendar_af/models/calendar_constants.py:31
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_create_local_occasion__repeat_mon
 #, python-format
 msgid "Monday"
@@ -737,7 +758,7 @@ msgid "Move"
 msgstr "Omboka"
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:844
+#: code:addons/calendar_af/models/calendar_appointment.py:565
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_appointment_move_form
 #, python-format
 msgid "Move meeting"
@@ -787,26 +808,26 @@ msgid "No administrative officers on this operation"
 msgstr ""
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:1122
+#: code:addons/calendar_af/models/calendar_occasion.py:292
 #, python-format
 msgid "No case worker could be set for operation %s"
 msgstr ""
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:402
-#: code:addons/calendar_af/models/calendar.py:443
+#: code:addons/calendar_af/models/calendar_appointment_suggestion.py:125
+#: code:addons/calendar_af/models/calendar_appointment_suggestion.py:171
 #, python-format
 msgid "No free occasions. This shouldn't happen. Please contact the system administrator."
 msgstr "Inga lediga tillfällen. Det här ska inte ske. Vänligen kontakta system administratören."
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:833
+#: code:addons/calendar_af/models/calendar_appointment.py:552
 #, python-format
 msgid "No threshold set for operation %s and meeting type %s"
 msgstr ""
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:831
+#: code:addons/calendar_af/models/calendar_appointment.py:547
 #, python-format
 msgid "No threshold users setup for operation %s"
 msgstr ""
@@ -911,10 +932,10 @@ msgid "Over booking"
 msgstr "Överbokning"
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:1088
+#: code:addons/calendar_af/models/calendar_occasion.py:253
 #, python-format
 msgid "Overbooking not allowed on %s"
-msgstr "Överbokning inte tillåtet på %s"
+msgstr "Överbokning är inte tillåtet på %s"
 
 #. module: calendar_af
 #: model:ir.ui.menu,name:calendar_af.menu_pdm
@@ -993,9 +1014,7 @@ msgid "Rules"
 msgstr "Regler"
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:347
-#: code:addons/calendar_af/models/calendar.py:528
-#: code:addons/calendar_af/models/calendar.py:981
+#: code:addons/calendar_af/models/calendar_constants.py:36
 #, python-format
 msgid "Saturday"
 msgstr "Lördag"
@@ -1049,11 +1068,6 @@ msgstr "Visa förslag"
 #: selection:calendar.create_local_occasion,create_type:0
 msgid "Single"
 msgstr "Enstaka"
-
-#. module: calendar_af
-#: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment_type__skill_ids
-msgid "Skills"
-msgstr "Meriter"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_appointment_type__sort_order
@@ -1154,9 +1168,7 @@ msgid "Suggested Dates"
 msgstr "Föreslagna datum"
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:348
-#: code:addons/calendar_af/models/calendar.py:529
-#: code:addons/calendar_af/models/calendar.py:982
+#: code:addons/calendar_af/models/calendar_constants.py:37
 #, python-format
 msgid "Sunday"
 msgstr "Söndag"
@@ -1205,7 +1217,7 @@ msgid "The IPF type id, if this is wrong the integration won't work"
 msgstr "IPF typ ID, om detta ID är fel kommer integrationen inte att fungera"
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:386
+#: code:addons/calendar_af/models/calendar_appointment_suggestion.py:107
 #, python-format
 msgid "This appointment is already booked."
 msgstr "Det här mötet är redan bokat"
@@ -1217,15 +1229,13 @@ msgid "This day is a holiday."
 msgstr "Dagen är en helgdag."
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:655
+#: code:addons/calendar_af/models/calendar_appointment.py:317
 #, python-format
 msgid "This duration is not allowed for the meeting type."
-msgstr "Denna tid är inte tillåten för denna mötestyp."
+msgstr ""
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:345
-#: code:addons/calendar_af/models/calendar.py:526
-#: code:addons/calendar_af/models/calendar.py:979
+#: code:addons/calendar_af/models/calendar_constants.py:34
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_create_local_occasion__repeat_thu
 #, python-format
 msgid "Thursday"
@@ -1237,9 +1247,7 @@ msgid "To Date"
 msgstr "Till datum"
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:343
-#: code:addons/calendar_af/models/calendar.py:524
-#: code:addons/calendar_af/models/calendar.py:977
+#: code:addons/calendar_af/models/calendar_constants.py:32
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_create_local_occasion__repeat_tue
 #, python-format
 msgid "Tuesday"
@@ -1258,6 +1266,12 @@ msgstr "Typ"
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_hr_operation__type_operation_ids
 msgid "Type - Operation mapping"
+msgstr ""
+
+#. module: calendar_af
+#: code:addons/calendar_af/models/calendar_schedule.py:90
+#, python-format
+msgid "Unhandled meeting type while creating occasions from schedules: %s"
 msgstr ""
 
 #. module: calendar_af
@@ -1290,9 +1304,7 @@ msgid "Warning threshold"
 msgstr "Gränsvärden"
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:344
-#: code:addons/calendar_af/models/calendar.py:525
-#: code:addons/calendar_af/models/calendar.py:978
+#: code:addons/calendar_af/models/calendar_constants.py:33
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_create_local_occasion__repeat_wed
 #, python-format
 msgid "Wednesday"
@@ -1317,20 +1329,20 @@ msgid "Yes"
 msgstr "Ja"
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:1202
-#: code:addons/calendar_af/models/calendar.py:1222
+#: code:addons/calendar_af/models/calendar_occasion.py:376
+#: code:addons/calendar_af/models/calendar_occasion.py:396
 #, python-format
 msgid "You are not allowed to accept these occasions."
 msgstr ""
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:761
+#: code:addons/calendar_af/models/calendar_appointment.py:458
 #, python-format
 msgid "You are not allowed to cancel these meetings."
 msgstr ""
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:784
+#: code:addons/calendar_af/models/calendar_appointment.py:481
 #, python-format
 msgid "You are not allowed to confirm these meetings."
 msgstr ""
@@ -1343,21 +1355,21 @@ msgid "You are not allowed to create these occasions."
 msgstr ""
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:1243
+#: code:addons/calendar_af/models/calendar_occasion.py:417
 #, python-format
 msgid "You are not allowed to delete these occasions."
 msgstr ""
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:380
-#: code:addons/calendar_af/models/calendar.py:425
-#: code:addons/calendar_af/models/calendar.py:640
+#: code:addons/calendar_af/models/calendar_appointment.py:299
+#: code:addons/calendar_af/models/calendar_appointment_suggestion.py:101
+#: code:addons/calendar_af/models/calendar_appointment_suggestion.py:151
 #, python-format
 msgid "You are not allowed to handle these meetings."
 msgstr ""
 
 #. module: calendar_af
-#: code:addons/calendar_af/models/calendar.py:1181
+#: code:addons/calendar_af/models/calendar_occasion.py:355
 #, python-format
 msgid "You are not allowed to publish these occasions."
 msgstr ""
