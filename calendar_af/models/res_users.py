@@ -23,7 +23,7 @@ import logging
 from datetime import timedelta
 
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
+from odoo.exceptions import ValidationError
 
 _logger = logging.getLogger(__name__)
 
@@ -82,7 +82,7 @@ class ResUsers(models.Model):
         # we get context as a str not a dict
         context = eval(res.get("context", "{}"))
         if not self.operation_ids:
-            raise Warning(_("User is not connected to any operations"))
+            raise ValidationError(_("User is not connected to any operations"))
         context["default_operation_id"] = self.operation_ids._ids[0]
         context["default_user_ids"] = self._ids
         # convert back to str and return
@@ -98,17 +98,17 @@ class ResUsers(models.Model):
         ]
         return res
 
-    def check_resource_calendar_occasion(self, check_datetime):
+    def check_resource_calendar_occasion(self, check_datetime, duration):
         # We will assume that each user only 
         # has one employee connected for now.
         # TODO: This should be reviewed in the future.
         if self.employee_ids and self.employee_ids[0].resource_calendar_id:
-            count_work_hours = self.employee_ids[0].resource_calendar_id.get_work_hours_count(check_datetime, check_datetime + timedelta(minutes=30))
-            if count_work_hours == 0.5:
+            count_work_hours = self.employee_ids[0].resource_calendar_id.get_work_hours_count(check_datetime, check_datetime + timedelta(minutes=duration*60))
+            if count_work_hours == duration:
                 return True
             else:
                 return False
         else:
-            # TODO: add raise Warning here?
+            # TODO: add raise ValidationError here?
             # this will stop the system from creating any occasions if so.
             return False

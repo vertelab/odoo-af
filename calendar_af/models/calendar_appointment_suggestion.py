@@ -21,7 +21,7 @@
 
 import logging
 
-from odoo.exceptions import Warning
+from odoo.exceptions import ValidationError
 from odoo import models, fields, api, _
 
 from .calendar_constants import *
@@ -97,13 +97,13 @@ class CalendarAppointmentSuggestion(models.Model):
         if self.af_check_access():
             # Checks passed. Run inner function with sudo.
             return self.sudo()._select_suggestion()
-        raise Warning(_("You are not allowed to handle these meetings."))
+        raise ValidationError(_("You are not allowed to handle these meetings."))
 
     @api.multi
     def _select_suggestion(self):
         # check state of appointment
         if self.appointment_id.state in ["reserved", "confirmed"]:
-            raise Warning(_("This appointment is already booked."))
+            raise ValidationError(_("This appointment is already booked."))
 
         occasions = self.env["calendar.occasion"]
         for occasion in self.occasion_ids:
@@ -120,7 +120,7 @@ class CalendarAppointmentSuggestion(models.Model):
                     limit=1,
                 )
                 if not free_occasion:
-                    raise Warning(
+                    raise ValidationError(
                         _(
                             "No free occasions. This shouldn't happen. Please contact the system administrator."
                         )
@@ -145,7 +145,7 @@ class CalendarAppointmentSuggestion(models.Model):
         if self.af_check_access():
             # Checks passed. Run inner function with sudo.
             return self.sudo()._select_suggestion_move()
-        raise Warning(_("You are not allowed to handle these meetings."))
+        raise ValidationError(_("You are not allowed to handle these meetings."))
 
     @api.multi
     def _select_suggestion_move(self):
@@ -164,7 +164,7 @@ class CalendarAppointmentSuggestion(models.Model):
                     limit=1,
                 )
                 if not free_occasion:
-                    raise Warning(
+                    raise ValidationError(
                         _(
                             "No free occasions. This shouldn't happen. Please contact the system administrator."
                         )

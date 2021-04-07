@@ -51,11 +51,7 @@ unused_occasions.unlink()</field>
         <field name="binding_model_id" ref="calendar_af.model_calendar_occasion"/>
         <field name="binding_type">action</field>
         <field name="state">code</field>
-        <field name="code">for rec in records:
-  if rec.state == 'draft' or rec.state == 'fail':
-    res = rec.publish_occasion()
-    if not res:
-      raise Warning("One of your occasions is not a draft.")</field>
+        <field name="code">record.publish_occasion(records)</field>
     </record>
 
     <record id="action_occasion_accept" model="ir.actions.server">
@@ -64,11 +60,7 @@ unused_occasions.unlink()</field>
         <field name="binding_model_id" ref="calendar_af.model_calendar_occasion"/>
         <field name="binding_type">action</field>
         <field name="state">code</field>
-        <field name="code">for rec in records:
-  if rec.state == 'request' or rec.state == 'fail':
-    res = rec.accept_occasion()
-    if not res:
-      raise Warning("One of your occasions is not a request.")</field>
+        <field name="code">record.accept_occasion(records)</field>
     </record>
 
     <record id="action_occasion_reject" model="ir.actions.server">
@@ -77,11 +69,7 @@ unused_occasions.unlink()</field>
         <field name="binding_model_id" ref="calendar_af.model_calendar_occasion"/>
         <field name="binding_type">action</field>
         <field name="state">code</field>
-        <field name="code">for rec in records:
-  if rec.state in ['request', 'ok']:
-    res = rec.reject_occasion()
-    if not res:
-      raise Warning("One of your occasions is not a request.")</field>
+        <field name="code">record.reject_occasion(records)</field>
     </record>
 
     <record id="action_occasion_delete" model="ir.actions.server">
@@ -90,11 +78,7 @@ unused_occasions.unlink()</field>
         <field name="binding_model_id" ref="calendar_af.model_calendar_occasion"/>
         <field name="binding_type">action</field>
         <field name="state">code</field>
-        <field name="code">for rec in records:
-  if not rec.appointment_id:
-    res = rec.delete_occasion()
-    if not res:
-      raise Warning("One of your occasions is already booked")</field>
+        <field name="code">record.delete_occasion(records)</field>
     </record>
 
   <record id="action_calendar_user" model="ir.actions.act_window">

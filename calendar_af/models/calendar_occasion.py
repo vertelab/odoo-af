@@ -25,7 +25,7 @@ from random import randint
 from copy import copy
 
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
+from odoo.exceptions import ValidationError
 
 from .calendar_constants import *
 
@@ -283,19 +283,19 @@ class CalendarOccasion(models.Model):
                     user_id = employee_ids[randint(0, len(employee_ids) - 1)].user_id
                 else:
                     # no user_id could be set.
-                    raise Warning(
+                    raise ValidationError(
                         _("No case worker could be set for operation %s")
                         % operation_id.operation_code
                     )
         elif type_id.channel == self.env.ref("calendar_channel.channel_pdm"):
             if operation_id or user_id:
-                raise Warning(
+                raise ValidationError(
                     _("Trying to create an additional PDM occasion with operation_id or user_id.")
                 )
             # Additional booking for PDM
             start_date = self._get_min_occasions(type_id, day_start, day_stop)
         else:
-            raise Warning(
+            raise ValidationError(
                 _("Could not create additional booking for operation %s")
                 % operation_id.operation_code
                 if operation_id.operation_code
@@ -362,13 +362,23 @@ class CalendarOccasion(models.Model):
         return False
 
     @api.multi
-    def publish_occasion(self):
+    def publish_occasion(self, records):
         """User publishes suggested occasion"""
-        # Perform access control.
-        if self.af_check_access():
-            # Checks passed. Run inner function with sudo.
-            return self.sudo()._publish_occasion()
-        raise Warning(_("You are not allowed to publish these occasions."))
+        # Added this stop since we don't want to allow batch handling.
+        if len(records) > 1:
+            raise ValidationError(_("You can't change the status of several occasions at the same time."))
+        for rec in records:
+            if rec.state == 'draft' or rec.state == 'fail':
+                # Perform access control.
+                if rec.af_check_access():
+                    # Checks passed. Run inner function with sudo.
+                    res = rec.sudo()._publish_occasion()
+                    if not res:
+                        raise ValidationError(_("One of your occasions is not a draft."))
+                    return res
+                raise ValidationError(_("You are not allowed to publish these occasions."))
+            else:
+                raise ValidationError(_("Only occasions in status Rejected or Draft can be published."))
 
     @api.multi
     def _publish_occasion(self):
@@ -381,13 +391,23 @@ class CalendarOccasion(models.Model):
         return ret
 
     @api.multi
-    def accept_occasion(self):
+    def accept_occasion(self, records):
         """User accepts suggested occasion"""
-        # Perform access control.
-        if self.af_check_access():
-            # Checks passed. Run inner function with sudo.
-            return self.sudo()._accept_occasion()
-        raise Warning(_("You are not allowed to accept these occasions."))
+        # Added this stop since we don't want to allow batch handling.
+        if len(records) > 1:
+            raise ValidationError(_("You can't change the status of several occasions at the same time."))
+        for rec in records:
+            if rec.state == 'request' or rec.state == 'fail':
+                # Perform access control.
+                if rec.af_check_access():
+                    # Checks passed. Run inner function with sudo.
+                    res = rec.sudo()._accept_occasion()
+                    if not res:
+                        raise ValidationError(_("One of your occasions is not a request."))
+                    return res
+                raise ValidationError(_("You are not allowed to accept these occasions."))
+            else:
+                raise ValidationError(_("Only occasions in status Rejected or Request can be accepted."))
 
     def _accept_occasion(self):
         if self.state == "request" or self.state == "fail":
@@ -399,13 +419,23 @@ class CalendarOccasion(models.Model):
         return ret
 
     @api.multi
-    def reject_occasion(self):
+    def reject_occasion(self, records):
         """User rejects suggested occasion"""
-        # Perform access control.
-        if self.af_check_access():
-            # Checks passed. Run inner function with sudo.
-            return self.sudo()._reject_occasion()
-        raise Warning(_("You are not allowed to accept these occasions."))
+        # Added this stop since we don't want to allow batch handling.
+        if len(records) > 1:
+            raise ValidationError(_("You can't change the status of several occasions at the same time."))
+        for rec in records:
+            if rec.state in ['request', 'ok']:
+                # Perform access control.
+                if rec.af_check_access():
+                    # Checks passed. Run inner function with sudo.
+                    res = rec.sudo()._reject_occasion()
+                    if not res:
+                        raise ValidationError(_("One of your occasions is not a request."))
+                    return res
+                raise ValidationError(_("You are not allowed to reject these occasions."))
+            else:
+                raise ValidationError(_("Only occasions in status Accepted or Request can be rejected."))
 
     @api.multi
     def _reject_occasion(self):
@@ -418,13 +448,21 @@ class CalendarOccasion(models.Model):
         return ret
 
     @api.multi
-    def delete_occasion(self):
+    def delete_occasion(self, records):
         """User deletes an occasion"""
-        # Perform access control.
-        if self.af_check_access():
-            # Checks passed. Run inner function with sudo.
-            return self.sudo()._delete_occasion()
-        raise Warning(_("You are not allowed to delete these occasions."))
+        # Added this stop since we don't want to allow batch handling.
+        if len(records) > 1:
+            raise ValidationError(_("You can't change the status of several occasions at the same time."))
+        for rec in records:
+            if not rec.appointment_id:
+                # Perform access control.
+                if rec.af_check_access():
+                    # Checks passed. Run inner function with sudo.
+                    res = rec.sudo()._delete_occasion()
+                    if not res:
+                        raise ValidationError(_("One of your occasions is already booked"))
+                    return res
+                raise ValidationError(_("You are not allowed to delete these occasions."))
 
     @api.multi
     def _delete_occasion(self):

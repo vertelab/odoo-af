@@ -57,10 +57,7 @@ class CalendarSchedule(models.Model):
     @api.one
     def inactivate(self, b=True):
         """Inactivates self. Used as a workaround to inactivate from server actions."""
-        if b:
-            self.active = False
-        else:
-            self.active = True
+        self.active = not b
         return self.active
 
     @api.multi
