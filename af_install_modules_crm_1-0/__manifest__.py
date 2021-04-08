@@ -57,6 +57,7 @@
         # "module_chart", 		# odoo-base/ The module displays a graphical view of the modules dependencies
 	"monitoring_status",		# adds a monitoring value for automatic montitoring
         "partner_desired_jobs",		# odoo-base/
+	"partner_education_360",
         "partner_fax", 			# OCA Adds fax-number for AG
         "partner_firstname", 		# OCA
         # "partner_kpi_data", 		# odoo-base/ Needed only for AG 1.0
