@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution, third party addon
-#    Copyright (C) 2019 Vertel AB (<http://vertel.se>).
+#    Copyright (C) 2020 Vertel AB (<http://vertel.se>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -20,20 +20,53 @@
 ##############################################################################
 
 from odoo import models, fields, api, _
-import logging
-_logger = logging.getLogger(__name__)
+from collections import OrderedDict
 
-    
+
 class ResPartner(models.Model):
-    _inherit = "res.partner"
+    _inherit = 'res.partner'
 
-    # Access rights to archive contacts. This is probably not good enough.
-    # Can't specify read/write.
-    # Can't specify domains per group (causes crossover between employers and jobseekers officers)
-    # TODO: Look for a solution. Existing module or build one.
-    #       Look at that encryption module to add new parameters to fields.
-    active = fields.Boolean(groups='base.group_system,af_security.group_af_employers_high,af_security.group_af_jobseekers_high')
+    jobseeker_access = fields.Selection(
+        selection=[('STARK', 'Stark'), ('MYCKET_STARK', 'Mycket stark')],
+        string='Access Level',
+        compute='_compute_jobseeker_access',
+        search='_search_jobseeker_access')
+
+    @api.multi
+    def _compute_jobseeker_access(self):
+        """ Placeholder. The real function is implemented in af_security_rules."""
+        pass
 
     @api.model
-    def af_security_install_rules(self):
-        self.env.ref('base.res_partner_rule_private_employee').active = False
+    def _search_jobseeker_access(self, op, value):
+        """ Placeholder. The real function is implemented in af_security_rules."""
+        # Return something that's always True.
+        return [('id', '!=', 0)]
+
+    @api.multi
+    def _grant_jobseeker_access(
+            self,
+            access_type,
+            user=None,
+            reason_code=None,
+            reason=None,
+            granting_user=None,
+            start=None,
+            interval=1):
+        """ Placeholder. The real function is implemented in af_security_rules."""
+        return OrderedDict()
+
+
+class User(models.Model):
+    _inherit = 'res.users'
+
+    af_signature = fields.Char(
+        string='AF signature',
+        compute='_compute_af_signature',
+        compute_sudo=True,
+        store=True)
+
+    @api.depends('login')
+    def _compute_af_signature(self):
+        for record in self:
+            record.af_signature = record.login

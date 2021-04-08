@@ -1,7 +1,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 {
-    "name": "AF REST Appointment",
+    "name": "Depreciated AF REST Appointment",
     "version": "12.0.1.0.0",
     "author": "Vertel AB",
     "license": "AGPL-3",
@@ -13,6 +13,6 @@
         "views/af_rest_appointment_views.xml",
         "security/ir.model.access.csv",
     ],
-    "application": True,
-    "installable": True,
+    "application": False,
+    "installable": False,
 }

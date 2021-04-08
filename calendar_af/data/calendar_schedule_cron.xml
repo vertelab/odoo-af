@@ -1,0 +1,115 @@
+<odoo>
+    <data noupdate="1">
+        <record forcecreate="True" id="ir_cron_calendar_schedule_fetch_0" model="ir.cron">
+            <field name="name">Teleopti hämtning 05:00</field>
+            <field name="model_id" ref="model_calendar_schedule"/>
+            <field name="state">code</field>
+            <field name="code">days = 35
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 21)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 22)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 23)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 24)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 25)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 26)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 27)])
+model.cron_get_schedules(type_id, days)</field>
+            <field name="user_id" ref="base.user_root" />
+            <field name="nextcall">2020-09-30 05:00:00</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall" />
+            <field name="active" eval="False"/>
+        </record>
+
+        <record forcecreate="True" id="ir_cron_calendar_schedule_fetch_1" model="ir.cron">
+            <field name="name">Teleopti hämtning 08:00</field>
+            <field name="model_id" ref="model_calendar_schedule"/>
+            <field name="state">code</field>
+            <field name="code">days = 35
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 21)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 22)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 23)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 24)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 25)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 26)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 27)])
+model.cron_get_schedules(type_id, days)</field>
+            <field name="user_id" ref="base.user_root" />
+            <field name="nextcall">2020-09-30 08:00:00</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall" />
+            <field name="active" eval="False"/>
+        </record>
+
+        <record forcecreate="True" id="ir_cron_calendar_schedule_fetch_2" model="ir.cron">
+            <field name="name">Teleopti hämtning 11:35</field>
+            <field name="model_id" ref="model_calendar_schedule"/>
+            <field name="state">code</field>
+            <field name="code">days = 35
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 21)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 22)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 23)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 24)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 25)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 26)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 27)])
+model.cron_get_schedules(type_id, days)</field>
+            <field name="user_id" ref="base.user_root" />
+            <field name="nextcall">2020-09-30 11:35:00</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall" />
+            <field name="active" eval="False"/>
+        </record>
+
+        <record forcecreate="True" id="ir_cron_calendar_schedule_fetch_3" model="ir.cron">
+            <field name="name">Teleopti hämtning 15:35</field>
+            <field name="model_id" ref="model_calendar_schedule"/>
+            <field name="state">code</field>
+            <field name="code">days = 35
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 21)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 22)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 23)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 24)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 25)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 26)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 27)])
+model.cron_get_schedules(type_id, days)</field>
+            <field name="user_id" ref="base.user_root" />
+            <field name="nextcall">2020-09-30 15:35:00</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall" />
+            <field name="active" eval="False"/>
+        </record>
+    </data>
+</odoo>

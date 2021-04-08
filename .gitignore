@@ -14,3 +14,9 @@ base_afdemo/data/testdata_2020-04-07/prestandatest.csv
 base_afdemo/data/testdata_2020-04-07/res.partner.csv
 base_afdemo/data/testdata_2020-04-07/res.partner.notes.csv
 base_afdemo/data/testdata_2020-04-07/res.user.csv
+.idea/
+
+# Translations
+*.mo
+*.pot
+module_list_af

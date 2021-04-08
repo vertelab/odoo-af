@@ -1,18 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <record id="view_partner_form_calendar_af_inherited" model="ir.ui.view"> 
-    <field name="name">res.users.form.calendar_af.inherited</field>
-    <field name="model">res.users</field> 
-    <field name="inherit_id" ref="base.view_users_form" /> 
-    <field name="arch" type="xml"> 
-      <div name="button_box" position="inside">
-        <button class="oe_stat_button" type="object"
-            name="view_appointments"
-            icon="fa-calendar"
-            groups="base.group_user"> 
-            <field string="Booked meetings" name="appointment_count" widget="statinfo"/>
-        </button>
-      </div>
+    <record id="view_partner_form_calendar_af_inherited" model="ir.ui.view">
+        <field name="name">res.users.form.calendar_af.inherited</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button class="oe_stat_button" type="object"
+                        name="view_appointments"
+                        icon="fa-calendar"
+                        groups="base.group_user">
+                    <field string="Booked meetings" name="appointment_count" widget="statinfo"/>
+                </button>
+            </div>
+        </field>
+    </record>
+
+  <record id="view_calendar_user_tree" model="ir.ui.view">
+    <field name="name">calendar.user.tree</field>
+    <field name="model">res.users</field>
+    <field name="priority" eval="10" />
+    <field name="arch" type="xml">
+        <tree string="Locations" create="false" delete="false">
+            <field name="name" />
+            <field name="login" />
+            <field name="office_codes" />
+            <field name="operation_names"/>
+        </tree>
     </field>
-  </record> 
+  </record>
+
+  <record id="calendar_user_search" model="ir.ui.view">
+    <field name="name">calendar.user.search</field>
+    <field name="model">res.users</field>
+    <field name="arch" type="xml">
+      <search string="Rules">
+        <field name="name" />
+        <field name="login" />    
+      </search>
+    </field>
+  </record>
+
+  <record id="view_calendar_user_form" model="ir.ui.view">
+    <field name="name">calendar.user.form</field>
+    <field name="model">res.users</field>
+    <field name="priority" eval="15" />
+    <field name="arch" type="xml">
+      <form>
+        <header>
+          <button string="Local occasions" type="object" class="oe_highlight" name="action_calendar_local_occasion"/>
+          <button string="Create occasion" type="object" class="oe_highlight" name="create_local_occasion_action"/>
+          <button string="Local appointments" type="object" class="oe_highlight" name="action_local_appointment"/>
+        </header>
+        <sheet>
+          <group string="Case worker">
+            <group>
+              <field name="name"/>
+              <field name="login"/>
+            </group>
+            <group>
+              <field name="operation_ids" widget="many2many_tags"/>
+            </group>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
 </odoo>

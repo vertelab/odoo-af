@@ -1,0 +1,156 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* calendar_af_360
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0-20200603\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-11-19 15:38+0000\n"
+"PO-Revision-Date: 2020-11-19 16:40+0100\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: sv\n"
+"X-Generator: Poedit 2.0.6\n"
+
+#. module: calendar_af_360
+#: model:ir.model,name:calendar_af_360.model_calendar_appointment
+msgid "Appointment"
+msgstr "Möte"
+
+#. module: calendar_af_360
+#: model:ir.model.fields,field_description:calendar_af_360.field_res_partner__appointment_count
+msgid "Appointment Count"
+msgstr "Antal möten"
+
+#. module: calendar_af_360
+#: model:ir.model.fields,field_description:calendar_af_360.field_calendar_appointment__partner_pnr
+#: model:ir.model.fields,field_description:calendar_af_360.field_calendar_occasion__app_partner_pnr
+msgid "Attendee SSN"
+msgstr ""
+
+#. module: calendar_af_360
+#: code:addons/calendar_af_360/models/calendar.py:88
+#: code:addons/calendar_af_360/models/calendar.py:90
+#, python-format
+msgid "Book meeting"
+msgstr "Boka möte"
+
+#. module: calendar_af_360
+#: model:ir.model,name:calendar_af_360.model_calendar_appointment_suggestion
+msgid "Bookable Occasion"
+msgstr "Bokningsbart tillfälle"
+
+#. module: calendar_af_360
+#: code:addons/calendar_af_360/models/hr_employee.py:88
+#: code:addons/calendar_af_360/models/res_partner.py:61
+#: code:addons/calendar_af_360/models/res_partner.py:86
+#: model:ir.model.fields,field_description:calendar_af_360.field_hr_employee__appointment_ids
+#: model:ir.model.fields,field_description:calendar_af_360.field_res_partner__appointment_ids
+#: model:ir.model.fields,field_description:calendar_af_360.field_res_partner__appointment_ids_ahead
+#: model:ir.model.fields,field_description:calendar_af_360.field_res_partner__appointment_ids_past
+#: model:ir.model.fields,field_description:calendar_af_360.field_res_users__appointment_ids_ahead
+#: model:ir.model.fields,field_description:calendar_af_360.field_res_users__appointment_ids_past
+#: model_terms:ir.ui.view,arch_db:calendar_af_360.view_partner_form_calendar_af_inherited
+#, python-format
+msgid "Booked meetings"
+msgstr "Bokade möten"
+
+#. module: calendar_af_360
+#: model:ir.model.fields,field_description:calendar_af_360.field_hr_employee__appointment_ids_ahead
+#: model:ir.model.fields,field_description:calendar_af_360.field_hr_employee_jobseeker_search_wizard__appointment_ids_ahead
+msgid "Booked meetings ahead"
+msgstr "Framtida bokade möten"
+
+#. module: calendar_af_360
+#: model:ir.model.fields,field_description:calendar_af_360.field_hr_employee__appointment_ids_all
+#: model:ir.model.fields,field_description:calendar_af_360.field_hr_employee_jobseeker_search_wizard__appointment_ids_all
+msgid "Booked meetings ahead for everyone"
+msgstr "Framtida bokade möten för alla"
+
+#. module: calendar_af_360
+#: code:addons/calendar_af_360/models/hr_employee.py:100
+#: code:addons/calendar_af_360/models/res_partner.py:73
+#, python-format
+msgid "Calendar"
+msgstr "Kalender"
+
+#. module: calendar_af_360
+#: model_terms:ir.ui.view,arch_db:calendar_af_360.view_employee_360_form_calendar_af_inherited
+#: model_terms:ir.ui.view,arch_db:calendar_af_360.view_jobseeker_form_calendar_af_inherited
+msgid "Cancel"
+msgstr "Avbryt"
+
+#. module: calendar_af_360
+#: model:ir.model,name:calendar_af_360.model_res_partner
+msgid "Contact"
+msgstr "Kontakt"
+
+#. module: calendar_af_360
+#: model:ir.model,name:calendar_af_360.model_hr_employee
+msgid "Employee"
+msgstr "Anställd"
+
+#. module: calendar_af_360
+#: model:ir.model.fields,field_description:calendar_af_360.field_res_partner__forbidden_meeting_types
+#: model:ir.model.fields,field_description:calendar_af_360.field_res_users__forbidden_meeting_types
+msgid "Forbidden meeting types"
+msgstr "Förbjudna mötestyper"
+
+#. module: calendar_af_360
+#: code:addons/calendar_af_360/models/calendar.py:46
+#: code:addons/calendar_af_360/models/calendar.py:67
+#, python-format
+msgid "Jobseekers"
+msgstr "Arbetssökande"
+
+#. module: calendar_af_360
+#: model_terms:ir.ui.view,arch_db:calendar_af_360.view_employee_360_form_calendar_af_inherited
+#: model_terms:ir.ui.view,arch_db:calendar_af_360.view_jobseeker_form_calendar_af_inherited
+msgid "Move"
+msgstr "Omboka"
+
+#. module: calendar_af_360
+#: model_terms:ir.ui.view,arch_db:calendar_af_360.view_jobseeker_form_calendar_af_inherited
+msgid "New appointment"
+msgstr "Boka nytt möte"
+
+#. module: calendar_af_360
+#: model:ir.model,name:calendar_af_360.model_calendar_occasion
+msgid "Occasion"
+msgstr "Möte"
+
+#. module: calendar_af_360
+#: model:ir.model.fields,field_description:calendar_af_360.field_calendar_appointment__partner_forbidden_types
+msgid "Partner forbidden types"
+msgstr "Partners förbjudna typer"
+
+#. module: calendar_af_360
+#: model_terms:ir.ui.view,arch_db:calendar_af_360.view_employee_360_form_calendar_af_inherited
+msgid "Show all appointments"
+msgstr "Visa kollegors möten"
+
+#. module: calendar_af_360
+#: model_terms:ir.ui.view,arch_db:calendar_af_360.view_employee_360_form_calendar_af_inherited
+msgid "Upcoming meetings"
+msgstr "Kommande möten"
+
+#. module: calendar_af_360
+#: model_terms:ir.ui.view,arch_db:calendar_af_360.view_employee_360_form_calendar_af_inherited
+msgid "Upcoming meetings for others"
+msgstr "Kollegors kommande möten"
+
+#. module: calendar_af_360
+#: model:ir.model,name:calendar_af_360.model_hr_employee_jobseeker_search_wizard
+msgid "hr.employee.jobseeker.search.wizard"
+msgstr "hr_360_view-sökvizard"
+
+#. module: calendar_af_360
+#: model:ir.model.fields,help:calendar_af_360.field_calendar_appointment__partner_pnr
+#: model:ir.model.fields,help:calendar_af_360.field_calendar_occasion__app_partner_pnr
+msgid "organization number"
+msgstr "organisationsnummer"

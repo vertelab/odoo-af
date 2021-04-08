@@ -5,12 +5,20 @@
         <field name="model">calendar.appointment.type</field>
         <field name="arch" type="xml">
             <tree string="Meeting types" editable="bottom">
+                <field name="sort_order"/>
                 <field name="ipf_num"/>
                 <field name="name"/>
                 <field name="duration"/>
+                <field name="duration_30"/>
+                <field name="duration_60"/>
+                <field name="days_first"/>
+                <field name="days_last"/>
                 <field name="channel"/>
                 <field name="additional_booking"/>
                 <field name="ipf_id"/>
+                <field name="ipf_name"/>
+                <!-- <field name="skill_ids" widget="Many2many_tags"/> -->
+                <field name="text"/>
             </tree>
         </field>
     </record>
@@ -22,5 +30,25 @@
         <field name="view_id" ref="view_calendar_appointment_type_tree"/>
     </record>
 
-    <menuitem action="action_type" id="menu_action_type" parent="menu_admin" sequence="10" />
+    <record id="view_calendar_appointment_cancel_reason_tree" model="ir.ui.view">
+        <field name="name">calendar.appointment.cancel.reason.tree</field>
+        <field name="model">calendar.appointment.cancel_reason</field>
+        <field name="arch" type="xml">
+            <tree string="Meeting cancel reasons" editable="bottom">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_cancel_reason" model="ir.actions.act_window">
+        <field name="name">Meeting cancel reasons</field>
+        <field name="res_model">calendar.appointment.cancel_reason</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="view_calendar_appointment_cancel_reason_tree"/>
+    </record>
+
+    <menuitem action="action_type" id="menu_action_type" parent="menu_admin" sequence="10"
+              groups="af_security.af_meeting_admin"/>
+    <menuitem action="action_cancel_reason" id="menu_action_cancel_reason" parent="menu_admin" sequence="15"
+              groups="af_security.af_meeting_admin"/>
 </odoo>

@@ -1,0 +1,472 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* af_automatic_customer_dialogue
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0-20210121\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-01-28 08:17+0000\n"
+"PO-Revision-Date: 2021-01-28 08:17+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: af_automatic_customer_dialogue
+#: model_terms:ir.ui.view,arch_db:af_automatic_customer_dialogue.view_event_kanban
+msgid "<b><i class=\"fa fa-clock-o\"/>\n"
+"                                        To</b>"
+msgstr "<b><i class=\"fa fa-clock-o\"/>\n"
+"                                        Till</b>"
+
+#. module: af_automatic_customer_dialogue
+#: model:mail.template,body_html:af_automatic_customer_dialogue.meeting_reminder_email_template
+msgid "<div style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;margin: 0px; padding: 0px;\">\n"
+"                    <p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;margin: 0px; padding: 0px; font-size: 13px;\">\n"
+"                        Hej,\n"
+"                        <br><br>\n"
+"                        Här kommer en påminnelse om händelsen.\n"
+"                    </p>\n"
+"                </div>\n"
+"            "
+msgstr ""
+
+#. module: af_automatic_customer_dialogue
+#: model:mail.template,body_html:af_automatic_customer_dialogue.meeting_follow_up_email_template
+msgid "<div style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;margin: 0px; padding: 0px;\">\n"
+"                    <p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;margin: 0px; padding: 0px; font-size: 13px;\">\n"
+"                        Hej,\n"
+"                        <br><br>\n"
+"                        Uppföljning till händelsen!\n"
+"                    </p>\n"
+"                </div>\n"
+"            "
+msgstr ""
+
+#. module: af_automatic_customer_dialogue
+#: model:mail.template,body_html:af_automatic_customer_dialogue.on_boarding_email_template
+msgid "<div style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;margin: 0px; padding: 0px;\">\n"
+"                    <p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;margin: 0px; padding: 0px; font-size: 13px;\">\n"
+"                        Hej,\n"
+"                        <br><br>\n"
+"                        Välkommen till oss!\n"
+"                    </p>\n"
+"                </div>\n"
+"            "
+msgstr ""
+
+#. module: af_automatic_customer_dialogue
+#: model:mail.template,body_html:af_automatic_customer_dialogue.meeting_invitation_email_template
+msgid "<div style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;margin: 0px; padding: 0px;\">\n"
+"                    <p style=\"font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;margin: 0px; padding: 0px; font-size: 13px;\">\n"
+"                        Hello,\n"
+"                        <br><br>\n"
+"                        Inbjudan till händelsen\n"
+"                    </p>\n"
+"                </div>\n"
+"            "
+msgstr ""
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__message_needaction
+msgid "Action Needed"
+msgstr "Åtgärd krävs"
+
+#. module: af_automatic_customer_dialogue
+#: model_terms:ir.actions.act_window,help:af_automatic_customer_dialogue.action_dialogue_event
+msgid "Add a new event"
+msgstr "Lägg till en ny händelse"
+
+#. module: af_automatic_customer_dialogue
+#: selection:partner.event.email.schedule,interval_type:0
+msgid "After each registration"
+msgstr "Efter varje registrering"
+
+#. module: af_automatic_customer_dialogue
+#: selection:partner.event.email.schedule,interval_type:0
+msgid "After the event"
+msgstr "Efter händelsen"
+
+#. module: af_automatic_customer_dialogue
+#: model_terms:ir.ui.view,arch_db:af_automatic_customer_dialogue.view_event_form
+msgid "Are you sure you want to cancel this event?"
+msgstr "Är du säker på att du vill avboka händelsen?"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__message_attachment_count
+msgid "Attachment Count"
+msgstr "Antal bilagor"
+
+#. module: af_automatic_customer_dialogue
+#: selection:partner.event.email.schedule,interval_type:0
+msgid "Before the event"
+msgstr "Före händelsen"
+
+#. module: af_automatic_customer_dialogue
+#: model_terms:ir.ui.view,arch_db:af_automatic_customer_dialogue.view_event_form
+msgid "Cancel Event"
+msgstr "Avboka händelse"
+
+#. module: af_automatic_customer_dialogue
+#: selection:partner.event,state:0
+msgid "Cancelled"
+msgstr "Avbruten"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__category
+msgid "Category"
+msgstr "Kategori"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__country_id
+msgid "Country"
+msgstr "Land"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__create_uid
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event_email_schedule__create_uid
+msgid "Created by"
+msgstr "Skapad av"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__create_date
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event_email_schedule__create_date
+msgid "Created on"
+msgstr "Skapad den"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model,name:af_automatic_customer_dialogue.model_partner_event
+#: model:ir.ui.menu,name:af_automatic_customer_dialogue.customer_dialogue_menu_id
+msgid "Customer Dialogue"
+msgstr "Automatisk Digital Kunddialog"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.actions.server,name:af_automatic_customer_dialogue.customer_dialogue_event_mail_scheduler_ir_actions_server
+#: model:ir.cron,cron_name:af_automatic_customer_dialogue.customer_dialogue_event_mail_scheduler
+#: model:ir.cron,name:af_automatic_customer_dialogue.customer_dialogue_event_mail_scheduler
+msgid "Customer Dialogue: Mail Scheduler"
+msgstr ""
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model,name:af_automatic_customer_dialogue.model_res_partner_notes
+msgid "Daily notes for a partner"
+msgstr "Daganteckningar för en kund"
+
+#. module: af_automatic_customer_dialogue
+#: selection:partner.event.email.schedule,interval_unit:0
+msgid "Day(s)"
+msgstr "Dag(ar)"
+
+#. module: af_automatic_customer_dialogue
+#: model_terms:ir.ui.view,arch_db:af_automatic_customer_dialogue.view_event_kanban
+msgid "Delete"
+msgstr "Ta bort"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event_email_schedule__name
+msgid "Description"
+msgstr "Beskrivning"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.ui.menu,name:af_automatic_customer_dialogue.dialogue_event_id
+msgid "Dialogue Event"
+msgstr "Automatisk Digital Kunddialog"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__display_name
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event_email_schedule__display_name
+msgid "Display Name"
+msgstr "Visningsnamn"
+
+#. module: af_automatic_customer_dialogue
+#: selection:partner.event,state:0
+msgid "Draft"
+msgstr "Utkast"
+
+#. module: af_automatic_customer_dialogue
+#: model_terms:ir.ui.view,arch_db:af_automatic_customer_dialogue.view_event_kanban
+msgid "Dropdown menu"
+msgstr ""
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__email_schedule_ids
+#: model_terms:ir.ui.view,arch_db:af_automatic_customer_dialogue.view_event_form
+msgid "Email Schedule"
+msgstr "Emailschema"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event_email_schedule__template_id
+msgid "Email Template"
+msgstr "E-postmall"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__date_end
+msgid "End Date"
+msgstr "Slutdatum"
+
+#. module: af_automatic_customer_dialogue
+#: model_terms:ir.ui.view,arch_db:af_automatic_customer_dialogue.view_event_form
+msgid "Event Name"
+msgstr "Händelsenamn"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__name
+msgid "Event Segment"
+msgstr "Namn på utskick"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.actions.act_window,name:af_automatic_customer_dialogue.action_dialogue_event
+#: model_terms:ir.ui.view,arch_db:af_automatic_customer_dialogue.view_event_form
+#: model_terms:ir.ui.view,arch_db:af_automatic_customer_dialogue.view_event_tree
+msgid "Events"
+msgstr "Utskick"
+
+#. module: af_automatic_customer_dialogue
+#: model:mail.template,subject:af_automatic_customer_dialogue.meeting_follow_up_email_template
+msgid "Follow Up of the Meeting"
+msgstr "Uppföljning av händelsen"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__message_follower_ids
+msgid "Followers"
+msgstr "Följare"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__message_channel_ids
+msgid "Followers (Channels)"
+msgstr "Följare (Kanaler)"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Följare (kontakter)"
+
+#. module: af_automatic_customer_dialogue
+#: selection:partner.event.email.schedule,interval_unit:0
+msgid "Hour(s)"
+msgstr "Timme(ar)"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__id
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event_email_schedule__id
+msgid "ID"
+msgstr ""
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,help:af_automatic_customer_dialogue.field_partner_event__message_unread
+msgid "If checked new messages require your attention."
+msgstr "Om ikryssad nya meddelanden som kräver din uppmärksamhet"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,help:af_automatic_customer_dialogue.field_partner_event__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "Om den är markerad så finns det meddelanden som kräver din uppmärksamhet."
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,help:af_automatic_customer_dialogue.field_partner_event__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: af_automatic_customer_dialogue
+#: selection:partner.event.email.schedule,interval_unit:0
+msgid "Immediately"
+msgstr "Omedelbart"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event_email_schedule__interval_nbr
+msgid "Interval"
+msgstr "Intervall"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__message_is_follower
+msgid "Is Follower"
+msgstr "Är följare"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__color
+msgid "Kanban Color Index"
+msgstr ""
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event____last_update
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event_email_schedule____last_update
+msgid "Last Modified on"
+msgstr "Senast redigerad"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__write_uid
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event_email_schedule__write_uid
+msgid "Last Updated by"
+msgstr "Senast uppdaterad av"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__write_date
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event_email_schedule__write_date
+msgid "Last Updated on"
+msgstr "Senast uppdaterad"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__address_id
+msgid "Location"
+msgstr "Plats"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__message_main_attachment_id
+msgid "Main Attachment"
+msgstr ""
+
+#. module: af_automatic_customer_dialogue
+#: model:mail.template,subject:af_automatic_customer_dialogue.meeting_invitation_email_template
+msgid "Meeting Invitation"
+msgstr "Mötesinbjudan"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__message_ids
+msgid "Messages"
+msgstr "Meddelanden"
+
+#. module: af_automatic_customer_dialogue
+#: selection:partner.event.email.schedule,interval_unit:0
+msgid "Month(s)"
+msgstr "Månad(er)"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Antal åtgärder"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__message_has_error_counter
+msgid "Number of error"
+msgstr "Antal fel"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,help:af_automatic_customer_dialogue.field_partner_event__message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr "Antal meddelanden som kräver en åtgärd"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,help:af_automatic_customer_dialogue.field_partner_event__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,help:af_automatic_customer_dialogue.field_partner_event__message_unread_counter
+msgid "Number of unread messages"
+msgstr "Antal olästa meddelanden"
+
+#. module: af_automatic_customer_dialogue
+#: model_terms:ir.ui.view,arch_db:af_automatic_customer_dialogue.view_event_form
+msgid "Online"
+msgstr "Uppkopplad"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__is_online
+msgid "Online Event"
+msgstr "Onlinehändelse"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__organizer_id
+msgid "Organizer"
+msgstr "Arrangör"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event_email_schedule__partner_event_id
+msgid "Partner Event"
+msgstr "Partnerhändelse"
+
+#. module: af_automatic_customer_dialogue
+#: model_terms:ir.ui.view,arch_db:af_automatic_customer_dialogue.view_event_form
+msgid "Re-Run Event"
+msgstr "Återkommande händelse"
+
+#. module: af_automatic_customer_dialogue
+#: model:mail.template,subject:af_automatic_customer_dialogue.meeting_reminder_email_template
+msgid "Reminder of the Meeting"
+msgstr "Påminnelse om händelse"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__user_id
+msgid "Responsible"
+msgstr "Ansvarig"
+
+#. module: af_automatic_customer_dialogue
+#: selection:partner.event,state:0
+msgid "Running"
+msgstr "Aktiverad"
+
+#. module: af_automatic_customer_dialogue
+#: model_terms:ir.actions.act_window,help:af_automatic_customer_dialogue.action_dialogue_event
+msgid "Schedule and organize your events efficiently:\n"
+"                    track registrations and participations, automate the confirmation emails, sell tickets, etc."
+msgstr "Schemalägg och organisera händelserna effektivt: \n"
+"                    Språa registreringar och deltagare, automatisera bekräftelser mm"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__contact_domain
+msgid "Search Filter"
+msgstr "Sökfilter"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event_email_schedule__sent
+msgid "Sent"
+msgstr "Skickat"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__date_begin
+msgid "Start Date"
+msgstr "Startdatum"
+
+#. module: af_automatic_customer_dialogue
+#: model_terms:ir.ui.view,arch_db:af_automatic_customer_dialogue.view_event_form
+msgid "Start Event"
+msgstr "Aktivera utskicket"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__state
+msgid "State"
+msgstr "Status"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event_email_schedule__interval_type
+msgid "Trigger "
+msgstr "Trigger"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event_email_schedule__interval_unit
+msgid "Unit"
+msgstr "Enhet"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__message_unread
+msgid "Unread Messages"
+msgstr "Olästa meddelanden"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model.fields,field_description:af_automatic_customer_dialogue.field_partner_event__message_unread_counter
+msgid "Unread Messages Counter"
+msgstr "Räknare olästa meddelanden"
+
+#. module: af_automatic_customer_dialogue
+#: selection:partner.event.email.schedule,interval_unit:0
+msgid "Week(s)"
+msgstr "Vecka/or"
+
+#. module: af_automatic_customer_dialogue
+#: model:mail.template,subject:af_automatic_customer_dialogue.on_boarding_email_template
+msgid "Welcome to Our Agency"
+msgstr "Välkommen till oss"
+
+#. module: af_automatic_customer_dialogue
+#: model:ir.model,name:af_automatic_customer_dialogue.model_partner_event_email_schedule
+msgid "partner.event.email.schedule"
+msgstr ""
+

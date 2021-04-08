@@ -1,4 +1,3 @@
-  
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="1">
@@ -53,7 +52,8 @@
             <field name="name">Office Design</field>
             <field name="color">3</field>
             <field name="user_id" ref="base.user_demo"/>
-            <field name="type_ids" eval="[(4, ref('project_stage_0')), (4, ref('project_stage_1')), (4, ref('project_stage_2')), (4, ref('project_stage_3'))]"/>
+            <field name="type_ids"
+                   eval="[(4, ref('project_stage_0')), (4, ref('project_stage_1')), (4, ref('project_stage_2')), (4, ref('project_stage_3'))]"/>
             <field name="partner_id" ref="base.partner_demo_portal"/>
             <field name="privacy_visibility">portal</field>
         </record>
@@ -62,7 +62,8 @@
             <field name="name">Research &amp; Development</field>
             <field name="privacy_visibility">followers</field>
             <field name="user_id" ref="base.user_demo"/>
-            <field name="type_ids" eval="[(4, ref('project_stage_0')), (4, ref('project_stage_1')), (4, ref('project_stage_2')), (4, ref('project_stage_3'))]"/>
+            <field name="type_ids"
+                   eval="[(4, ref('project_stage_0')), (4, ref('project_stage_1')), (4, ref('project_stage_2')), (4, ref('project_stage_3'))]"/>
         </record>
 
         <!-- Channel -->
@@ -74,7 +75,7 @@
 
         <!-- Channel follows all above projects -->
         <function model="project.project" name="message_subscribe"
-            eval="[ref('project_project_1'), ref('project_project_2')
+                  eval="[ref('project_project_1'), ref('project_project_2')
             ], None, [ref('mail_channel_project_task')]"/>
 
         <!-- Tasks -->
@@ -268,9 +269,10 @@
             <field name="model">project.task</field>
             <field name="res_id" ref="project_task_22"/>
             <field name="body">Hello Demo,
-There is a change in customer requirement.
-Can you check the document from customer again.
-Thanks,</field>
+                There is a change in customer requirement.
+                Can you check the document from customer again.
+                Thanks,
+            </field>
             <field name="message_type">comment</field>
             <field name="author_id" ref="base.partner_root"/>
         </record>
@@ -279,7 +281,8 @@ Thanks,</field>
             <field name="res_id" ref="project_task_22"/>
             <field name="parent_id" ref="message_task_1"/>
             <field name="body">Ok, I have checked the mail,
-I will update the document and let you know.</field>
+                I will update the document and let you know.
+            </field>
             <field name="message_type">comment</field>
             <field name="author_id" ref="base.partner_demo"/>
         </record>
@@ -288,13 +291,14 @@ I will update the document and let you know.</field>
             <field name="res_id" ref="project_task_22"/>
             <field name="parent_id" ref="message_task_2"/>
             <field name="body">Fine!
-Send it ASAP, its urgent.</field>
+                Send it ASAP, its urgent.
+            </field>
             <field name="message_type">comment</field>
             <field name="author_id" ref="base.partner_root"/>
         </record>
 
         <function model="project.project" name="message_subscribe"
-            eval="[ref('project.project_project_1')], [ref('base.partner_demo_portal')]"/>
+                  eval="[ref('project.project_project_1')], [ref('base.partner_demo_portal')]"/>
 
 
         <!-- Rating Demo Data -->
@@ -329,4 +333,4 @@ Send it ASAP, its urgent.</field>
 </odoo>
 
 
-<!-- https://github.com/odoo/odoo/blob/12.0/addons/project/data/project_demo.xml -->
+        <!-- https://github.com/odoo/odoo/blob/12.0/addons/project/data/project_demo.xml -->

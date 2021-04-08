@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_af_emp_officer_res_partner,res.partner - Employers Officer,base.model_res_partner,af_security.af_employers_officer,1,0,0,0
+access_af_emp_editor_res_partner,res.partner - Employers Editor,base.model_res_partner,af_security.af_employers_editor,1,1,1,0
+access_af_seekers_officer_res_partner,res.partner - Jobseekers Officer,base.model_res_partner,af_security.af_jobseekers_officer,1,0,0,0
+access_af_seekers_editor_res_partner,res.partner - Jobseekers Editor,base.model_res_partner,af_security.af_jobseekers_editor,1,1,1,0
+access_af_emp_officer_res_partner_notes,res.partner.notes - Employers Officer,partner_daily_notes.model_res_partner_notes,af_security.af_employers_officer,1,0,1,0
+access_af_emp_editor_res_partner_notes,res.partner.notes - Employers Editor,partner_daily_notes.model_res_partner_notes,af_security.af_employers_editor,1,0,1,1
+access_af_seekers_officer_res_partner_notes,res.partner.notes - Jobseekers Officer,partner_daily_notes.model_res_partner_notes,af_security.af_jobseekers_officer,1,0,1,0
+access_af_seekers_editor_res_partner_notes,res.partner.notes - Jobseekers Editor,partner_daily_notes.model_res_partner_notes,af_security.af_jobseekers_editor,1,0,1,1
+access_af_seekers_officer_calendar_appointment,calendar.appointment - Jobseekers Officer,calendar_af.model_calendar_appointment,af_security.af_jobseekers_officer,1,1,1,0
+access_af_seekers_officer_calendar_appointment_suggestion,calendar.appointment.suggestion - Jobseekers Officer,calendar_af.model_calendar_appointment_suggestion,af_security.af_jobseekers_officer,1,1,1,1
+base.res_partner group_partner_manager,res_partner group_partner_manager,base.model_res_partner,base.group_partner_manager,0,0,0,0

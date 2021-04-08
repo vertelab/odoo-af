@@ -1,0 +1,142 @@
+<odoo>
+    <data>
+        <record id="email_template_calendar_appointment" model="mail.template">
+            <field name="name">Calendar Appointment</field>
+            <field name="model_id" ref="calendar_af.model_calendar_appointment"/>
+            <field name="subject">Dags för planeringssamtal</field>
+            <field name="email_to">${object.partner_id.email | safe}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hej!
+                        <br/><br/>
+                            Arbetsförmedlingen har bokat ett planeringssamtal med dig. 
+                            Under samtalet kommer vi att prata om vad du vill jobba med och hur du ska få ett jobb så snart som möjligt.                         
+                        <br/><br/>
+                        <strong>Datum:</strong> ${object.weekday} ${object.start} <br/>
+                        <strong>Plats:</strong> ${object.operation_id.name}, ${object.operation_id.visitation_address_street}<br/>
+                        <strong>Tid:</strong> ${object.start_time} <br/>
+                        <strong>Längd:</strong> ${object.duration_selection}<br/>  
+                        <strong>Mötestyp:</strong> ${object.type_id.name}
+                        <br/><br/>
+                            Förbered gärna ditt samtal. Skriv ned vad du vill jobba med och de frågor du har till oss.
+                        <br/><br/>
+                            Det är viktigt att du kommer på mötet. Om du inte gör det kan din ersättning påverkas. 
+                            Det gäller både dig som har ersättning från a-kassan och dig som har aktivitetsstöd, utvecklingsersättning eller etableringsersättning. 
+                            Det gäller även dig som tidigare har haft en anställning som gett rätt till en sjukpenninggrundande inkomst (SGI) hos Försäkringskassan 
+                            och dig som har försörjningsstöd. 
+                            Kontakta den myndighet som beslutar om ersättningen om du har frågor om din ersättning.
+                        <br/><br/>
+                            Passar inte tiden? Hör av dig till oss så snart som möjligt så bokar vi en ny tid. 
+                            Gå in på arbetsformedlingen.se och chatta med oss eller ring 0771-416 416.
+                        <br/><br/>
+                    </p>
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hälsningar<br/>
+                        ${object.company_id.name}
+                        <!-- % set website_url = object.env['ir.config_parameter'].sudo().get_param('web.base.url')
+                        <br/><br/>
+                        View <a href='${website_url}/web#id=${object.id}&amp;view_type=form&amp;model=calendar.appointment' target="_blank"> meeting </a>
+                        <br/> -->
+                    </p>
+                </div>
+            </field>
+            <field name="user_signature" eval="False"/>
+            <field name="report_template" ref="af_calendar_reports.calendar_appointment_report"/>
+            <field name="report_name">Calendar Appointment</field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="email_template_updated_calendar_appointment" model="mail.template">
+            <field name="name">Updated Calendar Appointment</field>
+            <field name="model_id" ref="calendar_af.model_calendar_appointment"/>
+            <field name="subject">Ombokat planeringssamtal – ny tid</field>
+            <field name="email_to">${object.partner_id.email | safe}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hej!
+                        <br/><br/>
+                        Du har en ny tid för ett planeringssamtal med Arbetsförmedlingen. 
+                        Under samtalet kommer vi att prata om vad du vill jobba med och hur du ska få ett jobb så snart som möjligt.                         
+                        <br/><br/>
+                    </p>
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        <strong>Datum:</strong> ${object.weekday} ${object.start} <br/>
+                        <strong>Plats:</strong> ${object.operation_id.name}, ${object.operation_id.visitation_address_street}<br/>
+                        <strong>Tid:</strong> ${object.start_time} <br/>
+                        <strong>Längd:</strong> ${object.duration_selection}<br/>  
+                        <strong>Mötestyp:</strong> ${object.type_id.name}
+                        <br/><br/>
+                            Förbered gärna ditt samtal. Skriv ned vad du vill jobba med och de frågor du har till oss.
+                        <br/><br/>
+                            Det är viktigt att du kommer på mötet. Om du inte gör det kan din ersättning påverkas. 
+                            Det gäller både dig som har ersättning från a-kassan och dig som har aktivitetsstöd, utvecklingsersättning eller etableringsersättning. 
+                            Det gäller även dig som tidigare har haft en anställning som gett rätt till en sjukpenninggrundande inkomst (SGI) hos Försäkringskassan 
+                            och dig som har försörjningsstöd. 
+                            Kontakta den myndighet som beslutar om ersättningen om du har frågor om din ersättning.
+                        <br/><br/>
+                            Passar inte tiden? Hör av dig till oss så snart som möjligt så bokar vi en ny tid. 
+                            Gå in på arbetsformedlingen.se och chatta med oss eller ring <a href="tel:0771416416">0771-416 416</a>.
+                        <br /><br />
+                    </p>
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hälsningar<br/>
+                        ${object.company_id.name}
+                        <!-- % set website_url = object.env['ir.config_parameter'].sudo().get_param('web.base.url')
+                        <br/><br/>
+                        View <a href='${website_url}/web#id=${object.id}&amp;view_type=form&amp;model=calendar.appointment' target="_blank"> meeting </a>
+                        <br/> -->
+                    </p>
+                </div>
+            </field>
+            <field name="user_signature" eval="False"/>
+            <field name="report_template" ref="af_calendar_reports.updated_calendar_appointment_report"/>
+            <field name="report_name">Updated Calendar Appointment</field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="email_template_cancelled_calendar_appointment" model="mail.template">
+            <field name="name">Cancelled Calendar Appointment</field>
+            <field name="model_id" ref="calendar_af.model_calendar_appointment"/>
+            <field name="subject">Cancelled Calendar Appointment</field>
+            <field name="email_to">${object.partner_id.email | safe}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hej!
+                        <br/><br/>
+                            Det här mötet är avbokat:
+                        <br/><br/>
+                    </p>
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        <strong>Datum:</strong> ${object.weekday} ${object.start} <br/>
+                        <strong>Plats:</strong> ${object.operation_id.name}, ${object.operation_id.visitation_address_street}<br/>
+                        <strong>Tid:</strong> ${object.start_time} <br/>
+                        <strong>Längd:</strong> ${object.duration_selection}<br/>  
+                        <strong>Mötestyp:</strong> ${object.type_id.name}
+                        <br /> <br />
+                        Om du har frågor om det avbokade mötet kan du höra av dig till oss.
+                        Gå in på arbetsformedlingen.se och chatta med oss eller ring 0771-416 416.
+                    </p>
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hälsningar<br/>
+                        ${object.company_id.name}
+                        <!-- % set website_url = object.env['ir.config_parameter'].sudo().get_param('web.base.url')
+                        <br/><br/>
+                        View <a href='${website_url}/web#id=${object.id}&amp;view_type=form&amp;model=calendar.appointment' target="_blank"> cancelled meeting </a>
+                        <br/> -->
+                    </p>
+                    
+                </div>
+            </field>
+            <field name="user_signature" eval="False"/>
+            <field name="report_template" ref="af_calendar_reports.cancelled_calendar_appointment_report"/>
+            <field name="report_name">Cancelled Calendar Appointment</field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>
