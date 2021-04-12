@@ -1,7 +1,7 @@
 {
-    "name": "AF Mass Mailing Template",
+    "name": "Replaced - AF Mass Mailing Template",
     "summary": "AF Mass Mailing Template Design",
-    "version": "12.0.0.2",
+    "version": "12.0.1.1.0",
     "category": "Email Marketing",
 	"description": """
 	 v12.0.0.1 AFC-86  Add Mass mailing template for AF newsletters.\
