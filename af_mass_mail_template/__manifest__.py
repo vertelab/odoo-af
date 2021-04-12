@@ -1,5 +1,5 @@
 {
-    "name": "AF Mass Mailing Template",
+    "name": "Moved to odoo-mail AF Mass Mailing Template",
     "summary": "AF Mass Mailing Template Design",
     "version": "12.0.0.1",
     "category": "Email Marketing",
