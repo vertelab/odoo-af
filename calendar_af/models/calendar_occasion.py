@@ -546,9 +546,6 @@ class CalendarOccasion(models.Model):
 
             sql_query = """SELECT user_id, start::date as start_date, start::time as start_time, array_agg(DISTINCT(id))
                             FROM calendar_occasion co
-                                LEFT JOIN calendar_occasion_related cor
-                                    ON cor.occasion_1 = co.id
-                                        OR cor.occasion_2 = co.id
                             WHERE appointment_id IS NULL 
                                 AND additional_booking = 'f'
                                 AND type_id = %s
