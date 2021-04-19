@@ -2,7 +2,7 @@
 
 {
     "name": "Af Book Meeting 1.0 Install all modules ",
-    "version": "12.0.1.0.3",
+    "version": "12.0.1.0.4",
     "author": "Vertel AB",
     "description": """
         This module installs all Book Meeting-modules at one go.\n
@@ -13,6 +13,7 @@
          v12.0.1.1  - First release\n
          v12.0.1.2  - Updated version\n
          v12.0.1.0.3 - fixed version and dependencies\n
+         v12.0.1.0.4 - added module hr_holidays_leave_repeated\n
          Once the module is installed, please de-install it to avoid depencency-problems.\n
          \n
     """,
@@ -33,7 +34,8 @@
         "ipf_planning", 		# /oodo-af
         #"mail_calendar_report_crm",	# /odoo-mail (missing repo in script) This module should be installed to be able to send meeting-notifications
         "partner_daily_notes", 		# /odoo-base
-        "partner_daily_notes_edi" 	# /odoo-base
+        "partner_daily_notes_edi", 	# /odoo-base
+        "hr_holidays_leave_repeated" # /odooext-oca-hr
     ],
     "application": False,
     "installable": True,
