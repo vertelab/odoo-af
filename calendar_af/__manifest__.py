@@ -21,15 +21,15 @@
 
 {
     "name": "Calendar management - AF",
-    "version": "12.0.3.0.1",
+    "version": "12.0.3.0.3",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
     "summary": "Calendar management",
     'description': """
-Module for AF appointments
-================================================================================================
+Module for AF appointments \n
+================================================================================================ \n
 This module adds new functionality regarding appointments functionality \n
 This functionality is tailored for AF. \n
 v12.0.1.0.7: versions before good version control \n
@@ -38,6 +38,7 @@ v12.0.1.0.9 AFC-1908: changed type_id Many2one to show 15 entries before showing
 v12.0.2.0.0 AFC-1805: Major overhaul of functionality. PDM occasions now handled differently. \n
 v12.0.3.0.0 AFC-2044: Major overhaul of functionality. All occasions now handled differently. \n
 v12.0.3.0.1 AFC-1715: Added new appointment types and updated existing ones. \n
+v12.0.3.0.3 AFC-2113: Updated how res.users is presented in views. \n
 \n
 """,
     "depends": [

@@ -71,6 +71,9 @@ class CalendarOccasion(models.Model):
         help="Booked case worker",
         index=True,
     )
+    case_worker_name = fields.Char(
+        string="Case worker", compute="_compute_case_worker_name"
+    )
     state = fields.Selection(
         selection=[
             ("draft", "Draft"),
@@ -117,6 +120,13 @@ class CalendarOccasion(models.Model):
     def _compute_weekday(self):
         if self.start:
             self.weekday = DAYNUM2DAYNAME[self.start.weekday()]
+
+    @api.one
+    def _compute_case_worker_name(self):
+        if self.channel == self.env.ref("calendar_channel.channel_pdm"):
+            self.case_worker_name = _("Employment service officer")
+        else:
+            self.case_worker_name = f"{self.user_id.login} ({self.user_id.name})"
 
     @api.depends("start")
     def _occ_start_time_calc(self):
