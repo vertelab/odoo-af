@@ -19,9 +19,7 @@
 #
 ##############################################################################
 
-import copy
 import logging
-import pytz
 from datetime import datetime, timedelta
 
 from odoo import api, fields, models, _
@@ -33,10 +31,6 @@ _logger = logging.getLogger(__name__)
 class CreateLocalOccasion(models.TransientModel):
     _name = "calendar.create_local_occasion"
     _description = "Create occasion"
-
-    # @api.model
-    # def _get_appointments(self):
-    #     return self.env['calendar.appointment'].browse(self._context.get('active_ids'))
 
     name = fields.Char(string="Name", required=True)
     start = fields.Datetime(
@@ -151,6 +145,8 @@ class CreateLocalOccasion(models.TransientModel):
                 _("Start or stop needs to be a multiple of a quarter.")
             )
 
+        res_occ = self.env["calendar.occasion"]
+
         # Check how many 30min occasions we need
         if self.create_type == "single":
             # check if date is a holiday
@@ -170,26 +166,26 @@ class CreateLocalOccasion(models.TransientModel):
                         ]
                     )
                     if curr_occ_user:
-                        raise ValidationError(
-                            _("User %s has conflicting occasions")
-                            % user_id.af_signature
+                        # TODO: store time and person in list and somehow present list to user.
+                        # user has conflicting meeting
+                        pass
+                    else:
+                        res_occ |= self.env["calendar.occasion"]._force_create_occasion(
+                            self.duration,
+                            self.start,
+                            self.type_id.id,
+                            self.channel.id,
+                            "request",
+                            user_id,
+                            self.operation_id,
+                            False,
                         )
-                    occ = self.env["calendar.occasion"]._force_create_occasion(
-                        self.duration,
-                        self.start,
-                        self.type_id.id,
-                        self.channel.id,
-                        "request",
-                        user_id,
-                        self.operation_id,
-                        False,
-                    )
                 else:
-                    raise ValidationError(_("Employee not working this date and time."))
+                    # TODO: store time and person in list and somehow present list to user.
+                    # user is not working this time
+                    pass
             res = self.env.ref("calendar_af.action_calendar_local_occasion").read()[0]
-            res["domain"] = [
-                ("user_id", "in", self.user_ids._ids),
-            ]
+            res["domain"] = [("id", "in", res_occ._ids)]
             return res
         elif self.create_type == "repeating":
             # create list of weekday values allowed:
@@ -212,10 +208,10 @@ class CreateLocalOccasion(models.TransientModel):
                 for x in range((self.stop_range - self.start_range).days)
             ]
             # loop possible dates
-            for date in date_list:
+            for possible_date in date_list:
                 # update date, keep start time.
                 start_date = self.start.replace(
-                    year=date.year, month=date.month, day=date.day
+                    year=possible_date.year, month=possible_date.month, day=possible_date.day
                 )
                 # check if date is an allowed weekday
                 # TODO: do we do this check in check_resource_calendar_occasion() now?
@@ -235,25 +231,28 @@ class CreateLocalOccasion(models.TransientModel):
                                 ]
                             )
                             if curr_occ_user:
-                                raise ValidationError(
-                                    _("User %s has conflicting occasions")
-                                    % user_id.af_signature
+                                # TODO: store time and person in list and somehow present list to user.
+                                # user has conflicting meeting
+                                pass
+                            else:
+                                res_occ |= self.env[
+                                    "calendar.occasion"
+                                ]._force_create_occasion(
+                                    self.duration,
+                                    start_date,
+                                    self.type_id.id,
+                                    self.channel.id,
+                                    "request",
+                                    user_id,
+                                    self.operation_id,
+                                    False,
                                 )
-                            occ = self.env[
-                                "calendar.occasion"
-                            ]._force_create_occasion(
-                                self.duration,
-                                start_date,
-                                self.type_id.id,
-                                self.channel.id,
-                                "request",
-                                user_id,
-                                self.operation_id,
-                                False,
-                            )
+                        else:
+                            # TODO: store time and person in list and somehow present list to user.
+                            # user is not working this time
+                            pass
             res = self.env.ref("calendar_af.action_calendar_local_occasion").read()[0]
-            res["domain"] = [
-                ("user_id", "in", self.user_ids._ids),
-            ]
+            # Filter view with only the created occasions.
+            res["domain"] = [("id", "in", res_occ._ids)]
             return res
         return False
