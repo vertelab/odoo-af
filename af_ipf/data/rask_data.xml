@@ -6,14 +6,13 @@
 			<field name="name">IPF RASK</field>
 			<field name="environment">T2</field>
 			<field name="systemid">AFCRM</field>
-			<field name="url">https://ipfapi.arbetsformedlingen.se</field>
-			<field name="port">443</field>
-			<field name="ssl_verify">True</field>
+			<field name="url">http://t2.ft.arbetsformedlingen.se</field>
+			<field name="port">80</field>
 		</record>
 	</data>
 	<data>
 		<record id="ipf_endpoint_rask" model="af.ipf.endpoint">
-			<field name="name">ais-f-arbetssokande/v1/arbetssokande/{customer_id}/anpassad?resurser=alla&amp;client_id={clientid}&amp;client_secret={client_secret}</field>
+			<field name="name">arbetssokande/rest/v1/arbetssokande/{customer_id}/anpassad?resurser=alla</field>
 			<field name="ipf_id" ref="ipf_rask"/>
 	</record>
 	</data>
