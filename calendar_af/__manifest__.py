@@ -21,6 +21,7 @@
 
 {
     "name": "Calendar management - AF",
+
     "version": "12.0.3.0.3",
     "author": "Vertel AB",
     "license": "AGPL-3",
@@ -38,6 +39,7 @@ v12.0.1.0.9 AFC-1908: changed type_id Many2one to show 15 entries before showing
 v12.0.2.0.0 AFC-1805: Major overhaul of functionality. PDM occasions now handled differently. \n
 v12.0.3.0.0 AFC-2044: Major overhaul of functionality. All occasions now handled differently. \n
 v12.0.3.0.1 AFC-1715: Added new appointment types and updated existing ones. \n
+v12.0.3.0.2 AFC-2110: Removed raise Warnings to create better workflow. Added better filter after creating occasions. \n
 v12.0.3.0.3 AFC-2113: Updated how res.users is presented in views. \n
 \n
 """,

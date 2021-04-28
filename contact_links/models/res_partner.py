@@ -48,7 +48,7 @@ class PartnerLinks(models.Model):
         """
         url = None
         try:
-            url = self.link.format(partner=partner, user=self.env.user)
+            url = self.link.format(partner=partner.sudo(), user=self.env.user)
         except:
             # TODO: Improve error feedback. This is pretty useless since the end users won't see the log.
             # Use traceback to build message and return it in the result.
