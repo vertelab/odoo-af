@@ -1321,7 +1321,7 @@ msgstr "Tisdag"
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_occasion__type_id
 #: model_terms:ir.ui.view,arch_db:calendar_af.calendar_occasion_local_search
 msgid "Type"
-msgstr "Typ"
+msgstr "Mötestyp"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_hr_operation__type_operation_ids
