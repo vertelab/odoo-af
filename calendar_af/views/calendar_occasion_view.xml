@@ -123,7 +123,7 @@
                 <field name="duration_text"/>
                 <field name="operation_id"/>
                 <field name="state"/>
-                <field name="user_id"/>
+                <field name="case_worker_name"/>
             </tree>
         </field>
     </record>

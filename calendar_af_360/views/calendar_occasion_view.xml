@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="calendar_af.view_calendar_occasion_local_tree" />
         <field name="priority" eval="2" />
         <field name="arch" type="xml">
-            <xpath expr="//tree/field[@name='user_id']" position="after">
+            <xpath expr="//tree/field[@name='case_worker_name']" position="after">
                 <field name="app_partner_pnr"/>
             </xpath>
         </field>

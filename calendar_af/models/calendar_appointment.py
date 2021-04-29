@@ -138,7 +138,7 @@ class CalendarAppointment(models.Model):
         string="Suggested Dates",
     )
     case_worker_name = fields.Char(
-        string="Case worker", compute="compute_case_worker_name"
+        string="Case worker", compute="_compute_case_worker_name"
     )
     active = fields.Boolean(string="Active", default=True)
     show_suggestion_ids = fields.Boolean(string="Show suggestions", default=False)
@@ -181,11 +181,11 @@ class CalendarAppointment(models.Model):
             self.weekday = DAYNUM2DAYNAME[self.start.weekday()]
 
     @api.one
-    def compute_case_worker_name(self):
+    def _compute_case_worker_name(self):
         if self.channel == self.env.ref("calendar_channel.channel_pdm"):
             self.case_worker_name = _("Employment service officer")
         else:
-            self.case_worker_name = self.user_id.login
+            self.case_worker_name = f"{self.user_id.login} ({self.user_id.name})"
 
     @api.model
     def default_partners(self):
