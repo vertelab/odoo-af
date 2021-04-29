@@ -51,9 +51,3 @@ if (_mtm) {
 // console.log("Matomo script completed.", matomo_data);
 
 
-// CRM PROD https://af.analytics.elx.cloud/js/container_4v00kfpD.js
-// Test CRM: https://af-staging.analytics.elx.cloud/js/container_ew8X7e8B.js
-// DAFA PROD https://af.analytics.elx.cloud/js/container _t72Scj0c.js
-// Test DAFA: https://af-staging.analytics.elx.cloud/js/container_n7teu7kr.js
-
-
