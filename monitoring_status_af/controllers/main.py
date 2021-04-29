@@ -33,7 +33,7 @@ class Monitoring(http.Controller):
         # TODO: add 'sub-systems' status and infos:
         # queue job, cron, database, ...
         headers = {'Content-Type': 'application/json'}
-        info = {'status': 1}
+        info = {'status': 1.19}
         session = http.request.session
         # We set a custom expiration of 1 second for this request, as we do a
         # lot of health checks, we don't want those anonymous sessions to be
