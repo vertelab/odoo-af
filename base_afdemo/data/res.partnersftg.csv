@@ -1,3 +1,0 @@
-﻿id;customer_id;type;name;parent_id/id;Use Parent Address;street;street2;zip;city;country_id/id;country_id/name;phone;mobile;email;website;industry_id/id;industry_id/name;is_company;customer;supplier;
-base.main_partner;10000000;Contact;Org HK ;;;Elgatan 4;;11364;STOCKHOLM           ;base.se;Sverige;077-110 00 00;;info@hk.se;www.org.se;0;0;TRUE;0;0;
-demo_parent_10000001;10000001;Contact;Lernia Bemanning ;;;Fridhemsgatan 69;;18650;VALLENTUNA          ;base.se;Sverige;0792-54 07 47;;info@lerniabemanning.com;www.lerniabemanning.com;0;0;TRUE;TRUE;;
