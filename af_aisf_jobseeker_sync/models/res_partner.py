@@ -8,38 +8,43 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
+RASK_SYNC = "RASK SYNC"
+MASK_SYNC = "MASK SYNC"
 
 class Partner(models.Model):
     _inherit = "res.partner"
 
     @api.model
-    def _aisf_sync_jobseeker(self, customer_id, eventid=None):
+    def _aisf_sync_jobseeker(self, process_name, customer_id, eventid=None):
         """ Perform a sync of a jobseeker from AIS-F.
         :param customer_id: Customer ID of the jobseeker.
         :param eventid: The MQ message id for logging purposes.
         :returns: True if sync succeeded.
         """
+        log = self.env['af.process.log']
+        log.log_message(process_name, eventid, "SYNC STARTED", objectid=customer_id)
+
         partner = self.env['res.partner'].search(
             [('customer_id', '=', customer_id), ('is_jobseeker', '=', True)])
         eventid = eventid or uuid4()
-        log = self.env['af.process.log']
-        log.log_message('MQ AIS-F SYNC', eventid, "SYNC STARTED", objectid=customer_id)
+
         rask = self.env.ref('af_ipf.ipf_endpoint_rask').sudo()
         try:
+            log.log_message(process_name, eventid, RASK_SYNC, objectid=customer_id)
             res = rask.call(customer_id=int(customer_id))
         except Exception:
             em = traceback.format_exc()
-            log.log_message('MQ AIS-F SYNC', eventid, "RASK CONNECTION",
+            log.log_message(process_name, eventid, RASK_SYNC,
                             objectid=customer_id, error_message=em, status=False)
             return
         if not res:
-            log.log_message('MQ AIS-F SYNC', eventid, "RASK",
+            log.log_message(process_name, eventid, RASK_SYNC,
                             objectid=customer_id, error_message="NOT IN AIS-F", status=False)
             return
         customer_id = res.get('arbetssokande', {}).get('sokandeId')
         if res.get('processStatus', {}).get('skyddadePersonUppgifter'):
-            log.log_message('MQ AIS-F SYNC', eventid, "RASK ABORTED",
-                            objectid=customer_id, error_message="Skyddade Personuppgifter")
+            log.log_message(process_name, eventid, RASK_SYNC,
+                            objectid=customer_id, error_message="SUP")
             return True
         try:
             state = res.get('kontaktuppgifter', {}).get('hemkommunKod')
@@ -173,7 +178,9 @@ class Partner(models.Model):
                         self.env['res.partner'].create(given_address_dict)
         except Exception:
             em = traceback.format_exc()
-            log.log_message('MQ AIS-F SYNC', eventid, "RASK",
+            log.log_message(process_name, eventid, RASK_SYNC,
                             objectid=customer_id, error_message=em, status=False)
             return
+
+        log.log_message(process_name, eventid, "SYNC COMPLETED", objectid=customer_id)
         return True
