@@ -31,7 +31,7 @@ msgstr "Antal möten"
 #: model:ir.model.fields,field_description:calendar_af_360.field_calendar_appointment__partner_pnr
 #: model:ir.model.fields,field_description:calendar_af_360.field_calendar_occasion__app_partner_pnr
 msgid "Attendee SSN"
-msgstr ""
+msgstr "Personnummer"
 
 #. module: calendar_af_360
 #: code:addons/calendar_af_360/models/calendar.py:88
