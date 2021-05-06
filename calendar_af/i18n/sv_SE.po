@@ -1468,3 +1468,23 @@ msgstr ""
 msgid "stop"
 msgstr ""
 
+#. module: calendar_af
+#: model:calendar.appointment.cancel_reason,name:calendar_cancel_reason.work
+msgid "Work"
+msgstr "Arbete"
+
+#. module: calendar_af
+#: model:calendar.appointment.cancel_reason,name:calendar_cancel_reason.interview
+msgid "Interview"
+msgstr "Intervju"
+
+#. module: calendar_af
+#: model:calendar.appointment.cancel_reason,name:calendar_cancel_reason.impediment
+msgid "Impediment"
+msgstr "Förhinder"
+
+#. module: calendar_af
+#: model:calendar.appointment.cancel_reason,name:calendar_cancel_reason.authority
+msgid "On the initiative of the authority"
+msgstr "På myndighetens begäran"
+
