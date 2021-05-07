@@ -18,6 +18,12 @@ model.cron_get_schedules(type_id, days)
 type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 26)])
 model.cron_get_schedules(type_id, days)
 type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 27)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 201)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 202)])
+model.cron_get_schedules(type_id, days)
+type_id = env['calendar.appointment.type'].search([('ipf_num', '=', 203)])
 model.cron_get_schedules(type_id, days)</field>
             <field name="user_id" ref="base.user_root" />
             <field name="nextcall">2020-09-30 05:00:00</field>
