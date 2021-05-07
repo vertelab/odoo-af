@@ -4,18 +4,18 @@
         <field name="name">search.jobseeker.wizard</field>
         <field name="model">hr.employee.jobseeker.search.wizard</field>
         <field name="arch" type="xml">
-            <form string="Search Partner" create="false">
+            <form string="Search Partner" create="false" class="search-jobseeker-wizard">
                 <h1>Search Jobseekers</h1>
                 <notebook>
                     <page string="When in contact">
                         <group>
                             <group>
-                                <field name="social_sec_nr_search"/>
-                                <field name="identification"/>
+                                <field name="social_sec_nr_search" class="o_required_modifier"/>
+                                <field name="identification" class="o_required_modifier"/>
                                 <field name="bank_id_ok" invisible="1"/>
                             </group>
                             <group>
-                                <button name="do_bankid"  string="BankID" type="object" attrs="{'invisible': [('identification','!=','Digital ID')]}"/>
+                                <button name="do_bankid" string="BankID" type="object" attrs="{'invisible': [('identification','!=','Digital ID')]}"/>
                                 <br/>
                                 <field name="bank_id_text" string="" nolabel="1" readonly="1" attrs="{'invisible': [('identification','!=','Digital ID')]}" />
                             </group>
@@ -27,7 +27,7 @@
                     <page string="Based on the needs of the authority">
                         <group>
                             <group>
-                                <field name="search_reason"/>
+                                <field name="search_reason" class="o_required_modifier"/>
                                 <field name="other_reason" widget="text" attrs="{'invisible': [('search_reason','!=','other reason')]}"/>
                                 <field name="social_sec_nr_search"/>
                                 <field name="customer_id_search"/>

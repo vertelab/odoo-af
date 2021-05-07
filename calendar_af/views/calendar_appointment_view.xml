@@ -105,13 +105,10 @@
         <field name="priority" eval="2"/>
         <field name="arch" type="xml">
             <form>
-                <header>
-                    <field name="state" nolabel="1" widget="statusbar"
-                           statusbar_visible="free,reserved,confirmed,done,canceled"/>
-                </header>
-                <sheet>
                     <h1>
-                        <div class="oe_edit_only">Book meeting</div>
+                        <span class="oe_edit_only">Book meeting with</span>
+                        <span class="oe_read_only">Meeting with</span>
+                        <field string="Attendees" name="partner_id" placeholder="Select attendee..."/>
                     </h1>
                     <group>
                         <group>
@@ -129,9 +126,7 @@
                                    invisible="1"/>
                         </group>
                         <group>
-                            <field string="Attendees" name="partner_id" widget="many2oneattendee"
-                                   placeholder="Select attendee..." invisible="1"/>
-                            <field string="Case worker" name="user_id" widget="many2oneattendee"
+                            <field string="Case worker" name="user_id"
                                    placeholder="Select case worker..."
                                    attrs="{'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}"
                                    options="{'no_open': True}" invisible="1"/>
@@ -176,7 +171,6 @@
                         <form>
                         </form>
                     </field>
-                </sheet>
             </form>
         </field>
     </record>

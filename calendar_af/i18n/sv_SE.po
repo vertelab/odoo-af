@@ -1321,7 +1321,7 @@ msgstr "Tisdag"
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_occasion__type_id
 #: model_terms:ir.ui.view,arch_db:calendar_af.calendar_occasion_local_search
 msgid "Type"
-msgstr "Typ"
+msgstr "Mötestyp"
 
 #. module: calendar_af
 #: model:ir.model.fields,field_description:calendar_af.field_hr_operation__type_operation_ids
@@ -1467,4 +1467,24 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_appointment_form
 msgid "stop"
 msgstr ""
+
+#. module: calendar_af
+#: model:calendar.appointment.cancel_reason,name:calendar_cancel_reason.work
+msgid "Work"
+msgstr "Arbete"
+
+#. module: calendar_af
+#: model:calendar.appointment.cancel_reason,name:calendar_cancel_reason.interview
+msgid "Interview"
+msgstr "Intervju"
+
+#. module: calendar_af
+#: model:calendar.appointment.cancel_reason,name:calendar_cancel_reason.impediment
+msgid "Impediment"
+msgstr "Förhinder"
+
+#. module: calendar_af
+#: model:calendar.appointment.cancel_reason,name:calendar_cancel_reason.authority
+msgid "On the initiative of the authority"
+msgstr "På myndighetens begäran"
 
