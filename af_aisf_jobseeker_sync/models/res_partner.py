@@ -151,6 +151,7 @@ class Partner(models.Model):
                     elif len(streetadress_array) > 1:
                         street = streetadress_array[1]
                         street2 = streetadress_array[0]
+                    co_address = address.get("coAdress")
                     zip = address.get('postnummer')
                     city = address.get('postort')
                     country = address.get('landsadress')
@@ -158,6 +159,7 @@ class Partner(models.Model):
                         country = self.env['res.country'].with_context(lang='sv_SE').search([('name', '=', country)])
                         country = country or None
                     if address.get('adressTyp') == 'FBF':
+                        partner.address_co = co_address
                         partner.street = street
                         partner.street2 = street2
                         partner.zip = zip
@@ -166,7 +168,10 @@ class Partner(models.Model):
                     elif address.get('adressTyp') == 'EGEN' or address.get('adressTyp') == 'UTL':
                         # TODO: This looks sketchy. Wont this create new
                         #  adresses every time we sync?
+                        #  Nope, this method will only be called when the
+                        #  user does not exist in res.partner
                         given_address_dict = {
+                            'address_co': co_address,
                             'parent_id': partner.id,
                             'street': street,
                             'street2': street2,
