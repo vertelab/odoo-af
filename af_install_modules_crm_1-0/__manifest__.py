@@ -28,16 +28,14 @@
         # These modules needs to be installed for Customer Card functionality
         "af_security",			# Module for the security settings for AF
         "af_security_rules",  		# should be replaced later
-        #"af_statistics",		# module to enable Matomo
         "auth_saml_af",			# odoo-af/ Login-module for SAML authentification
         "auth_saml_ol",			#
         "auth_saml_ol_create_user",	# server-auth/
         "auth_saml_ol_groups",		#
         "auth_signup",			#
-        # "auth_timeout",  		# odoo-auth/ Disabled due to conflict with auth_saml_ol AFC-1547
         "audit_logger",			# odoo-server-tools/ Adds JSON-Formated logging
-	"af_data_ais-f_loader",
-	"af_data_jobseeker_api_loader",
+	    "af_data_ais-f_loader",
+	    "af_data_jobseeker_api_loader",
         "contact_links", 		# odoo-af/
         "edi_af_aisf_rask",		# odoo-edi/
         "edi_af_aisf_rask_get_jobseeker", # odoo-edi/
@@ -51,17 +49,14 @@
         "hr_employee_firstname",	# OCA
         "hr_employee_firstname_extension", # odoo-hr
         "hr_office", 			# odoo-hr
-        # "hr_org_chart",		# OCA
-        "ipf_ais_a", 			# Used to integrate to AIS-Å
+        "ipf_case", 			# Use new api to integrate to AIS-Å and BÄR
         "ipf_planning",			# odoo-af/
-        # "module_chart", 		# odoo-base/ The module displays a graphical view of the modules dependencies
-	"monitoring_status",		# adds a monitoring value for automatic montitoring
+	    "monitoring_status",		# adds a monitoring value for automatic montitoring
         "partner_desired_jobs",		# odoo-base/
-	"partner_education_360",
+	    "partner_education_360",
         "partner_fax", 			# OCA Adds fax-number for AG
         "partner_firstname", 		# OCA
-        # "partner_kpi_data", 		# odoo-base/ Needed only for AG 1.0
-	"partner_flip_firstname",	# odoo-base/ Flips firstname and lastname
+	    "partner_flip_firstname",	# odoo-base/ Flips firstname and lastname
         "partner_mq_ipf", 		# odoo-base/ Listens for changes in AIS-F
         "res_drivers_license",		# odoo-base/
         "res_sni",			# odoo-base/
@@ -72,9 +67,7 @@
         # "web_a11y_create-buttons", 	# odoo-web/ adds descriptions to create and edit-buttons
         "web_backend_theme_af", 	# odoo-web/ module for backendtheme developed in DAFA
         "web_autocomplete_off",		# ?
-        # "web_core_menu_disabling", 	# new module to replace af_core_menu_disabling
         "web_gui_disabeling_af", 	# odoo-web/ disables
-        # "web_hide-about-user-settings", # module that hides the users-page in the top right corner.
         # "web_hide-top-todo-icons", 	# module that hides the icon for the todo-items.
     ],
     "application": False,
