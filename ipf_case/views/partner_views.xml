@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="view_errand_tree" model="ir.ui.view">
+        <field name="name">res.partner.case.tree</field>
+        <field name="model">res.partner.case</field>
+        <field name="arch" type="xml">
+            <tree string="Ärende">
+                <field name="source"/>
+                <field name="name"/>
+                <field name="res_officer"/>
+                <field name="status"/>
+                <field name="start"/>
+                <field name="stop"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_jobseeker_form" model="ir.ui.view">
+        <field name="name">res.partner.form.jobseeker.case</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="partner_view_360.view_jobseeker_form"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page name="case" string="Cases">
+                    <field name="case_ids"/>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>
