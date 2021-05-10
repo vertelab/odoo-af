@@ -26,14 +26,13 @@
     "category": "Tools",
     "depends": [
         # These modules needs to be installed for Customer Card functionality
-        "af_security",			# Module for the security settings for AF
         "af_security_rules",  		# should be replaced later
-        "auth_saml_af",			# odoo-af/ Login-module for SAML authentification
-        "auth_saml_ol",			#
+        "auth_saml_af",			    # odoo-af/ Login-module for SAML authentification
+        "auth_saml_ol",			    #
         "auth_saml_ol_create_user",	# server-auth/
         "auth_saml_ol_groups",		#
-        "auth_signup",			#
-        "audit_logger",			# odoo-server-tools/ Adds JSON-Formated logging
+        "auth_signup",			    #
+        "audit_logger",			    # odoo-server-tools/ Adds JSON-Formated logging
 	    "af_data_ais-f_loader",
 	    "af_data_jobseeker_api_loader",
         "contact_links", 		# odoo-af/
@@ -41,23 +40,23 @@
         "edi_af_aisf_rask_get_jobseeker", # odoo-edi/
         "edi_af_aisf_trask",		# odoo-edi/
         "edi_af_bar_arbetsuppgifter", 	# odoo-edi/
-        "edi_af_facility",		# odoo-edi/
+        "edi_af_facility",		    # odoo-edi/
         "edi_af_krom_postcode",		# odoo-edi/
-        "edi_af_officer",		# odoo-edi/
-        "edi_route", 			# odoo-edi/ Central Module with settings to Af IPF
-        "hr_360_view",			# odoo-af/
+        "edi_af_officer",		    # odoo-edi/
+        "edi_route", 			    # odoo-edi/ Central Module with settings to Af IPF
+        "hr_360_view",			    # odoo-af/
         "hr_employee_firstname",	# OCA
         "hr_employee_firstname_extension", # odoo-hr
-        "hr_office", 			# odoo-hr
-        "ipf_case", 			# Use new api to integrate to AIS-Å and BÄR
-        "ipf_planning",			# odoo-af/
+        "hr_office", 			    # odoo-hr
+        "ipf_case", 			    # Use new api to integrate to AIS-Å and BÄR
+        "ipf_planning",			    # odoo-af/
 	    "monitoring_status",		# adds a monitoring value for automatic montitoring
         "partner_desired_jobs",		# odoo-base/
 	    "partner_education_360",
-        "partner_fax", 			# OCA Adds fax-number for AG
+        "partner_fax", 			    # OCA Adds fax-number for AG
         "partner_firstname", 		# OCA
 	    "partner_flip_firstname",	# odoo-base/ Flips firstname and lastname
-        "partner_mq_ipf", 		# odoo-base/ Listens for changes in AIS-F
+        "partner_mq_ipf", 		    # odoo-base/ Listens for changes in AIS-F
         "res_drivers_license",		# odoo-base/
         "res_sni",			# odoo-base/
         "res_ssyk",			# odoo-base/
