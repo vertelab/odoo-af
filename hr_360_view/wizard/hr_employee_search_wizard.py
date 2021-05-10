@@ -229,7 +229,6 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                 'searched_partner': partner.name,
                 'social_sec_num': partner.social_sec_nr,
                 'office': partner.office_id.name
-
             }
 
             _logger.info(json.dumps(vals))
@@ -262,9 +261,6 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             'http://bhipws.arbetsformedlingen.se/Integrationspunkt/ws/mobiltbankidinterntjanst?wsdl')) # create a Client instance
         if not self.social_sec_nr_search:
            raise ValidationError(_('Social security number missing'))
-        partner = self.env['res.partner'].search([('social_sec_nr', '=', self.social_sec_nr_search)], limit=1)
-        if not partner:
-            raise ValidationError(_('Social security number not found in system'))
         res = bankid.service.startaIdentifiering(
             self.social_sec_nr_search.replace('-',''),
             'crm')
@@ -298,6 +294,9 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                 self.bank_id_text = _("User timeout")
                 self.bank_id_ok = False
 
+        partner = self.env['res.partner'].search_pnr(self.social_sec_nr_search)
+        if not partner:
+            raise ValidationError(_('Social security number not found in system'))
         # create bankid token to let user know status of bankid process
         bankid_vals = {
             'name': self.bank_id_text,
