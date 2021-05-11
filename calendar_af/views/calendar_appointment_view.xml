@@ -106,9 +106,10 @@
         <field name="arch" type="xml">
             <form>
                     <h1>
-                        <span class="oe_edit_only">Book meeting with</span>
-                        <span class="oe_read_only">Meeting with</span>
-                        <field string="Attendees" name="partner_id" placeholder="Select attendee..."/>
+                        <span class="oe_edit_only">Book meeting with </span>
+                        <span class="oe_read_only">Meeting with </span>
+                        &amp;#32;
+                        <field string="Attendees" name="partner_id" placeholder="Select attendee..." readonly="1"/>
                     </h1>
                     <group>
                         <group>

@@ -79,10 +79,10 @@ msgstr "<div style=\"margin: 0px; padding: 0px;\">\n"
 
 #. module: calendar_af
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_appointment_form
-msgid "<span class=\"oe_edit_only\">Book meeting with</span>\n"
+msgid "<span class=\"oe_edit_only\">Book meeting with </span>\n"
 "                        <span class=\"oe_read_only\">Meeting with</span>"
-msgstr "<span class=\"oe_edit_only\">Boka möte med</span>\n"
-"                        <span class=\"oe_read_only\">Möte med</span>"
+msgstr "<span class=\"oe_edit_only\">Boka möte med </span>\n"
+"                        <span class=\"oe_read_only\">Möte med </span>"
 
 #. module: calendar_af
 #: model:ir.actions.server,name:calendar_af.action_occasion_accept
@@ -847,7 +847,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:calendar_af.move_appointment_view_form
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_appointment_form
 msgid "Next"
-msgstr "Framåt"
+msgstr "Nästa"
 
 #. module: calendar_af
 #: selection:calendar.occasion,is_possible_start:0
