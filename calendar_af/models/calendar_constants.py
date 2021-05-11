@@ -27,16 +27,6 @@ BASE_DAY_LUNCH = (
 # RESERVED_TIMEOUT is the default time before a reservation times out.
 RESERVED_TIMEOUT = 300.0
 
-DAYNUM2DAYNAME = {
-    0: _("Monday"),
-    1: _("Tuesday"),
-    2: _("Wednesday"),
-    3: _("Thursday"),
-    4: _("Friday"),
-    5: _("Saturday"),
-    6: _("Sunday"),
-}
-
 # Termer
 # appointment = faktiskt bokat möte
 # occasions = bokningsbara tider

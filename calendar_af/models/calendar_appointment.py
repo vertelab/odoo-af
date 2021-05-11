@@ -142,7 +142,19 @@ class CalendarAppointment(models.Model):
     )
     active = fields.Boolean(string="Active", default=True)
     show_suggestion_ids = fields.Boolean(string="Show suggestions", default=False)
-    weekday = fields.Char(string="Weekday", compute="_compute_weekday")
+    weekday = fields.Selection(
+        string="Weekday",
+        selection=[
+            (0, "Monday"),
+            (1, "Tuesday"),
+            (2, "Wednesday"),
+            (3, "Thursday"),
+            (4, "Friday"),
+            (5, "Saturday"),
+            (6, "Sunday"),
+        ],
+        compute="_compute_weekday"
+    )
     start_time = fields.Char(
         string="Appointment start time",
         readonly=True,
@@ -178,7 +190,7 @@ class CalendarAppointment(models.Model):
     @api.one
     def _compute_weekday(self):
         if self.start:
-            self.weekday = DAYNUM2DAYNAME[self.start.weekday()]
+            self.weekday = self.start.weekday()
 
     @api.one
     def _compute_case_worker_name(self):
@@ -314,7 +326,9 @@ class CalendarAppointment(models.Model):
         if self.type_id.duration_30:
             allowed_durations += [0.5]
         if self.duration not in allowed_durations:
-            raise ValidationError(_("This duration is not allowed for the meeting type."))
+            raise ValidationError(
+                _("This duration is not allowed for the meeting type.")
+            )
 
         start = self.start_meeting_search(self.type_id)
         stop = self.stop_meeting_search(start, self.type_id)
@@ -382,7 +396,9 @@ class CalendarAppointment(models.Model):
                 self.occasion_ids = [(6, 0, free_occ._ids)]
                 self.user_id = self.user_id_local
             else:
-                raise ValidationError(_("Case worker has no free occasions at that time."))
+                raise ValidationError(
+                    _("Case worker has no free occasions at that time.")
+                )
 
     def _check_resource_calendar_date(self, check_date):
         """Checks if a date is overlapping with a holiday from resource.calender.leaves """

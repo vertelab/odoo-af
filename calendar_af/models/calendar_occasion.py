@@ -103,7 +103,19 @@ class CalendarOccasion(models.Model):
         compute="_occ_start_time_calc",
         store=True,
     )
-    weekday = fields.Char(string="Weekday", compute="_compute_weekday")
+    weekday = fields.Selection(
+        string="Weekday",
+        selection=[
+            (0, "Monday"),
+            (1, "Tuesday"),
+            (2, "Wednesday"),
+            (3, "Thursday"),
+            (4, "Friday"),
+            (5, "Saturday"),
+            (6, "Sunday"),
+        ],
+        compute="_compute_weekday"
+    )
     is_possible_start = fields.Selection(
         string="Is a possible start time",
         selection=[("", "Not set"), ("0", "No"), ("1", "Yes")],
@@ -119,7 +131,7 @@ class CalendarOccasion(models.Model):
     @api.one
     def _compute_weekday(self):
         if self.start:
-            self.weekday = DAYNUM2DAYNAME[self.start.weekday()]
+            self.weekday = self.start.weekday()
 
     @api.one
     def _compute_case_worker_name(self):

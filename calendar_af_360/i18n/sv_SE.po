@@ -1,21 +1,19 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* calendar_af_360
+#	* calendar_af_360
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 12.0-20200603\n"
+"Project-Id-Version: Odoo Server 12.0-20191201\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-19 15:38+0000\n"
+"POT-Creation-Date: 2021-05-11 06:34+0000\n"
 "PO-Revision-Date: 2020-11-19 16:40+0100\n"
-"Last-Translator: <>\n"
+"Last-Translator: Daniel Eriksson <daniel.eriksson@vertel.se>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-"Language: sv\n"
-"X-Generator: Poedit 2.0.6\n"
 
 #. module: calendar_af_360
 #: model:ir.model,name:calendar_af_360.model_calendar_appointment
@@ -32,13 +30,6 @@ msgstr "Antal möten"
 #: model:ir.model.fields,field_description:calendar_af_360.field_calendar_occasion__app_partner_pnr
 msgid "Attendee SSN"
 msgstr "Personnummer"
-
-#. module: calendar_af_360
-#: code:addons/calendar_af_360/models/calendar.py:88
-#: code:addons/calendar_af_360/models/calendar.py:90
-#, python-format
-msgid "Book meeting"
-msgstr "Boka möte"
 
 #. module: calendar_af_360
 #: model:ir.model,name:calendar_af_360.model_calendar_appointment_suggestion
@@ -149,8 +140,3 @@ msgstr "Kollegors kommande möten"
 msgid "hr.employee.jobseeker.search.wizard"
 msgstr "hr_360_view-sökvizard"
 
-#. module: calendar_af_360
-#: model:ir.model.fields,help:calendar_af_360.field_calendar_appointment__partner_pnr
-#: model:ir.model.fields,help:calendar_af_360.field_calendar_occasion__app_partner_pnr
-msgid "organization number"
-msgstr "organisationsnummer"

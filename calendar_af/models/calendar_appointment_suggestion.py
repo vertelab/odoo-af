@@ -53,7 +53,19 @@ class CalendarAppointmentSuggestion(models.Model):
         readonly=True,
     )
     user_id = fields.Many2one(comodel_name="res.users", string="Case worker")
-    weekday = fields.Char(string="Weekday", compute="_compute_weekday")
+    weekday = fields.Selection(
+        string="Weekday",
+        selection=[
+            (0, "Monday"),
+            (1, "Tuesday"),
+            (2, "Wednesday"),
+            (3, "Thursday"),
+            (4, "Friday"),
+            (5, "Saturday"),
+            (6, "Sunday"),
+        ],
+        compute="_compute_weekday"
+    )
 
     @api.one
     def compute_duration_text(self):
@@ -65,7 +77,7 @@ class CalendarAppointmentSuggestion(models.Model):
     @api.one
     def _compute_weekday(self):
         if self.start:
-            self.weekday = DAYNUM2DAYNAME[self.start.weekday()]
+            self.weekday = self.start.weekday()
 
     @api.multi
     def af_check_access(self):
