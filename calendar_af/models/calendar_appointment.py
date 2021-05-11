@@ -579,15 +579,15 @@ class CalendarAppointment(models.Model):
         )
         return {
             "name": _("Move meeting"),
-            "res_model": "calendar.appointment",
-            "res_id": self._context.get("active_id", False),
+            "res_model": "calendar.move_appointment",
             "view_type": "form",
             "view_mode": "form",
             "view_id": self.env.ref(
-                "calendar_af.view_calendar_appointment_move_form"
+                "calendar_af.move_appointment_view_form"
             ).id,
             "target": "inline",
             "type": "ir.actions.act_window",
+            "context": {},
         }
 
     @api.multi
