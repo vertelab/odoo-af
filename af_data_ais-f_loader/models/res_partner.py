@@ -236,6 +236,7 @@ class ResPartner(models.Model):
                             'user_id': user.id,
                             }
                 if not user:
+                    transformed_row['saml_provider_id'] = self.env['ir.model.data'].xmlid_to_res_id('auth_saml_af.provider_shibboleth'),
                     transformed_row['tz'] = 'Europe/Stockholm'
                     transformed_row['lang'] = 'sv_SE'
                     user = self.env['res.users'].with_context(no_reset_password=True).create(transformed_row)
