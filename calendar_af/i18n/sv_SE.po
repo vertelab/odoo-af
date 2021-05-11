@@ -1521,3 +1521,12 @@ msgstr ""
 msgid "stop"
 msgstr ""
 
+#. module: calendar_af
+#: model:calendar.channel,name:calendar_channel.channel_local
+msgid "Local"
+msgstr "Lokalkontor"
+
+#. module: calendar_af
+#: model:calendar.channel,name:calendar_channel.channel_pdm
+msgid "PDM"
+msgstr "PDM"
