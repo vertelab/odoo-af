@@ -41,7 +41,7 @@
         "edi_af_aisf_trask",		# odoo-edi/
         "edi_af_bar_arbetsuppgifter", 	# odoo-edi/
         "edi_af_facility",		    # odoo-edi/
-        "edi_af_krom_postcode",		# odoo-edi/
+        "edi_af_ais_bos",		    # odoo-edi/
         "edi_af_officer",		    # odoo-edi/
         "edi_route", 			    # odoo-edi/ Central Module with settings to Af IPF
         "hr_360_view",			    # odoo-af/
