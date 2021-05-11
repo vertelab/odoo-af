@@ -85,6 +85,7 @@ class PartnerArende(models.TransientModel):
             'source': 'AIS',
             'name': vals['arende_id'],
             'res_officer': vals.get('beslut_handlaggare', {}).get('signatur'),
+            'status': vals['status'],
             'start': datetime.strptime(start_date, '%Y-%m-%d') if start_date else False,
             'stop': datetime.strptime(stop_date, '%Y-%m-%d') if stop_date else False
         })
