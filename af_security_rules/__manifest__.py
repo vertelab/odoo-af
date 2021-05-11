@@ -2,10 +2,12 @@
 
 {
     "name": "AF Security Rules",
-    "version": "12.0.1.1.0",
+    "version": "12.0.1.1.1",
     "author": "Vertel AB",
     "license": "AGPL-3",
-    "description": "Security rules for Arbetsförmedlingen.",
+    "description": """Security rules for Arbetsförmedlingen.
+v12.0.1.1.1 AFC-2168: Changed groups of various menus.
+    """,
     "website": "https://vertel.se/",
     "category": "Tools",
     "depends": [
@@ -13,11 +15,16 @@
         "partner_view_360",
         "partner_daily_notes",
         "calendar_af",
+        "mail",
+        "contacts",
+        "hr_holidays",
+        "sms",
         ],
     "external_dependencies": {'python': ['zeep']},
     "data": [
         "security/af_security.xml",
         "security/ir.model.access.csv",
+        'data/menu.xml',
     ],
     "application": True,
     "installable": True,
