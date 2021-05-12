@@ -82,7 +82,9 @@ msgstr "<div style=\"margin: 0px; padding: 0px;\">\n"
 msgid "<span class=\"oe_edit_only\">Book meeting with </span>\n"
 "                        <span class=\"oe_read_only\">Meeting with </span>\n"
 "                        &amp;#32;"
-msgstr ""
+msgstr "<span class=\"oe_edit_only\">Boka möte med </span>\n"
+"                        <span class=\"oe_read_only\">Möte med </span>\n"
+"                        &amp;#32;"
 
 #. module: calendar_af
 #: model:ir.actions.server,name:calendar_af.action_occasion_accept
