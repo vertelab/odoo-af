@@ -157,7 +157,7 @@
                         </page>
                     </notebook>
                     <span aria-atomic="true" class="btn-group oe-right oe_button_box">
-                        <button class="oe_edit_only" name="compute_suggestion_ids" type="object" string="Next"/>
+                        <button class="oe_edit_only" name="compute_suggestion_ids" type="object" string="Get free occasions"/>
                     </span>
                     <field name="suggestion_ids" class="oe_edit_only"
                            attrs="{'invisible':[('show_suggestion_ids','=',False)]}">

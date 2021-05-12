@@ -27,6 +27,7 @@ class ResPartner(models.Model):
 class PartnerLinks(models.Model):
     _name = "partner.links"
     _description = "Partner Links"
+    _order = "sequence"
 
     name = fields.Char("Display Name")
     link = fields.Char(
@@ -55,6 +56,7 @@ class PartnerLinks(models.Model):
     type_smart = fields.Selection(
         [("tab", "Tab"), ("smart", "Smart Button")], string="Type", default="tab"
     )
+    sequence = fields.Integer(string='Order of links')
 
     @api.one
     def get_links(self, partner):
