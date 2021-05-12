@@ -15,7 +15,7 @@ class Partner(models.Model):
     _inherit = "res.partner"
 
     @api.model
-    def _aisf_sync_jobseeker(self, process_name, customer_id, eventid=None):
+    def _aisf_sync_jobseeker(self, db_values, process_name, customer_id, eventid=None):
         """ Perform a sync of a jobseeker from AIS-F.
         :param customer_id: Customer ID of the jobseeker.
         :param eventid: The MQ message id for logging purposes.
@@ -50,20 +50,41 @@ class Partner(models.Model):
             state = res.get('kontaktuppgifter', {}).get('hemkommunKod')
             # TODO: Would probably be best to add country here? I believe
             #  code is unique per country.
-            state = state and self.env['res.country.state'].search([('code', '=', state)])
+            if not db_values:
+                state = state and self.env['res.country.state'].search([('code', '=', state)], ['id'], limit=1)
+                state = state and state[0]['id'] or None
+            else:
+                state = db_values['res.country.state'].get(state, False)
 
             office = res.get('kontor', {}).get('kontorsKod')
-            office = office and self.env['hr.department'].search([('office_code', '=', office)])
+            if not db_values:
+                office = office and self.env['hr.department'].search_read([('office_code', '=', office)], ['id'], limit=1)
+                office = office and office[0]['id'] or None
+            else:
+                office = db_values['hr.department'].get(office, False)
 
             sun = res.get('utbildning', {}).get('sunKod')
-            sun = sun and self.env['res.sun'].search([('code', '=', sun)])
-            sun = sun or self.env['res.sun'].search([('code', '=', '999')]) or False
+            if not db_values:
+                sun = sun and self.env['res.sun'].search([('code', '=', sun)])
+                sun = sun or self.env['res.sun'].search([('code', '=', '999')]) or False
+                if sun:
+                    sun = sun['id']
+            else:
+                sun = db_values['res.sun'].get(sun, db_values['res.sun'].get('999'))
 
             skat = res.get('kontakt', {}).get('sokandekategoriKod')
-            skat = skat and self.env['res.partner.skat'].search([('code', '=', skat)])
+            if not db_values:
+                skat = skat and self.env['res.partner.skat'].search_read([('code', '=', skat)], ['id'], limit=1)
+                skat = skat and skat[0]['id'] or None
+            else:
+                skat = db_values['res.partner.skat'].get(skat, False)
 
             user = res.get('kontor', {}).get('ansvarigHandlaggareSignatur')
-            user = user and self.env['res.users'].search([('login', '=', user)])
+            if not db_values:
+                user = user and self.env['res.users'].search([('login', '=', user)], ['id'], limit=1)
+                user = user and user[0]['id'] or None
+            else:
+                user = db_values['res.users'].get(user, False)
 
             segmenteringsval = res.get('segmentering', {}).get('segmenteringsval')
             if segmenteringsval == "LOKAL":
@@ -102,14 +123,14 @@ class Partner(models.Model):
                 'phone': res.get('kontaktuppgifter', {}).get('telefonBostad'),
                 'work_phone': res.get('kontaktuppgifter', {}).get('telefonArbetet'),
                 'mobile': res.get('kontaktuppgifter', {}).get('telefonMobil'),
-                'jobseeker_category_id': skat and skat.id,
+                'jobseeker_category_id': skat,
                 'deactualization_date': res.get('processStatus', {}).get('avaktualiseringsDatum'),
                 'deactualization_reason': res.get('processStatus', {}).get('avaktualiseringsOrsaksKod'),
                 'email': res.get('kontaktuppgifter', {}).get('epost'),
-                'office_id': office and office.id,
-                'state_id': state and state.id,
+                'office_id': office,
+                'state_id': state,
                 'registered_through': registered_through,
-                'user_id': user and user.id,
+                'user_id': user,
                 'sms_reminders': res.get('medgivande', {}).get('paminnelseViaSms'),
                 'next_contact_date': res.get('kontakt', {}).get('nastaKontaktdatum'),
                 'next_contact_time': res.get('kontakt', {}).get('nastaKontaktTid'),
@@ -134,7 +155,7 @@ class Partner(models.Model):
                     jobseeker_dict['education_ids'] = []
                 if 'education_ids' in jobseeker_dict:
                     jobseeker_dict['education_ids'].append((0, 0, {
-                        'sun_id': sun.id,
+                        'sun_id': sun,
                         'education_level_id': education_level.id}))
             if partner:
                 partner.write(jobseeker_dict)
@@ -156,15 +177,18 @@ class Partner(models.Model):
                     city = address.get('postort')
                     country = address.get('landsadress')
                     if country:
-                        country = self.env['res.country'].with_context(lang='sv_SE').search([('name', '=', country)])
-                        country = country or None
+                        if not db_values:
+                            country = self.env['res.country'].with_context(lang='sv_SE').search([('name', '=', country)])
+                            country = country['id'] or None
+                        else:
+                            country = db_values['res.country'].get(country, False)
                     if address.get('adressTyp') == 'FBF':
                         partner.address_co = co_address
                         partner.street = street
                         partner.street2 = street2
                         partner.zip = zip
                         partner.city = city
-                        partner.country_id = country and country.id
+                        partner.country_id = country
                     elif address.get('adressTyp') == 'EGEN' or address.get('adressTyp') == 'UTL':
                         # TODO: This looks sketchy. Wont this create new
                         #  adresses every time we sync?
@@ -178,7 +202,7 @@ class Partner(models.Model):
                             'zip': zip,
                             'city': city,
                             'type': 'given address',
-                            'country_id': country and country.id,
+                            'country_id': country,
                         }
                         self.env['res.partner'].create(given_address_dict)
         except Exception:
