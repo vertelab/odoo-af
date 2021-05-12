@@ -42,7 +42,7 @@
                         </page>
                     </notebook>
                     <span aria-atomic="true" class="btn-group oe-right oe_button_box">
-                        <button name="compute_suggestion_ids" type="object" string="Next"/>
+                        <button name="compute_suggestion_ids" type="object" string="Get free occasions"/>
                     </span>
                     <field name="suggestion_ids" readonly="1" attrs="{'invisible':[('show_suggestion_ids','=',False)]}">
                         <tree string="Bookable Occasions" limit="10" create="false">
