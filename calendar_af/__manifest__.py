@@ -21,7 +21,7 @@
 
 {
     "name": "Calendar management - AF",
-    "version": "12.0.3.1.1",
+    "version": "12.0.3.1.2",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
@@ -43,6 +43,7 @@ v12.0.3.0.3 AFC-2113: Updated how res.users is presented in views. \n
 v12.0.3.0.4 AFC-2168: Changed menu groups. \n
 v12.0.3.1.0 AFC-2177: Reworked how appointments are rebooked. \n
 v12.0.3.1.1 AFC-2229: Updated text on get new times buttons. \n
+v12.0.3.1.2 AFC-2229: Removed duration selector when booking new appointment. \n
 \n
 """,
     "depends": [
