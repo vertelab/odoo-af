@@ -21,8 +21,7 @@
 
 {
     "name": "Calendar management - AF",
-
-    "version": "12.0.3.0.3",
+    "version": "12.0.3.1.1",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
@@ -41,6 +40,9 @@ v12.0.3.0.0 AFC-2044: Major overhaul of functionality. All occasions now handled
 v12.0.3.0.1 AFC-1715: Added new appointment types and updated existing ones. \n
 v12.0.3.0.2 AFC-2110: Removed raise Warnings to create better workflow. Added better filter after creating occasions. \n
 v12.0.3.0.3 AFC-2113: Updated how res.users is presented in views. \n
+v12.0.3.0.4 AFC-2168: Changed menu groups. \n
+v12.0.3.1.0 AFC-2177: Reworked how appointments are rebooked. \n
+v12.0.3.1.1 AFC-2229: Updated text on get new times buttons. \n
 \n
 """,
     "depends": [
@@ -72,6 +74,7 @@ v12.0.3.0.3 AFC-2113: Updated how res.users is presented in views. \n
         "wizard/cancel_appointment.xml",
         "wizard/create_local_occasion.xml",
         "wizard/change_user_appointment.xml",
+        "wizard/move_appointment.xml",
     ],
     "application": True,
     "installable": True,

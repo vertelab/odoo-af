@@ -2,7 +2,7 @@
 
 {
     "name": "AIS-F Data Loader",
-    "version": "12.0.1.5",
+    "version": "12.0.0.1.6",
     "description": """
 
 AIS-F Data Loader
@@ -10,10 +10,11 @@ AIS-F Data Loader
 Loads database dumps from AIS-F into odoo \n
 Database dump files must be located in AIS-F/filename.csv in 'data_dir' directory defined in odoo.conf\n
 There are test dump files located in data/test_dumps\n
-v12.0.1.2  - added version -explanation\n
-v12.0.1.3  - removed state-partner.csv\n
-v12.0.1.4  - replaced loading during install with a server action\n
-v12.0.1.5  - Added values for timezone and language when creating users.\n
+v12.0.0.1.2  - added version -explanation\n
+v12.0.0.1.3  - removed state-partner.csv\n
+v12.0.0.1.4  - replaced loading during install with a server action\n
+v12.0.0.1.5  - Added values for timezone and language when creating users.\n
+v12.0.0.1.6 - Added saml provider, changed to new versioning scheme\n
 \n
 """,
 
@@ -26,6 +27,7 @@ v12.0.1.5  - Added values for timezone and language when creating users.\n
         "calendar", 
         "hr_employee_firstname_extension", 
         "partner_daily_notes",
+        'auth_saml_af',
     ],
     "data": [
         "views/res_partner.xml",
