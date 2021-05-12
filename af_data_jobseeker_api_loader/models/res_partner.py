@@ -28,6 +28,8 @@ from odoo.tools.profiler import profile
 
 _logger = logging.getLogger(__name__)
 
+LOAD_AISF_ASOK_PROCESS = "LOAD AIS-F ASOK"
+
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
@@ -53,12 +55,11 @@ class ResPartner(models.Model):
                      'res.users': self.search_model('res.users', 'login', 'id'),
                      'res.country': self.search_model('res.country', 'name', 'id', {'lang':'sv_SE'})
                      }
-        rownr = 0
+        row_no = 0
         iterations = 0
-        call_to_rask_time = 0
         with open(path) as fh:
             for row in fh:
-                if rownr == 0:
+                if row_no == 0:
                     header = {key.strip():index for index, key in
                               enumerate(row.strip().split(','))}
                     try:
@@ -68,21 +69,31 @@ class ResPartner(models.Model):
                         _logger.error(
                             f'Failed to find {key} in {", ".join(header)}')
                         raise
-                    rownr += 1
+                    row_no += 1
                     continue
                 customer_id = row.strip().split(',')[id_index]
                 _logger.debug("sökande-id %s" % customer_id)
-                if not self.env['res.partner'].search_count([('customer_id',
-                                                             '=',
-                                                             customer_id)]):
-                    call_to_rask_time += self.env['res.partner'].rask_as_get(
-                        customer_id, db_con, db_values)
+
+                self.env['af.process.log'].log_message(
+                    LOAD_AISF_ASOK_PROCESS, customer_id, "PROCESS INITIATED",
+                    customer_id, first=True)
+                #self.env['res.partner'].rask_as_get(
+                #    customer_id, db_con, db_values)
+                # def _aisf_sync_jobseeker(self, process_name, customer_id, eventid=None)
+                success = self.env["res.partner"]._aisf_sync_jobseeker(
+                    db_values,
+                    LOAD_AISF_ASOK_PROCESS,
+                    customer_id,
+                    customer_id
+                )
+                if success:
+                    self.env['af.process.log'].log_message(
+                        LOAD_AISF_ASOK_PROCESS, customer_id, "PROCESS COMPLETED", objectid=customer_id)
 
                 iterations += 1
                 if not iterations % 500:
                     self.env.cr.commit()
-                    _logger.info('%s Users added' % iterations)
-        _logger.info('calls to RASK took %s seconds' % call_to_rask_time)
+                    _logger.info('%s Users handled' % iterations)
 
     def search_model(self, obj, key, field_name, context=None):
         """Build dicts with key: field_name"""
