@@ -46,7 +46,10 @@ INIT_HEADER_SYSTEM_ID = 'CRM'
 INIT_HEADER_API_VERSION = '1.3'
 
 def _get_request_object():
-    """ Fetch the current request object, if one exists."""
+    """ Fetch the current request object, if one exists. We often run
+    this code in sudo, so self.env.user is not reliable, but the
+    request object always has the actual user.
+    """
     try:
         # Poke the bear
         request.env
@@ -92,9 +95,16 @@ class ResPartner(models.Model):
 
     @api.model
     def _bhtj_get_user_keys(self, user=None):
+        """ Fetch the BHTJ keys for the user.
+        :param user: The user to check access for.
+                     Defaults to logged in user.
+        """
         if not user:
-            user = self._context.get('uid')
-            user = user and self.env['res.users'].browse(user) or self.env.user
+            req = _get_request_object()
+            if req:
+                user = req.env.user
+            else:
+                user = self.env.user
         return user._bhtj_get_user_keys()
 
     @api.model

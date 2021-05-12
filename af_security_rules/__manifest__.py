@@ -2,11 +2,13 @@
 
 {
     "name": "AF Security Rules",
-    "version": "12.0.1.1.1",
+    "version": "12.0.1.1.2",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "description": """Security rules for Arbetsförmedlingen.
+=======
 v12.0.1.1.1 AFC-2168: Changed groups of various menus.
+v12.0.1.1.2 AFC-2227: Fixed a bug when finding logged in user.
     """,
     "website": "https://vertel.se/",
     "category": "Tools",
