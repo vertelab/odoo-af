@@ -141,14 +141,12 @@
                                     <label for="stop" string="stop" class="oe_read_only"/>
                                     <field name="start" class="oe_read_only" nolabel="1" options="{'datepicker': {'hide': {'seconds': True}}}"/>
                                     <field name="stop" class="oe_read_only" nolabel="1"/>
-                                    <field name="duration_selection" widget="radio"
-                                           attrs="{'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}"/>
                                     <field name="duration" invisible="1"/>
+                                    <field name="operation_id"  options="{'no_open': True}"
+                                           attrs="{'required':[('channel', '!=', %(calendar_channel.channel_pdm)d)],
+                                      'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}" />
                                 </group>
                                 <group>
-                                    <field name="operation_id"  options="{'no_open': True}"
-                                      attrs="{'required':[('channel', '!=', %(calendar_channel.channel_pdm)d)],
-                                      'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}" />
                                     <field string="Description" name="description" invisible="1"/>
                                     <field name="occasion_ids" invisible="1" widget="many2many_tags"/>
                                     <field name="show_suggestion_ids" invisible="1"/>
