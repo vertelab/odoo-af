@@ -679,6 +679,7 @@ msgstr "Sista tillåtna dag för typ"
 
 #. module: calendar_af
 #: model:ir.ui.menu,name:calendar_af.menu_local
+#: model:calendar.channel,name:calendar_channel.channel_local
 msgid "Local"
 msgstr "Lokalkontor"
 
