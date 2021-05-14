@@ -26,8 +26,24 @@ from requests.auth import HTTPBasicAuth
 from uuid import uuid4
 
 from odoo import models, fields, api, _
+from odoo.http import request
 
 _logger = logging.getLogger(__name__)
+
+
+def _get_request_object():
+    """ Fetch the current request object, if one exists. We often run
+    this code in sudo, so self.env.user is not reliable, but the
+    request object always has the actual user.
+    """
+    try:
+        # Poke the bear
+        request.env
+        # It's alive!
+        return request
+    except Exception:
+        # No request is available
+        return
 
 
 class AfIpf(models.Model):
@@ -77,10 +93,13 @@ class AfIpf(models.Model):
             if self.enduserid_hardcoded:
                 headers['AF-EndUserId'] = '*sys*'
             else:
-                user = self._context.get('uid')
-                user = user and self.env['res.users'].browse(user) or self.env.user
+                req = _get_request_object()
+                if req:
+                    user = req.env.user
+                else:
+                    user = self.env.user
                 headers['AF-EndUserId'] = user.af_signature
-        return headers 
+        return headers
 
     @api.multi
     def get_ssl_params(self):
