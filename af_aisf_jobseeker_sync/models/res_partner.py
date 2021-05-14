@@ -158,9 +158,9 @@ class Partner(models.Model):
                         'sun_id': sun,
                         'education_level_id': education_level.id}))
             if partner:
-                partner.write(jobseeker_dict)
+                partner.with_context(tracking_disable=True).write(jobseeker_dict)
             else:
-                partner = self.env['res.partner'].create(jobseeker_dict)
+                partner = self.env['res.partner'].with_context(tracking_disable=True, install_mode=True).create(jobseeker_dict)
 
             for address in res.get('kontaktuppgifter', {}).get('adresser', {}):
                 streetaddress = address.get('gatuadress')
