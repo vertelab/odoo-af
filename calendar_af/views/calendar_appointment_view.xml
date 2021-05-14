@@ -125,6 +125,7 @@
                                    context="{ 'default_channel': %(calendar_channel.channel_pdm)d }"/>
                             <field string="Meeting subject" name="name" placeholder="e.g. Business Lunch"
                                    invisible="1"/>
+                            <field name="duration_selection" invisible="1"/>
                         </group>
                         <group>
                             <field string="Case worker" name="user_id"
