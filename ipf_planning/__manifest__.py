@@ -8,6 +8,12 @@ Jira
 ===========================================
 AFC-1051 - Arbetssokande Planering (V12.0.1.0.0)
 """,
+    "description": """
+Jira
+===========================================
+v12.0.1.0.1 AFC-734: Arbetssokande Planering Integration
+v12.0.2.0.0 AFC-2239: Updated the get_ais_a_pnr function
+""",
     "version": "12.0.1.0.0",
     "author": "Vertel AB",
     "license": "AGPL-3",

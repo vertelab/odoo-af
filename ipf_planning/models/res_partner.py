@@ -18,21 +18,17 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+import logging
 
 from odoo import models, fields, api, _
-import requests
-from requests.auth import HTTPBasicAuth
-import json
-from uuid import uuid4
-import logging
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
+
 class Partner(models.Model):
     _inherit = 'res.partner'
-    
-   
+
     @api.multi
     def ipf_load_planning(self):
         self.ensure_one()
@@ -50,10 +46,8 @@ class Partner(models.Model):
     @api.multi
     def get_ais_a_pnr(self):
         try:
-            if self.company_registry:
-                pnr = self.company_registry.replace('-', '')
+            if self.social_sec_nr:
+                pnr = self.social_sec_nr.replace('-', '')
                 return pnr
-        except:
-            _logger.warn("Invalid personal identification number: %s" % self.company_registry)
-
-
+        except ValueError:
+            raise UserError("Invalid personal identification number: %s" % self.social_sec_nr)

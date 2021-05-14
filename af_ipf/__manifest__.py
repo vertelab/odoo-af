@@ -14,6 +14,7 @@ Jira
 v12.0.1.0.1 AFC-734: Integration till IPF
 v12.0.1.0.2 AFC-1385: Data för rask integration
 v12.0.1.0.3 AFC-2001: updated default IPF url
+v12.0.1.0.4 AFC-2239: Fixed bug for getting users
 """,
     "depends": ["af_security"],
     "external_dependencies": {"python": ["requests"]},
