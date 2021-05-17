@@ -27,10 +27,13 @@ class AFProcessLog(models.Model):
     status = fields.Boolean(string="Status")
     no_tries = fields.Integer(string="No. of tries")
     objectid = fields.Char(string="Object Id")
+    info_1 = fields.Text(string="Informational Message 1", required=False)
+    info_2 = fields.Text(string="Informational Message 2", required=False)
+    info_3 = fields.Text(string="Informational Message 3", required=False)
 
     @api.model
     def log_message(self, process, eventid, step, message=None, error_message=None,
-                    status=True, objectid=None, first=False, **kwargs):
+                    status=True, objectid=None, first=False, info_1=None, info_2=None, info_3=None, **kwargs):
         """ Log a message.
         :param process: The name of the process.
         :param eventid: The id of the logged event.
@@ -78,6 +81,12 @@ class AFProcessLog(models.Model):
                             vals["objectid"] = objectid
                         if first:
                             vals["no_tries"] = log.no_tries + 1
+                        if info_1:
+                            vals["info_1"] = info_1
+                        if info_2:
+                            vals["info_2"] = info_2
+                        if info_3:
+                            vals["info_3"] = info_3
                         log.write(vals)
         except Exception:
             _logger.exception(f"Exception during message handling! process: {process}, eventId: {eventid}")
