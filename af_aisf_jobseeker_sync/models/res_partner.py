@@ -3,7 +3,7 @@
 from odoo import models, api
 from uuid import uuid4
 import traceback
-
+import time
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -15,14 +15,15 @@ class Partner(models.Model):
     _inherit = "res.partner"
 
     @api.model
-    def _aisf_sync_jobseeker(self, db_values, process_name, customer_id, eventid=None):
+    def _aisf_sync_jobseeker(self, db_values, process_name, customer_id, eventid=None, batch=None):
         """ Perform a sync of a jobseeker from AIS-F.
         :param customer_id: Customer ID of the jobseeker.
         :param eventid: The MQ message id for logging purposes.
         :returns: True if sync succeeded.
         """
         log = self.env['af.process.log']
-        log.log_message(process_name, eventid, "SYNC STARTED", objectid=customer_id)
+        if not batch:
+            log.log_message(process_name, eventid, "SYNC STARTED", objectid=customer_id)
 
         partner = self.env['res.partner'].search(
             [('customer_id', '=', customer_id), ('is_jobseeker', '=', True)])
@@ -30,8 +31,12 @@ class Partner(models.Model):
 
         rask = self.env.ref('af_ipf.ipf_endpoint_rask').sudo()
         try:
-            log.log_message(process_name, eventid, RASK_SYNC, objectid=customer_id)
+            if not batch:
+                log.log_message(process_name, eventid, RASK_SYNC, objectid=customer_id)
+            start_time = time.time()
             res = rask.call(customer_id=int(customer_id))
+            end_time = time.time()
+            time_for_call_to_rask = end_time - start_time
         except Exception:
             em = traceback.format_exc()
             log.log_message(process_name, eventid, RASK_SYNC,
@@ -39,12 +44,12 @@ class Partner(models.Model):
             return
         if not res:
             log.log_message(process_name, eventid, RASK_SYNC,
-                            objectid=customer_id, error_message="NOT IN AIS-F", status=False)
+                            objectid=customer_id, error_message="NOT IN AIS-F", status=False, info_1=time_for_call_to_rask)
             return
         customer_id = res.get('arbetssokande', {}).get('sokandeId')
         if res.get('processStatus', {}).get('skyddadePersonUppgifter'):
             log.log_message(process_name, eventid, RASK_SYNC,
-                            objectid=customer_id, error_message="SUP")
+                            objectid=customer_id, error_message="SPU", info_1=time_for_call_to_rask)
             return True
         try:
             state = res.get('kontaktuppgifter', {}).get('hemkommunKod')
@@ -157,10 +162,13 @@ class Partner(models.Model):
                     jobseeker_dict['education_ids'].append((0, 0, {
                         'sun_id': sun,
                         'education_level_id': education_level.id}))
+
             if partner:
                 partner.with_context(tracking_disable=True).write(jobseeker_dict)
+                create_update = "update"
             else:
                 partner = self.env['res.partner'].with_context(tracking_disable=True, install_mode=True).create(jobseeker_dict)
+                create_update = "create"
 
             for address in res.get('kontaktuppgifter', {}).get('adresser', {}):
                 streetaddress = address.get('gatuadress')
@@ -211,5 +219,6 @@ class Partner(models.Model):
                             objectid=customer_id, error_message=em, status=False)
             return
 
-        log.log_message(process_name, eventid, "SYNC COMPLETED", objectid=customer_id)
+        log.log_message(process_name, eventid, "SYNC COMPLETED", objectid=customer_id, info_1=time_for_call_to_rask, info_2=create_update)
+
         return True
