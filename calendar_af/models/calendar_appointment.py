@@ -214,7 +214,7 @@ class CalendarAppointment(models.Model):
         if (
             self.type_id
             and not self.partner_id.match_area
-            and "Ja" in self.type_id.name
+            and "KROM" in self.type_id.name
         ):
             self.type_id = False
             raise ValidationError(_("Jobseeker not KROM classified"))

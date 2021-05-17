@@ -45,7 +45,6 @@ v12.0.3.1.0 AFC-2177: Reworked how appointments are rebooked. \n
 v12.0.3.1.1 AFC-2229: Updated text on get new times buttons. \n
 v12.0.3.1.2 AFC-2229: Removed duration selector when booking new appointment. \n
 v12.0.3.1.3 AFC-2239: Fixed bug when booking mettings.
-v12.0.0.1.4 AFC-1950: Replaced match_area field KROM with Ja.\n
 \n
 """,
     "depends": [
