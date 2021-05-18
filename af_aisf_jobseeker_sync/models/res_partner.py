@@ -56,7 +56,7 @@ class Partner(models.Model):
             # TODO: Would probably be best to add country here? I believe
             #  code is unique per country.
             if not db_values:
-                state = state and self.env['res.country.state'].search([('code', '=', state)], ['id'], limit=1)
+                state = state and self.env['res.country.state'].search_read([('code', '=', state)], ['id'], limit=1)
                 state = state and state[0]['id'] or None
             else:
                 state = db_values['res.country.state'].get(state, False)
@@ -86,7 +86,7 @@ class Partner(models.Model):
 
             user = res.get('kontor', {}).get('ansvarigHandlaggareSignatur')
             if not db_values:
-                user = user and self.env['res.users'].search([('login', '=', user)], ['id'], limit=1)
+                user = user and self.env['res.users'].search_read([('login', '=', user)], ['id'], limit=1)
                 user = user and user[0]['id'] or None
             else:
                 user = db_values['res.users'].get(user, False)
