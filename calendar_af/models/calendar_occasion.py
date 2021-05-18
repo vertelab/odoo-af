@@ -599,7 +599,7 @@ class CalendarOccasion(models.Model):
                     prev_date = curr_date
                     prev_user_id = curr_user_id
                 if curr_date != prev_date:
-                    day_num = +1
+                    day_num += 1
                 occasions = []
                 if len(occ_lists[day_num]) < max_depth:
                     for i in range(min(max_depth, len(curr_starts))):
