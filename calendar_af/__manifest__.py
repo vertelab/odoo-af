@@ -46,6 +46,7 @@ v12.0.3.1.1 AFC-2229: Updated text on get new times buttons. \n
 v12.0.3.1.2 AFC-2229: Removed duration selector when booking new appointment. \n
 v12.0.3.1.3 AFC-2239: Fixed bug when booking meetings. \n
 v12.0.3.1.4 AFC-2267: Fixed typo in code. \n
+v12.0.3.1.4 AFC-2129: Re-added possibility to accept/reject/publish several occasions at once. \n
 \n
 """,
     "depends": [
