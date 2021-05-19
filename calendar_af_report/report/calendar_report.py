@@ -176,7 +176,8 @@ class CalendarAppointmentReport(models.Model):
                     ON co.id = distinct_co.id
                 LEFT JOIN calendar_appointment_type cat
                     ON co.type_id = cat.id
-              WHERE cat.channel = %s 
+              WHERE cat.channel = %s
+                AND co.state != 'deleted' 
               %s
         """
             % (self._table, self._select(), self.env.ref("calendar_channel.channel_pdm").id, self._group_by())
