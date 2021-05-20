@@ -74,7 +74,7 @@ class CalendarOccasion(models.Model):
         index=True,
     )
     case_worker_name = fields.Char(
-        string="Case worker", compute="_compute_case_worker_name"
+        string="Case worker", compute="_compute_case_worker_name", store=True
     )
     state = fields.Selection(
         selection=[
@@ -137,6 +137,7 @@ class CalendarOccasion(models.Model):
             self.weekday = self.start.weekday()
 
     @api.one
+    @api.depends("user_id")
     def _compute_case_worker_name(self):
         if self.channel == self.env.ref("calendar_channel.channel_pdm"):
             self.case_worker_name = _("Employment service officer")

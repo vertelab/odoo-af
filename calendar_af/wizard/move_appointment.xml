@@ -35,7 +35,9 @@
                                     <field name="stop" invisible="1"/>
                                 </group>
                                 <group>
-                                    <field name="operation_id"  attrs="{'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}" />
+                                    <field name="operation_id"
+                                        attrs="{'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}"
+                                        readonly="0"/>
                                     <field name="show_suggestion_ids" invisible="1"/>
                                 </group>
                             </group>

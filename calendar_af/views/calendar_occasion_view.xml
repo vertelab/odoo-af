@@ -172,6 +172,12 @@
                             domain="[]"
                             context="{'group_by':'duration_text'}"
                     />
+                    <filter
+                            name="group_by_case_worker"
+                            string="Handläggare"
+                            domain="[]"
+                            context="{'group_by':'case_worker_name'}"
+                    />
                 </group>
             </search>
         </field>

@@ -134,7 +134,8 @@
                             <field string="Case worker" name="user_id"
                                    placeholder="Select case worker..."
                                    attrs="{'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}"
-                                   options="{'no_open': True}" invisible="1"/>
+                                   options="{'no_open': True}" invisible="1"
+                                   context="{'formatted_display_name': True}"/>
                         </group>
                     </group>
                     <notebook>
