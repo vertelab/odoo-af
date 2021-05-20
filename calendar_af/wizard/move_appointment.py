@@ -56,6 +56,14 @@ class MoveAppointment(models.TransientModel):
         app.show_suggestion_ids = False
         return app.type_id
 
+    @api.model
+    def _get_operation(self):
+        app_id = self._context.get("active_id")
+        if not app_id:
+            raise UserError(_("No appointment selected."))
+        app = self.env["calendar.appointment"].browse(app_id)
+        return app.operation_id
+
     appointment_id = fields.Many2one(
         string="Appointment to be moved",
         comodel_name="calendar.appointment",
@@ -86,7 +94,7 @@ class MoveAppointment(models.TransientModel):
         help="Cancellation reason",
     )
     operation_id = fields.Many2one(
-        comodel_name="hr.operation", related="appointment_id.operation_id"
+        comodel_name="hr.operation", default=_get_operation
     )
     office_id = fields.Many2one(
         comodel_name="hr.department",
@@ -106,10 +114,12 @@ class MoveAppointment(models.TransientModel):
 
         # store values from appointment_id
         old_channel = self.appointment_id.channel
+        old_operation =self.operation_id
         old_type = self.appointment_id.type_id
         old_duration = self.appointment_id.duration
         # update appointment_id with data from wizard
         self.appointment_id.channel = self.channel
+        self.appointment_id.operation_id = self.operation_id
         self.appointment_id.type_id = self.type_id
         self.appointment_id.duration = self.type_id.duration / 60
         self.appointment_id.cancel_reason = self.cancel_reason_temp
@@ -120,6 +130,7 @@ class MoveAppointment(models.TransientModel):
         self.suggestion_ids = self.appointment_id.suggestion_ids
         # Restore data on appointment_id in case the user aborts the move before selecting a time.
         self.appointment_id.channel = old_channel
+        self.appointment_id.operation_id = old_operation
         self.appointment_id.type_id = old_type
         self.appointment_id.duration = old_duration
 
