@@ -166,6 +166,12 @@
                             domain="[]"
                             context="{'group_by':'additional_booking'}"
                     />
+                    <filter
+                            name="group_by_duration"
+                            string="Duration"
+                            domain="[]"
+                            context="{'group_by':'duration_text'}"
+                    />
                 </group>
             </search>
         </field>
