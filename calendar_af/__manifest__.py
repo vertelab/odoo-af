@@ -21,7 +21,7 @@
 
 {
     "name": "Calendar management - AF",
-    "version": "12.0.3.1.7",
+    "version": "12.0.3.1.8",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
@@ -48,7 +48,9 @@ v12.0.3.1.3 AFC-2239: Fixed bug when booking meetings. \n
 v12.0.3.1.4 AFC-2267: Fixed typo in code. \n
 v12.0.3.1.4 AFC-2129: Re-added possibility to accept/reject/publish several occasions at once. \n
 v12.0.3.1.5 AFC-2276: Changed access rights to models and changed views. \n
-v12.0.3.1.7 AFC-2293: Changed duration_text field to stored. \n
+v12.0.3.1.6 AFC-2113: Updated view for local occasions. \n
+v12.0.3.1.7 AFC-2303: Added support for operation_id in move-wizard. \n
+v12.0.3.1.8 AFC-2293: Changed duration_text field to stored. \n
 \n
 """,
     "depends": [
