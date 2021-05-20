@@ -154,14 +154,18 @@ class Partner(models.Model):
                         # Already exists. Do nothing.
                         pass
                     else:
-                        # TODO: Should we really overwrite educations?
-                        jobseeker_dict['education_ids'] = [(5,)]
+                        # delete education with source from AIS-F
+                        partner.education_ids.filtered(
+                            lambda e: e.is_aisf).unlink()
+                        # add empty list to jobseeker_dict to trigger next if
+                        jobseeker_dict['education_ids'] = []
                 else:
                     jobseeker_dict['education_ids'] = []
                 if 'education_ids' in jobseeker_dict:
                     jobseeker_dict['education_ids'].append((0, 0, {
                         'sun_id': sun,
-                        'education_level_id': education_level.id}))
+                        'education_level_id': education_level.id,
+                        'is_aisf': True}))
 
             if partner:
                 partner.with_context(tracking_disable=True).write(jobseeker_dict)
