@@ -12,7 +12,7 @@ access_type_meeting_admin,calendar.type.meeting.admin,model_calendar_appointment
 access_mapped_dates_all_employee,calendar.mapped_dates_all_employee,model_calendar_mapped_dates,base.group_user,1,0,0,0
 access_mapped_dates_meeting_admin,calendar.mapped_dates.meeting.admin,model_calendar_mapped_dates,af_security.af_meeting_admin,1,1,1,1
 access_channel_all_employee,calendar.channel_all_employee,model_calendar_channel,base.group_user,1,0,0,0
-access_channel_meeting_admin,calendar.channel.meeting.admin,model_calendar_channel,af_security.af_meeting_admin,1,1,1,1
+access_channel_meeting_admin,calendar.channel.meeting.admin,model_calendar_channel,af_security.af_meeting_admin,1,0,0,0
 access_cancel_reason_all_employee,calendar.cancel_reason_all_employee,model_calendar_appointment_cancel_reason,base.group_user,1,0,0,0
 access_cancel_reason_meeting_admin,calendar.cancel_reason.meeting.admin,model_calendar_appointment_cancel_reason,af_security.af_meeting_admin,1,1,1,1
 access_type_ope_all_employee,calendar.type.loc.meeting.planner,model_calendar_appointment_type_operation,base.group_user,1,0,0,0

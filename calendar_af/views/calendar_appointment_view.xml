@@ -115,9 +115,12 @@
                         <group>
                             <field name="name" invisible="1"/>
                             <field string="Meeting channel" name="channel" readonly="0"
-                                   domain="[('name', '!=', 'None')]" options="{'no_open': True}"/>
+                                   domain="[('name', '!=', 'None')]"
+                                   options="{'limit':15,'no_quick_create':True,'no_create_edit':True,'no_create':True,
+                                            'no_edit':True,'no_open':True}"/>
                             <field string="Meeting channel" name="channel_name" invisible="1"
-                                   options="{'no_open': True}"/>
+                                   options="{'limit':15,'no_quick_create':True,'no_create_edit':True,'no_create':True,
+                                            'no_edit':True,'no_open':True}"/>
                             <field string="Meeting type" name="type_id"
                                    domain="[('channel', '=', channel)]"
                                    options="{'limit':15,'no_quick_create':True,'no_create_edit':True,'no_create':True,'no_edit':True,
@@ -143,7 +146,8 @@
                                     <field name="start" class="oe_read_only" nolabel="1" options="{'datepicker': {'hide': {'seconds': True}}}"/>
                                     <field name="stop" class="oe_read_only" nolabel="1"/>
                                     <field name="duration" invisible="1"/>
-                                    <field name="operation_id"  options="{'no_open': True}"
+                                    <field name="operation_id"  options="{'limit':15,'no_quick_create':True,'no_create_edit':True,
+                                           'no_create':True,'no_edit':True,'no_open':True}"
                                            attrs="{'required':[('channel', '!=', %(calendar_channel.channel_pdm)d)],
                                       'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}" />
                                 </group>
