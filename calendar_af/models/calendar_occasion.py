@@ -48,7 +48,9 @@ class CalendarOccasion(models.Model):
         selection=[("30 minutes", "30 minutes"), ("1 hour", "1 hour")],
     )
     duration = fields.Float("Duration")
-    duration_text = fields.Char("Duration", compute="_compute_duration_text")
+    duration_text = fields.Char(
+        "Duration", compute="_compute_duration_text", store=True
+    )
     appointment_id = fields.Many2one(
         comodel_name="calendar.appointment", string="Appointment", index=True
     )
@@ -114,19 +116,20 @@ class CalendarOccasion(models.Model):
             (5, "Saturday"),
             (6, "Sunday"),
         ],
-        compute="_compute_weekday"
+        compute="_compute_weekday",
     )
     is_possible_start = fields.Selection(
         string="Is a possible start time",
         selection=[("", "Not set"), ("0", "No"), ("1", "Yes")],
     )
 
-    @api.one
+    @api.depends("duration")
     def _compute_duration_text(self):
-        if self.duration == 0.5:
-            self.duration_text = _("30 minutes")
-        elif self.duration == 1.0:
-            self.duration_text = _("1 hour")
+        for rec in self:
+            if rec.duration == 0.5:
+                rec.duration_text = _("30 minutes")
+            elif rec.duration == 1.0:
+                rec.duration_text = _("1 hour")
 
     @api.one
     def _compute_weekday(self):
@@ -259,7 +262,7 @@ class CalendarOccasion(models.Model):
 
     @api.model
     def _get_additional_booking(self, date, duration, type_id, operation_id=False):
-        """"Creates extra, additional, occasions. Iff overbooking is allowed.
+        """ "Creates extra, additional, occasions. Iff overbooking is allowed.
         :param date: datetime object. Date to create occasion on.
         :param duration: Integer duration of the meeting in minutes.
         :param type_id: Object of type calendar.appointment.type.
@@ -312,7 +315,9 @@ class CalendarOccasion(models.Model):
         elif type_id.channel == self.env.ref("calendar_channel.channel_pdm"):
             if operation_id or user_id:
                 raise ValidationError(
-                    _("Trying to create an additional PDM occasion with operation_id or user_id.")
+                    _(
+                        "Trying to create an additional PDM occasion with operation_id or user_id."
+                    )
                 )
             # Additional booking for PDM
             start_date = self._get_min_occasions(type_id, day_start, day_stop)
@@ -388,17 +393,23 @@ class CalendarOccasion(models.Model):
         """User publishes suggested occasion"""
         # Added this stop since we don't want to allow batch handling.
         for rec in self:
-            if rec.state == 'draft' or rec.state == 'fail':
+            if rec.state == "draft" or rec.state == "fail":
                 # Perform access control.
                 if rec.af_check_access():
                     # Checks passed. Run inner function with sudo.
                     res = rec.sudo()._publish_occasion()
                     if not res:
-                        raise ValidationError(_("One of your occasions is not a draft."))
+                        raise ValidationError(
+                            _("One of your occasions is not a draft.")
+                        )
                 else:
-                    raise ValidationError(_("You are not allowed to publish these occasions."))
+                    raise ValidationError(
+                        _("You are not allowed to publish these occasions.")
+                    )
             else:
-                raise ValidationError(_("Only occasions in status Rejected or Draft can be published."))
+                raise ValidationError(
+                    _("Only occasions in status Rejected or Draft can be published.")
+                )
 
     @api.multi
     def _publish_occasion(self):
@@ -415,17 +426,23 @@ class CalendarOccasion(models.Model):
         """User accepts suggested occasion"""
         # Added this stop since we don't want to allow batch handling.
         for rec in self:
-            if rec.state == 'request' or rec.state == 'fail':
+            if rec.state == "request" or rec.state == "fail":
                 # Perform access control.
                 if rec.af_check_access():
                     # Checks passed. Run inner function with sudo.
                     res = rec.sudo()._accept_occasion()
                     if not res:
-                        raise ValidationError(_("One of your occasions is not a request."))
+                        raise ValidationError(
+                            _("One of your occasions is not a request.")
+                        )
                 else:
-                    raise ValidationError(_("You are not allowed to accept these occasions."))
+                    raise ValidationError(
+                        _("You are not allowed to accept these occasions.")
+                    )
             else:
-                raise ValidationError(_("Only occasions in status Rejected or Request can be accepted."))
+                raise ValidationError(
+                    _("Only occasions in status Rejected or Request can be accepted.")
+                )
 
     def _accept_occasion(self):
         if self.state == "request" or self.state == "fail":
@@ -441,17 +458,23 @@ class CalendarOccasion(models.Model):
         """User rejects suggested occasion"""
         # Added this stop since we don't want to allow batch handling.
         for rec in self:
-            if rec.state in ['request', 'ok']:
+            if rec.state in ["request", "ok"]:
                 # Perform access control.
                 if rec.af_check_access():
                     # Checks passed. Run inner function with sudo.
                     res = rec.sudo()._reject_occasion()
                     if not res:
-                        raise ValidationError(_("One of your occasions is not a request."))
+                        raise ValidationError(
+                            _("One of your occasions is not a request.")
+                        )
                 else:
-                    raise ValidationError(_("You are not allowed to reject these occasions."))
+                    raise ValidationError(
+                        _("You are not allowed to reject these occasions.")
+                    )
             else:
-                raise ValidationError(_("Only occasions in status Accepted or Request can be rejected."))
+                raise ValidationError(
+                    _("Only occasions in status Accepted or Request can be rejected.")
+                )
 
     @api.multi
     def _reject_occasion(self):
@@ -468,7 +491,9 @@ class CalendarOccasion(models.Model):
         """User deletes an occasion"""
         # Added this stop since we don't want to allow batch handling.
         if len(records) > 1:
-            raise ValidationError(_("You can't change the status of several occasions at the same time."))
+            raise ValidationError(
+                _("You can't change the status of several occasions at the same time.")
+            )
         for rec in records:
             if not rec.appointment_id:
                 # Perform access control.
@@ -476,9 +501,13 @@ class CalendarOccasion(models.Model):
                     # Checks passed. Run inner function with sudo.
                     res = rec.sudo()._delete_occasion()
                     if not res:
-                        raise ValidationError(_("One of your occasions is already booked"))
+                        raise ValidationError(
+                            _("One of your occasions is already booked")
+                        )
                     return res
-                raise ValidationError(_("You are not allowed to delete these occasions."))
+                raise ValidationError(
+                    _("You are not allowed to delete these occasions.")
+                )
 
     @api.multi
     def _delete_occasion(self):
@@ -572,7 +601,9 @@ class CalendarOccasion(models.Model):
                             GROUP BY start::time, start::date, user_id
                             ORDER BY user_id ASC, start_date DESC, start_time ASC;"""
             # TODO: use %s in query and tuple with values as argument
-            self._cr.execute(sql_query, (sql_type_id, sql_start, sql_stop, sql_operation_id))
+            self._cr.execute(
+                sql_query, (sql_type_id, sql_start, sql_stop, sql_operation_id)
+            )
             sql_res = self._cr.fetchall()
 
             # handle 30 min meetings
@@ -597,9 +628,7 @@ class CalendarOccasion(models.Model):
                 occasions = []
                 if len(occ_lists[day_num]) < max_depth:
                     for i in range(min(max_depth, len(curr_starts))):
-                        occ_id = self.env["calendar.occasion"].browse(
-                            curr_starts[i]
-                        )
+                        occ_id = self.env["calendar.occasion"].browse(curr_starts[i])
                         occasions.append(occ_id)
                 occ_lists[day_num].append(occasions)
                 prev_date = curr_date
