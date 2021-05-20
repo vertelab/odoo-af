@@ -116,3 +116,15 @@ class ResUsers(models.Model):
             # TODO: add raise ValidationError here?
             # this will stop the system from creating any occasions if so.
             return False
+
+    @api.multi
+    def name_get(self):
+        if self.env.context.get('formatted_display_name', True):
+            result = []
+            for user in self:
+                name = f"{user.login} ({user.name})"
+                result.append((user.id, name))
+            return result
+        else:
+            super(ResUsers, self).name_get()
+
