@@ -60,7 +60,9 @@ class CalendarAppointment(models.Model):
         string="Duration",
         selection=[("30 minutes", "30 minutes"), ("1 hour", "1 hour")],
     )
-    duration_text = fields.Char(string="Duration", compute="compute_duration_text")
+    duration_text = fields.Char(
+        string="Duration", compute="compute_duration_text", store=True
+    )
     duration = fields.Float("Duration")
     user_id = fields.Many2one(
         string="Case worker", comodel_name="res.users", help="Booked case worker"
@@ -153,7 +155,7 @@ class CalendarAppointment(models.Model):
             (5, "Saturday"),
             (6, "Sunday"),
         ],
-        compute="_compute_weekday"
+        compute="_compute_weekday",
     )
     start_time = fields.Char(
         string="Appointment start time",
@@ -163,6 +165,7 @@ class CalendarAppointment(models.Model):
     )
 
     @api.one
+    @api.depends("duration")
     def compute_duration_text(self):
         if self.duration == 0.5:
             self.duration_text = _("30 minutes")
@@ -582,9 +585,7 @@ class CalendarAppointment(models.Model):
             "res_model": "calendar.move_appointment",
             "view_type": "form",
             "view_mode": "form",
-            "view_id": self.env.ref(
-                "calendar_af.move_appointment_view_form"
-            ).id,
+            "view_id": self.env.ref("calendar_af.move_appointment_view_form").id,
             "target": "inline",
             "type": "ir.actions.act_window",
             "context": {},
