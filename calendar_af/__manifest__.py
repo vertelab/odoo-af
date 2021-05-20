@@ -48,6 +48,7 @@ v12.0.3.1.3 AFC-2239: Fixed bug when booking meetings. \n
 v12.0.3.1.4 AFC-2267: Fixed typo in code. \n
 v12.0.3.1.4 AFC-2129: Re-added possibility to accept/reject/publish several occasions at once. \n
 v12.0.3.1.5 AFC-2276: Changed access rights to models and changed views. \n
+v12.0.3.1.5 AFC-2278: Updated criteria for shown meetings. \n
 \n
 """,
     "depends": [

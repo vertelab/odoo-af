@@ -143,7 +143,10 @@ class CalendarAppointmentLocalReport(models.Model):
                     ON ca.id = co.appointment_id
                 LEFT JOIN calendar_appointment_type cat
                     ON co.type_id = cat.id
-              WHERE cat.channel = %s 
+              WHERE cat.channel = %s
+                AND co.state != 'deleted' 
+                AND ca.state != 'canceled' 
+                AND ca.state != 'free'  
                     %s
         """
             % (self._table, self._select(), self.env.ref("calendar_channel.channel_local").id, self._group_by())

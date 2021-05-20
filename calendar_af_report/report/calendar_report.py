@@ -178,6 +178,8 @@ class CalendarAppointmentReport(models.Model):
                     ON co.type_id = cat.id
               WHERE cat.channel = %s
                 AND co.state != 'deleted' 
+                AND ca.state != 'canceled' 
+                AND ca.state != 'free' 
               %s
         """
             % (self._table, self._select(), self.env.ref("calendar_channel.channel_pdm").id, self._group_by())
