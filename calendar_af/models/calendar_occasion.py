@@ -387,27 +387,19 @@ class CalendarOccasion(models.Model):
         return False
 
     @api.multi
-    def publish_occasion(self, records):
+    def publish_occasion(self):
         """User publishes suggested occasion"""
         # Added this stop since we don't want to allow batch handling.
-        if len(records) > 1:
-            raise ValidationError(
-                _("You can't change the status of several occasions at the same time.")
-            )
-        for rec in records:
-            if rec.state == "draft" or rec.state == "fail":
+        for rec in self:
+            if rec.state == 'draft' or rec.state == 'fail':
                 # Perform access control.
                 if rec.af_check_access():
                     # Checks passed. Run inner function with sudo.
                     res = rec.sudo()._publish_occasion()
                     if not res:
-                        raise ValidationError(
-                            _("One of your occasions is not a draft.")
-                        )
-                    return res
-                raise ValidationError(
-                    _("You are not allowed to publish these occasions.")
-                )
+                        raise ValidationError(_("One of your occasions is not a draft."))
+                else:
+                    raise ValidationError(_("You are not allowed to publish these occasions."))
             else:
                 raise ValidationError(
                     _("Only occasions in status Rejected or Draft can be published.")
@@ -424,27 +416,19 @@ class CalendarOccasion(models.Model):
         return ret
 
     @api.multi
-    def accept_occasion(self, records):
+    def accept_occasion(self):
         """User accepts suggested occasion"""
         # Added this stop since we don't want to allow batch handling.
-        if len(records) > 1:
-            raise ValidationError(
-                _("You can't change the status of several occasions at the same time.")
-            )
-        for rec in records:
-            if rec.state == "request" or rec.state == "fail":
+        for rec in self:
+            if rec.state == 'request' or rec.state == 'fail':
                 # Perform access control.
                 if rec.af_check_access():
                     # Checks passed. Run inner function with sudo.
                     res = rec.sudo()._accept_occasion()
                     if not res:
-                        raise ValidationError(
-                            _("One of your occasions is not a request.")
-                        )
-                    return res
-                raise ValidationError(
-                    _("You are not allowed to accept these occasions.")
-                )
+                        raise ValidationError(_("One of your occasions is not a request."))
+                else:
+                    raise ValidationError(_("You are not allowed to accept these occasions."))
             else:
                 raise ValidationError(
                     _("Only occasions in status Rejected or Request can be accepted.")
@@ -460,27 +444,19 @@ class CalendarOccasion(models.Model):
         return ret
 
     @api.multi
-    def reject_occasion(self, records):
+    def reject_occasion(self):
         """User rejects suggested occasion"""
         # Added this stop since we don't want to allow batch handling.
-        if len(records) > 1:
-            raise ValidationError(
-                _("You can't change the status of several occasions at the same time.")
-            )
-        for rec in records:
-            if rec.state in ["request", "ok"]:
+        for rec in self:
+            if rec.state in ['request', 'ok']:
                 # Perform access control.
                 if rec.af_check_access():
                     # Checks passed. Run inner function with sudo.
                     res = rec.sudo()._reject_occasion()
                     if not res:
-                        raise ValidationError(
-                            _("One of your occasions is not a request.")
-                        )
-                    return res
-                raise ValidationError(
-                    _("You are not allowed to reject these occasions.")
-                )
+                        raise ValidationError(_("One of your occasions is not a request."))
+                else:
+                    raise ValidationError(_("You are not allowed to reject these occasions."))
             else:
                 raise ValidationError(
                     _("Only occasions in status Accepted or Request can be rejected.")

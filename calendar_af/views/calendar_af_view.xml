@@ -51,7 +51,7 @@ unused_occasions.unlink()</field>
         <field name="binding_model_id" ref="calendar_af.model_calendar_occasion"/>
         <field name="binding_type">action</field>
         <field name="state">code</field>
-        <field name="code">record.publish_occasion(records)</field>
+        <field name="code">records.publish_occasion()</field>
     </record>
 
     <record id="action_occasion_accept" model="ir.actions.server">
@@ -60,7 +60,7 @@ unused_occasions.unlink()</field>
         <field name="binding_model_id" ref="calendar_af.model_calendar_occasion"/>
         <field name="binding_type">action</field>
         <field name="state">code</field>
-        <field name="code">record.accept_occasion(records)</field>
+        <field name="code">records.accept_occasion()</field>
     </record>
 
     <record id="action_occasion_reject" model="ir.actions.server">
@@ -69,7 +69,7 @@ unused_occasions.unlink()</field>
         <field name="binding_model_id" ref="calendar_af.model_calendar_occasion"/>
         <field name="binding_type">action</field>
         <field name="state">code</field>
-        <field name="code">record.reject_occasion(records)</field>
+        <field name="code">records.reject_occasion()</field>
     </record>
 
     <record id="action_occasion_delete" model="ir.actions.server">
