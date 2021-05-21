@@ -56,7 +56,7 @@
     <field name="model">hr.operation</field>
     <field name="priority" eval="10" />
     <field name="arch" type="xml">
-      <tree string="Operations" create="false" delete="false">
+      <tree string="Operations" create="false" edit="false" delete="false">
         <button name="open_users_tree" type="object" string="Select"/>            
         <field name="name" />
         <field name="department_id" />    
