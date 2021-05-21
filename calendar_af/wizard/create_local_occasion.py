@@ -92,7 +92,12 @@ class CreateLocalOccasion(models.TransientModel):
 
     @api.model
     def default_location_ids(self):
-        return self.env.user.mapped("employee_ids.office_ids.operation_ids.location_id")
+        default_operation_id = self.env.context.get('default_operation_id')
+        hr_operation = self.env["hr.operation"].search([('id', '=', default_operation_id)])
+        if hr_operation:
+            return hr_operation
+        else:
+            return self.env.user.mapped("employee_ids.office_ids.operation_ids.location_id")
 
     @api.onchange("type_id")
     def set_duration_text(self):
