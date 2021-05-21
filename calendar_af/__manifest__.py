@@ -21,7 +21,7 @@
 
 {
     "name": "Calendar management - AF",
-    "version": "12.0.3.2.0",
+    "version": "12.0.3.2.1",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
@@ -54,6 +54,7 @@ v12.0.3.1.8 AFC-2278: Updated criteria for shown meetings. \n
 v12.0.3.1.8 AFC-2293: Changed duration_text field to stored for calendar_occasion. \n
 v12.0.3.1.9 AFC-2290: Changed duration_text field to stored for calendar_appointment. \n
 v12.0.3.2.0 AFC-2335: Removed ability to open operation_ids from views. \n
+v12.0.3.2.1 AFC-2328: Changed labels for create occasions view \n
 \n
 """,
     "depends": [

@@ -9,7 +9,7 @@
                 <sheet>
                     <group string="">
                         <group>
-                            <field name="create_type" widget="radio"/>
+                            <field name="create_type" widget="radio" nolabel="1"/>
                             <field name="start_range" attrs="{'invisible':[('create_type', '!=', 'repeating')]}"/>
                             <field name="stop_range" attrs="{'invisible':[('create_type', '!=', 'repeating')]}"/>
                         </group>
@@ -32,7 +32,8 @@
                                     <field name="duration" invisible="1"/>
                                 </group>
                                 <group>
-                                    <field name="type_id" required="1" domain="[('channel', '=', %(calendar_channel.channel_local)d)]"/>
+                                    <field name="type_id"  string="Meeting type"
+                                           required="1" domain="[('channel', '=', %(calendar_channel.channel_local)d)]"/>
                                     <field name="channel_name" invisible="1" />
                                     <field name="location_ids" invisible="1" />
                                     <field name="operation_id" required="1" domain="[('location_id', 'in', location_ids)]"
