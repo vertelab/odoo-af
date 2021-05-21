@@ -35,24 +35,24 @@ class CalendarOccasion(models.Model):
     xmlid_module = "__adoxa_import__"
 
     @api.model
-    def create_occasions(self):
+    def create_occasions(self, path):
         headers_header = ['occasions.csv', 'Notering', 'Trans', 'Odoo']
-        path = os.path.join(
-            config.options.get('data_dir'),
-            'Adoxa/occasions.csv')
+        if not path:
+            path = os.path.join(config.options.get('data_dir'),
+                                'Adoxa/occasions.csv')
         # testing purposes only
-        path = "/usr/share/odoo-af/af_data_adoxa_loader/data/test_dumps/occasions.csv"
+        #path = "/usr/share/odoo-af/af_data_adoxa_loader/data/test_dumps/occasions.csv"
         header_path = "/usr/share/odoo-af/af_data_adoxa_loader/data/occasion_mapping.csv"
         self.create_calendar_objs(headers_header, path, header_path)
 
     @api.model
-    def create_appointments(self):
+    def create_appointments(self, path):
         headers_header = ['appointments.csv', 'Notering', 'Trans', 'Odoo']
-        path = os.path.join(
-            config.options.get('data_dir'),
-            'Adoxa/appointments.csv')
+        if not path:
+            path = os.path.join(config.options.get('data_dir'),
+                                'Adoxa/appointments.csv')
         # testing purposes only
-        path = "/usr/share/odoo-af/af_data_adoxa_loader/data/test_dumps/appointments.csv"
+        #path = "/usr/share/odoo-af/af_data_adoxa_loader/data/test_dumps/appointments.csv"
         header_path = "/usr/share/odoo-af/af_data_adoxa_loader/data/appointment_mapping.csv"
         self.create_calendar_objs(headers_header, path, header_path)
 

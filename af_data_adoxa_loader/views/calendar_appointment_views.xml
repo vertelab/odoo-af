@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="load_adoxa_data" model="ir.actions.server">
+        <field name="name">Adoxa loader</field>
+        <field name="model_id" ref="base.model_ir_actions_server"/>
+        <field name="state">code</field>
+        <field name="code">
+occasions_path = "/usr/share/odoo-af/af_data_adoxa_loader/data/test_dumps/occasions.csv"
+appointments_path= "/usr/share/odoo-af/af_data_adoxa_loader/data/test_dumps/appointments.csv"
+env['calendar.appointment'].create_occasions(occasions_path)
+env['calendar.appointment'].create_appointments(appointments_path)
+        </field>
+    </record>
+</odoo>

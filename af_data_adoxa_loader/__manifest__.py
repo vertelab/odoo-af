@@ -26,7 +26,7 @@ v12.0.1.3  - removed state-partner.csv\n
         ],
     
     "data": [
-        "data/calendar_appointment.xml",
+        "views/calendar_appointment_views.xml",
     ],
     "application": False,
     "installable": True,
