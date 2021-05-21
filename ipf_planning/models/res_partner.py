@@ -37,10 +37,10 @@ class Partner(models.Model):
             personnummer = self.get_ais_a_pnr()
             if personnummer:
                 try:
-                    ipf = self.env.ref('af_ipf.ipf_endpoint_planning').sudo()
+                    ipf = self.env.ref('ipf_planning.ipf_endpoint_planning').sudo()
                     res = ipf.call(personnummer=personnummer)
                 except Exception as e:
-                    _logger.warn('Error in IPF Planning integration.', exc_info=e)
+                    _logger.warning('Error in IPF CASE integration.', exc_info=e)
         return res
 
     @api.multi
