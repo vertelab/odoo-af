@@ -226,7 +226,7 @@ class ResPartner(models.Model):
                 transformed_row.pop('country_id', None) 
                 transformed_row.pop('type', None)
                 transformed_row['employee'] = True
-                transformed_row['groups_id'] = [(6, 0, [self.env.ref('base.group_user').id])],
+                transformed_row['groups_id'] = [(6, 0, [self.env.ref('base.group_user').id])]
                 office_id = transformed_row['office_id']
                 transformed_row.pop('office_id', None)
                 user = self.env['res.users'].search([('login', '=', transformed_row['login'])])
@@ -236,8 +236,8 @@ class ResPartner(models.Model):
                             'user_id': user.id,
                             }
                 if not user:
-                    transformed_row['saml_uid'] = transformed_row['login'],
-                    transformed_row['saml_provider_id'] = self.env['ir.model.data'].xmlid_to_res_id('auth_saml_af.provider_shibboleth'),
+                    transformed_row['saml_uid'] = transformed_row['login']
+                    transformed_row['saml_provider_id'] = self.env['ir.model.data'].xmlid_to_res_id('auth_saml_af.provider_shibboleth')
                     transformed_row['tz'] = 'Europe/Stockholm'
                     transformed_row['lang'] = 'sv_SE'
                     user = self.env['res.users'].with_context(no_reset_password=True).create(transformed_row)
