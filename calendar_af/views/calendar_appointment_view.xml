@@ -343,7 +343,7 @@
         <field name="view_id" ref="view_calendar_appointment_form"/>
     </record>
 
-    <menuitem action="action_appointment" id="menu_action_appointment" parent="menu_pdm" sequence="12"/>
+    <menuitem action="action_appointment" id="menu_action_appointment" parent="menu_pdm" sequence="12" groups="af_security.af_meeting_planner_PDM"/>
     <menuitem action="action_local_appointment" id="menu_action_local_appointment" parent="menu_local" sequence="13"
               groups="af_security.af_meeting_planner"/>
 </odoo>
