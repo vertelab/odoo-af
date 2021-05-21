@@ -21,7 +21,7 @@
 
 {
     "name": "Calendar management - AF",
-    "version": "12.0.3.1.8",
+    "version": "12.0.3.1.9",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
@@ -50,7 +50,8 @@ v12.0.3.1.4 AFC-2129: Re-added possibility to accept/reject/publish several occa
 v12.0.3.1.5 AFC-2276: Changed access rights to models and changed views. \n
 v12.0.3.1.6 AFC-2113: Updated view for local occasions. \n
 v12.0.3.1.7 AFC-2303: Added support for operation_id in move-wizard. \n
-v12.0.3.1.8 AFC-2293: Changed duration_text field to stored. \n
+v12.0.3.1.8 AFC-2293: Changed duration_text field to stored for calendar_occasion. \n
+v12.0.3.1.9 AFC-2290: Changed duration_text field to stored for calendar_appointment. \n
 \n
 """,
     "depends": [
