@@ -131,7 +131,7 @@
         <field name="view_id" ref="view_calendar_schedule_kanban"/>
     </record>
 
-    <menuitem action="action_calendar_schedule" id="menu_action_schedule" parent="menu_pdm" sequence="10"/>
+    <menuitem action="action_calendar_schedule" id="menu_action_schedule" parent="menu_pdm" sequence="10" groups="af_security.af_meeting_planner_PDM"/>
 </odoo>
 
 
