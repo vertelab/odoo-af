@@ -51,6 +51,18 @@ class hr_operation(models.Model):
     )
     reserve_time = fields.Float(string="Reserve time start")
 
+    def _compute_is_office_manager(self):
+        self.is_office_manager = (
+            True
+            if self.env.user.has_group("af_security.af_meeting_admin")
+            or self.env.user.has_group("base.group_system")
+            else False
+        )
+
+    is_office_manager = fields.Boolean(
+        string="Is office manager", compute=_compute_is_office_manager
+    )
+
     @api.one
     def compute_user_ids(self):
         for employee in self.employee_ids:
