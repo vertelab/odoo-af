@@ -193,7 +193,7 @@
     <record id="action_calendar_local_occasion" model="ir.actions.act_window">
         <field name="name">Local occasions</field>
         <field name="res_model">calendar.occasion</field>
-        <field name="view_mode">calendar,tree,pivot,kanban</field>
+        <field name="view_mode">tree</field>
         <field name="view_id" ref="view_calendar_occasion_local_tree"/>
         <field name="domain" eval="[('channel', '=', ref('calendar_channel.channel_local')), ('state', '!=', 'deleted')]"/>
         <field name="search_view_id" ref="calendar_occasion_local_search"/>
