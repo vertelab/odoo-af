@@ -148,9 +148,10 @@
                                     <field name="stop" class="oe_read_only" nolabel="1"/>
                                     <field name="duration" invisible="1"/>
                                     <field name="operation_id"  options="{'limit':15,'no_quick_create':True,'no_create_edit':True,
-                                           'no_create':True,'no_edit':True,'no_open':True}"
-                                           attrs="{'required':[('channel', '!=', %(calendar_channel.channel_pdm)d)],
-                                      'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}" />
+                                            'no_create':True,'no_edit':True,'no_open':True}"
+                                            attrs="{'required':[('channel', '!=', %(calendar_channel.channel_pdm)d)],
+                                            'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}"
+                                            domain="[('id','in',user_id.operation_ids._ids)]"/>
                                 </group>
                                 <group>
                                     <field string="Description" name="description" invisible="1"/>

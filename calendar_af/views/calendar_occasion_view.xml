@@ -48,7 +48,7 @@
                         <group>
                             <field name="type_id" domain="[('channel', '=', %(calendar_channel.channel_local)d)]" 
                                    required="1" />
-                            <field name="operation_id" required="1" />
+                            <field name="operation_id" required="1" domain="[('id','in',user_id.operation_ids._ids)]"/>
                             <field name="user_id" string="Case worker" widget="many2oneattendee" 
                                    placeholder="Select case worker..." required="1" />
                         </group>
