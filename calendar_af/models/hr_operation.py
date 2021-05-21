@@ -85,6 +85,9 @@ class hr_operation(models.Model):
         res = self.env["ir.actions.act_window"].for_xml_id(
             "calendar_af", "action_calendar_user"
         )
+        context = eval(res.get("context", "{}"))
+        context["default_operation_id"] = self.id
+        res["context"] = str(context)
         if self.user_ids:
             res["domain"] = [("id", "in", self.user_ids._ids)]
         else:

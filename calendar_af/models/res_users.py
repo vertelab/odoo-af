@@ -78,12 +78,12 @@ class ResUsers(models.Model):
 
     def create_local_occasion_action(self):
         res = self.env.ref("calendar_af.create_local_occasion_action").read()[0]
-
         # we get context as a str not a dict
-        context = eval(res.get("context", "{}"))
+        context = dict(self.env.context)
         if not self.operation_ids:
             raise ValidationError(_("User is not connected to any operations"))
-        context["default_operation_id"] = self.operation_ids._ids[0]
+        if not context.get("default_operation_id"):
+            context["default_operation_id"] = self.operation_ids._ids[0]
         context["default_user_ids"] = self._ids
         # convert back to str and return
         res["context"] = str(context)

@@ -21,7 +21,7 @@
 
 {
     "name": "Calendar management - AF",
-    "version": "12.0.3.2.2",
+    "version": "12.0.3.2.3",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
@@ -56,6 +56,7 @@ v12.0.3.1.9 AFC-2290: Changed duration_text field to stored for calendar_appoint
 v12.0.3.2.0 AFC-2335: Removed ability to open operation_ids from views. \n
 v12.0.3.2.1 AFC-2328: Changed labels for create occasions view \n
 v12.0.3.2.2 AFC-2334: Stopped regular users from editing employees on hr_operation \n
+v12.0.3.2.3 AFC-2327: Fixed context when navigating views. \n
 \n
 """,
     "depends": [
