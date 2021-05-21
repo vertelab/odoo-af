@@ -10,8 +10,9 @@
           <field name="app_warn_emp_ids" widget="many2many_tags" domain="[('id', 'in', employee_ids)]" string="Appointment warnings"/>
         </group>
         <notebook>
+          <field name="is_office_manager" invisible="1"/>
           <page name="employees" string="Case workers">
-            <field name="employee_ids">
+            <field name="employee_ids" attrs="{'readonly':[('is_office_manager', '!=', True)]}">
               <tree string="Administrative officers">
                 <field name="name"/>
                 <field name="signature"/>
