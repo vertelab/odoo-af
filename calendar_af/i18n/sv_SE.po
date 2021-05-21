@@ -757,6 +757,7 @@ msgstr "Mötesämne"
 #: model_terms:ir.ui.view,arch_db:calendar_af.calendar_appointment_search
 #: model_terms:ir.ui.view,arch_db:calendar_af.move_appointment_view_form
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_appointment_form
+#: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_create_local_occasion_form
 #: model_terms:ir.ui.view,arch_db:calendar_af.view_calendar_mapped_dates_tree
 msgid "Meeting type"
 msgstr "Mötestyp"
