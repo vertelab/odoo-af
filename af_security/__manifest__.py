@@ -5,7 +5,11 @@
     "version": "12.0.1.0.2",
     "author": "Vertel AB",
     "license": "AGPL-3",
-    "description": "User groups for Arbetsförmedlingen.",
+    "description": """
+    User groups for Arbetsförmedlingen. n\
+    This module is maintained from https://github.com/vertelab/odoo-af \n
+    """
+     ,
     "website": "https://vertel.se/",
     "category": "Tools",
     "depends": [
