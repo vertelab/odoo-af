@@ -28,16 +28,30 @@ _logger = logging.getLogger(__name__)
 
 
 class ResPartner(models.Model):
-    _inherit = 'res.partner'
+    _inherit = "res.partner"
 
-    appointment_ids_past = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings',
-                                           compute="compute_show_dates_past")
-    appointment_ids_ahead = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings',
-                                            compute="compute_show_dates_ahead")
-    appointment_ids = fields.One2many(comodel_name='calendar.appointment', string='Booked meetings',
-                                      inverse_name="partner_id")
-    forbidden_meeting_types = fields.Many2many(string="Forbidden meeting types", comodel_name="calendar.appointment.type", compute="_comp_forbidden_meeting_types", store=True)
-    
+    appointment_ids_past = fields.One2many(
+        comodel_name="calendar.appointment",
+        string="Booked meetings",
+        compute="compute_show_dates_past",
+    )
+    appointment_ids_ahead = fields.One2many(
+        comodel_name="calendar.appointment",
+        string="Booked meetings",
+        compute="compute_show_dates_ahead",
+    )
+    appointment_ids = fields.One2many(
+        comodel_name="calendar.appointment",
+        string="Booked meetings",
+        inverse_name="partner_id",
+    )
+    forbidden_meeting_types = fields.Many2many(
+        string="Forbidden meeting types",
+        comodel_name="calendar.appointment.type",
+        compute="_comp_forbidden_meeting_types",
+        store=True,
+    )
+
     @api.depends("match_area")
     @api.one
     def _comp_forbidden_meeting_types(self):
@@ -53,76 +67,93 @@ class ResPartner(models.Model):
         for partner in self:
             partner.appointment_count = len(partner.appointment_ids)
 
-    appointment_count = fields.Integer(compute='_compute_appointment_count')
+    appointment_count = fields.Integer(compute="_compute_appointment_count")
 
     @api.multi
     def view_appointments(self):
         return {
-            'name': _('Booked meetings'),
-            'domain': [('partner_id', '=', self.ids)],
-            'view_type': 'form',
-            'res_model': 'calendar.appointment',
-            'view_id': self.env.ref('calendar_af.view_calendar_appointment_tree').id,
-            'view_mode': 'tree',
-            'type': 'ir.actions.act_window',
+            "name": _("Booked meetings"),
+            "domain": [("partner_id", "=", self.ids)],
+            "view_type": "form",
+            "res_model": "calendar.appointment",
+            "view_id": self.env.ref("calendar_af.view_calendar_appointment_tree").id,
+            "view_mode": "tree",
+            "type": "ir.actions.act_window",
         }
 
     @api.multi
     def open_partner_calendar(self):
         return {
-            'name': _('Calendar'),
-            'domain': [('partner_id', '=', self.ids)],
-            'view_type': 'form',
-            'res_model': 'calendar.appointment',
-            'view_id': False,
-            'view_mode': 'tree,calendar,kanban,pivot,form',
-            'type': 'ir.actions.act_window',
+            "name": _("Calendar"),
+            "domain": [("partner_id", "=", self.ids)],
+            "view_type": "form",
+            "res_model": "calendar.appointment",
+            "view_id": False,
+            "view_mode": "tree,calendar,kanban,pivot,form",
+            "type": "ir.actions.act_window",
         }
 
     # unbook meeting?
     @api.multi
     def create_appointment(self):
         return {
-            'name': _('Booked meetings'),
-            'domain': [('partner_id', '=', self.ids)],
-            'view_type': 'form',
-            'res_model': 'calendar.appointment',
-            'view_id': self.env.ref('calendar_af.view_calendar_appointment_form').id,
-            'view_mode': 'form',
-            'type': 'ir.actions.act_window',
+            "name": _("Booked meetings"),
+            "domain": [("partner_id", "=", self.ids)],
+            "view_type": "form",
+            "res_model": "calendar.appointment",
+            "view_id": self.env.ref("calendar_af.view_calendar_appointment_form").id,
+            "view_mode": "form",
+            "type": "ir.actions.act_window",
         }
 
     @api.one
     def compute_show_dates_ahead(self):
         self.appointment_ids_ahead = self.appointment_ids.filtered(
-            lambda a: a.start > datetime.now() and a.state == 'confirmed')
+            lambda a: a.start > datetime.now() and a.state == "confirmed"
+        )
 
     @api.one
     def compute_show_dates_past(self):
-        self.appointment_ids_past = self.appointment_ids.filtered(lambda a: a.start < datetime.now())
+        self.appointment_ids_past = self.appointment_ids.filtered(
+            lambda a: a.start < datetime.now() and a.state != "free"
+        )
 
     @api.model
     def send_to_stom_track(self, pnr_list):
         # pnr_list = [{'pnr': '20000202-2382'}, {'pnr': '20000105-2380'}, {'pnr': '20000203-2399'}, {'foo': 'bar' }]
         pnr_domain = []
         for pnr in pnr_list:
-            pnr_domain.append(pnr.get('pnr'))
+            pnr_domain.append(pnr.get("pnr"))
         # get partners from pnr
-        partner_ids = self.env['res.partner'].sudo().search([('social_sec_nr', 'in', pnr_domain)])
+        partner_ids = (
+            self.env["res.partner"].sudo().search([("social_sec_nr", "in", pnr_domain)])
+        )
         # find our appointment types
-        type_21 = self.env.ref('calendar_meeting_type.type_21')
-        type_26 = self.env.ref('calendar_meeting_type.type_26')
+        type_21 = self.env.ref("calendar_meeting_type.type_21")
+        type_26 = self.env.ref("calendar_meeting_type.type_26")
         # find appointments that need to be moved
-        appointment_ids = self.env['calendar.appointment'].search(
-            [('partner_id', 'in', partner_ids._ids), ('type_id', '=', type_21.id)])
+        appointment_ids = self.env["calendar.appointment"].search(
+            [("partner_id", "in", partner_ids._ids), ("type_id", "=", type_21.id)]
+        )
 
         desired_time = datetime.now()
         # loop through appointments to be moved
         for appointment in appointment_ids:
-            appointment_length = appointment.duration 
+            appointment_length = appointment.duration
             location_id = appointment.location_id
             # find free occasions for meeting type 26
-            occasions = self.env['calendar.occasion'].sudo().get_bookable_occasions(desired_time, desired_time + timedelta(appointment_length), appointment_length, type_26, location_id, 1)
+            occasions = (
+                self.env["calendar.occasion"]
+                .sudo()
+                .get_bookable_occasions(
+                    desired_time,
+                    desired_time + timedelta(appointment_length),
+                    appointment_length,
+                    type_26,
+                    location_id,
+                    1,
+                )
+            )
             # loop result until we find a free occasion
             for book_occasion in occasions:
                 if book_occasion and book_occasion[0]:

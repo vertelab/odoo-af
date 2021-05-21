@@ -2,7 +2,7 @@
 
 {
     "name": "Calendar management - AF (360)",
-    "version": "12.0.1.0.2",
+    "version": "12.0.1.0.3",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
@@ -14,6 +14,7 @@ This module extends the functionality regarding appointments functionality \n
 This functionality is tailored for AF. \n
 v12.0.1.0.1: versions before good version control \n
 v12.0.1.0.2 AFC-2113: Updated how res.users is presented in views. \n
+v12.0.1.0.3 AFC-2278: Updated critera for shown meetings \n
 \n
 """,
     "depends": [

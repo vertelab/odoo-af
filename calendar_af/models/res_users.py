@@ -94,7 +94,7 @@ class ResUsers(models.Model):
         res["domain"] = [
             ("operation_id", "in", self.operation_ids._ids),
             ("user_id", "=", self.id),
-            ("state", "!=", "canceled"),
+            ("state", "not in", ["canceled", "free"])
         ]
         return res
 
