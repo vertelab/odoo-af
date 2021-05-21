@@ -72,6 +72,12 @@
             <field name="comment">The user will be able to administrate the appointments planner.</field>
         </record>
 
+        <record id="af_meeting_planner_PDM" model="res.groups">
+            <field name="name">PDM planner</field>
+            <field name="category_id" eval="module_category_af_meeting"/>
+            <field name="comment">The user will have access to the appointments planner for PDM.</field>
+        </record>
+
         <!-- Newsletter -->
 
         <record model="ir.module.category" id="module_category_af_newsletter">
