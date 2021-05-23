@@ -96,6 +96,8 @@ class CreateLocalOccasion(models.TransientModel):
         hr_operation = self.env["hr.operation"].search([('id', '=', default_operation_id)])
         if hr_operation:
             return hr_operation
+        elif self.env.user.has_group("af_security.af_meeting_admin"):
+            return self.env["hr.operation"].search([])
         else:
             return self.env.user.mapped("employee_ids.office_ids.operation_ids.location_id")
 
@@ -117,26 +119,46 @@ class CreateLocalOccasion(models.TransientModel):
             self.stop = self.start + timedelta(minutes=int(self.duration * 60))
 
     @api.multi
-    def check_access_planner_locations(self, locations):
+    def _check_access_meeting_planner(self):
         """Check if current user is planner with access to these locations."""
         if not self.env.user.has_group("af_security.af_meeting_planner"):
             return False
+        locations = self.env.user.mapped(
+            "employee_ids.office_ids.operation_ids.location_id"
+        )
         if not self.mapped("operation_id.location_id") in locations:
             return False
         return True
 
-    def action_create_occasions(self):
-        """Create occasions."""
-        # Perform access control.
+    @api.multi
+    def _check_access_meeting_admin(self):
+        """Check if current user is a meeting admin."""
+        return self.env.user.has_group("af_security.af_meeting_admin")
+
+    # TODO: Check if we need this.
+    @api.multi
+    def _check_access_js_officer(self):
+        """Check if current user is a jobseeker officer scheduling for themselves."""
+        if not self.env.user.has_group("af_security.af_jobseekers_officer"):
+            return False
+        return True
+
+    def _check_access(self):
+        """Perform access control."""
+        if self.env.user.has_group("base.group_system"):
+            return True
         allowed = False
         denied = False
-        locations = self.env.user.mapped(
-            "employee_ids.office_ids.operation_ids.location_id"
-        )
-        # Check access for Meeting Planner
-        if self.check_access_planner_locations(locations):
-            allowed = True
-        if allowed and not denied:
+        for method in ("_check_access_js_officer",
+                       "_check_access_meeting_planner",
+                       "_check_access_meeting_admin"):
+            if getattr(self, method)():
+                allowed = True
+        return allowed and not denied
+
+    def action_create_occasions(self):
+        """Create occasions."""
+        if self._check_access():
             # Checks passed. Run inner function with sudo.
             return self.sudo()._action_create_occasions()
         raise ValidationError(_("You are not allowed to create these occasions."))

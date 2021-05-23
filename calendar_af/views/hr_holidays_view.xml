@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_schedule"
+              name="Schedule"
+              parent="calendar_af.menu_calendar"
+              action="hr_holidays.hr_leave_action_my"
+              sequence="25"
+              groups="af_security.af_jobseekers_officer"/>
+</odoo>
+
+
