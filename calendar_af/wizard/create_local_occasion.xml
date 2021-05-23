@@ -79,6 +79,6 @@
                 target="new"/>
 
     <menuitem action="create_local_occasion_action" id="menu_action_create_local_occasion" parent="menu_local"
-              sequence="12" groups="af_security.af_meeting_planner"/>
+              sequence="12" groups="af_security.af_meeting_planner,af_security.af_meeting_admin,af_security.af_jobseekers_officer"/>
 
 </odoo>

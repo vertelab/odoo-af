@@ -122,6 +122,31 @@ class CalendarOccasion(models.Model):
         string="Is a possible start time",
         selection=[("", "Not set"), ("0", "No"), ("1", "Yes")],
     )
+    # TODO: Couldn't we solve this with security rules?
+    af_tree_filter = fields.Boolean(compute='_compute_af_tree_filter',
+                                    search="_search_af_tree_filter",
+                                    help="User dependant filtering for default tree view.")
+
+    def _compute_af_tree_filter(self):
+        """Not needed. We only use search."""
+        pass
+
+    @api.model
+    def _search_af_tree_filter(self, op, value):
+        """ Meeting Admin should see every occasion.
+        Planners should only see their coworkers occasions.
+        Regular users should only see their own occasions."""
+        if op != "=":
+            raise Warning(_("%s operator not implemented for calendar.occasion.af_tree_filter!") % op)
+        if value is not True:
+            raise Warning(_("Value '%s' not implemented for calendar.occasion.af_tree_filter!") % op)
+        if self.env.user.has_group("base.group_system"):
+            return []
+        if self.env.user.has_group("af_security.af_meeting_admin"):
+            return []
+        if self.env.user.has_group("af_security.af_meeting_planner"):
+            return [("user_id.employee_ids.office_ids.id", "in", self.env.user.mapped("employee_ids.office_ids.id"))]
+        return [("user_id", "=", self.env.user.id)]
 
     @api.depends("duration")
     def _compute_duration_text(self):

@@ -345,5 +345,5 @@
 
     <menuitem action="action_appointment" id="menu_action_appointment" parent="menu_pdm" sequence="12" groups="af_security.af_meeting_planner_PDM"/>
     <menuitem action="action_local_appointment" id="menu_action_local_appointment" parent="menu_local" sequence="13"
-              groups="af_security.af_meeting_planner"/>
+              groups="af_security.af_meeting_planner,af_security.af_meeting_admin"/>
 </odoo>

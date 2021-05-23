@@ -211,10 +211,34 @@
             <field name="perm_unlink" eval="False"/>
         </record>
 
+        <record id="af_rule_hr_operation_mp" model="ir.rule">
+            <field name="name">hr.office - Meeting Planner</field>
+            <field name="model_id" ref="hr_office.model_hr_operation"/>
+            <field name="domain_force">[('id', 'in', user.mapped('employee_ids.office_ids.operation_ids.id'))]</field>
+            <field name="groups" eval="[(4, ref('af_security.af_meeting_planner'))]"/>
+            <field name="perm_read" eval="False"/>
+        </record>
+
+        <record id="af_rule_cal_app_type_operation_mp" model="ir.rule">
+            <field name="name">calendar.appointment.type.operation - Meeting Planner</field>
+            <field name="model_id" ref="calendar_af.model_calendar_appointment_type_operation"/>
+            <field name="domain_force">[('operation_id', 'in', user.mapped('employee_ids.office_ids.operation_ids.id'))]</field>
+            <field name="groups" eval="[(4, ref('af_security.af_meeting_planner'))]"/>
+            <field name="perm_read" eval="False"/>
+        </record>
+
+        <record id="af_rule_calendar_mapped_dates_mp" model="ir.rule">
+            <field name="name">calendar.mapped_dates - Meeting Planner</field>
+            <field name="model_id" ref="calendar_af.model_calendar_mapped_dates"/>
+            <field name="domain_force">[('operation_id', 'in', user.mapped('employee_ids.office_ids.operation_ids.id'))]</field>
+            <field name="groups" eval="[(4, ref('af_security.af_meeting_planner'))]"/>
+            <field name="perm_read" eval="False"/>
+        </record>
+
         <!-- =====Bemanningshandläggare mötesbokning===== -->
         <record id="af_rule_resource_leaves_meeting_admin" model="ir.rule">
             <field name="name">resource.calendar.leaves - Meeting Admin</field>
-            <field ref="resource.model_resource_calendar_leaves" name="model_id"/>
+            <field name="model_id" ref="resource.model_resource_calendar_leaves"/>
             <field name="domain_force">[(1, '=', 1)]</field>
             <field name="groups" eval="[(4, ref('af_security.af_meeting_admin'))]"/>
             <field name="perm_read" eval="True"/>

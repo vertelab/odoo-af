@@ -92,10 +92,15 @@ class ChangeUserAppointment(models.TransientModel):
         # Perform access control.
         allowed = False
         denied = False
-        locations = self.env.user.mapped('employee_ids.office_ids.operation_ids.location_id')
-        # Check access for Meeting Planner
-        if self.check_access_planner_locations(locations):
+        # Check access for Meeting Admin
+        if self.env.user.has_group("af_security.af_meeting_admin"):
             allowed = True
+        # Office check is not needed if we're Meeting Admin
+        if not allowed:
+            locations = self.env.user.mapped('employee_ids.office_ids.operation_ids.location_id')
+            # Check access for Meeting Planner
+            if self.check_access_planner_locations(locations):
+                allowed = True
         if allowed and not denied:
             # Checks passed. Run inner function with sudo.
             return self.sudo()._action_change_user_appointment()

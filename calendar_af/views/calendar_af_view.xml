@@ -109,6 +109,7 @@ unused_occasions.unlink()</field>
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="view_calendar_operation_tree" />
         <field name="search_view_id" ref="hr_office.view_operation_filter" />
+        <field name="domain">[('af_show_in_tree', '=', True)]</field>
     </record>
 
     <record id="action_view_calendar_operation_tree" model="ir.actions.act_window.view">
@@ -119,13 +120,17 @@ unused_occasions.unlink()</field>
     </record>
 
     <menuitem action="action_calendar_operation" name="Calendar" id="menu_calendar"
-      sequence="2" groups="af_security.af_meeting_planner,af_security.af_meeting_admin"
+      sequence="2" groups="af_security.af_meeting_planner,af_security.af_meeting_admin,af_security.af_jobseekers_officer"
       web_icon="calendar,static/description/icon.png"
     />
-    <menuitem name="Distans Meeting" id="menu_book_distans_meeting" parent="calendar_af.menu_calendar" sequence="10" />
+    <menuitem name="Distans Meeting" id="menu_book_distans_meeting" parent="calendar_af.menu_calendar" sequence="10"
+              groups="af_security.af_meeting_planner,af_security.af_meeting_admin"/>
     <menuitem name="PDM" id="menu_pdm" parent="calendar_af.menu_calendar" sequence="11" />
     <menuitem name="Local" id="menu_local" parent="calendar_af.menu_calendar" sequence="12" />
-    <menuitem name="Reports" id="menu_reports" parent="calendar_af.menu_calendar" sequence="13" />
-    <menuitem name="Administration" id="menu_admin" parent="calendar_af.menu_calendar" sequence="20" />
-    <menuitem name="Holidays" action="resource.action_resource_calendar_leave_tree" id="menu_action_calendar_leave" parent="menu_admin" sequence="15" groups="af_security.af_meeting_admin" />
+    <menuitem name="Reports" id="menu_reports" parent="calendar_af.menu_calendar" sequence="13"
+              groups="af_security.af_meeting_planner,af_security.af_meeting_admin"/>
+    <menuitem name="Administration" id="menu_admin" parent="calendar_af.menu_calendar" sequence="20"
+              groups="af_security.af_meeting_planner,af_security.af_meeting_admin"/>
+    <menuitem name="Holidays" action="resource.action_resource_calendar_leave_tree" id="menu_action_calendar_leave"
+              parent="menu_admin" sequence="15" groups="af_security.af_meeting_admin" />
 </odoo>

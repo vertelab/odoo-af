@@ -27,7 +27,7 @@ from odoo.exceptions import ValidationError
 _logger = logging.getLogger(__name__)
 
 
-class hr_operation(models.Model):
+class HrOperation(models.Model):
     _inherit = "hr.operation"
 
     user_ids = fields.Many2many(comodel_name="res.users", compute="compute_user_ids")
@@ -50,18 +50,35 @@ class hr_operation(models.Model):
         string="Mapped dates",
     )
     reserve_time = fields.Float(string="Reserve time start")
+    af_show_in_tree = fields.Boolean(compute="_compute_af_show_in_tree",
+                                     search="_search_af_show_in_tree",
+                                     help="Whether this operation should show up in"
+                                          "the standard list view.")
+    is_office_manager = fields.Boolean(
+        string="Is office manager", compute="_compute_is_office_manager")
+
+    def _compute_af_show_in_tree(self):
+        """Not needed. We only want to search."""
+        pass
+
+    def _search_af_show_in_tree(self, op, value):
+        """ Meeting Admin should see every operation.
+        Other users should only see their own offices."""
+        if op != "=":
+            raise Warning(_("%s operator not implemented for hr.operation.af_show_in_tree!") % op)
+        if value is not True:
+            raise Warning(_("Value '%s' not implemented for hr.operation.af_show_in_tree!") % op)
+        if self.env.user.has_group("base.group_system"):
+            return []
+        if self.env.user.has_group("af_security.af_meeting_admin"):
+            return []
+        return [("id", "in", self.env.user.mapped("employee_ids.office_ids.id"))]
 
     def _compute_is_office_manager(self):
         self.is_office_manager = (
-            True
-            if self.env.user.has_group("af_security.af_meeting_admin")
-            or self.env.user.has_group("base.group_system")
-            else False
+                self.env.user.has_group("af_security.af_meeting_admin") or
+                self.env.user.has_group("base.group_system")
         )
-
-    is_office_manager = fields.Boolean(
-        string="Is office manager", compute=_compute_is_office_manager
-    )
 
     @api.one
     def compute_user_ids(self):
@@ -70,7 +87,7 @@ class hr_operation(models.Model):
 
     def view_reserve_dates(self):
         return {
-            "name": _("Mapped dates for %s") % (self.display_name),
+            "name": _("Mapped dates for %s") % self.display_name,
             "res_model": "calendar.mapped_dates",
             "view_type": "form",
             "view_mode": "tree",
@@ -93,6 +110,12 @@ class hr_operation(models.Model):
         else:
             raise ValidationError(_("No administrative officers on this operation"))
         return res
+
+    def _check_employee_ids_access(self):
+        """Allow Meeting admins to write employees."""
+        if self.env.user.has_group('af_security.af_meeting_admin'):
+            return True
+        return super(HrOperation, self)._check_employee_ids_access()
 
 
 class AppointmentTypeOperation(models.Model):
