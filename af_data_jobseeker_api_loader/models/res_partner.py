@@ -67,7 +67,7 @@ class ResPartner(models.Model):
                     additional_message='0', objectid=customer_id, first=True)
 
                 self.env["res.partner"]._aisf_sync_jobseeker(
-                    #db_values,
+                    db_values,
                     None,
                     process_name,
                     customer_id,
