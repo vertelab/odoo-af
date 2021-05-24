@@ -21,7 +21,7 @@
 
 {
     "name": "Calendar management - AF",
-    "version": "12.0.3.3.1",
+    "version": "12.0.3.3.2",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
@@ -59,6 +59,7 @@ v12.0.3.2.2 AFC-2334: Stopped regular users from editing employees on hr_operati
 v12.0.3.2.3 AFC-2327: Fixed context when navigating views. \n
 v12.0.3.3.0 AFC-2298: calendar_af: Fixed access rights and menus. \n
 v12.0.3.3.1 AFC-2351: allowed removal of several occasions at once \n
+v12.0.3.3.2 AFC-2342: Removed unused views from action_local_appointment \n
 \n
 """,
     "depends": [

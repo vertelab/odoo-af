@@ -292,7 +292,7 @@
     <record id="action_local_appointment" model="ir.actions.act_window">
         <field name="name">Local appointments</field>
         <field name="res_model">calendar.appointment</field>
-        <field name="view_mode">tree,calendar,form,kanban</field>
+        <field name="view_mode">tree,form</field>
         <field name="view_id" ref="view_calendar_appointment_local_calendar"/>
         <field name="domain" eval="[('channel', '=', ref('calendar_channel.channel_local'))]"/>
         <!-- This should be a reference to the external id instead. -->
