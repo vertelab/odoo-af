@@ -48,8 +48,16 @@ class Partner(models.Model):
             return
         customer_id = res.get('arbetssokande', {}).get('sokandeId')
         if res.get('processStatus', {}).get('skyddadePersonUppgifter'):
-            log.log_message(process_name, eventid, RASK_SYNC,
-                            objectid=customer_id, error_message="SPU", info_1=time_for_call_to_rask)
+            # TODO: det här funkar tills vi fått in t.ex. Boka möte där andra objekt har relation till res.partner-objektet,
+            # ska alltså ersättas med korrekt hantering ASAP!
+            if partner:
+                partner.unlink()
+                log.log_message(process_name, eventid, RASK_SYNC,
+                    objectid=customer_id, error_message="SPU", info_1=time_for_call_to_rask, info_2='delete')
+            else:
+                log.log_message(process_name, eventid, RASK_SYNC,
+                    objectid=customer_id, error_message="SPU", info_1=time_for_call_to_rask, info_2='not created')
+
             return True
         try:
             state = res.get('kontaktuppgifter', {}).get('hemkommunKod')
@@ -104,12 +112,17 @@ class Partner(models.Model):
             education_level = res.get('utbildning', {}).get('utbildningsniva')
             if education_level is not None:
                 try:
-                    education_level = self.env['res.partner.education.education_level'].search(
-                        [('name', '=', int(education_level))])
+                    if not db_values:
+                        education_level = self.env['res.partner.education.education_level'].search(
+                            [('name', '=', int(education_level))]).id
+                    else:
+                        education_level = db_values['education_level'].get(int(education_level), False)
                 except ValueError:
                     education_level = False
             else:
                 education_level = False
+
+            # En kommentar
 
             last_contact_type = res.get('kontakt', {}).get('senasteKontakttyp') or False
             if last_contact_type:
@@ -150,7 +163,7 @@ class Partner(models.Model):
                 if partner:
                     if partner.education_ids.filtered(
                             lambda e: e.sun_id == sun and
-                            e.education_level_id == education_level):
+                            e.education_level_id.id == education_level):
                         # Already exists. Do nothing.
                         pass
                     else:
@@ -202,21 +215,28 @@ class Partner(models.Model):
                         partner.city = city
                         partner.country_id = country
                     elif address.get('adressTyp') == 'EGEN' or address.get('adressTyp') == 'UTL':
-                        # TODO: This looks sketchy. Wont this create new
-                        #  adresses every time we sync?
-                        #  Nope, this method will only be called when the
-                        #  user does not exist in res.partner
-                        given_address_dict = {
-                            'address_co': co_address,
-                            'parent_id': partner.id,
-                            'street': street,
-                            'street2': street2,
-                            'zip': zip,
-                            'city': city,
-                            'type': 'given address',
-                            'country_id': country,
-                        }
-                        self.env['res.partner'].create(given_address_dict)
+                        own_or_foreign_address_given = True
+                        given_address_object = self.env["res.partner"].search(
+                            [("parent_id", "=", partner.id)]
+                        )
+                        if not given_address_object:
+                            given_address_dict = {
+                                'address_co': co_address,
+                                'parent_id': partner.id,
+                                'street': street,
+                                'street2': street2,
+                                'zip': zip,
+                                'city': city,
+                                'type': 'given address',
+                                'country_id': country,
+                            }
+                            self.env['res.partner'].create(given_address_dict)
+                if not own_or_foreign_address_given:
+                    given_address_object = self.env["res.partner"].search(
+                    [("parent_id", "=", partner.id)]
+                )
+                    if given_address_object:
+                        given_address_object.unlink()
         except Exception:
             em = traceback.format_exc()
             log.log_message(process_name, eventid, RASK_SYNC,
