@@ -513,14 +513,10 @@ class CalendarOccasion(models.Model):
         return ret
 
     @api.multi
-    def delete_occasion(self, records):
+    def delete_occasion(self):
         """User deletes an occasion"""
         # Added this stop since we don't want to allow batch handling.
-        if len(records) > 1:
-            raise ValidationError(
-                _("You can't change the status of several occasions at the same time.")
-            )
-        for rec in records:
+        for rec in self:
             if not rec.appointment_id:
                 # Perform access control.
                 if rec.af_check_access():
@@ -530,10 +526,10 @@ class CalendarOccasion(models.Model):
                         raise ValidationError(
                             _("One of your occasions is already booked")
                         )
-                    return res
-                raise ValidationError(
-                    _("You are not allowed to delete these occasions.")
-                )
+                else:
+                    raise ValidationError(
+                        _("You are not allowed to delete these occasions.")
+                    )
 
     @api.multi
     def _delete_occasion(self):
