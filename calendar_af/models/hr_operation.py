@@ -72,7 +72,7 @@ class HrOperation(models.Model):
             return []
         if self.env.user.has_group("af_security.af_meeting_admin"):
             return []
-        return [("id", "in", self.env.user.mapped("employee_ids.office_ids.id"))]
+        return [("id", "in", self.env.user.mapped("employee_ids.operation_ids.id"))]
 
     def _compute_is_office_manager(self):
         self.is_office_manager = (

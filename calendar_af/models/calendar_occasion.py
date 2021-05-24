@@ -145,7 +145,7 @@ class CalendarOccasion(models.Model):
         if self.env.user.has_group("af_security.af_meeting_admin"):
             return []
         if self.env.user.has_group("af_security.af_meeting_planner"):
-            return [("user_id.employee_ids.office_ids.id", "in", self.env.user.mapped("employee_ids.office_ids.id"))]
+            return [("user_id.employee_ids.operation_ids.id", "in", self.env.user.mapped("employee_ids.operation_ids.id"))]
         return [("user_id", "=", self.env.user.id)]
 
     @api.depends("duration")
