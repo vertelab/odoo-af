@@ -79,6 +79,20 @@ class hr_operation(models.Model):
             raise ValidationError(_("No administrative officers on this operation"))
         return res
 
+    @api.multi
+    def action_calendar_operation(self):
+        return {
+            'name': 'Operations',
+            'res_model': 'hr.operation',
+            'view_type': 'tree',
+            'view_mode': 'tree,form',
+            'view_id': self.env.ref('calendar_af.view_calendar_operation_tree').id,
+            'search_view_id': self.env.ref('hr_office.view_operation_filter').id,
+            'type': 'ir.actions.act_window',
+            'target': 'current',
+            'domain': [('id', 'in', self.env.user.operation_ids._ids)]
+        }
+
 
 class AppointmentTypeOperation(models.Model):
     _name = "calendar.appointment.type.operation"

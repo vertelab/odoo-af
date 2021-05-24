@@ -103,20 +103,29 @@ unused_occasions.unlink()</field>
         <field name="view_id" ref="view_calendar_user_form" />
     </record>
 
-      <record id="action_calendar_operation" model="ir.actions.act_window">
+    <!-- <record id="action_calendar_operation" model="ir.actions.act_window">
         <field name="name">Operations</field>
         <field name="res_model">hr.operation</field>
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="view_calendar_operation_tree" />
         <field name="search_view_id" ref="hr_office.view_operation_filter" />
+    </record> -->
+
+    <record id="action_calendar_operation" model="ir.actions.server">
+        <field name="name">Operations</field>
+        <field name="condition">True</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="base.model_ir_actions_server" />
+        <field name="state">code</field>
+        <field name="code">env['hr.operation'].action_calendar_operation()</field>
     </record>
 
-    <record id="action_view_calendar_operation_tree" model="ir.actions.act_window.view">
+   <!-- <record id="action_view_calendar_operation_tree" model="ir.actions.act_window.view">
         <field name="act_window_id" ref="action_calendar_operation" />
         <field name="sequence" eval="1" />
         <field name="view_mode">tree</field>
         <field name="view_id" ref="view_calendar_operation_tree" />
-    </record>
+    </record> -->
 
     <menuitem action="action_calendar_operation" name="Calendar" id="menu_calendar"
       sequence="2" groups="af_security.af_meeting_planner,af_security.af_meeting_admin"
