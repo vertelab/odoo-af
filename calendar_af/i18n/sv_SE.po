@@ -591,6 +591,11 @@ msgid "Group By..."
 msgstr "Gruppera efter"
 
 #. module: calendar_af
+#: model_terms:ir.ui.view,arch_db:calendar_af.calendar_occasion_local_search
+msgid "Hide history"
+msgstr "Dölj historik"
+
+#. module: calendar_af
 #: model:ir.ui.menu,name:calendar_af.menu_action_calendar_leave
 msgid "Holidays"
 msgstr "Helgdagar"
@@ -1435,6 +1440,11 @@ msgstr "Onsdag"
 #: model:ir.model.fields,field_description:calendar_af.field_calendar_occasion__weekday
 msgid "Weekday"
 msgstr "Veckodag"
+
+#. module: calendar_af
+#: model:ir.ui.menu,name:calendar_af.menu_schedule
+msgid "Work Schedule"
+msgstr "Arbetsschema"
 
 #. module: calendar_af
 #: selection:calendar.occasion,is_possible_start:0

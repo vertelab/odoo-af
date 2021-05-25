@@ -21,7 +21,7 @@
 
 {
     "name": "Calendar management - AF",
-    "version": "12.0.3.3.0",
+    "version": "12.0.3.3.1",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
@@ -58,6 +58,7 @@ v12.0.3.2.1 AFC-2328: Changed labels for create occasions view \n
 v12.0.3.2.2 AFC-2334: Stopped regular users from editing employees on hr_operation \n
 v12.0.3.2.3 AFC-2327: Fixed context when navigating views. \n
 v12.0.3.3.0 AFC-2298: calendar_af: Fixed access rights and menus. \n
+v12.0.3.3.1 AFC-2350: Translated schedule menu.
 \n
 """,
     "depends": [
