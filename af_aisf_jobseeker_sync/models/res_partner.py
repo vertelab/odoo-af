@@ -1,4 +1,3 @@
-#  Copyright (c) 2021 Arbetsförmedlingen.
 
 from odoo import models, api
 from uuid import uuid4

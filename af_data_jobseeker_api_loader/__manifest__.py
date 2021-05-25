@@ -2,8 +2,9 @@
 
 {
     "name": "AIS-F Jobseeker Loader",
-    "version": "12.0.1.1",
-    "description": """
+    "version": "12.0.1.2",
+    "description": "12.0.1.2 """"
+    
 
 AIS-F Jobseeker Loader
 ==========================================

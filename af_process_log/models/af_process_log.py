@@ -15,21 +15,21 @@ class AFProcessLog(models.Model):
     _name = "af.process.log"
     _description = "AF Process Log"
     _rec_name = 'eventid'
-    _sql_constraints = [("af_sync_log_messageId_unique",
-                         "unique(messageId, process)",
-                         "Message Id must be unique within a process.")]
+    _sql_constraints = [("af_sync_log_eventid_unique",
+                         "unique(eventid, process)",
+                         "Message Eventid must be unique within a process.")]
 
-    process = fields.Char(string="Process", required=True)
+    process = fields.Char(string="Process", required=True, index=True)
     eventid = fields.Char(string="Event Id", required=True, index=True)
     step = fields.Char(string="Step", required=True)
     message = fields.Text(string="Message", required=True)
-    error_message = fields.Text(string='Error Message')
-    status = fields.Boolean(string="Status")
-    no_tries = fields.Integer(string="No. of tries")
+    error_message = fields.Text(string='Error Msg')
+    status = fields.Boolean(string="Status", index=True)
+    no_tries = fields.Integer(string="No of tries")
     objectid = fields.Char(string="Object Id")
-    info_1 = fields.Text(string="Informational Message 1", required=False)
-    info_2 = fields.Text(string="Informational Message 2", required=False)
-    info_3 = fields.Text(string="Informational Message 3", required=False)
+    info_1 = fields.Text(string="Info Msg 1", required=False)
+    info_2 = fields.Text(string="Info Msg 2", required=False)
+    info_3 = fields.Text(string="Info Msg 3", required=False)
 
     @api.model
     def log_message(self, process, eventid, step, message=None, error_message=None,

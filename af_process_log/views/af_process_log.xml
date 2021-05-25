@@ -14,6 +14,9 @@
                 <field name="status"/>
                 <field name="no_tries"/>
                 <field name="objectid"/>
+                <field name="info_1"/>
+                <field name="info_2"/>
+                <field name="info_3"/>
             </tree>
         </field>
     </record>
@@ -33,6 +36,9 @@
                         <field name="status"/>
                         <field name="no_tries"/>
                         <field name="objectid"/>
+                        <field name="info_1"/>
+                        <field name="info_2"/>
+                        <field name="info_3"/>
                     </group>
                     <label for="message"/>
                     <field name="message"/>
