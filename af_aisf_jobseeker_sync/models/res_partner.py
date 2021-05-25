@@ -236,7 +236,7 @@ class Partner(models.Model):
                         pass
                     else:
                         # delete education with source from AIS-F
-                        aisf_edu = partner.education_ids.filtered(lambda e: e.is_aisf)
+                        aisf_edu = partner.education_ids.filtered(lambda e: e.is_rask)
                         if aisf_edu:
                             aisf_edu.unlink()
                         # add empty list to jobseeker_dict to trigger next if
@@ -251,7 +251,7 @@ class Partner(models.Model):
                             {
                                 "sun_id": sun,
                                 "education_level_id": education_level,
-                                "is_aisf": True,
+                                "is_rask": True,
                             },
                         )
                     )

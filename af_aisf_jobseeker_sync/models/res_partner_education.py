@@ -29,4 +29,4 @@ _logger = logging.getLogger(__name__)
 class ResPartnerEducation(models.Model):
     _inherit = "res.partner.education"
 
-    is_aisf = fields.Boolean(string="Education from AIS-F", default=False)
+    is_rask = fields.Boolean(string="Education from AIS-F", default=False)
