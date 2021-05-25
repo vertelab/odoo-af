@@ -15,7 +15,7 @@ class Partner(models.Model):
     _inherit = "res.partner"
 
     @api.model
-    def _aisf_sync_jobseeker(self, db_values, process_name, customer_id, eventid=None, batch=None):
+    def _aisf_sync_jobseeker(self, db_values, process_name, customer_id, social_sec_nr=False, eventid=None, batch=None):
         """ Perform a sync of a jobseeker from AIS-F.
         :param customer_id: Customer ID of the jobseeker.
         :param eventid: The MQ message id for logging purposes.
@@ -27,6 +27,8 @@ class Partner(models.Model):
 
         partner = self.env['res.partner'].search(
             [('customer_id', '=', customer_id), ('is_jobseeker', '=', True)])
+        if not partner and social_sec_nr:
+            partner = self.env['res.partner'].search_pnr(social_sec_nr)
         eventid = eventid or uuid4()
 
         rask = self.env.ref('af_ipf.ipf_endpoint_rask').sudo()
@@ -114,7 +116,9 @@ class Partner(models.Model):
                 try:
                     if not db_values:
                         education_level = self.env['res.partner.education.education_level'].search(
-                            [('name', '=', int(education_level))]).id
+                            [('name', '=', int(education_level))])
+                        if education_level:
+                            education_level = education_level.id
                     else:
                         education_level = db_values['education_level'].get(int(education_level), False)
                 except ValueError:
@@ -162,14 +166,15 @@ class Partner(models.Model):
             if sun and education_level:
                 if partner:
                     if partner.education_ids.filtered(
-                            lambda e: e.sun_id == sun and
-                            e.education_level_id.id == education_level):
+                            lambda e: (e.sun_id and e.sun_id.id == sun) and
+                                      (e.education_level_id and e.education_level_id.id == education_level)):
                         # Already exists. Do nothing.
                         pass
                     else:
                         # delete education with source from AIS-F
-                        partner.education_ids.filtered(
-                            lambda e: e.is_aisf).unlink()
+                        aisf_edu = partner.education_ids.filtered(lambda e: e.is_aisf)
+                        if aisf_edu:
+                            aisf_edu.unlink()
                         # add empty list to jobseeker_dict to trigger next if
                         jobseeker_dict['education_ids'] = []
                 else:
@@ -177,7 +182,7 @@ class Partner(models.Model):
                 if 'education_ids' in jobseeker_dict:
                     jobseeker_dict['education_ids'].append((0, 0, {
                         'sun_id': sun,
-                        'education_level_id': education_level.id,
+                        'education_level_id': education_level,
                         'is_aisf': True}))
 
             if partner:
