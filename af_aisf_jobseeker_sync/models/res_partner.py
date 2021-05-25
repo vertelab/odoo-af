@@ -286,7 +286,7 @@ class Partner(models.Model):
                             country = (
                                 self.env["res.country"]
                                 .with_context(lang="sv_SE")
-                                .search([("name", "=", country)])
+                                .search([("name", "ilike", country)])
                             )
                             country = country["id"] or None
                         else:
