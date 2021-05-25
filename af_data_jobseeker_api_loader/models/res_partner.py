@@ -28,6 +28,8 @@ from odoo.tools.profiler import profile
 
 _logger = logging.getLogger(__name__)
 
+LOAD_AISF_ASOK_PROCESS = "LOAD AIS-F ASOK"
+
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
@@ -39,11 +41,11 @@ class ResPartner(models.Model):
                 config.options.get('data_dir'),
                 'AIS-F/arbetssokande.csv')
             path = "/usr/share/odoo-af/af_data_jobseeker_api_loader/data/test_dumps/arbetssokande.csv" # testing purposes only
-        self.create_partners_from_api('SOKANDE_ID', path)
+        self.create_partners_from_api(path)
         _logger.info("LOAD AIS-F Jobseekers %s - END" % path)
 
     @api.model
-    def create_partners_from_api(self, key, path):
+    def create_partners_from_api(self, path):
         db_con = self.env.ref('af_ipf.ipf_endpoint_rask').sudo()
         db_values = {'res.country.state': self.search_model('res.country.state', 'code', 'id'),
                      'hr.department': self.search_model('hr.department', 'office_code', 'id'),
@@ -53,36 +55,23 @@ class ResPartner(models.Model):
                      'res.users': self.search_model('res.users', 'login', 'id'),
                      'res.country': self.search_model('res.country', 'name', 'id', {'lang':'sv_SE'})
                      }
-        rownr = 0
-        iterations = 0
-        call_to_rask_time = 0
+        filename = os.path.basename(path)
+        process_name = LOAD_AISF_ASOK_PROCESS + " " + filename
+
         with open(path) as fh:
             for row in fh:
-                if rownr == 0:
-                    header = {key.strip():index for index, key in
-                              enumerate(row.strip().split(','))}
-                    try:
-                        _logger.debug("header: %s" % header)
-                        id_index = header[key]
-                    except KeyError:
-                        _logger.error(
-                            f'Failed to find {key} in {", ".join(header)}')
-                        raise
-                    rownr += 1
-                    continue
-                customer_id = row.strip().split(',')[id_index]
-                _logger.debug("sökande-id %s" % customer_id)
-                if not self.env['res.partner'].search_count([('customer_id',
-                                                             '=',
-                                                             customer_id)]):
-                    call_to_rask_time += self.env['res.partner'].rask_as_get(
-                        customer_id, db_con, db_values)
+                customer_id = row.rstrip("\n")
 
-                iterations += 1
-                if not iterations % 500:
-                    self.env.cr.commit()
-                    _logger.info('%s Users added' % iterations)
-        _logger.info('calls to RASK took %s seconds' % call_to_rask_time)
+                self.env['af.process.log'].log_message(
+                    process_name, customer_id, "PROCESS INITIATED", message=customer_id,
+                    additional_message='0', objectid=customer_id, first=True)
+
+                self.env["res.partner"]._aisf_sync_jobseeker(
+                    db_values=db_values,
+                    process_name=process_name,
+                    customer_id=customer_id,
+                    eventid=customer_id
+                )
 
     def search_model(self, obj, key, field_name, context=None):
         """Build dicts with key: field_name"""
