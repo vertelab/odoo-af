@@ -67,11 +67,10 @@ class ResPartner(models.Model):
                     additional_message='0', objectid=customer_id, first=True)
 
                 self.env["res.partner"]._aisf_sync_jobseeker(
-                    db_values,
-                    None,
-                    process_name,
-                    customer_id,
-                    customer_id
+                    db_values=db_values,
+                    process_name=process_name,
+                    customer_id=customer_id,
+                    eventid=customer_id
                 )
 
     def search_model(self, obj, key, field_name, context=None):
