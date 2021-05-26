@@ -232,7 +232,7 @@ msgstr "Mina arbetssökande"
 #: code:addons/hr_360_view/wizard/search_jobseeker_when_in_contact.py:95
 #, python-format
 msgid "No id found"
-msgstr "Inget ID hittades"
+msgstr "Hänvisning till Sök-A/AIS-F, den arbetssökande finns inte i Kundrelationssystemet."
 
 #. module: hr_360_view
 #: selection:hr.employee.jobseeker.search.wizard,search_reason:0
