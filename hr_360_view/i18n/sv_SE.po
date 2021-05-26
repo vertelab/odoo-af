@@ -60,7 +60,7 @@ msgstr "Utifrån myndighetens behov"
 #. module: hr_360_view
 #: selection:hr.employee.jobseeker.search.wizard,search_reason:0
 msgid "Callback"
-msgstr "Återkalla"
+msgstr "Motringning"
 
 #. module: hr_360_view
 #: model_terms:ir.ui.view,arch_db:hr_360_view.search_jobseeker_form
