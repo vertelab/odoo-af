@@ -1,6 +1,8 @@
 
-from odoo import models, api
+from odoo import models, api, registry
+import odoo
 from uuid import uuid4
+from psycopg2 import IntegrityError, InternalError
 import traceback
 import time
 import logging
@@ -72,20 +74,48 @@ class Partner(models.Model):
             )
             return
         customer_id = res.get("arbetssokande", {}).get("sokandeId")
+
         if res.get("processStatus", {}).get("skyddadePersonUppgifter"):
-            # TODO: det här funkar tills vi fått in t.ex. Boka möte där andra objekt har relation till res.partner-objektet,
-            # ska alltså ersättas med korrekt hantering ASAP!
+            # jobseeker has SPU status. partner should be removed
             if partner:
-                partner.unlink()
-                log.log_message(
-                    process_name,
-                    eventid,
-                    RASK_SYNC,
-                    objectid=customer_id,
-                    error_message="SPU",
-                    info_1=time_for_call_to_rask,
-                    info_2="delete",
-                )
+                # cancel all meetings with this jobseeker
+                cancel_reason = self.env.ref('calendar_af.reason_authority', raise_if_not_found=False)
+                # if we didn't find the cancel_reason we do not have
+                # calendar_af module installed and there's no need to
+                # continue with canceling meetings. It would crash.
+                if cancel_reason:
+                    partner.appointment_ids._cancel(cancel_reason)
+                # Use special method _try_unlink_class to unlink this partner.
+                # This is done in order to avoid psql locking our cursor if
+                # we run into a problem while unlinking.
+                partner_id = partner.id
+                dbname = self.env.cr.dbname
+                db = odoo.sql_db.db_connect(dbname)
+                cr_unlink = db.cursor()
+                reg_unlink = odoo.registry(dbname)[self._name]
+                res_unlink = reg_unlink._try_unlink_class(partner_id, cr_unlink, self.env.uid)
+                if not res_unlink:
+                    # partner was unlinked
+                    log.log_message(
+                        process_name,
+                        eventid,
+                        RASK_SYNC,
+                        objectid=customer_id,
+                        error_message="SPU",
+                        info_1=time_for_call_to_rask,
+                        info_2="delete")
+                else:
+                    # partner could not be unlinked
+                    log.log_message(
+                        process_name,
+                        eventid,
+                        RASK_SYNC,
+                        objectid=customer_id,
+                        error_message="SPU",
+                        info_1=time_for_call_to_rask,
+                        info_2=res_unlink,
+                    )
+                cr_unlink.close()
             else:
                 log.log_message(
                     process_name,
@@ -96,8 +126,8 @@ class Partner(models.Model):
                     info_1=time_for_call_to_rask,
                     info_2="not created",
                 )
-
             return True
+
         try:
             state = res.get("kontaktuppgifter", {}).get("hemkommunKod")
             # TODO: Would probably be best to add country here? I believe
@@ -346,3 +376,51 @@ class Partner(models.Model):
         )
 
         return True
+
+    @classmethod
+    def _try_unlink_class(cls, partner_id, cr, uid):
+        with api.Environment.manage():
+            res = None
+            env_unlink = api.Environment(cr, uid, {})[cls._name]
+            try:
+                # try to delete the partner.
+                env_unlink._try_unlink(partner_id, cr, uid)
+            except IntegrityError as e:
+                # mark partner as SPU and remove all sensitive information.
+                partner = env_unlink.browse(partner_id)
+                anon_partner = {
+                    'is_spu': True,
+                    'name': "ANONYMIZED",
+                    'social_sec_nr': False,
+                    'email': False,
+                    'mobile': False,
+                    'phone': False,
+                    'education_ids': [(5, 0, 0)],
+                }
+                child_list = []
+                for child in partner.child_ids:
+                    child_list.append((2, child.id, 0))
+                anon_partner['child_ids'] = child_list
+                partner.write(anon_partner)
+
+                # dump error to log so we can monitor it in kibana.
+                _logger.warning(e)
+                res = e
+            finally:
+                cr.commit()
+            return res
+
+    @api.model
+    def _try_unlink(self, partner_id, cr, uid):
+        try:
+            if self.pool != self.pool.check_signaling():
+                # the registry has changed, reload self in the new registry
+                self.env.reset()
+                self = self.env()[self._name]
+            self.env['res.partner'].browse(partner_id).unlink()
+            self.env['res.partner'].invalidate_cache()
+            self.pool.signal_changes()
+        except IntegrityError as e:
+            self.pool.reset_changes()
+            cr.rollback()
+            raise e
