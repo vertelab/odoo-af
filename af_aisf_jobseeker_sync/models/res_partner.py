@@ -1,4 +1,3 @@
-
 from odoo import models, api, registry
 import odoo
 from uuid import uuid4
@@ -79,7 +78,9 @@ class Partner(models.Model):
             # jobseeker has SPU status. partner should be removed
             if partner:
                 # cancel all meetings with this jobseeker
-                cancel_reason = self.env.ref('calendar_af.reason_authority', raise_if_not_found=False)
+                cancel_reason = self.env.ref(
+                    "calendar_af.reason_authority", raise_if_not_found=False
+                )
                 # if we didn't find the cancel_reason we do not have
                 # calendar_af module installed and there's no need to
                 # continue with canceling meetings. It would crash.
@@ -93,7 +94,9 @@ class Partner(models.Model):
                 db = odoo.sql_db.db_connect(dbname)
                 cr_unlink = db.cursor()
                 reg_unlink = odoo.registry(dbname)[self._name]
-                res_unlink = reg_unlink._try_unlink_class(partner_id, cr_unlink, self.env.uid)
+                res_unlink = reg_unlink._try_unlink_class(
+                    partner_id, cr_unlink, self.env.uid
+                )
                 if not res_unlink:
                     # partner was unlinked
                     log.log_message(
@@ -103,7 +106,8 @@ class Partner(models.Model):
                         objectid=customer_id,
                         error_message="SPU",
                         info_1=time_for_call_to_rask,
-                        info_2="delete")
+                        info_2="delete",
+                    )
                 else:
                     # partner could not be unlinked
                     log.log_message(
@@ -389,18 +393,18 @@ class Partner(models.Model):
                 # mark partner as SPU and remove all sensitive information.
                 partner = env_unlink.browse(partner_id)
                 anon_partner = {
-                    'is_spu': True,
-                    'name': "ANONYMIZED",
-                    'social_sec_nr': False,
-                    'email': False,
-                    'mobile': False,
-                    'phone': False,
-                    'education_ids': [(5, 0, 0)],
+                    "is_spu": True,
+                    "name": "ANONYMIZED",
+                    "social_sec_nr": False,
+                    "email": False,
+                    "mobile": False,
+                    "phone": False,
+                    "education_ids": [(5, 0, 0)],
                 }
                 child_list = []
                 for child in partner.child_ids:
                     child_list.append((2, child.id, 0))
-                anon_partner['child_ids'] = child_list
+                anon_partner["child_ids"] = child_list
                 partner.write(anon_partner)
 
                 # dump error to log so we can monitor it in kibana.
@@ -417,8 +421,8 @@ class Partner(models.Model):
                 # the registry has changed, reload self in the new registry
                 self.env.reset()
                 self = self.env()[self._name]
-            self.env['res.partner'].browse(partner_id).unlink()
-            self.env['res.partner'].invalidate_cache()
+            self.env["res.partner"].browse(partner_id).unlink()
+            self.env["res.partner"].invalidate_cache()
             self.pool.signal_changes()
         except IntegrityError as e:
             self.pool.reset_changes()
