@@ -1,6 +1,6 @@
 {
     "name": "Af Template Module",
-    "version": "12.0.1.0",
+    "version": "12.0.1.0.1",
     "author": "Vertel AB",
     "maintainer": "Vertel AB",
     "license": "AGPL-3",
