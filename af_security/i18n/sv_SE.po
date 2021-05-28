@@ -61,12 +61,11 @@ msgstr "Tillåter dig bearbeta bokningar"
 #. module: af_security
 #: model:res.groups,name:af_security.af_newsletter_automatic
 msgid "Automatic"
-msgstr "Automatiskt"
+msgstr "Automatiska"
 
 #. module: af_security
 #: model:res.groups,name:af_security.af_employers_editor
 #: model:res.groups,name:af_security.af_jobseekers_editor
-#: model:res.groups,name:af_security.af_newsletter_editor
 msgid "Editor"
 msgstr "Redigerare"
 
@@ -98,7 +97,7 @@ msgstr "Möte "
 #. module: af_security
 #: model:ir.module.category,name:af_security.module_category_af_newsletter
 msgid "Newsletter"
-msgstr "Nyhetsbrev"
+msgstr "ADKD Nyhetsbrev"
 
 #. module: af_security
 #: model:ir.model.fields,field_description:af_security.field_hr_employee__office_id
