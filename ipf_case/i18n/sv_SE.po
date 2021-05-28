@@ -6,14 +6,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-10 13:57+0000\n"
-"PO-Revision-Date: 2021-05-10 13:57+0000\n"
+"POT-Creation-Date: 2021-05-28 09:15+0000\n"
+"PO-Revision-Date: 2021-05-28 09:15+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: ipf_case
+#: model_terms:ir.ui.view,arch_db:ipf_case.view_errand_tree
+msgid "Case"
+msgstr "Ärende"
 
 #. module: ipf_case
 #: model:ir.model.fields,field_description:ipf_case.field_res_partner_case__name
@@ -24,6 +29,11 @@ msgstr "Ärendenr"
 #: model:ir.model.fields,field_description:ipf_case.field_res_partner_case__res_officer
 msgid "Case officer"
 msgstr "Beslutande handläggare"
+
+#. module: ipf_case
+#: model:ir.model.fields,field_description:ipf_case.field_res_partner_case__case_type
+msgid "Case type"
+msgstr "Program/Insats"
 
 #. module: ipf_case
 #: model:ir.model.fields,field_description:ipf_case.field_res_partner__case_ids
@@ -46,6 +56,11 @@ msgstr "Skapad av"
 #: model:ir.model.fields,field_description:ipf_case.field_res_partner_case__create_date
 msgid "Created on"
 msgstr "Skapad den"
+
+#. module: ipf_case
+#: model:ir.model.fields,field_description:ipf_case.field_res_partner_case__name_desc
+msgid "Description"
+msgstr "Beskrivning"
 
 #. module: ipf_case
 #: model:ir.model.fields,field_description:ipf_case.field_res_partner_case__display_name
@@ -83,6 +98,11 @@ msgid "Last Updated on"
 msgstr "Senast uppdaterad"
 
 #. module: ipf_case
+#: model:ir.model.fields,field_description:ipf_case.field_res_partner_case__short_names
+msgid "Short name"
+msgstr ""
+
+#. module: ipf_case
 #: model:ir.model.fields,field_description:ipf_case.field_res_partner_case__source
 msgid "Source"
 msgstr "Källa"
@@ -95,14 +115,10 @@ msgstr "Startdatum"
 #. module: ipf_case
 #: model:ir.model.fields,field_description:ipf_case.field_res_partner_case__status
 msgid "Status"
-msgstr "Status"
-
-#. module: ipf_case
-#: model_terms:ir.ui.view,arch_db:ipf_case.view_errand_tree
-msgid "Ärende"
-msgstr "Ärende"
+msgstr ""
 
 #. module: ipf_case
 #: model:ir.model,name:ipf_case.model_res_partner_case
 msgid "Ärende För System"
 msgstr ""
+

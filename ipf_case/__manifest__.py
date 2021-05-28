@@ -3,13 +3,14 @@
 {
     "name": "IPF Case",
     "summary": "AF to IPF Arende For System integration",
-    "version": "12.0.1.0.0",
+    "version": "12.0.1.0.1",
     "author": "Arbetsförmedlingen",
     "license": "AGPL-3",
     'description': """
 Jira
 ===========================================
-AFC-2019 - Visa ärenden från BÄR i CRM (V12.0.1.0.0)
+v12.0.1.0.1 AFC-2385: Program/Insats saknas i flik Ärende \n
+v12.0.1.0.0 AFC-2019 - Visa ärenden från BÄR i CRM \n
 """,
     "website": "https://arbetsformedlingen.se/",
     "category": "Tools",
