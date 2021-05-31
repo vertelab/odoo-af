@@ -7,9 +7,12 @@
     "author": "Arbetsförmedlingen",
     "license": "AGPL-3",
     'description': """
-Jira
-===========================================
-AFC-2019 - Visa ärenden från BÄR i CRM (V12.0.1.0.0)
+Module for showing a jobseeker's cases \n
+Jira \n
+================================================================================================ \n
+This module adds new functionality regarding appointments functionality \n
+V12.0.1.0.0 AFC-2019: Visa ärenden från BÄR i CRM \n
+V12.0.1.0.1 AFC-2385: Added new column for Program/Insats \n
 """,
     "website": "https://arbetsformedlingen.se/",
     "category": "Tools",
