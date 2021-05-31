@@ -208,8 +208,6 @@ class Partner(models.Model):
             else:
                 education_level = False
 
-            # En kommentar
-
             last_contact_type = res.get("kontakt", {}).get("senasteKontakttyp") or False
             if last_contact_type:
                 last_contact_type = last_contact_type[0]
@@ -301,6 +299,7 @@ class Partner(models.Model):
                 )
                 create_update = "create"
 
+            own_or_foreign_address_given = False
             for address in res.get("kontaktuppgifter", {}).get("adresser", {}):
                 streetaddress = address.get("gatuadress")
                 if streetaddress:
@@ -352,12 +351,12 @@ class Partner(models.Model):
                                 "country_id": country,
                             }
                             self.env["res.partner"].create(given_address_dict)
-                if not own_or_foreign_address_given:
-                    given_address_object = self.env["res.partner"].search(
-                        [("parent_id", "=", partner.id)]
-                    )
-                    if given_address_object:
-                        given_address_object.unlink()
+            if not own_or_foreign_address_given:
+                given_address_object = self.env["res.partner"].search(
+                    [("parent_id", "=", partner.id)]
+                )
+                if given_address_object:
+                    given_address_object.unlink()
         except Exception:
             em = traceback.format_exc()
             log.log_message(
