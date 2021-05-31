@@ -231,7 +231,7 @@ msgstr "Mina arbetssökande"
 #: code:addons/hr_360_view/wizard/search_jobseeker_when_in_contact.py:95
 #, python-format
 msgid "No id found"
-msgstr ""
+msgstr "Hänvisning till Sök-A/AIS-F, den arbetssökande finns inte i Kundrelationssystemet"
 
 #. module: hr_360_view
 #: selection:hr.employee.jobseeker.search.wizard,search_reason:0
@@ -252,7 +252,7 @@ msgstr "Annan orsak måste vara minst 20 tecken lång."
 #: code:addons/hr_360_view/wizard/search_jobseeker_based_auth.py:114
 #, python-format
 msgid "Other reason selected but other reason field is not filled in"
-msgstr ""
+msgstr "Annan orsak valt, men ingen anledningen är given."
 
 #. module: hr_360_view
 #: model:ir.model.fields,help:hr_360_view.field_hr_employee__related_partner_id
