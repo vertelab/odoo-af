@@ -9,7 +9,7 @@
     'description': """
 Jira
 ===========================================
-V12.0.1.0.0 AFC-621: Integration Rusta-och-Matcha
+V12.0.1.0.0 AFC-734: Integration till AIS-Å
 v12.0.1.1.0 AFC-2001: Added start and stop date for AIS-Å
 """,
     "website": "https://vertel.se/",
