@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="assets_backend" inherit_id="web.assets_backend">
+        <script src="/web/static/src/js/views/list/list_controller.js" position="after">
+            <script type="text/javascript" src="/af_web_gui/static/src/js/crash_manager.js"></script>
+        </script>
+        <script src="/web/static/src/js/chrome/abstract_web_client.js" position="after">
+            <script type="text/javascript" src="/af_web_gui/static/src/js/af_title.js"></script>
+        </script>
+    </template>
+
+</odoo>
