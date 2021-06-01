@@ -2,8 +2,9 @@
 
 {
     "name": "AIS-F Jobseeker Loader",
-    "version": "12.0.1.1",
-    "description": """
+    "version": "12.0.1.2",
+    "description": "12.0.1.2 """"
+    
 
 AIS-F Jobseeker Loader
 ==========================================
@@ -15,7 +16,7 @@ calls api to load all jobseekers according to file of customer ids
     "website": "https://vertel.se/",
     "category": "Tools",
     "depends": [ 
-		"edi_af_aisf_rask_get_jobseeker", 
+		"af_aisf_jobseeker_sync",
     ],
     "data": [
         "views/res_partner.xml",

@@ -1,5 +1,5 @@
 id,name
-calendar_cancel_reason.work,"Work"
-calendar_cancel_reason.interview,"Interview"
-calendar_cancel_reason.impediment,"Impediment"
-calendar_cancel_reason.authority,"On the initiative of the authority"
+calendar_af.reason_work,"Work"
+calendar_af.reason_interview,"Interview"
+calendar_af.reason_impediment,"Impediment"
+calendar_af.reason_authority,"On the initiative of the authority"

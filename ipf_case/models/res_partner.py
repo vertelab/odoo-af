@@ -71,6 +71,9 @@ class PartnerArende(models.TransientModel):
     status = fields.Char(string='Status')
     start = fields.Date(string='Start date')
     stop = fields.Date(string='End date')
+    short_names = fields.Char(string='Short name')
+    name_desc = fields.Char(string='Description')
+    case_type = fields.Char(string="Case type")
     partner_id = fields.Many2one(
         comodel_name="res.partner", string="Job seeker")
 
@@ -78,14 +81,17 @@ class PartnerArende(models.TransientModel):
     def create_arende(self, vals, partner_id):
         start_date = vals.get('beslut_period', {}).get('startdatum')
         stop_date = vals.get('beslut_period', {}).get('slutdatum')
+        short_name = vals['arendetyp_kortnamn']
+        name_desc = vals['arendetyp_benamning']
 
         return self.create({
             'partner_id': partner_id,
-            #  AIS is to be changed in future to incorporate a choice BÄR.
+            #  AIS is to be changed in future to show BÄR.
             'source': 'AIS',
             'name': vals['arende_id'],
             'res_officer': vals.get('beslut_handlaggare', {}).get('signatur'),
             'status': vals['status'],
+            'case_type': f'{name_desc}({short_name})',
             'start': datetime.strptime(start_date, '%Y-%m-%d') if start_date else False,
-            'stop': datetime.strptime(stop_date, '%Y-%m-%d') if stop_date else False
+            'stop': datetime.strptime(stop_date, '%Y-%m-%d') if stop_date else False,
         })

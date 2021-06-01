@@ -69,7 +69,8 @@ class PartnerLinks(models.Model):
             url = self.link.format(
                 partner=partner,
                 user=self.env.user,
-                pnr=partner.social_sec_nr.replace("-", "")[-10:],
+                ais_pnr=partner.social_sec_nr.replace("-", "")[-10:],
+                clean_pnr=partner.social_sec_nr.replace("-", ""),
             )
         except:
             # TODO: Improve error feedback. This is pretty useless since the end users won't see the log.

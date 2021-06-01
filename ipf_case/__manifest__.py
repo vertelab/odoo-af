@@ -3,7 +3,7 @@
 {
     "name": "IPF Case",
     "summary": "AF to IPF Arende For System integration",
-    "version": "12.0.1.0.0",
+    "version": "12.0.1.0.1",
     "author": "Arbetsförmedlingen",
     "license": "AGPL-3",
     'description': """
