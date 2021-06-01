@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="af_layout" inherit_id="web.layout">
+        <link position="replace">
+            <link type="image/x-icon" rel="shortcut icon" t-att-href="x_icon or '/af_web_gui/static/src/img/favicon.ico'"/>
+        </link>
+    </template>
+
+</odoo>
