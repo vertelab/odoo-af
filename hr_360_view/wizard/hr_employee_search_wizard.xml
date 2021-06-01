@@ -41,7 +41,7 @@
                             </group>
                         </group>
                         <group></group>
-                        <button name="search_jobseeker1" string="search" type="object" class="btn-primary"  />
+                        <button name="search_jobseeker_authority" string="search" type="object" class="btn-primary"  />
                         <button string="Cancel" class="btn-secondary" special="cancel"/>
                     </page>
                 </notebook>
