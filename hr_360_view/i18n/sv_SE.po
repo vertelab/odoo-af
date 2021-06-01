@@ -19,7 +19,7 @@ msgstr ""
 #: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:43
 #, python-format
 msgid "%s [This jobseeker is not registered at Arbetsförmedlingen]"
-msgstr "%s [Denna arbetssökande finns inte registrerad hos Arbetsförmedlingen]"
+msgstr "%s [Hänvisning till Sök-A/AIS-F, den arbetssökande finns inte i Kundrelationssystemet.]"
 
 #. module: hr_360_view
 #: model_terms:ir.ui.view,arch_db:hr_360_view.search_jobseeker_form

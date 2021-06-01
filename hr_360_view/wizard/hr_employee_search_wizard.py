@@ -279,11 +279,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
 
         partners = self.env["res.partner"].sudo().search(domain)
         if not partners:
-            raise ValidationError(
-                _(
-                    "Refer to Sök-A/AIS-F, the jobseeker does not exist in the Kundrelationssystem"
-                )
-            )
+            return
         # TODO: Set correct access level. Probably varies with the reason for the search.
         partners._grant_jobseeker_access(
             "MYCKET_STARK",
