@@ -58,6 +58,7 @@ class ResPartner(models.Model):
         filename = os.path.basename(path)
         process_name = LOAD_AISF_ASOK_PROCESS + " " + filename
 
+        iterations = 0
         with open(path) as fh:
             for row in fh:
                 customer_id = row.rstrip("\n")
@@ -72,6 +73,11 @@ class ResPartner(models.Model):
                     customer_id=customer_id,
                     eventid=customer_id
                 )
+
+                iterations += 1
+                if not iterations % 100:
+                    self.env.cr.commit()
+                    _logger.info('%s Users handled' % iterations)
 
     def search_model(self, obj, key, field_name, context=None):
         """Build dicts with key: field_name"""
