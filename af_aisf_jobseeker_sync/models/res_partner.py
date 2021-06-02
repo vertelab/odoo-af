@@ -351,6 +351,13 @@ class Partner(models.Model):
                                 "country_id": country,
                             }
                             self.env["res.partner"].create(given_address_dict)
+                        else:
+                            given_address_object.address_co = co_address
+                            given_address_object.street = street
+                            given_address_object.street2 = street2
+                            given_address_object.zip = zip
+                            given_address_object.city = city
+                            given_address_object.country_id = country
             if not own_or_foreign_address_given:
                 given_address_object = self.env["res.partner"].search(
                     [("parent_id", "=", partner.id)]
