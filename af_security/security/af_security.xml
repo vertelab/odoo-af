@@ -82,21 +82,21 @@
 
         <record model="ir.module.category" id="module_category_af_newsletter">
             <field name="name">Newsletter</field>
-            <field name="description">Allows you to handle jobseekers.</field>
+            <field name="description">Are not alloed to handle jobseekers personal data.</field>
             <field name="sequence">1</field>
         </record>
 
         <record id="af_newsletter_manual" model="res.groups">
             <field name="name">Manual</field>
             <field name="category_id" ref="module_category_af_newsletter"/>
-            <field name="comment"></field>
+            <field name="comment">This role can manage manually configured newsletters</field>
         </record>
 
         <record id="af_newsletter_automatic" model="res.groups">
             <field name="name">Automatic</field>
             <field name="category_id" ref="module_category_af_newsletter"/>
             <field name="implied_ids" eval="[(4, ref('af_newsletter_manual'))]"/>
-            <field name="comment"></field>
+            <field name="comment">This role can manage automatically configured newsletters, autoresponders.</field>
         </record>
 
         <!-- Support -->
