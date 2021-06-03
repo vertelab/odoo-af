@@ -84,7 +84,7 @@ class Partner(models.Model):
                 # if we didn't find the cancel_reason we do not have
                 # calendar_af module installed and there's no need to
                 # continue with canceling meetings. It would crash.
-                if cancel_reason:
+                if cancel_reason and hasattr(partner, 'appointment_ids'):
                     partner.appointment_ids._cancel(cancel_reason)
                 # Use special method _try_unlink_class to unlink this partner.
                 # This is done in order to avoid psql locking our cursor if
