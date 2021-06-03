@@ -87,7 +87,7 @@ msgstr "Arbetssökande"
 #. module: af_security
 #: model:res.groups,name:af_security.af_newsletter_manual
 msgid "Manual"
-msgstr "Instruktion"
+msgstr "Manuell"
 
 #. module: af_security
 #: model:ir.module.category,name:af_security.module_category_af_meeting
