@@ -9,8 +9,9 @@ Jira
 v12.0.1.0.1 AFC-734: Arbetssokande Planering Integration
 v12.0.2.0.0 AFC-2239: Updated with get_ais_a_pnr function
 v12.0.2.0.1 AFC-1051: Updated data file and index
+v12.0.2.1.0 AFC-2305: Moved button 'Visa handlingsplan' and added redirect url function
 """,
-    "version": "12.0.2.0.1",
+    "version": "12.0.2.1.0",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",

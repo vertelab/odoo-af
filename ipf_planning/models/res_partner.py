@@ -29,6 +29,20 @@ _logger = logging.getLogger(__name__)
 class Partner(models.Model):
     _inherit = 'res.partner'
 
+    has_ipf_planning = fields.Boolean(compute='_check_ipf_planning')
+
+    @api.one
+    def _check_ipf_planning(self):
+        try:
+            planning = self.ipf_load_planning()
+            if (planning and planning['source']) and 'BAR' in planning['source'] or 'PLV' in planning['source']:
+                self.has_ipf_planning = True
+            else:
+                self.has_ipf_planning = False
+        except Exception as e:
+            _logger.warning(exc_info=e)
+
+
     @api.multi
     def ipf_load_planning(self):
         self.ensure_one()
@@ -51,3 +65,21 @@ class Partner(models.Model):
                 return pnr
         except ValueError:
             raise UserError("Invalid personal identification number: %s" % self.social_sec_nr)
+
+    def action_redirect_planning_url(self):
+        """Invoked when 'Handlingsplan' button in Arbetsyta view is clicked."""
+        self.ensure_one()
+        url = ''
+        planning = self.ipf_load_planning()
+        if planning and planning['source']:
+            if planning['source'] == 'PLV':
+                url = 'http://ivs.arbetsformedlingen.se/etjanst/planeringsverktyg/#/start/bedomning/{}'.format(
+                    self.social_sec_nr.replace('-', ''))
+            elif planning['source'] == 'BAR':
+                url = 'https://aobp.arbetsformedlingen.se:8443/prweb/PRAuth/HLPortal'
+            if url:
+                return {
+                'type': 'ir.actions.act_url',
+                'target': 'new',
+                'url': url,
+                }
