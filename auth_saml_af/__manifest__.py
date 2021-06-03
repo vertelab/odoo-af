@@ -21,10 +21,12 @@
 
 {
     "name": "AF SAML Settings",
-    "version": "12.0.1.1.0",
+    "version": "12.0.1.2.0",
     "author": "Vertel AB",
     "license": "AGPL-3",
-    "description": "SAML Settings for Arbetsförmedlingen.",
+    "description": """SAML Settings for Arbetsförmedlingen.
+v12.0.1.2.0 AFC-2428: Switched to pilot SAML groups \n
+    """,
     "website": "https://vertel.se/",
     "category": "Tools",
     "depends": [

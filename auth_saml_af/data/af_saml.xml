@@ -32,7 +32,7 @@
         </record>
         <!-- Kundhandläggare Arbetssökande -->
         <record id="group_map_af_jobseekers_officer" model="auth.saml.provider.group_mapping">
-            <field name="value">AFCRM_KundHL_AS</field>
+            <field name="value">AFCRM_Pilot</field>     <!-- AFCRM_KundHL_AS -->
             <field name="group_id" ref="af_security.af_jobseekers_officer"/>
             <field name="saml_id" ref="provider_shibboleth"/>
             <field name="saml_attribute">entGroups</field>
@@ -135,15 +135,13 @@
         </record>
         -->
         <!-- AF CRM 3rd Line Support -->
-        <!--
         <record id="group_map_support_3" model="auth.saml.provider.group_mapping">
             <field name="value">AFCRM_3rd_Line</field>
-            <field name="group_id" ref="" />
+            <field name="group_id" ref="base.group_system" />
             <field name="saml_id" ref="provider_shibboleth" />
             <field name="saml_attribute">entGroups</field>
             <field name="operator">equals</field>
         </record>
-        -->
         <!-- AF CRM Odoo ADMIN -->
         <record id="group_map_admin" model="auth.saml.provider.group_mapping">
             <field name="value">AFCRM_Odoo_Admin</field>
