@@ -10,7 +10,7 @@
                             type="object"
                             string="Visa handlingsplan"
                             attrs="{'invisible':[('has_ipf_planning','=',False)]}"
-                            class="btn-primary oe_ce"
+                            class="btn-primary"
                 />
                 <field name="has_ipf_planning" invisible="1"/>
             </field>
