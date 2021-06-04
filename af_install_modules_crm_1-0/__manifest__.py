@@ -2,7 +2,7 @@
 
 {
     "name": "Af CRM 1.0 Install all modules ",
-    "version": "12.0.1.0.7",
+    "version": "12.0.1.0.8",
     "author": "Vertel AB",
     "description": """
 	This module installs all AF-modules at one go.\n
@@ -18,6 +18,7 @@
 	v12.0.1.0.5  -  Updates and added repo in comments \n	
 	v12.0.1.0.6  -  Disabled af_statistics to speed up theme-loading \n	
 	v12.0.1.0.7  -  Added af_web_gui \n	
+	v12.0.1.0.8 AFC-2415: Removed edi_af_bos \n
 	\n
 	Once the module is installed, please de-install it to avoid depencency-problems.\n
 	\n
@@ -43,7 +44,6 @@
         "edi_af_aisf_trask",		# odoo-edi/
         "edi_af_bar_arbetsuppgifter", 	# odoo-edi/
         "edi_af_facility",		    # odoo-edi/
-        "edi_af_ais_bos",		    # odoo-edi/
         "edi_af_officer",		    # odoo-edi/
         "edi_route", 			    # odoo-edi/ Central Module with settings to Af IPF
         "hr_360_view",			    # odoo-af/
