@@ -23,8 +23,8 @@ import logging
 import os
 
 from odoo.tools import config
-from odoo import models, fields, api, _
-from odoo.tools.profiler import profile
+from odoo import models, api
+from odoo.addons.af_process_log.models.af_process_log import MaxTriesExceededError
 
 _logger = logging.getLogger(__name__)
 
@@ -63,9 +63,13 @@ class ResPartner(models.Model):
             for row in fh:
                 customer_id = row.rstrip("\n")
 
-                self.env['af.process.log'].log_message(
-                    process_name, customer_id, "PROCESS INITIATED", message=customer_id,
-                    additional_message='0', objectid=customer_id, first=True)
+                try:
+                    self.env['af.process.log'].log_message(
+                        process_name, customer_id, "PROCESS INITIATED", message=customer_id,
+                        additional_message='0', objectid=customer_id, first=True)
+                except MaxTriesExceededError:
+                    _logger.exception(f'Max tries exceeded for {customer_id}.')
+                    continue
 
                 self.env["res.partner"]._aisf_sync_jobseeker(
                     db_values=db_values,
