@@ -1,6 +1,6 @@
 {
     "name": "Af Template Module",
-    "version": "12.0.1.2.5",
+    "version": "12.0.1.2.6",
     "author": "Vertel AB",
     "maintainer": "Vertel AB",
     "license": "AGPL-3",
@@ -18,7 +18,8 @@ Hover over fields to se a brief description of them \n
 For more information make sure you are in debug mode \n
 v12.0.1.0 - AFC-123 Added the module to the repo \n
 v12.0.1.2.4 - AFC-999 någon ändring \n
-v12.0.1.2.5 - AFC-112: daniels ändring
+v12.0.1.2.5 - AFC-998 någon ändring \n
+v12.0.1.2.6 - AFC-112: daniels ändring
 
 """,
     "depends": [
