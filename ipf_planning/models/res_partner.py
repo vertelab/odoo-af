@@ -40,7 +40,7 @@ class Partner(models.Model):
             else:
                 self.has_ipf_planning = False
         except Exception as e:
-            _logger.warning(exc_info=e)
+            _logger.warning('Error in IPF CASE integration.', exc_info=e)
 
 
     @api.multi
