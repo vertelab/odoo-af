@@ -19,8 +19,8 @@
 #
 ##############################################################################
 {
-    'name': 'AF Demodata for base',
-    'version': '12.0.1.0',
+    'name': 'Depreciated - AF Vertel Demodata converter - ',
+    'version': '12.0.1.1',
     'license': 'AGPL-3',
     'description': """
 CSV File Creator -- dokumentation
@@ -60,7 +60,7 @@ $ sudo chmod 774 -R data
 - Toma flikar. En flik som heter något.bra.namn.csv får inte vara helt tom.
 
 """,
-    'author': ' Vertel AB',
+    'author': 'Vertel AB',
     'website': 'http://vertel.se',
     'category': 'Extra Tools',
     'depends': ['base'],

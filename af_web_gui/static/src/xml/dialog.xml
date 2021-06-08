@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+<t t-extend="Dialog">
+    <t t-jquery=".modal-footer" t-operation="attributes">
+        <attribute name="class">d-flex modal-footer justify-content-end</attribute>
+    </t>>
+</t>
+
+</templates>

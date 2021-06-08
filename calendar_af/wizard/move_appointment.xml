@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="move_appointment_view_form" model="ir.ui.view">
+        <field name="name">calendar_move_appointment.form</field>
+        <field name="model">calendar.move_appointment</field>
+        <field name="arch" type="xml">
+            <form string="Move appointment" write="false" create="false">
+                <sheet>
+                    <group string="Move meeting">
+                        <group>
+                            <field name="name" invisible="1"/>
+                            <field name="appointment_id" invisible="1"/>
+                            <field string="Meeting channel" name="channel" readonly="0"/>
+                            <field string="Meeting type" name="type_id" domain="[('channel', '=', channel)]"
+                                   context="{ 'default_channel': %(calendar_channel.channel_pdm)d }"/>
+                            <field string="Meeting subject" name="name" placeholder="e.g. Business Lunch"
+                                   invisible="1"/>
+                            <field name="state" invisible="1"/>
+                        </group>
+                        <group>
+                            <field string="Attendees" name="partner_id" widget="many2oneattendee"
+                                   placeholder="Select attendees..." attrs="{'readonly':[('state', '!=', 'free')]}"/>
+                            <field string="Case worker" name="user_id" widget="many2oneattendee"
+                                   placeholder="Select case worker..."
+                                   attrs="{'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}" invisible="1"/>
+                            <field string="Move reason" name="cancel_reason_temp" required="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="page_details" string="Meeting Details">
+                            <group>
+                                <group>
+                                    <field name="start" readonly="1" attrs="{'readonly': True}" options="{'datepicker': {'hide': {'seconds': True}}}"/>
+                                    <field name="stop" invisible="1"/>
+                                </group>
+                                <group>
+                                    <field name="operation_id"
+                                        attrs="{'invisible':[('channel', '!=', %(calendar_channel.channel_local)d)]}"
+                                        readonly="0"/>
+                                    <field name="show_suggestion_ids" invisible="1"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                    <span aria-atomic="true" class="btn-group oe-right oe_button_box">
+                        <button name="compute_suggestion_ids" type="object" string="Get free occasions"/>
+                    </span>
+                    <field name="suggestion_ids" readonly="1" attrs="{'invisible':[('show_suggestion_ids','=',False)]}">
+                        <tree string="Bookable Occasions" limit="10" create="false">
+                            <field name="weekday"/>
+                            <field name="start" options="{'datepicker': {'hide': {'seconds': True}}}"/>
+                            <field name="duration_text"/>
+                            <field name="type_id"/>
+                            <field name="occasion_ids" invisible="1"/>
+                            <button name="select_suggestion_move" type="object" string="Move"/>
+                        </tree>
+                        <form>
+                        </form>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

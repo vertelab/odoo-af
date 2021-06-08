@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_partner_form_for_links" model="ir.ui.view">
+        <field name="name">view.res.partner.form.inherited.links</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+            </div>
+            <xpath expr="//notebook" position="inside">
+                <page name="partner_link" string="Links">
+                    <div class="o-contact-links"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_partner_employer_form_for_links" model="ir.ui.view">
+        <field name="name">view.res.partner.employer.form.inherited.links</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="partner_view_360.view_partner_employer_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+            </div>
+            <xpath expr="//notebook" position="inside">
+                <page name="partner_link" string="Links">
+                    <div class="o-contact-links"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_partner_jobseeker_form_for_links" model="ir.ui.view">
+        <field name="name">view.res.partner.jobseeker.form.inherited.links</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="partner_view_360.view_jobseeker_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+            </div>
+            <xpath expr="//notebook" position="inside">
+                <page name="partner_link" string="Links">
+                    <div class="o-contact-links"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="view_partner_links_tree" model="ir.ui.view">
+        <field name="name">view.res.partner.links.tree</field>
+        <field name="model">partner.links</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="target"/>
+                <field name="group_ids"/>
+                <field name="link"/>
+                <field name="type_smart"/>
+                <field name="image"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_partner_links_form" model="ir.ui.view">
+        <field name="name">view.res.partner.links.form</field>
+        <field name="model">partner.links</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="type_smart" widget='radio'/>
+                        </group>
+                        <group>
+                            <field name="target"/>
+                            <field name="group_ids" widget="many2many_tags"/>
+                            <field name="link" widget="url"/>
+                            <field name="image" widget="image" class="oe_avatar"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_partner_links_kanban" model="ir.ui.view">
+        <field name="name">view.res.partner.links.kanban</field>
+        <field name="model">partner.links</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name='id'/>
+                <field name='image'/>
+                <field name='link'/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-att-class="oe_kanban_global_click">
+                            <div class="o_kanban_image">
+                                <t t-if="record.image.raw_value">
+                                    <img alt=""
+                                         t-att-src="kanban_image('partner.links.target', 'image', record.id.raw_value)"/>
+                                </t>
+                                <t t-if="!record.image.raw_value">
+                                    <img alt="Avatar"
+                                         t-att-src="_s + &quot;/base/static/img/avatar.png&quot;"/>
+                                </t>
+                            </div>
+                            <div class="oe_kanban_details">
+                                <a t-att-href="record.link.raw_value" target='new' t-if="record.link.raw_value">
+                                    <field name="name"/>
+                                </a>
+                            </div>
+                        </div>
+                        <!--  -->
+                        <!--                        <div class="o_kanban_record_has_image_fill o_res_partner_kanban" style="width:160px;height:80px">-->
+                        <!--                            <a t-att-href="record.link.raw_value" target='new' t-if="record.link.raw_value">-->
+                        <!--                            <div class="o_kanban_image">-->
+                        <!--                                <img style="min-width:140px; max-width:140px;max-height:65px" alt="" t-if="record.image.raw_value"-->
+                        <!--                                     t-att-src="kanban_image('partner.links.target', 'image', record.id.raw_value)"/>-->
+                        <!--                            </div>-->
+                        <!--                            </a>-->
+                        <!--                        </div>-->
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_partner_links" model="ir.actions.act_window">
+        <field name="name">Links</field>
+        <field name="res_model">partner.links</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_partner_links_tab" model="ir.actions.act_window">
+        <field name="name">Links</field>
+        <field name="res_model">partner.links</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem action="action_partner_links" id="menu_partner_links" groups="group_partner_link"
+              parent="contacts.res_partner_menu_config" sequence="10" name="Links Administration"/>
+
+    <template id="assets_backend" inherit_id="web.assets_backend" name="Contact Links Assets">
+        <xpath expr="//script[@src='/web/static/src/js/views/form/form_renderer.js']" position="after">
+            <script src="/contact_links/static/src/js/contact_links.js" type="text/javascript"></script>
+            <script src="/contact_links/static/src/js/form_renderer.js" type="text/javascript"></script>
+        </xpath>
+    </template>
+</odoo>

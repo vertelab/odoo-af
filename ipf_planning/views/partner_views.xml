@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="view_jobseeker_form" model="ir.ui.view">
+        <field name="name">res.partner.form.jobseeker.planning</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="partner_view_360.view_jobseeker_form" />
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <button name="action_redirect_planning_url"
+                            type="object"
+                            string="Visa handlingsplan"
+                            attrs="{'invisible':[('has_ipf_planning','=',False)]}"
+                            class="btn-primary"
+                />
+                <field name="has_ipf_planning" invisible="1"/>
+            </field>
+        </field>
+    </record>
+    <template id="assets_backend" inherit_id="web.assets_backend" name="IPF Planning Assets">
+        <xpath expr="//script[@src='/web/static/src/js/views/form/form_renderer.js']" position="after">
+            <script src="/ipf_planning/static/src/js/planning.js" type="text/javascript"></script>
+            <script src="/ipf_planning/static/src/js/form_renderer.js" type="text/javascript"></script>
+        </xpath>
+    </template>
+</odoo>

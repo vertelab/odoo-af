@@ -19,8 +19,8 @@
 #
 ##############################################################################
 {
-    'name': 'AF Demodata for base',
-    'version': '12.0.1.0',
+    'name': 'Depreciated AF Old Demodata for base',
+    'version': '12.0.1.1',
     'author': 'Vertel AB',
     'license': 'AGPL-3',
     'description': """
@@ -69,7 +69,7 @@ $ sudo chmod 777 -R data
         'python': ['xlrd'],
     },
     'demo': ['data/res.users.csv', 'data/res.partner.csv'],
-    'installable': 'True',
+    'installable': 'False',
     'application': 'False',
 }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

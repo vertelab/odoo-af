@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_calendar_appointment_form_inherited" model="ir.ui.view">
+    <field name="name">calendar.appointment.form.inherited</field>
+    <field name="model">calendar.appointment</field>
+    <field name="inherit_id" ref="calendar_af.view_calendar_appointment_form" />
+    <field name="arch" type="xml">
+      <field name="type_id" position="before">
+        <field name="partner_forbidden_types" invisible="1"/>
+      </field>
+      <field name="type_id" position="attributes">
+        <attribute name="domain">[('channel', '=', channel), ('id', 'not in', partner_forbidden_types)]</attribute>
+      </field>
+    </field>
+  </record>
+
+  <record id="view_calendar_appointment_local_tree_inherited" model="ir.ui.view">
+      <field name="name">calendar.appointment.local.tree.inherited</field>
+      <field name="model">calendar.appointment</field>
+      <field name="inherit_id" ref="calendar_af.view_calendar_appointment_local_tree" />
+      <field name="arch" type="xml">
+          <field name="partner_id" position="replace">
+              <field name="partner_pnr" />
+          </field>
+      </field>
+  </record>
+</odoo>

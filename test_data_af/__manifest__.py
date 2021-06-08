@@ -1,12 +1,17 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 {
-    "name": "Test Data AF",
-    "version": "12.0.1.0.1",
+    "name": "AF Testdata from AIS-F",
+    "version": "12.0.1.0.3",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
+	 "description": """
+		AF Testdata from AIS-F imports test-data from AIS-F plus new testdata.\n
+		v12.0.1.2 Added description in Manifest.\n
+		v12.0.1.3 Made the module installable=false.\n
+    """,
     "depends": [
         "contacts", 
         "hr", 
@@ -47,5 +52,5 @@
 		#"data/arbetsg_hr_imp2/hr_employee.csv",
     ],
     "application": False,
-    "installable": True,
+    "installable": False,
 }

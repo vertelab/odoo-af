@@ -1,0 +1,67 @@
+<h1>List of modules for the AF-projects</h1>
+<b>Instructions: </b>
+1 add "name", "summary" for users, "description"- for server admins, "index-file" for users + developers , "translation"-files, 
+2 When a module is replaced: Add "Depreciated/Replaced as the first word in the "name"-field, change "installable" to "False". Add a note of reason and if it is replaced, with what module.
+
+Qustions? Ask Fredrik Arvas.
+<hr>
+
+af_core_menu_disabling
+#af_backend_tema - replaced 2020-11-25 by web_backend_theme_af
+af_gui_disabeling
+af_hide_top_todo_icons
+audit_logger
+auth_saml_af
+auth_saml_ol
+auth_saml_ol_create_user
+auth_saml_ol_groups
+auth_signup
+odoo-af/af_calendar_reports
+odoo-sale/af_order_report
+af_security
+af_security_rules
+base
+calendar
+calendar_af
+calendar_af_360
+contact_links
+contacts
+edi_af_aisf_rask
+edi_af_aisf_trask
+edi_af_appointment
+edi_af_as_notes
+edi_af_bar_arbetsuppgifter
+edi_af_facility
+edi_af_krom_postcode
+edi_af_officer
+edi_af_officer
+edi_route
+edi_route_ipf
+hr
+hr_360_view
+hr_af_holidays
+hr_employee_first_name
+hr_employee_firstname_extension
+hr_office
+hr_org_chart
+hr_skill
+iap
+ipf_ais_a
+ipf_planning
+mail
+partner_daily_notes
+partner_daily_notes_edi
+partner_fax
+partner_firstname
+partner_kpi_data
+partner_mq_ipf
+partner_view_360
+portal_edi
+res_drivers_license
+res_sni
+res_ssyk
+res_sun
+resource
+test_data_demo_sv
+web_autocomplete_off
+

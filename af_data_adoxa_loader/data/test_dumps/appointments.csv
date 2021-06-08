@@ -1,0 +1,5 @@
+Bokningsid,Bokningstillfällesid,Kundnummer,PDM,Datum från,Datum till,Datum,Starttid,Sluttid,Längd,Mötestypsid,Bokningsstatus,Skapad,Skapad av,Kontorskod,Kontorsnamn,Möteshandläggare,Skapad överbokningstid,Skickad till ACE
+4506404,5926321,83518874,Lokalkontor,2020-08-24 00:00:00.000,2020-10-09 00:00:00.000,2020-11-09 00:00:00.000,14:00:00.0000000,15:00:00.0000000,60,32,NULL,2020-08-07 13:49:06.547,<ServiceUserName>,72120,Af Södertälje,xxaoj,Nej,Ej skickad
+4677020,6289057,83518874,Lokalkontor,2020-08-24 00:00:00.000,2020-10-09 00:00:00.000,2020-11-09 00:00:00.000,10:00:00.0000000,11:00:00.0000000,60,32,NULL,2020-09-01 10:24:26.800,<ServiceUserName>,72120,Af Södertälje,xxaoj,Nej,Ej skickad
+4677083,6289120,83514910,Lokalkontor,2020-08-24 00:00:00.000,2020-10-09 00:00:00.000,2020-11-09 00:00:00.000,10:00:00.0000000,11:00:00.0000000,60,32,NULL,2020-09-01 10:27:39.670,<ServiceUserName>,72120,Af Södertälje,xxaom,Ja,Ej skickad
+4677089,6275782,83514910,PDM,,,2020-11-10 00:00:00.000,13:00:00.0000000,13:30:00.0000000,30,21,1,2020-09-01 10:27:39.670,<ServiceUserName>,78005,Af Södertälje,xxaom,,

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data noupdate="1">
+		<record id="ipf_rask" model="af.ipf">
+			<field name="name">IPF RASK</field>
+			<field name="environment">T2</field>
+			<field name="systemid">AFCRM</field>
+			<field name="url">http://t2.ft.arbetsformedlingen.se</field>
+			<field name="port">80</field>
+		</record>
+	</data>
+	<data>
+		<record id="ipf_endpoint_rask" model="af.ipf.endpoint">
+			<field name="name">arbetssokande/rest/v1/arbetssokande/{customer_id}/anpassad?resurser=alla</field>
+			<field name="ipf_id" ref="ipf_rask"/>
+	</record>
+	</data>
+</odoo>

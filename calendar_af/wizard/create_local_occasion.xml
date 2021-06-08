@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_calendar_create_local_occasion_form" model="ir.ui.view">
+        <field name="name">calendar.create_local_occasion.form</field>
+        <field name="model">calendar.create_local_occasion</field>
+        <field name="arch" type="xml">
+            <form string="Create occasion">
+                <sheet>
+                    <group string="">
+                        <group>
+                            <field name="create_type" widget="radio" nolabel="1"/>
+                            <field name="start_range" attrs="{'invisible':[('create_type', '!=', 'repeating')]}"/>
+                            <field name="stop_range" attrs="{'invisible':[('create_type', '!=', 'repeating')]}"/>
+                        </group>
+                        <group>
+                            <field name="repeat_mon" attrs="{'invisible':[('create_type', '!=', 'repeating')]}"/>
+                            <field name="repeat_tue" attrs="{'invisible':[('create_type', '!=', 'repeating')]}"/>
+                            <field name="repeat_wed" attrs="{'invisible':[('create_type', '!=', 'repeating')]}"/>
+                            <field name="repeat_thu" attrs="{'invisible':[('create_type', '!=', 'repeating')]}"/>
+                            <field name="repeat_fri" attrs="{'invisible':[('create_type', '!=', 'repeating')]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="page_details" string="Occasion Details">
+                            <group>
+                                <group>
+                                    <field name="name" invisible="1"/>
+                                    <field name="start"/>
+                                    <field name="stop" invisible="1"/>
+                                    <field name="duration_text" />
+                                    <field name="duration" invisible="1"/>
+                                </group>
+                                <group>
+                                    <field name="type_id"  string="Meeting type"
+                                           required="1" domain="[('channel', '=', %(calendar_channel.channel_local)d)]"/>
+                                    <field name="channel_name" invisible="1" />
+                                    <field name="location_ids" invisible="1" />
+                                    <field name="operation_id" required="1" domain="[('location_id', 'in', location_ids)]"
+                                           options="{'no_quick_create':True,'no_create_edit':True,
+                                           'no_create':True,'no_edit':True,'no_open':True}"/>
+                                    <!-- I cant use many2manyattendees widget here for some reason?  -->
+                                    <field name="user_ids" string="Case worker" widget="many2many_tags"
+                                           placeholder="Select case worker..." required="1"
+                                           domain="[('employee_ids.office_ids.operation_ids', '=', operation_id)]"
+                                           options="{'no_quick_create':True,'no_create_edit':True,
+                                           'no_create':True,'no_edit':True,'no_open':True}"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <group>
+                        <span>
+                            <button string="Create" type="object" class="oe_highlight" name="action_create_occasions"/>
+                            <button string="Cancel" class="oe_link" special="cancel"/>
+                        </span>
+                    </group>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="create_local_occasion_form_action" model="ir.actions.act_window">
+        <field name="name">Create occasions</field>
+        <field name="res_model">calendar.create_local_occasion</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <act_window id="create_local_occasion_action"
+                name="Create occasion"
+                src_model="calendar.occasion"
+                res_model="calendar.create_local_occasion"
+                view_type="form"
+                view_mode="form"
+                target="new"/>
+
+    <menuitem action="create_local_occasion_action" id="menu_action_create_local_occasion" parent="menu_local"
+              sequence="12" groups="af_security.af_meeting_planner,af_security.af_meeting_admin,af_security.af_jobseekers_officer"/>
+
+</odoo>

@@ -5,6 +5,7 @@
         <field name="model">calendar.mapped_dates</field>
         <field name="arch" type="xml">
             <tree string="Meeting type" editable="bottom">
+                <field name="operation_id"/>
                 <field name="name"/>
                 <field name="from_date"/>
                 <field name="to_date"/>
@@ -19,5 +20,6 @@
         <field name="view_id" ref="view_calendar_mapped_dates_tree"/>
     </record>
 
-    <menuitem action="action_mapped_dates" id="menu_mapped_dates" parent="menu_admin" sequence="10" />
+    <menuitem action="action_mapped_dates" id="menu_mapped_dates" parent="menu_admin" sequence="10"
+              groups="af_security.af_meeting_admin"/>
 </odoo>

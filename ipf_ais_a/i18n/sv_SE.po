@@ -1,0 +1,124 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* ipf_ais_a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0-20210127\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-09-28 06:36+0000\n"
+"PO-Revision-Date: 2021-03-23 14:21+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ipf_ais_a
+#: model_terms:ir.ui.view,arch_db:ipf_ais_a.view_ais_a_tree
+#: model_terms:ir.ui.view,arch_db:ipf_ais_a.view_jobseeker_form
+msgid "AIS-Å"
+msgstr "Programbeslut i AIS-Å"
+
+#. module: ipf_ais_a
+#: model:ir.model,name:ipf_ais_a.model_res_partner_ais_a
+msgid "AIS-Å Beslut Om Stod"
+msgstr "AIS-Å Beslut om Stöd"
+
+#. module: ipf_ais_a
+#: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__dec_office
+msgid "Beslutande Kontor"
+msgstr "Beslutande kontor"
+
+#. module: ipf_ais_a
+#: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__name
+msgid "Case nr"
+msgstr "Ärendenummer"
+
+#. module: ipf_ais_a
+#: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner__ais_a_ids
+#: model:ir.model.fields,field_description:ipf_ais_a.field_res_users__ais_a_ids
+msgid "Cases"
+msgstr "Beslut"
+
+#. module: ipf_ais_a
+#: model:ir.model,name:ipf_ais_a.model_res_partner
+msgid "Contact"
+msgstr "Kontakt"
+
+#. module: ipf_ais_a
+#: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__create_uid
+msgid "Created by"
+msgstr "Skapad av"
+
+#. module: ipf_ais_a
+#: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__create_date
+msgid "Created on"
+msgstr "Skapad den"
+
+#. module: ipf_ais_a
+#: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__display_name
+msgid "Display Name"
+msgstr "Visningsnamn"
+
+#. module: ipf_ais_a
+#: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__res_officer
+msgid "Handlaggare"
+msgstr "Beslutande handläggare"
+
+#. module: ipf_ais_a
+#: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__id
+msgid "ID"
+msgstr ""
+
+#. module: ipf_ais_a
+#: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__partner_id
+msgid "Job seeker"
+msgstr "Arbetssökande"
+
+#. module: ipf_ais_a
+#: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__res_office
+msgid "Kontor"
+msgstr ""
+
+#. module: ipf_ais_a
+#: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a____last_update
+msgid "Last Modified on"
+msgstr "Senast redigerad"
+
+#. module: ipf_ais_a
+#: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__write_uid
+msgid "Last Updated by"
+msgstr "Senast uppdaterad av"
+
+#. module: ipf_ais_a
+#: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__write_date
+msgid "Last Updated on"
+msgstr "Senast uppdaterad"
+
+#. module: ipf_ais_a
+#: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__status_change
+msgid "Senaste Status Ändring"
+msgstr "Senaste statusändring"
+
+#. module: ipf_ais_a
+#: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__start
+msgid "Start"
+msgstr "Startdatum"
+
+#. module: ipf_ais_a
+#: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__status
+msgid "Status"
+msgstr ""
+
+#. module: ipf_ais_a
+#: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__stop
+msgid "Stop"
+msgstr "Slutdatum"
+
+#. module: ipf_ais_a
+#: model:ir.model.fields,field_description:ipf_ais_a.field_res_partner_ais_a__atgard
+msgid "Åtgärd"
+msgstr "Program/Insats"
+

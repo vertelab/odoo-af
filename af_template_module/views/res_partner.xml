@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--currently contains form, tree and kanban view examples as well as inherit example
+-->
+    <record id="view_partner_form_test_module_inherited" model="ir.ui.view"> 
+        <field name="name">res.partner.form.test_module.inherited</field>
+        <field name="model">res.partner</field> 
+        <field name="inherit_id" ref="base.view_partner_form"/> 
+        <field name="arch" type="xml"> 
+            <div name="button_box" position="inside">
+                <button name="hello_world" type="object">Hello world button</button>
+            </div>
+            <page name="internal_notes" position="after"> <!-- position can be before, after or inside (if applied to a notebook, page or similar)-->
+                <page name="a_page" string="A test page"/>
+            </page>
+            <xpath expr="//field[@name='phone']/.." position="after"> <!--more specific xpath in case greater specificity is necessary, in this case <field name=phone position="after"> caused everything to end up inside the field for some reason -->
+                <label for="test_char_field" string="This is a custom label"/>
+                <field name="test_char_field" nolabel="1"/>
+                <field name="test_float_field"/>
+                <field name="test_integer_field"/>
+                <field name="test_datetime_field"/>
+                <field name="test_selection_field"/>
+                <field name="test_model_ids" widget="many2many_tags"/> <!--widgets can change the way a field is presented-->
+                <field name="test_related_field"/> 
+                <field name="test_model_m2o_id"/>
+            </xpath>
+        </field>
+    </record> 
+   <record id="view_partner_test_form" model="ir.ui.view">
+            <field name="name">res.partner.test.form</field>
+            <field name="model">res.partner</field>
+            <field name="arch" type="xml">
+                <form string="Test">
+                    <sheet>
+                        <h1>
+                            <field name="test_related_field" />
+                        </h1>
+                        <div class="oe_button_box">
+                            <button name="hello_world" type="object">Hello world button</button>
+                        </div>
+                        <group>
+                            <label for="test_char_field" string="This is a custom label"/>
+                            <field name="test_char_field" nolabel="1"/>                            
+                            <field name="test_float_field" /> 
+                            <field name="test_integer_field" />
+                            <field name="test_datetime_field"/>
+                            <field name="test_selection_field"/>
+                            <field name="test_model_m2o_id"/>
+                        </group>
+                        
+                    
+                        <notebook>
+                            <page name="test_model_ids" string="Page with list">
+                                <field name="test_model_ids" nolabel="1">
+                                    <tree>
+                                        <field name="partner_ids"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    <record id="view_partner_test_tree" model="ir.ui.view">
+        <field name="name">res.partner.test.tree</field>
+        <field name="model">res.partner</field>
+        <field name="priority" eval="2" />
+        <field name="arch" type="xml">
+            <tree string="Partners test">
+                <field name="test_related_field"/> 
+                <field name="test_char_field"/>
+                <field name="test_float_field"/>
+                <field name="test_integer_field"/>
+                <field name="test_datetime_field"/>
+                <field name="test_selection_field"/>
+                <field name="test_model_ids" widget="many2many_tags"/> <!--widgets can change the way a field is presented-->
+                <field name="test_model_m2o_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_partner_test_kanban" model="ir.ui.view">
+        <field name="name">res.partner.test.kanban</field>
+        <field name="model">res.partner</field>
+        <field name="priority" eval="1" />
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name" />
+                <field name="test_float_field"/>
+
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title">
+                                    <field name="name" />
+                                </strong>
+                                <div class="o_kanban_tags_section">
+                                    <ul>
+                                        <li>
+                                            Test float:
+                                            <field name="test_float_field"/>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <record id="action_partner_test" model="ir.actions.act_window"> <!--the main action that controlls the views-->
+        <field name="name">Partner test</field>
+        <field name="res_model">res.partner</field> 
+        <field name="view_mode">kanban,tree,form</field> <!-- determines which types of views can be used, can also contain calendar and pivot-->
+        <field name="view_id" ref="view_partner_test_kanban" />
+    </record>
+    <!--actions for each view type, to add other types just add the necessary view and another action like these for that type of view-->
+    <record id="action_view_partner_test_tree" model="ir.actions.act_window.view"> 
+        <field name="act_window_id" ref="action_partner_test" /> <!--the main action that can call this action-->
+        <field name="sequence" eval="2" /> <!-- determines the priority of the views, lowest number is loaded by default from the main action-->
+        <field name="view_mode">tree</field> <!--this needs to be consistent with the type of view that's pointed at below-->
+        <field name="view_id" ref="view_partner_test_tree" /> <!--the view that this action points to-->
+    </record>
+    <record id="action_view_partner_test_kanban" model="ir.actions.act_window.view">
+        <field name="act_window_id" ref="action_partner_test" />
+        <field name="sequence" eval="1" />
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_partner_test_kanban" />
+    </record>
+    <record id="action_view_partner_test_form" model="ir.actions.act_window.view">
+        <field name="act_window_id" ref="action_partner_test" />
+        <field name="sequence" eval="3" />
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_partner_test_form" />
+    </record>
+    <menuitem action="action_partner_test" id="menu_action_partner_test" sequence="12" name="Test module"/> <!--root menu item calls main action-->
+    <menuitem parent="menu_action_partner_test" id="menu_action_partner_test_menu" sequence="1" name="Test module menu"/> <!--menu item that has root menu item as parent, shows up as its own menu in the view-->
+    <menuitem id="menu_action_partner_test_submenu" parent="menu_action_partner_test_menu" sequence="1" name="Test module submenu"/> <!--submenu to the menu in the view-->
+
+     <record id="test_module_hello_world_action" model="ir.actions.server"> <!-- this is a server action, you can find it under settings -> technical -> server actions -->
+        <field name="name">Test module server action</field>
+        <field name="model_id" ref="base.model_ir_actions_server"/>
+        <field name="state">code</field>
+        <field name="code">
+            env['res.partner'].hello_world()
+        
+        </field>
+    </record>
+</odoo>

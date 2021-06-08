@@ -1,0 +1,15 @@
+<odoo>
+    <data>
+
+        <menuitem id="mail.menu_root_discuss" name="Discuss" action="mail.action_discuss"
+                  web_icon="mail,static/description/icon.png" groups="base.group_no_one" sequence="1"/>
+
+        <menuitem name="Contacts" id="contacts.menu_contacts" sequence="4"
+                  web_icon="contacts,static/description/icon.png"
+                  groups="base.group_no_one"/>
+
+        <menuitem name="Website" id="website.menu_website_configuration" sequence="9"
+                  groups="base.group_no_one" web_icon="website,static/description/icon.png"/>
+
+    </data>
+</odoo>

@@ -1,10 +1,16 @@
-id,ipf_num,name,duration,additional_booking,channel/id,ipf_id
-calendar_meeting_type.type_00,00,"Reservation",30,False,calendar_channel.channel_pdm,"n/a"
-calendar_meeting_type.type_21,21,"Första planeringssamtal PDM",30,True,calendar_channel.channel_pdm,ded72445-e5d3-4e21-a356-aad200dac83d
-calendar_meeting_type.type_22,22,"Uppföljande planeringssamtal PDM",30,False,calendar_channel.channel_pdm,f203b91b-bdbe-46e8-b6ae-aad200df9884
-calendar_meeting_type.type_23,23,"Fördjupat planeringssamtal PDM",30,False,calendar_channel.channel_pdm,93557f15-d25a-4f40-8a6b-aad200e1d2a0
-calendar_meeting_type.type_24,24,"Första planeringssamtal KROM PDM",30,True,calendar_channel.channel_pdm,162b978b-f167-4837-a3d7-ab6700de6aff
-calendar_meeting_type.type_25,25,"Uppföljande planeringssamtal KROM PDM",30,False,calendar_channel.channel_pdm,a919ed37-5094-4124-bf7b-ab6700df390a
-calendar_meeting_type.type_31,31,"Första planeringssamtal",30,False,calendar_channel.channel_local,"n/a"
-calendar_meeting_type.type_32,32,"Uppföljande planeringssamtal",30,False,calendar_channel.channel_local,"n/a"
-calendar_meeting_type.type_33,33,"Fördjupat planeringssamtal",30,False,calendar_channel.channel_local,"n/a"
+id,sort_order,ipf_num,name,duration_30,duration_60,days_first,days_last,additional_booking,channel/id,ipf_id,text
+calendar_meeting_type.type_00,99,00,"Reservation",True,False,0,0,False,calendar_channel.channel_none,"n/a",""
+calendar_meeting_type.type_21,1,21,Första planeringssamtal PDM,True,False,3,15,True,calendar_channel.channel_pdm,22267b3f-5a46-4ad7-9285-acf00095287b,""
+calendar_meeting_type.type_22,5,22,Uppföljande planeringssamtal PDM,False,True,3,90,False,calendar_channel.channel_pdm,acb4c559-48c1-429e-947f-acf00095b479,""
+calendar_meeting_type.type_23,7,23,Fördjupat planeringssamtal PDM,False,True,3,15,False,calendar_channel.channel_pdm,69cbd352-71e3-41dd-844a-acf000960cd7,""
+calendar_meeting_type.type_24,2,24,Första planeringssamtal KROM PDM,False,True,3,10,True,calendar_channel.channel_pdm,1ceb1a9a-3a6d-4e4e-a4ac-acf0009638ac,""
+calendar_meeting_type.type_25,6,25,Uppföljande planeringssamtal KROM PDM,True,False,3,90,False,calendar_channel.channel_pdm,47177cc6-4efb-4168-bbe5-acf000968176,""
+calendar_meeting_type.type_26,3,26,Första planeringssamtal STOM PDM,True,False,3,25,True,calendar_channel.channel_pdm,55186baa-803e-4d8e-8a5a-acf00096d867,"STOM"
+calendar_meeting_type.type_27,10,27,Beslut STOM PDM,True,False,3,25,False,calendar_channel.channel_pdm,85229bd7-ddd3-4fd9-a18e-acf0009714dd,"STOM"
+calendar_meeting_type.type_201,4,201,Ungdomar utan gymnasiekompetens PDM,False,True,3,10,True,calendar_channel.channel_pdm,a3124d09-5140-4ab9-915b-acf0009759d0,""
+calendar_meeting_type.type_202,9,202,Karriärvägledning PDM,True,False,1,5,False,calendar_channel.channel_pdm,fc342dab-9a95-4173-86f3-acf00097ee16,""
+calendar_meeting_type.type_203,8,203,Arbetsmarknadsutbildning PDM,True,False,3,15,False,calendar_channel.channel_pdm,0a5a4d41-dc6e-4524-b64e-acf0009851f8,""
+calendar_meeting_type.type_31,51,31,Första planeringssamtal,False,True,3,15,True,calendar_channel.channel_local,n/a,""
+calendar_meeting_type.type_32,53,32,Uppföljande planeringssamtal Lokalkontor,True,False,3,90,False,calendar_channel.channel_local,n/a,""
+calendar_meeting_type.type_33,54,33,Fördjupat planeringssamtal Lokalkontor,False,True,3,15,False,calendar_channel.channel_local,n/a,""
+calendar_meeting_type.type_34,52,34,Första planeringssamtal Kultur och Media,True,False,3,15,True,calendar_channel.channel_local,n/a,""

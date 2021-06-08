@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data noupdate="1">
+        <record id="provider_shibboleth" model="auth.saml.provider">
+            <field name="name">Logga in</field>
+            <field name="css_class">af-saml-login</field>
+            <field name="create_user" eval="True"/>
+            <field name="settings">{
+                "strict": True,
+                "debug": True,
+                "security": {
+                'authnRequestsSigned': False,
+                'requestedAuthnContext': False,
+                },
+                }
+            </field>
+            <field name="idp_metadata"/>
+            <field name="sp_metadata"/>
+            <field name="sp_pkey"/>
+        </record>
+    </data>
+    <data>
+        <!-- Baserat på dokumentet Förslag från Mika 24 augusti.xlsx -->
+        <!-- AF CRM-användare -->
+        <record id="group_map_user" model="auth.saml.provider.group_mapping">
+            <field name="value">AFCRM_Anv</field>
+            <field name="group_id" ref="base.group_user"/>
+            <field name="saml_id" ref="provider_shibboleth"/>
+            <field name="saml_attribute">entGroups</field>
+            <field name="operator">equals</field>
+        </record>
+        <!-- Kundhandläggare Arbetssökande -->
+        <record id="group_map_af_jobseekers_officer" model="auth.saml.provider.group_mapping">
+            <field name="value">AFCRM_Pilot</field>     <!-- AFCRM_KundHL_AS -->
+            <field name="group_id" ref="af_security.af_jobseekers_officer"/>
+            <field name="saml_id" ref="provider_shibboleth"/>
+            <field name="saml_attribute">entGroups</field>
+            <field name="operator">equals</field>
+        </record>
+        <!-- Korrigeringshandläggare Arbetssökande -->
+        <!--
+        <record id="group_map_af_jobseekers_editor" model="auth.saml.provider.group_mapping">
+            <field name="value">AFCRM_KorrHL_AS</field>
+            <field name="group_id" ref="af_security.af_jobseekers_editor" />
+            <field name="saml_id" ref="provider_shibboleth" />
+            <field name="saml_attribute">entGroups</field>
+            <field name="operator">equals</field>
+        </record>
+        -->
+        <!-- Kundhandläggare Arbetsgivare -->
+        <!--
+        <record id="group_map_af_employers_officer" model="auth.saml.provider.group_mapping">
+            <field name="value">AFCRM_KundHL_AG</field>
+            <field name="group_id" ref=af_security.af_employers_officer"" />
+            <field name="saml_id" ref="provider_shibboleth" />
+            <field name="saml_attribute">entGroups</field>
+            <field name="operator">equals</field>
+        </record>
+        -->
+        <!-- Korrigeringshandläggare Arbetsgivare -->
+        <!--
+        <record id="group_map_af_employers_editor" model="auth.saml.provider.group_mapping">
+            <field name="value">AFCRM_KorrHL_AG</field>
+            <field name="group_id" ref="af_security.af_employers_editor" />
+            <field name="saml_id" ref="provider_shibboleth" />
+            <field name="saml_attribute">entGroups</field>
+            <field name="operator">equals</field>
+        </record>
+        -->
+        <!-- Planeringshandläggare mötesbokning -->
+        <record id="group_map_af_meeting_admin" model="auth.saml.provider.group_mapping">
+            <field name="value">AFCRM_PlanHL_Motesbokning</field>
+            <field name="group_id" ref="af_security.af_meeting_admin"/>
+            <field name="saml_id" ref="provider_shibboleth"/>
+            <field name="saml_attribute">entGroups</field>
+            <field name="operator">equals</field>
+        </record>
+        <!-- Bemanningshandläggare mötesbokning -->
+        <record id="group_map_af_meeting_planner" model="auth.saml.provider.group_mapping">
+            <field name="value">AFCRM_BemmHL_Motesbokning</field>
+            <field name="group_id" ref="af_security.af_meeting_planner"/>
+            <field name="saml_id" ref="provider_shibboleth"/>
+            <field name="saml_attribute">entGroups</field>
+            <field name="operator">equals</field>
+        </record>
+        <!-- Utskickshandläggare och manuella nyhetsbrev -->
+        <!--
+        <record id="group_map_af_newsletter_manual" model="auth.saml.provider.group_mapping">
+            <field name="value">AFCRM_UtskHL_Manuellabrev</field>
+            <field name="group_id" ref="af_security.af_newsletter_manual" />
+            <field name="saml_id" ref="provider_shibboleth" />
+            <field name="saml_attribute">entGroups</field>
+            <field name="operator">equals</field>
+        </record>
+        -->
+        <!-- Utskickshandläggare och automatiska nyhetsbrev -->
+        <!--
+        <record id="group_map_af_newsletter_automatic" model="auth.saml.provider.group_mapping">
+            <field name="value">AFCRM_UtskHL_Automatiskabrev</field>
+            <field name="group_id" ref="af_security.af_newsletter_automatic" />
+            <field name="saml_id" ref="provider_shibboleth" />
+            <field name="saml_attribute">entGroups</field>
+            <field name="operator">equals</field>
+        </record>
+        -->
+        <!-- Utskicksansvarig nyhetsbrev -->
+        <!--
+        <record id="group_map_af_newsletter_editor" model="auth.saml.provider.group_mapping">
+            <field name="value">AFCRM_UtskAnsvarig_Nyhetsbrev</field>
+            <field name="group_id" ref="af_security.af_newsletter_editor" />
+            <field name="saml_id" ref="provider_shibboleth" />
+            <field name="saml_attribute">entGroups</field>
+            <field name="operator">equals</field>
+        </record>
+        -->
+        <!-- AF CRM 1st Line Support -->
+        <!--
+        <record id="group_map_support_1" model="auth.saml.provider.group_mapping">
+            <field name="value">AFCRM_1st_Line</field>
+            <field name="group_id" ref="" />
+            <field name="saml_id" ref="provider_shibboleth" />
+            <field name="saml_attribute">entGroups</field>
+            <field name="operator">equals</field>
+        </record>
+        -->
+        <!-- AF CRM 2nd Line Support -->
+        <!--
+        <record id="group_map_support_2" model="auth.saml.provider.group_mapping">
+            <field name="value">AFCRM_2nd_Line</field>
+            <field name="group_id" ref="" />
+            <field name="saml_id" ref="provider_shibboleth" />
+            <field name="saml_attribute">entGroups</field>
+            <field name="operator">equals</field>
+        </record>
+        -->
+        <!-- AF CRM 3rd Line Support -->
+        <record id="group_map_support_3" model="auth.saml.provider.group_mapping">
+            <field name="value">AFCRM_3rd_Line</field>
+            <field name="group_id" ref="base.group_system" />
+            <field name="saml_id" ref="provider_shibboleth" />
+            <field name="saml_attribute">entGroups</field>
+            <field name="operator">equals</field>
+        </record>
+        <!-- AF CRM Odoo ADMIN -->
+        <record id="group_map_admin" model="auth.saml.provider.group_mapping">
+            <field name="value">AFCRM_Odoo_Admin</field>
+            <field name="group_id" ref="base.group_system"/>
+            <field name="saml_id" ref="provider_shibboleth"/>
+            <field name="saml_attribute">entGroups</field>
+            <field name="operator">equals</field>
+        </record>
+    </data>
+</odoo>

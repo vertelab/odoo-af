@@ -32,19 +32,21 @@ _logger = logging.getLogger(__name__)
 
 # exception.BadRequest() 400
 
+
 class AfAppointments(http.Controller):
 
     @http.route('/appointments/appointments/', auth='user', website=False)
     def appointments(self):
         # TODO: GET + POST
-        #self.env['calendar.occasion'].get_bookable_occasions()
+        # self.env['calendar.occasion'].get_bookable_occasions()
         json = ''
         return json
 
-    @http.route('/appointments/competences/', auth='user', website=False, type='http')
+    @http.route('/appointments/competences/',
+                auth='user', website=False, type='http')
     def competences(self):
         """ Get a complete list of all meeting types in the system.
-        !!! Odoo is not master for this data. This method should not be relied 
+        !!! Odoo is not master for this data. This method should not be relied
         upon !!!"""
         # NOTE: GET
         res_dict = []
@@ -56,27 +58,45 @@ class AfAppointments(http.Controller):
             })
         return json.dumps(res_dict, ensure_ascii=False)
 
-    @http.route('/appointments/bookable-occasions/', auth='user', website=False)
-    def bookable_occasions(self, appointment_type, appointment_length, 
-    from_date, from_time, to_date, to_time, location_code, profession_id, 
-    employee_user_id, max_depth):
+    @http.route('/appointments/bookable-occasions/',
+                auth='user', website=False)
+    def bookable_occasions(
+            self,
+            appointment_type,
+            appointment_length,
+            from_date,
+            from_time,
+            to_date,
+            to_time,
+            location_code,
+            profession_id,
+            employee_user_id,
+            max_depth):
         """Get bookable occasions"""
         # TODO: GET
-        start = datetime.datetime.strptime("%sT%s" % (from_date, from_time), "%Y-%m-%dT%H:%M:%S")
-        stop = datetime.datetime.strptime("%sT%s" % (to_date, to_time), "%Y-%m-%dT%H:%M:%S")
-        type_id = request.env['calendar.appointment.type'].search([('ipf_id', '')])
+        start = datetime.datetime.strptime(
+            "%sT%s" %
+            (from_date, from_time), "%Y-%m-%dT%H:%M:%S")
+        stop = datetime.datetime.strptime(
+            "%sT%s" %
+            (to_date, to_time), "%Y-%m-%dT%H:%M:%S")
+        type_id = request.env['calendar.appointment.type'].search([
+                                                                  ('ipf_id', '')])
         # TODO: ....
-        request.env['calendar.occasion'].get_bookable_occasions(start, stop, type_id, channel, max_depth = 1)
+        request.env['calendar.occasion'].get_bookable_occasions(
+            start, stop, type_id, channel, max_depth=1)
         json = ''
         return json
 
-    @http.route('/appointments/bookable-occasions/reservation', auth='user', website=False)
+    @http.route('/appointments/bookable-occasions/reservation',
+                auth='user', website=False)
     def bookable_occasions_reservation(self, ocassion, **post):
         # TODO: POST + DELETE
         if post:
             if ocassions:
                 ocassion_ids = self.env['calendar.occasion'].browse(ocassions)
-                appointment_id = self.env[calendar.occasion].reserve_occasion(ocassion_ids)
+                appointment_id = self.env[calendar.occasion].reserve_occasion(
+                    ocassion_ids)
                 if appointment_id:
                     return 201
                 else:

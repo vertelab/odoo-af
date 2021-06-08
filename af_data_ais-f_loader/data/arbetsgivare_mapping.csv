@@ -1,46 +1,46 @@
-"arbetsgivare.csv","Notering","Trans","Odoo"
-"KUNDNR","! i odoo kolumnene för att kommentera ett fält. Syntax för transformation: fältnamn,transformation","external_id,part_emplr_","external_id"
-"KUNDNR","dubblerad rad för att läsa in samma AIS-F fält i två olika Odoo fält",,"customer_id"
-"TMSTAMP",,,
-"REGDATUM",,,"customer_since"
-"KONTOR_KOD","fel kod",,
-"ANTAL_AKT_ORDER",,,
-"ANTAL_AKT_ARENDEN",,,
-"ARBETSSTALLENR",,,"cfar_number"
-"AG_NAMN",,,"name"
-"TELNR",,,"phone"
-"FAXNR",,,"fax"
-"BESOKSADRESS","id = part_emplr_adr_ + external_id","visitation_address_id,part_emplr_adr_","visitation_address_id"
-"UTDELNINGSADRESS",,,"street"
-"POSTNR",,,"visitation_address_zip"
-"POSTORT",,,"visitation_address_city"
-"UTLANDSK_POSTADRESS","utländska företag har endast denna adress, skippa alla som har den just nu","skip,skip","skip"
-"LAND","behöver transformation, country_id/id",,"visitation_address_country_id"
-"EPOST",,,"email"
-"HEMSIDA",,,"website"
-"SNIKOD_1","skippa",,
-"KOMMUN_KOD","behöver transformation, behöver inläsning av states state_id/id",,"visitation_address_state_id"
-"ANTAL_ANSTALLDA","antal anställda",,
-"INTERNET_AG","om j → skippa","skip_if_j,skip3","!skip3"
-"SENASTE_KONTAKTDATUM",,,
-"SENASTE_KONTAKT_KONTOR",,,
-"SENASTE_KONTAKT_SIGN",,,
-"INTERN_INFORMATION",,,
-"ARBETSGIVARKLASS","?",,
-"YRKESGRUPPER_BESKR",,,
-"RADERAD","om j → skippa","skip_if_j,skip2","skip2"
-"LOGGMARKERING",,,
-"SNIKOD_2","skippa, kommer få separat fil med sni",,
-"OVERENSK_ORDER_KOD",,,
-"OVERENSK_ORDER_TEXT",,,
-"ARKIVERAD",,,
-"MIGRERAD",,,
-"VC_GATUADRESS_SOK",,,
-"VC_ARBETSSTALLENAMN_SOK",,,
-"ORGANISATION_KUNDNR","parent_id/id behöver organisationer inlästa","parent_id,part_org_","parent_id"
-"STORLEKSKLASS","behöver fält",,
-"UTDELNINGSADRESS_POSTNR","postal address zip",,"zip"
-"UTDELNINGSADRESS_POSTORT","postal address city",,"city"
-"UTD_KOMMUN_KOD","postal address state_id/id",,"state_id"
-"UTD_LAND","skippa nu postal adress country_id/id",,"country_id"
-"AKTIV",,,
+arbetsgivare.csv,Notering,Trans,Odoo
+KUNDNR,"! i odoo kolumnen för att kommentera ett fält. Syntax för transformation: transformationsnamn (typiskt fältnamnet),transformation","external_id,part_emplr_",external_id
+KUNDNR,dubblerad rad för att läsa in samma AIS-F fält i två olika Odoo fält,,customer_id
+TMSTAMP,,,
+REGDATUM,,,customer_since
+KONTOR_KOD,fel kod,,
+ANTAL_AKT_ORDER,,,
+ANTAL_AKT_ARENDEN,,,
+ARBETSSTALLENR,,,cfar
+AG_NAMN,,,name
+TELNR,,,phone
+FAXNR,,,fax
+BESOKSADRESS,id = part_emplr_adr_ + external_id,"visitation_address_id,part_emplr_adr_",visitation_address_id
+UTDELNINGSADRESS,,,street
+POSTNR,,,visitation_address_zip
+POSTORT,,,visitation_address_city
+UTLANDSK_POSTADRESS,"utländska företag har endast denna adress, skippa alla som har den just nu","skip,skip",skip
+LAND,"behöver transformation, country_id/id",,visitation_address_country_id
+EPOST,,,email
+HEMSIDA,,,website
+SNIKOD_1,skippa,,
+KOMMUN_KOD,"behöver transformation, behöver inläsning av states state_id/id",,visitation_address_state_id
+ANTAL_ANSTALLDA,antal anställda,,
+INTERNET_AG,om j → skippa,"skip_if_j,skip3",!skip3
+SENASTE_KONTAKTDATUM,,,
+SENASTE_KONTAKT_KONTOR,,,
+SENASTE_KONTAKT_SIGN,,,
+INTERN_INFORMATION,,,
+ARBETSGIVARKLASS,?,,
+YRKESGRUPPER_BESKR,,,
+RADERAD,om j → skippa,"skip2,skip_if_j",skip2
+LOGGMARKERING,,,
+SNIKOD_2,"skippa, kommer få separat fil med sni",,
+OVERENSK_ORDER_KOD,,,
+OVERENSK_ORDER_TEXT,,,
+ARKIVERAD,,,
+MIGRERAD,,,
+VC_GATUADRESS_SOK,,,
+VC_ARBETSSTALLENAMN_SOK,,,
+ORGANISATION_KUNDNR,parent_id/id behöver organisationer inlästa,"parent_id,part_org_",parent_id
+STORLEKSKLASS,behöver fält,,
+UTDELNINGSADRESS_POSTNR,postal address zip,,zip
+UTDELNINGSADRESS_POSTORT,postal address city,,city
+UTD_KOMMUN_KOD,postal address state_id/id,,state_id
+UTD_LAND,skippa nu postal adress country_id/id,,country_id
+AKTIV,,,

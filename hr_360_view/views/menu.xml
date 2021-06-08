@@ -1,0 +1,7 @@
+<odoo>
+    <menuitem
+            id="menu_administrative_office_root"
+            name="My Administrative Officer Area"
+            groups="base.group_user"
+            sequence="80"/>
+</odoo>
