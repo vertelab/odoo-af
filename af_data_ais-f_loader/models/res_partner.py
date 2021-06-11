@@ -40,38 +40,11 @@ _logger = logging.getLogger(__name__)
 #
 # Threading?
 
+
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
     xmlid_module = "__ais_import__"
-
-    @api.model
-    def create_jobseekers(self):
-        headers_header = ['arbetssokande.csv', 'Notering', 'Trans', 'Odoo']
-        path = os.path.join(
-            config.options.get('data_dir'),
-            'AIS-F/arbetssokande.csv')
-        # testing purposes only
-        path = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/arbetssokande.csv"
-        header_path = "/usr/share/odoo-af/af_data_ais-f_loader/data/arbetssokande_mapping.csv"
-        #self.create_partners(headers_header, path, header_path)
-
-        headers_header_adr = ['sok_adress.csv', 'Notering', 'Trans', 'Odoo']
-        path_adr = os.path.join(
-            config.options.get('data_dir'),
-            'AIS-F/sok_adress.csv')
-        # testing purposes only
-        path_adr = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/sok_adress.csv"
-        header_path_adr = "/usr/share/odoo-af/af_data_ais-f_loader/data/sok_adress_mapping.csv"
-        #self.create_partners(headers_header_adr, path_adr, header_path_adr)
-
-        headers_header_jobs = ['SOK_SOKTYRKE.csv', 'Notering', 'Trans', 'Odoo']
-        path_jobs = os.path.join(
-            config.options.get('data_dir'),
-            'AIS-F/SOK_SOKTYRKE.csv') # testing purposes only
-        path_jobs = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/SOK_SOKTYRKE.csv"
-        header_path_jobs = "/usr/share/odoo-af/af_data_ais-f_loader/data/SOK_SOKTYRKE_mapping.csv"
-        # self.create_partners(headers_header_jobs, path_jobs, header_path_jobs)
 
     @api.model
     def create_offices(self, path):
