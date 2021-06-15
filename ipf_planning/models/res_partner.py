@@ -35,7 +35,8 @@ class Partner(models.Model):
     def _check_ipf_planning(self):
         try:
             planning = self.ipf_load_planning()
-            if (planning and planning['source']) and 'BAR' in planning['source'] or 'PLV' in planning['source']:
+            if ((planning and planning.get('source')) and
+                    (planning['source'] == 'BAR' or planning['source'] == 'PLV')):
                 self.has_ipf_planning = True
             else:
                 self.has_ipf_planning = False
@@ -71,7 +72,7 @@ class Partner(models.Model):
         self.ensure_one()
         url = ''
         planning = self.ipf_load_planning()
-        if planning and planning['source']:
+        if planning and planning.get('source'):
             if planning['source'] == 'PLV':
                 url = 'http://ivs.arbetsformedlingen.se/etjanst/planeringsverktyg/#/start/bedomning/{}'.format(
                     self.social_sec_nr.replace('-', ''))
