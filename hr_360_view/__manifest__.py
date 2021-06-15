@@ -3,7 +3,7 @@
     'summary': """
         A dashboard for employees to search for job seekers.
         """,
-    'version': '12.0.2.1.1',
+    'version': '12.0.2.1.2',
     'category': 'Human resources',
     'description': """
 Jiras
@@ -23,6 +23,7 @@ v12.0.1.4.0 AFC-2097 - misc bugfixes. \n
 v12.0.2.0.0 AFC-2260 - Changed error messages. Tried to fix log and version numbers. \n
 v12.0.2.1.0 AFC-2230 - Changed txt when a person is not in the database and deleted screen pop-up. \n
 v12.0.2.1.1 AFC-2230 - Recovered screen pop-up. \n
+v12.0.2.1.2 AFC-2234 - Refactored code, fixed customer number search. \n
 
 """,
     'author': 'Vertel AB',
