@@ -2,7 +2,7 @@
 
 {
     "name": "AF web gui",
-    "version": "12.0.1.0.0",
+    "version": "12.0.1.0.2",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "description": """
@@ -11,6 +11,7 @@ Used to override GUI in odoo core
 ===========================================
 v12.0.1.0.0 AFC-2260: Introduced module
 v12.0.1.0.1 AFC-2390: Changed module name and description. Changed title and favicon
+v12.0.1.0.2 AFC-2389: Changed default behaviour of the popup notification
 """,
     "website": "https://vertel.se/",
     "category": "Tools",
