@@ -27,6 +27,7 @@ from zeep.client import CachingClient
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 from odoo.http import request
+import requests
 
 _logger = logging.getLogger(__name__)
 TIMEOUT = 60 * 3
@@ -328,27 +329,25 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     def do_bankid(self):
         """Send BankID request and wait for user verification."""
         self.bank_id_ok = False
-        bankid = CachingClient(
-            self.env["ir.config_parameter"]
-            .sudo()
-            .get_param(
-                "hr_360_view.bankid_wsdl",
-                "http://bhipws.arbetsformedlingen.se/Integrationspunkt/ws/mobiltbankidinterntjanst?wsdl",
-            )
-        )  # create a Client instance
+
         if not self.social_sec_nr_search:
-            raise ValidationError(_("Social security number missing"))
-        res = bankid.service.startaIdentifiering(
-            self.social_sec_nr_search.replace("-", ""), "crm"
-        )
-        _logger.debug("res: %s" % res)
+             raise ValidationError(_("Social security number missing"))
+        url_collect = "https://bhipws.arbetsformedlingen.se/bhipws/rest/v1/elegservice/collect"
+        url_auth = "https://bhipws.arbetsformedlingen.se/bhipws/rest/v1/elegservice/auth"
+        body_auth = {
+            "systemID": "AFCRM",
+            "authSystem": "bankid",
+            "personalNumber": self.social_sec_nr_search.replace("-", ""),
+        }
+        response_auth = requests.post(url_auth, json=body_auth)
+        response_auth_json = response_auth.json()
         order_ref = False
         try:
-            order_ref = res["orderRef"]
-            if not orderRef:
+            order_ref = response_auth_json["orderRef"]
+            if not order_ref:
                 self.bank_id_ok = False
                 try:
-                    self.bank_id_text = res["felStatusKod"]
+                    self.bank_id_text = response_auth_json["infoCode"]
                 except KeyError:
                     self.bank_id_text = _("Error in communication with BankID")
         except KeyError:
@@ -358,13 +357,19 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             deadline = time.monotonic() + TIMEOUT
             time.sleep(9)  # Give user time to react before polling.
             while deadline > time.monotonic():
-                res = bankid.service.verifieraIdentifiering(order_ref, "crm")
-                if "statusText" in res and res["statusText"] == "OK":
-                    self.bank_id_text = res["statusText"]
+                response_collect = requests.post(url_collect, json={
+                        "systemID": "AFCRM",
+                        "orderRef": order_ref
+                })
+                response_collect_json = response_collect.json()
+                if "status" in response_collect_json and \
+                        response_collect_json["status"] == "complete":
+                    self.bank_id_text = response_collect_json["status"]
                     self.bank_id_ok = True
                     break
-                elif "felStatusKod" in res and self.bank_id_text["felStatusKod"]:
-                    self.bank_id_text = res["felStatusKod"]
+                elif "status" in response_collect_json and \
+                        response_collect_json["status"] == "failed":
+                    self.bank_id_text = response_collect_json["infoCode"]
                     self.bank_id_ok = False
                     break
                 time.sleep(3)
@@ -372,9 +377,11 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                 self.bank_id_text = _("User timeout")
                 self.bank_id_ok = False
 
-        partner = self.env["res.partner"].search_pnr(self.social_sec_nr_search)
+        partner = self.env["res.partner"].search_pnr(
+            self.social_sec_nr_search)
         if not partner:
-            raise ValidationError(_("Social security number not found in system"))
+            raise ValidationError(
+                _("Social security number not found in system"))
         # create bankid token to let user know status of bankid process
         bankid_vals = {
             "name": self.bank_id_text,
@@ -382,12 +389,12 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             "partner_id": partner.id,
         }
         request.env["res.partner.bankid"].create(bankid_vals)
-
-        action = (
-            self.env["ir.actions.act_window"]
-            .browse(self.env.ref("hr_360_view.search_jobseeker_wizard").id)
-            .read()[0]
-        )
-        action["res_id"] = self.id
-        action["view_mode"] = "form"
-        return action
+        if self.bank_id_ok:
+            action = (
+                self.env["ir.actions.act_window"]
+                .browse(self.env.ref("hr_360_view.search_jobseeker_wizard").id)
+                .read()[0]
+            )
+            action["res_id"] = self.id
+            action["view_mode"] = "form"
+            return action
