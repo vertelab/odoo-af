@@ -48,6 +48,7 @@ class AFProcessLog(models.Model):
         # Log with new cursor to avoid any rollback issues
         db = db_connect(self.env.cr.dbname)
         max_tries_exceeded = False
+        message = message or "EMPTY"
         try:
             with db.cursor() as cr:
                 with api.Environment.manage():
