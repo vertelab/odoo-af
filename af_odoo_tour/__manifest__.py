@@ -1,8 +1,9 @@
 {
     'name': 'Af CRM Introduction tour',
-    'version': '12.0.0.0',
+    'version': '12.0.0.1',
     "description": """
-       AFC-780 v 12.0.0.0 This module hosts all introduction tours to Af CRM.
+       v 12.0.0.0 AFC-780  This module hosts all introduction tours to Af CRM. \n
+       v 12.0.0.1 AFC-2266 Updated format of person number for searching. \n
     """,
     'author': 'Vertel AB',
     'license': 'AGPL-3',

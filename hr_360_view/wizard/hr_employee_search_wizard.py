@@ -27,6 +27,7 @@ from zeep.client import CachingClient
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 from odoo.http import request
+from datetime import datetime
 
 _logger = logging.getLogger(__name__)
 TIMEOUT = 60 * 3
@@ -134,6 +135,8 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
 
     @api.multi
     def search_jobseeker(self):
+        now_year = str(datetime.now().year)
+        before_year = str(datetime.now().year - 100)
         domain = []
         if self.social_sec_nr_search:
             if (
@@ -141,7 +144,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                 and self.social_sec_nr_search[8] == "-"
             ):
                 domain.append(("social_sec_nr", "=", self.social_sec_nr_search))
-            elif len(self.social_sec_nr_search) == 12:
+            elif len(self.social_sec_nr_search) == 12 and "-" not in self.social_sec_nr_search:
                 domain.append(
                     (
                         "social_sec_nr",
@@ -153,6 +156,39 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                         ),
                     )
                 )
+            elif (
+                    len(self.social_sec_nr_search) == 11
+                    and self.social_sec_nr_search[6] == "-"
+            ):
+                if self.social_sec_nr_search[0:2] < now_year[2:4]:
+                    domain.append(("social_sec_nr", "=", now_year[0:2] + self.social_sec_nr_search))
+                else:
+                    domain.append(("social_sec_nr", "=", before_year[0:2] + self.social_sec_nr_search))
+            elif len(self.social_sec_nr_search) == 10 and "-" not in self.social_sec_nr_search:
+                if self.social_sec_nr_search[0:2] < now_year[2:4]:
+                    domain.append(
+                        (
+                            "social_sec_nr",
+                            "=",
+                            "%s-%s"
+                            % (
+                                now_year[0:2] + self.social_sec_nr_search[:6],
+                                self.social_sec_nr_search[6:10],
+                            ),
+                        )
+                    )
+                else:
+                    domain.append(
+                        (
+                            "social_sec_nr",
+                            "=",
+                            "%s-%s"
+                            % (
+                                before_year[0:2] + self.social_sec_nr_search[:6],
+                                self.social_sec_nr_search[6:10],
+                            ),
+                        )
+                    )
             else:
                 raise ValidationError(
                     _("Incorrectly formatted social security number: %s")
@@ -223,6 +259,10 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
 
     @api.multi
     def search_jobseeker_authority(self):
+        now_year = str(datetime.now().year)
+        # which gives 2021
+        before_year = str(datetime.now().year - 100)
+        # which gives 1921
         domain = []
         if self.social_sec_nr_search:
             if (
@@ -230,7 +270,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                 and self.social_sec_nr_search[8] == "-"
             ):
                 domain.append(("social_sec_nr", "=", self.social_sec_nr_search))
-            elif len(self.social_sec_nr_search) == 12:
+            elif len(self.social_sec_nr_search) == 12 and "-" not in self.social_sec_nr_search:
                 domain.append(
                     (
                         "social_sec_nr",
@@ -242,6 +282,39 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                         ),
                     )
                 )
+            elif (
+                    len(self.social_sec_nr_search) == 11
+                    and self.social_sec_nr_search[6] == "-"
+            ):
+                if self.social_sec_nr_search[0:2] < now_year[2:4]:
+                    domain.append(("social_sec_nr", "=", now_year[0:2] + self.social_sec_nr_search))
+                else:
+                    domain.append(("social_sec_nr", "=", before_year[0:2] + self.social_sec_nr_search))
+            elif len(self.social_sec_nr_search) == 10 and "-" not in self.social_sec_nr_search:
+                if self.social_sec_nr_search[0:2] < now_year[2:4]:
+                    domain.append(
+                        (
+                            "social_sec_nr",
+                            "=",
+                            "%s-%s"
+                            % (
+                                now_year[0:2] + self.social_sec_nr_search[:6],
+                                self.social_sec_nr_search[6:10],
+                            ),
+                        )
+                    )
+                else:
+                    domain.append(
+                        (
+                            "social_sec_nr",
+                            "=",
+                            "%s-%s"
+                            % (
+                                before_year[0:2] + self.social_sec_nr_search[:6],
+                                self.social_sec_nr_search[6:10],
+                            ),
+                        )
+                    )
             else:
                 raise ValidationError(
                     _("Incorrectly formatted social security number: %s")
@@ -254,7 +327,13 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             if res:
                 pnr = res.get("ids", {}).get("pnr")
                 if pnr:
-                    pnr = "%s-%s" % (pnr[:8], pnr[8:12])
+                    if len(pnr) == 12:
+                        pnr = "%s-%s" % (pnr[:8], pnr[8:12])
+                    elif len(pnr) == 10:
+                        if pnr[0:2] < now_year[2:4]:
+                            pnr = "%s-%s" % (now_year[0:2] + pnr[:6], pnr[6:10])
+                        else:
+                            pnr = "%s-%s" % (before_year[0:2] + pnr[:6], pnr[6:10])
             if pnr:
                 domain.append(("social_sec_nr", "=", pnr))
             else:
