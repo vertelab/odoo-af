@@ -7,6 +7,10 @@
     "description": """
         This module installs all AF-modules at one go.\n
         Should NOT be changed.\n
+        
+        This module maintained here: 
+         https://github.com/vertelab/odoo-af/tree/Dev-12.0-Fenix-Sprint-02/af_install_modules\n
+         
         Please see the depend-tab (with debug-mode) for a list\n
         \n
          v12.0.1.2  - changed version number to four digits\n

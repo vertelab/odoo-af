@@ -19,10 +19,11 @@
 #
 ##############################################################################
 import datetime
-from odoo import api, fields, models, _
+import logging
 from odoo.exceptions import Warning
 
-import logging
+from odoo import api, fields, models, _
+
 _logger = logging.getLogger(__name__)
 
 
@@ -30,25 +31,26 @@ class account_analytic_profit(models.TransientModel):
     _name = 'hr.timesheet.analytic.profit'
     _description = 'Print Timesheet Profit'
 
-    date_from = fields.Date(string='From', required=True, default=lambda *a : fields.Date.today()[:8]+'01')
-    date_to = fields.Date(string='To', required=True, default=lambda *a : fields.Date.today())
-    #~ journal_ids = fields.Many2many(comodel_name='account.analytic.journal', relation='analytic_profit_journal_rel', column1='analytic_id', column2='journal_id', string='Journal', required=True)
-    employee_ids = fields.Many2many(comodel_name='res.users', relation='analytic_profit_emp_rel', column1='analytic_id', column2='emp_id', string='User', required=True)
+    date_from = fields.Date(string='From', required=True, default=lambda *a: fields.Date.today()[:8] + '01')
+    date_to = fields.Date(string='To', required=True, default=lambda *a: fields.Date.today())
+    # ~ journal_ids = fields.Many2many(comodel_name='account.analytic.journal', relation='analytic_profit_journal_rel', column1='analytic_id', column2='journal_id', string='Journal', required=True)
+    employee_ids = fields.Many2many(comodel_name='res.users', relation='analytic_profit_emp_rel', column1='analytic_id',
+                                    column2='emp_id', string='User', required=True)
 
     @api.multi
     def print_report(self):
         data = {}
         data['form'] = self.read()[0]
         ids_chk = self.env['account.analytic.line'].search([
-                ('date', '>=', data['form']['date_from']),
-                ('date', '<=', data['form']['date_to']),
-                #~ ('journal_id', 'in', data['form']['journal_ids']),
-                ('user_id', 'in', data['form']['employee_ids']),
-                ])
+            ('date', '>=', data['form']['date_from']),
+            ('date', '<=', data['form']['date_to']),
+            # ~ ('journal_id', 'in', data['form']['journal_ids']),
+            ('user_id', 'in', data['form']['employee_ids']),
+        ])
         if not ids_chk:
             raise Warning(_('No record(s) found for this report.'))
 
-        #~ data['form']['journal_ids'] = [(6, 0, data['form']['journal_ids'])] # Improve me => Change the rml/sxw so that it can support withou [0][2]
+        # ~ data['form']['journal_ids'] = [(6, 0, data['form']['journal_ids'])] # Improve me => Change the rml/sxw so that it can support withou [0][2]
         data['form']['employee_ids'] = [(6, 0, data['form']['employee_ids'])]
         datas = {
             'ids': [],

@@ -5,7 +5,7 @@
         <template id="assets_bugherd" name="AF Bugherd" inherit_id="web.assets_backend">
             <xpath expr=".">
                 <script type="text/javascript" src="https://www.bugherd.com/sidebarv2.js?apikey=sv2fspmos67qch8mqqarow"
-                        async="true"></script>
+                        async="true"/>
             </xpath>
         </template>
     </data>

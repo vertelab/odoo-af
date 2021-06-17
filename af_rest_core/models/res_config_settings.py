@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from odoo import api, fields, models
 import os
+
+from odoo import api, fields, models
 
 
 class ResConfigSettings(models.TransientModel):
@@ -28,6 +29,7 @@ class ResConfigSettings(models.TransientModel):
     af_system_id = fields.Char(
         string='AF-SystemId',
         help="If you need help you shouldn't be changing this")
+
     # tracking_id is a unique id for each transaction. Not a good parameter to set.
     # af_tracking_id = fields.Char(string='AF-TrackingId',help="If you need help you shouldn't be changing this")
 

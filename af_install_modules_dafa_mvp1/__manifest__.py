@@ -92,6 +92,6 @@
         "web_widget_color",
         
     ],
-    "application": "False",
-    "installable": "True",
+    "application": False,
+    "installable": True,
 }

@@ -4,31 +4,38 @@
         <field name="name">AF Generate Occasions</field>
         <field name="model_id" ref="base.model_ir_actions_server"/>
         <field name="state">code</field>
-        <field name="code">competence = env['calendar.schedule.competence'].search([('ipf_id', '=', 'ded72445-e5d3-4e21-a356-aad200dac83d')])
-start = datetime.datetime.strptime(("2020-04-01T00:00:00"), "%Y-%m-%dT%H:%M:%S")
-stop = datetime.datetime.strptime(("2020-04-02T0:00:00"), "%Y-%m-%dT%H:%M:%S")
-schedules = env['calendar.schedule'].search([('start', '>', start),('stop', '&lt;', stop),('competence', '=', competence.id)])
+        <field name="code">competence = env['calendar.schedule.competence'].search([('ipf_id', '=',
+            'ded72445-e5d3-4e21-a356-aad200dac83d')])
+            start = datetime.datetime.strptime(("2020-04-01T00:00:00"), "%Y-%m-%dT%H:%M:%S")
+            stop = datetime.datetime.strptime(("2020-04-02T0:00:00"), "%Y-%m-%dT%H:%M:%S")
+            schedules = env['calendar.schedule'].search([('start', '>', start),('stop', '&lt;', stop),('competence',
+            '=', competence.id)])
 
-schedules.create_occasions()</field>
+            schedules.create_occasions()
+        </field>
     </record>
 
     <record id="af_get_bookable_occasions" model="ir.actions.server">
         <field name="name">AF Get Bookable Occasion</field>
         <field name="model_id" ref="base.model_ir_actions_server"/>
         <field name="state">code</field>
-        <field name="code">competence = env['calendar.schedule.competence'].search([('ipf_id', '=', 'ded72445-e5d3-4e21-a356-aad200dac83d')])
-start = datetime.datetime.strptime(("2020-04-02T09:00:00"), "%Y-%m-%dT%H:%M:%S")
-stop = datetime.datetime.strptime(("2020-04-02T10:30:00"), "%Y-%m-%dT%H:%M:%S")
-occasions = env['calendar.occasion'].get_bookable_occasions(start, stop, competence, 'SPD', 5)
-reservation = env['calendar.occasion'].reserve_occasion(occasions[0])</field>
+        <field name="code">competence = env['calendar.schedule.competence'].search([('ipf_id', '=',
+            'ded72445-e5d3-4e21-a356-aad200dac83d')])
+            start = datetime.datetime.strptime(("2020-04-02T09:00:00"), "%Y-%m-%dT%H:%M:%S")
+            stop = datetime.datetime.strptime(("2020-04-02T10:30:00"), "%Y-%m-%dT%H:%M:%S")
+            occasions = env['calendar.occasion'].get_bookable_occasions(start, stop, competence, 'SPD', 5)
+            reservation = env['calendar.occasion'].reserve_occasion(occasions[0])
+        </field>
     </record>
 
     <record id="af_calendar_cleanup" model="ir.actions.server">
         <field name="name">AF Calendar Cleanup</field>
         <field name="model_id" ref="base.model_ir_actions_server"/>
         <field name="state">code</field>
-        <field name="code">unused_occasions = env['calendar.occasion'].search([('appointment_id','=',''), ('start','&lt;', datetime.datetime.now() - datetime.timedelta(days=14))])
-unused_occasions.unlink()</field>
+        <field name="code">unused_occasions = env['calendar.occasion'].search([('appointment_id','=',''), ('start','&lt;',
+            datetime.datetime.now() - datetime.timedelta(days=14))])
+            unused_occasions.unlink()
+        </field>
     </record>
 
     <record id="ir_cron_additional_times_autovacuum" model="ir.cron">
@@ -37,11 +44,11 @@ unused_occasions.unlink()</field>
         <field name='interval_type'>days</field>
         <field name="numbercall">-1</field>
         <field name="nextcall">2020-09-19 20:00:00</field>
-        <field name="active" eval="True" />
-        <field name="doall" eval="False" />
+        <field name="active" eval="True"/>
+        <field name="doall" eval="False"/>
         <field name="code">model.autovacuum_additional_occasion()</field>
         <field name="state">code</field>
-        <field name="model_id" ref="model_calendar_occasion" />
+        <field name="model_id" ref="model_calendar_occasion"/>
     </record>
 
 
@@ -52,10 +59,11 @@ unused_occasions.unlink()</field>
         <field name="binding_type">action</field>
         <field name="state">code</field>
         <field name="code">for rec in records:
-  if rec.state == 'draft' or rec.state == 'fail':
-    res = rec.publish_occasion()
-    if not res:
-      raise Warning("One of your occasions is not a draft.")</field>
+            if rec.state == 'draft' or rec.state == 'fail':
+            res = rec.publish_occasion()
+            if not res:
+            raise Warning("One of your occasions is not a draft.")
+        </field>
     </record>
 
     <record id="action_occasion_accept" model="ir.actions.server">
@@ -65,10 +73,11 @@ unused_occasions.unlink()</field>
         <field name="binding_type">action</field>
         <field name="state">code</field>
         <field name="code">for rec in records:
-  if rec.state == 'request' or rec.state == 'fail':
-    res = rec.accept_occasion()
-    if not res:
-      raise Warning("One of your occasions is not a request.")</field>
+            if rec.state == 'request' or rec.state == 'fail':
+            res = rec.accept_occasion()
+            if not res:
+            raise Warning("One of your occasions is not a request.")
+        </field>
     </record>
 
     <record id="action_occasion_reject" model="ir.actions.server">
@@ -78,10 +87,11 @@ unused_occasions.unlink()</field>
         <field name="binding_type">action</field>
         <field name="state">code</field>
         <field name="code">for rec in records:
-  if rec.state in ['request', 'ok']:
-    res = rec.reject_occasion()
-    if not res:
-      raise Warning("One of your occasions is not a request.")</field>
+            if rec.state in ['request', 'ok']:
+            res = rec.reject_occasion()
+            if not res:
+            raise Warning("One of your occasions is not a request.")
+        </field>
     </record>
 
     <record id="action_occasion_delete" model="ir.actions.server">
@@ -91,39 +101,41 @@ unused_occasions.unlink()</field>
         <field name="binding_type">action</field>
         <field name="state">code</field>
         <field name="code">for rec in records:
-  if not rec.appointment_id:
-    res = rec.delete_occasion()
-    if not res:
-      raise Warning("One of your occasions is already booked")</field>
+            if not rec.appointment_id:
+            res = rec.delete_occasion()
+            if not res:
+            raise Warning("One of your occasions is already booked")
+        </field>
     </record>
 
-  <record id="action_calendar_user" model="ir.actions.act_window">
+    <record id="action_calendar_user" model="ir.actions.act_window">
         <field name="name">Case worker</field>
         <field name="res_model">res.users</field>
         <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="view_calendar_user_tree" />
-        <field name="search_view_id" ref="calendar_user_search" />
+        <field name="view_id" ref="view_calendar_user_tree"/>
+        <field name="search_view_id" ref="calendar_user_search"/>
     </record>
 
     <record id="action_view_calendar_user_tree" model="ir.actions.act_window.view">
-        <field name="act_window_id" ref="action_calendar_user" />
-        <field name="sequence" eval="1" />
+        <field name="act_window_id" ref="action_calendar_user"/>
+        <field name="sequence" eval="1"/>
         <field name="view_mode">tree</field>
-        <field name="view_id" ref="view_calendar_user_tree" />
+        <field name="view_id" ref="view_calendar_user_tree"/>
     </record>
 
     <record id="action_view_calendar_user_form" model="ir.actions.act_window.view">
-        <field name="act_window_id" ref="action_calendar_user" />
-        <field name="sequence" eval="2" />
+        <field name="act_window_id" ref="action_calendar_user"/>
+        <field name="sequence" eval="2"/>
         <field name="view_mode">form</field>
-        <field name="view_id" ref="view_calendar_user_form" />
+        <field name="view_id" ref="view_calendar_user_form"/>
     </record>
 
-    <menuitem action="action_calendar_user" name="Calendar" id="menu_calendar" sequence="2" />
-    <menuitem name="Distans Meeting" id="menu_book_distans_meeting" parent="calendar_af.menu_calendar" sequence="10" />
-    <menuitem name="PDM" id="menu_pdm" parent="calendar_af.menu_calendar" sequence="11" />
-    <menuitem name="Local" id="menu_local" parent="calendar_af.menu_calendar" sequence="12" />
-    <menuitem name="Reports" id="menu_reports" parent="calendar_af.menu_calendar" sequence="13" />
-    <menuitem name="Administration" id="menu_admin" parent="calendar_af.menu_calendar" sequence="20" />
-    <menuitem name="Holidays" action="resource.action_resource_calendar_leave_tree" id="menu_action_calendar_leave" parent="menu_admin" sequence="15" groups="af_security.af_meeting_admin" />
+    <menuitem action="action_calendar_user" name="Calendar" id="menu_calendar" sequence="2"/>
+    <menuitem name="Distans Meeting" id="menu_book_distans_meeting" parent="calendar_af.menu_calendar" sequence="10"/>
+    <menuitem name="PDM" id="menu_pdm" parent="calendar_af.menu_calendar" sequence="11"/>
+    <menuitem name="Local" id="menu_local" parent="calendar_af.menu_calendar" sequence="12"/>
+    <menuitem name="Reports" id="menu_reports" parent="calendar_af.menu_calendar" sequence="13"/>
+    <menuitem name="Administration" id="menu_admin" parent="calendar_af.menu_calendar" sequence="20"/>
+    <menuitem name="Holidays" action="resource.action_resource_calendar_leave_tree" id="menu_action_calendar_leave"
+              parent="menu_admin" sequence="15" groups="af_security.af_meeting_admin"/>
 </odoo>

@@ -19,8 +19,9 @@
 #
 ##############################################################################
 
-from odoo import models, fields, api, _
 from collections import OrderedDict
+
+from odoo import models, fields, api, _
 
 
 class ResPartner(models.Model):

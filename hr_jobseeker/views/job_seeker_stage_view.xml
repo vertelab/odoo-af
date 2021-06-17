@@ -42,12 +42,12 @@
         </record>
 
         <menuitem
-            id="menu_hr_job_seeker_stage"
-            parent="hr_jobseeker.hr_job_seeker_configuration"
-            action="hr_jobseeker.hr_jobseeker_stage_action"
-            name="Stages"
-            groups="base.group_user"
-            sequence="10"/>
+                id="menu_hr_job_seeker_stage"
+                parent="hr_jobseeker.hr_job_seeker_configuration"
+                action="hr_jobseeker.hr_jobseeker_stage_action"
+                name="Stages"
+                groups="base.group_user"
+                sequence="10"/>
 
     </data>
 </odoo>

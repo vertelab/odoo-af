@@ -19,21 +19,22 @@
 #
 ##############################################################################
 
-from odoo import models, fields, api, _
-from datetime import datetime
-import pytz
-from urllib import request
-from urllib.error import URLError, HTTPError
 import json
 import logging
-from odoo.exceptions import Warning
-
+import pytz
 # TODO: only use this in remote tests
 import ssl
+from datetime import datetime
+from odoo.exceptions import Warning
+from urllib import request
+from urllib.error import URLError, HTTPError
+
+from odoo import models, fields, api, _
 
 _logger = logging.getLogger(__name__)
 
 LOCAL_TZ = 'Europe/Stockholm'
+
 
 class AfAppointment(models.Model):
     _name = "af.appointment"
@@ -50,7 +51,7 @@ class AfAppointment(models.Model):
             ctx.check_hostname = False
             ctx.verify_mode = ssl.CERT_NONE
         else:
-            pass # TODO: implement mTSL here?
+            pass  # TODO: implement mTSL here?
         return ctx
 
     def _generate_headers(self, af_environment, af_system_id, af_tracking_id):
@@ -62,7 +63,8 @@ class AfAppointment(models.Model):
         return get_headers
 
     # /bookable-occasions
-    def get_occasions(self, from_date, to_date, appointment_channel, appointment_type, max_depth = False, appointment_length = False, location_code = False, profession_id = False, employee_user_id = False):
+    def get_occasions(self, from_date, to_date, appointment_channel, appointment_type, max_depth=False,
+                      appointment_length=False, location_code=False, profession_id=False, employee_user_id=False):
         client_id = self.env['ir.config_parameter'].sudo().get_param('af_rest.client_id')
         client_secret = self.env['ir.config_parameter'].sudo().get_param('af_rest.client_secret')
         af_environment = self.env['ir.config_parameter'].sudo().get_param('af_rest.af_environment')
@@ -82,19 +84,19 @@ class AfAppointment(models.Model):
 
         # Insert values into base_url
         get_url = base_url.format(
-            url = af_url, # https://ipfapi.arbetsformedlingen.se
-            port = af_port, # 443
-            path = "appointments/v1/bookable-occasions", # TODO: remove hardcoding?
-            client = client_id, # check in anypoint for example
-            secret = client_secret, # check in anypoint for example
-            from_date_str = from_date.strftime("%Y-%m-%d"), # 2020-03-17
-            to_date_str = to_date.strftime("%Y-%m-%d"), # 2020-03-25
-            appointment_channel_str = appointment_channel, # 'SPD'
-            appointment_type_str = appointment_type, # '1'
-            max_depth_str = ("&max_depth=%s" % max_depth) if max_depth else '',
-            appointment_length_str = ("&appointment_length=%s" % appointment_length) if appointment_length else '',
-            location_code_str = ("&location_code=%s" % location_code) if location_code else '',
-            profession_id_str = ("&profession_id=%s" % profession_id) if profession_id else '',
+            url=af_url,  # https://ipfapi.arbetsformedlingen.se
+            port=af_port,  # 443
+            path="appointments/v1/bookable-occasions",  # TODO: remove hardcoding?
+            client=client_id,  # check in anypoint for example
+            secret=client_secret,  # check in anypoint for example
+            from_date_str=from_date.strftime("%Y-%m-%d"),  # 2020-03-17
+            to_date_str=to_date.strftime("%Y-%m-%d"),  # 2020-03-25
+            appointment_channel_str=appointment_channel,  # 'SPD'
+            appointment_type_str=appointment_type,  # '1'
+            max_depth_str=("&max_depth=%s" % max_depth) if max_depth else '',
+            appointment_length_str=("&appointment_length=%s" % appointment_length) if appointment_length else '',
+            location_code_str=("&location_code=%s" % location_code) if location_code else '',
+            profession_id_str=("&profession_id=%s" % profession_id) if profession_id else '',
         )
 
         # appointment_type - möjliga värden:
@@ -116,7 +118,7 @@ class AfAppointment(models.Model):
         # Request(url, data=None, headers={}, origin_req_host=None, unverifiable=False, method=None)
         req = request.Request(url=get_url, headers=get_headers)
 
-        ctx = self._generate_ctx(True) # TODO: change to False
+        ctx = self._generate_ctx(True)  # TODO: change to False
 
         # send GET and read result
         res_json = request.urlopen(req, context=ctx).read()
@@ -146,7 +148,7 @@ class AfAppointment(models.Model):
                     'name': occ_id,
                     'stop': stop_datetime,
                     'start': start_datetime,
-                    'duration': (stop_datetime - start_datetime).seconds//60 # get length in minutes
+                    'duration': (stop_datetime - start_datetime).seconds // 60  # get length in minutes
                     # TODO: implement these
                     # '': occasion.get('appointment_channel'),
                     # '': occasion.get('occasion_status_id'),
@@ -154,7 +156,7 @@ class AfAppointment(models.Model):
                 self.env['calendar.occasion'].create(vals)
 
     # /appointments
-    def get_appointments(self, from_date, to_date, user = '', pnr = '', appointment_types = [], status_list = []):
+    def get_appointments(self, from_date, to_date, user='', pnr='', appointment_types=[], status_list=[]):
         client_id = self.env['ir.config_parameter'].sudo().get_param('af_rest.client_id')
         client_secret = self.env['ir.config_parameter'].sudo().get_param('af_rest.client_secret')
         af_environment = self.env['ir.config_parameter'].sudo().get_param('af_rest.af_environment')
@@ -174,17 +176,19 @@ class AfAppointment(models.Model):
 
         # Insert values into base_url
         get_url = base_url.format(
-            url = af_url, # https://ipfapi.arbetsformedlingen.se
-            port = af_port, # 443
-            path = "appointments/v1/appointments", # TODO: remove hardcoding?
-            client = client_id, # check in anypoint for example
-            secret = client_secret, # check in anypoint for example
-            from_date_str = from_date.strftime("%Y-%m-%d"), # 2020-03-17
-            to_date_str = to_date.strftime("%Y-%m-%d"), # 2020-03-25
-            user_str = ("&user_id=%s" % user) if user else '', # 'eridd'
-            pnr_str = ("&pnr=%s" % pnr) if pnr else '', # '16280810XXXX'
-            appointment_types_str = ("&appointment_types=%s" % appointment_types) if appointment_types else '', # TODO: implement better, expected: comma seperated list.
-            status_list_str = ("&status_list=%s" %status_list) if status_list else '', # TODO: implement better, expected: comma seperated list.
+            url=af_url,  # https://ipfapi.arbetsformedlingen.se
+            port=af_port,  # 443
+            path="appointments/v1/appointments",  # TODO: remove hardcoding?
+            client=client_id,  # check in anypoint for example
+            secret=client_secret,  # check in anypoint for example
+            from_date_str=from_date.strftime("%Y-%m-%d"),  # 2020-03-17
+            to_date_str=to_date.strftime("%Y-%m-%d"),  # 2020-03-25
+            user_str=("&user_id=%s" % user) if user else '',  # 'eridd'
+            pnr_str=("&pnr=%s" % pnr) if pnr else '',  # '16280810XXXX'
+            appointment_types_str=("&appointment_types=%s" % appointment_types) if appointment_types else '',
+            # TODO: implement better, expected: comma seperated list.
+            status_list_str=("&status_list=%s" % status_list) if status_list else '',
+            # TODO: implement better, expected: comma seperated list.
         )
 
         # Generate headers for our get
@@ -194,7 +198,7 @@ class AfAppointment(models.Model):
         # Request(url, data=None, headers={}, origin_req_host=None, unverifiable=False, method=None)
         req = request.Request(url=get_url, headers=get_headers)
 
-        ctx = self._generate_ctx(is_remote=True) # TODO: change to False
+        ctx = self._generate_ctx(is_remote=True)  # TODO: change to False
 
         # send GET and read result
         res_json = request.urlopen(req, context=ctx).read()
@@ -207,16 +211,17 @@ class AfAppointment(models.Model):
         # loop over list
         for appointment in appointments:
             app_id = appointment.get('id')
-            date = appointment.get('appointment_date') # "2019-10-02"
-            stop = appointment.get('appointment_end_time') # "12:30:00"
-            start = appointment.get('appointment_start_time') # "12:00:00"
+            date = appointment.get('appointment_date')  # "2019-10-02"
+            stop = appointment.get('appointment_end_time')  # "12:30:00"
+            start = appointment.get('appointment_start_time')  # "12:00:00"
 
             stop_datetime = datetime.strptime((date + "T" + stop), "%Y-%m-%dT%H:%M:%S")
             start_datetime = datetime.strptime((date + "T" + start), "%Y-%m-%dT%H:%M:%S")
 
-            partner = self.env['res.partner'].search(['customer_id', '=', (appointment.get('customer_id'))]) # TODO: change to customer_id?
+            partner = self.env['res.partner'].search(
+                ['customer_id', '=', (appointment.get('customer_id'))])  # TODO: change to customer_id?
             user = self.env['res.users'].search([('signature', '=', appointment.get('employee_signature'))])
-            
+
             # check if appointment exists
             app = self.env['calendar.appointment'].search([('ipf_id', '=', app_id)])
             if app:
@@ -277,14 +282,14 @@ class AfAppointment(models.Model):
 
         # Insert values into base_url
         get_url = base_url.format(
-            url = af_url, # https://ipfapi.arbetsformedlingen.se
-            port = af_port, # 443
-            path = "appointments/v1/resource-planning/competencies/schedules", # TODO: remove hardcoding?
-            client = client_id, # check in anypoint for example
-            secret = client_secret, # check in anypoint for example
-            from_date = from_datetime.strftime("%Y-%m-%dT%H:%M:%SZ"), # 2020-03-17T00:00:00Z
-            to_date = to_datetime.strftime("%Y-%m-%dT%H:%M:%SZ"), # 2020-03-25T00:00:00Z
-            comps = type_str, # &competence_id=ded72445-e5d3-4e21-a356-aad200dac83d
+            url=af_url,  # https://ipfapi.arbetsformedlingen.se
+            port=af_port,  # 443
+            path="appointments/v1/resource-planning/competencies/schedules",  # TODO: remove hardcoding?
+            client=client_id,  # check in anypoint for example
+            secret=client_secret,  # check in anypoint for example
+            from_date=from_datetime.strftime("%Y-%m-%dT%H:%M:%SZ"),  # 2020-03-17T00:00:00Z
+            to_date=to_datetime.strftime("%Y-%m-%dT%H:%M:%SZ"),  # 2020-03-25T00:00:00Z
+            comps=type_str,  # &competence_id=ded72445-e5d3-4e21-a356-aad200dac83d
         )
 
         # Generate headers for our get
@@ -294,7 +299,7 @@ class AfAppointment(models.Model):
         # Request(url, data=None, headers={}, origin_req_host=None, unverifiable=False, method=None)
         req = request.Request(url=get_url, headers=get_headers)
 
-        ctx = ctx = self._generate_ctx(is_remote=True) # TODO: change to False
+        ctx = ctx = self._generate_ctx(is_remote=True)  # TODO: change to False
 
         # send GET and read result
         req_res_json = request.urlopen(req, context=ctx).read()
@@ -307,7 +312,8 @@ class AfAppointment(models.Model):
         for comp_day in req_res:
             # assumes that there's only ever one competence
             type_name = comp_day.get('competence').get('name')
-            type_id = self.env['calendar.appointment.type'].search([('ipf_id','=',comp_day.get('competence').get('id'))])
+            type_id = self.env['calendar.appointment.type'].search(
+                [('ipf_id', '=', comp_day.get('competence').get('id'))])
             for schedule in comp_day.get('schedules'):
                 start_time = datetime.strptime(schedule.get('start_time'), "%Y-%m-%dT%H:%M:%SZ")
                 stop_time = datetime.strptime(schedule.get('end_time'), "%Y-%m-%dT%H:%M:%SZ")
@@ -319,12 +325,14 @@ class AfAppointment(models.Model):
 
                 # schedules can exist every half hour from 09:00 to 16:00
                 # check if calendar.schedule already exists 
-                schedule_id = self.env['calendar.schedule'].search([('type_id','=',type_id.id), ('start','=',start_time_utc)])
+                schedule_id = self.env['calendar.schedule'].search(
+                    [('type_id', '=', type_id.id), ('start', '=', start_time_utc)])
                 if schedule_id:
                     # Update existing schedule only two values can change 
                     vals = {
-                        'scheduled_agents': schedule.get('scheduled_agents'), # number of agents supposed to be available for this
-                        'forecasted_agents': schedule.get('forecasted_agents'), # May be implemented at a later date.
+                        'scheduled_agents': schedule.get('scheduled_agents'),
+                        # number of agents supposed to be available for this
+                        'forecasted_agents': schedule.get('forecasted_agents'),  # May be implemented at a later date.
                     }
                     schedule_id.update(vals)
                     res |= schedule_id
@@ -335,8 +343,10 @@ class AfAppointment(models.Model):
                         'start': start_time_utc,
                         'stop': stop_time_utc,
                         'duration': 30.0,
-                        'scheduled_agents': int(schedule.get('scheduled_agents')), # number of agents supposed to be available for this. Can sometimes be float.
-                        'forecasted_agents': int(schedule.get('forecasted_agents')), # May be implemented at a later date. Can sometimes be float.
+                        'scheduled_agents': int(schedule.get('scheduled_agents')),
+                        # number of agents supposed to be available for this. Can sometimes be float.
+                        'forecasted_agents': int(schedule.get('forecasted_agents')),
+                        # May be implemented at a later date. Can sometimes be float.
                         'type_id': type_id.id,
                         'channel': type_id.channel.id,
                     }

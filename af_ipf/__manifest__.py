@@ -8,11 +8,6 @@
     "website": "https://vertel.se/",
     "category": "Tools",
     "summary": "Module for synchronous integrations to IPF",
-    'description': """
-Jira
-===========================================
-AFC-734 Integration till IPF(V12.0.1.0.1)
-""",
     "depends": ["af_security"],
     "external_dependencies": {'python': ['requests']},
     "data": [

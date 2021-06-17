@@ -22,7 +22,8 @@
                 <footer>
                     <group>
                         <span>
-                            <button string="OK" type="object" class="oe_highlight" name="action_change_user_appointment"/>
+                            <button string="OK" type="object" class="oe_highlight"
+                                    name="action_change_user_appointment"/>
                             <button string="Cancel" class="oe_link" special="cancel"/>
                         </span>
                     </group>

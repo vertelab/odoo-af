@@ -29,6 +29,7 @@ _logger = logging.getLogger(__name__)
 
 class ResPartnerEleg(models.TransientModel):
     _name = 'res.partner.eleg'
+    _description = "RES Partner ELEG"
 
     user_id = fields.Many2one(comodel_name="res.users")
     partner_id = fields.Many2one(comodel_name="res.partner")

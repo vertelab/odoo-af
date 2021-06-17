@@ -6,15 +6,20 @@
             <field name="arch" type="xml">
                 <form string="Events">
                     <header>
-                        <button string="Start Event" name="start_event" states="draft" type="object" class="oe_highlight" groups="base.group_user"/>
-                        <button string="Cancel Event" name="button_cancel" states="running" type="object" groups="base.group_user" confirm="Are you sure you want to cancel this event?" />
-                        <button string="Re-Run Event" name="start_event" states="canceled" type="object" class="oe_highlight" groups="base.group_user"/>
+                        <button string="Start Event" name="start_event" states="draft" type="object"
+                                class="oe_highlight" groups="base.group_user"/>
+                        <button string="Cancel Event" name="button_cancel" states="running" type="object"
+                                groups="base.group_user" confirm="Are you sure you want to cancel this event?"/>
+                        <button string="Re-Run Event" name="start_event" states="canceled" type="object"
+                                class="oe_highlight" groups="base.group_user"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,running,canceled"/>
                     </header>
                     <sheet>
                         <div class="oe_title">
                             <label for="name" class="oe_edit_only"/>
-                            <h1><field name="name" placeholder="Event Name"/></h1>
+                            <h1>
+                                <field name="name" placeholder="Event Name"/>
+                            </h1>
                             <field name="is_online" groups="base.group_no_one"/>
                             <label for="is_online" string="Online" groups="base.group_no_one"/>
                         </div>
@@ -22,9 +27,9 @@
                             <group>
                                 <field name="organizer_id"/>
                                 <field name="address_id"
-                                    attrs="{'invisible': [('is_online', '=', True)]}"
-                                    context="{'show_address': 1}"
-                                    options='{"always_reload": True}'/>
+                                       attrs="{'invisible': [('is_online', '=', True)]}"
+                                       context="{'show_address': 1}"
+                                       options='{"always_reload": True}'/>
                                 <field name="user_id"/>
                             </group>
                             <group>
@@ -40,8 +45,8 @@
                             <page string="Email Schedule" name="email_schedule_id">
                                 <field name="email_schedule_ids">
                                     <tree string="Email Schedule" editable="bottom">
-                                        <field name="template_id" />
-                                        <field name="name" />
+                                        <field name="template_id"/>
+                                        <field name="name"/>
                                         <field name="interval_nbr"/>
                                         <field name="interval_unit"/>
                                         <field name="interval_type"/>
@@ -91,7 +96,8 @@
                             <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
                                 <div class="o_dropdown_kanban dropdown">
 
-                                    <a class="dropdown-toggle o-no-caret btn" role="button" data-toggle="dropdown" href="#" aria-label="Dropdown menu" title="Dropdown menu">
+                                    <a class="dropdown-toggle o-no-caret btn" role="button" data-toggle="dropdown"
+                                       href="#" aria-label="Dropdown menu" title="Dropdown menu">
                                         <span class="fa fa-ellipsis-v"/>
                                     </a>
                                     <div class="dropdown-menu" role="menu">
@@ -102,19 +108,33 @@
                                     </div>
                                 </div>
                                 <div class="o_event_left">
-                                    <div class="o_day"><t t-esc="record.date_begin.raw_value.getDate()"/></div>
+                                    <div class="o_day">
+                                        <t t-esc="record.date_begin.raw_value.getDate()"/>
+                                    </div>
                                     <div>
                                         <t t-esc="moment(record.date_begin.raw_value).format('MMM')"/>
                                         <t t-esc="record.date_begin.raw_value.getFullYear()"/>
                                     </div>
-                                    <div><t t-esc="moment(record.date_begin.raw_value).format('LT')"/></div>
+                                    <div>
+                                        <t t-esc="moment(record.date_begin.raw_value).format('LT')"/>
+                                    </div>
                                 </div>
                                 <div class="o_event_right">
-                                    <h4 class="o_kanban_record_title"><field name="name"/></h4>
+                                    <h4 class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </h4>
                                     <div>
-                                        <t t-if="record.country_id.raw_value"> <b class="o_kanban_record_subtitle"> <field name="country_id"/> </b> <br/> </t>
-                                        <b><i class="fa fa-clock-o"/>
-                                        To</b> <t t-esc="moment(record.date_end.raw_value).format('lll')"/>
+                                        <t t-if="record.country_id.raw_value">
+                                            <b class="o_kanban_record_subtitle">
+                                                <field name="country_id"/>
+                                            </b>
+                                            <br/>
+                                        </t>
+                                        <b>
+                                            <i class="fa fa-clock-o"/>
+                                            To
+                                        </b>
+                                        <t t-esc="moment(record.date_end.raw_value).format('lll')"/>
                                     </div>
                                 </div>
                             </div>
@@ -125,16 +145,14 @@
         </record>
 
 
-
-
         <record model="ir.actions.act_window" id="action_dialogue_event">
             <field name="name">Events</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">partner.event</field>
             <field name="view_type">form</field>
             <field name="view_mode">kanban,tree,form</field>
-<!--            <field name="context">{"search_default_upcoming":1}</field>-->
-<!--            <field name="search_view_id" ref="view_event_search"/>-->
+            <!--            <field name="context">{"search_default_upcoming":1}</field>-->
+            <!--            <field name="search_view_id" ref="view_event_search"/>-->
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     Add a new event

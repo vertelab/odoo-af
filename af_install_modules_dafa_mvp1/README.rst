@@ -1,4 +1,7 @@
 
+This module maintained here:
+         https://github.com/vertelab/odoo-af/tree/Dev-12.0-Fenix-Sprint-02/af_install_modules_dafa_mvp1
+
 Versions
 ========
 
@@ -6,21 +9,21 @@ This module installs all Dafa MVP1-modules at one go.
 
 Please see the depend-tab (with debug-mode) for a list of which modules are installed.
 
-1.   v12.0.1.1  - First release
+1.    v12.0.1.1  - First release
 2.    v12.0.1.2  - Updates in the list
 3.    v12.0.1.3  - Added Auth_user_rights_wizard and CIAM-modules, corrected spelling of auth_timeout
 4.    v12.0.1.4  - Removed items outside of MVP1
 5.    v12.0.1.5  - Added more modules
-6.     v12.0.1.6  - Removed auth_login
+6.    v12.0.1.6  - Removed auth_login
 7.    v12.0.1.7  - Added my customer_tab and hr_holidays
 8.    v12.0.1.8  - Disableded Matomo due to bug. Disabled hr_org_chart since Emma did not want it.
 9.    Once the module is installed, please de-install it to avoid depencency-problems.
-10.    v12.0.1.0.9  - Added new version-numbers-standard. Added hr_af_holidays.
-11.    v12.0.1.0.10  - Added list of Repos that needs to be installed.
+10.   v12.0.1.0.9  - Added new version-numbers-standard. Added hr_af_holidays.
+11.   v12.0.1.0.10  - Added list of Repos that needs to be installed.
 12.   v12.0.1.0.11  - AFC-1666 added partner_flip_firstname.
-13.    v12.0.1.1.1  - Consolidation of MVP1 and MVP2 into DAFA 1.0
-14.    v12.0.1.1.2  - test of version bump
-15.    v12.0.1.1.3  - Moved manifest description to rst file to avoid module description conflicts
+13.   v12.0.1.1.1  - Consolidation of MVP1 and MVP2 into DAFA 1.0
+14.   v12.0.1.1.2  - test of version bump
+15.   v12.0.1.1.3  - Moved manifest description to rst file to avoid module description conflicts
 
 # Vertel Repositories
 =====================

@@ -2,17 +2,17 @@
 
 <odoo>
     <data noupdate="1">
-		<record id="ipf_ais_a" model="af.ipf">
-			<field name="name">IPF AIS-Å</field>
-			<field name="environment">T2</field>
-			<field name="systemid">AFCRM</field>
-			<field name="url">https://ipfapi.arbetsformedlingen.se</field>
-			<field name="port">443</field>
-			<field name="enduserid">True</field>
-		</record>
-		<record id="ipf_endpoint_ais_a" model="af.ipf.endpoint">
-			<field name="name">ais-beslut-om-stod-read/v1/arenden/sokande/{personnummer}?client_id={clientid}&amp;client_secret={client_secret}</field>
-			<field name="ipf_id" ref="ipf_ais_a"/>
-	</record>
-	</data>
+        <record id="ipf_ais_a" model="af.ipf">
+            <field name="name">IPF AIS-Å</field>
+            <field name="environment">T2</field>
+            <field name="systemid">AFCRM</field>
+            <field name="url">https://ipfapi.arbetsformedlingen.se</field>
+            <field name="port">443</field>
+            <field name="enduserid">True</field>
+        </record>
+        <record id="ipf_endpoint_ais_a" model="af.ipf.endpoint">
+            <field name="name">ais-beslut-om-stod-read/v1/arenden/sokande/{personnummer}?client_id={clientid}&amp;client_secret={client_secret}</field>
+            <field name="ipf_id" ref="ipf_ais_a"/>
+        </record>
+    </data>
 </odoo>

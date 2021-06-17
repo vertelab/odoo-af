@@ -23,9 +23,6 @@
     'name': 'Cache for employees and barcodes',
     'version': '12.0.1',
     'category': 'hr',
-    'description': """
-        A transient model which lets u cache certain values 
-""",
     'images': [],
     'author': 'Vertel AB',
     'license': 'AGPL-3',

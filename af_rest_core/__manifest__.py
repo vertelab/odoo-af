@@ -7,7 +7,7 @@
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
-    "depends": ["base","base_setup"],
+    "depends": ["base_setup"],
     "data": [
         "views/res_config_settings_view.xml",
     ],

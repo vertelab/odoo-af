@@ -36,8 +36,8 @@
 
     <template id="assets_backend" name="Backend Assets" inherit_id="web.assets_backend">
         <xpath expr="//link[last()]" position="after">
-     		<link rel="stylesheet" type="text/css" href="/af_backend_tema/static/src/libs/simplebar/simplebar.css"/>
-<!--     		<script type="text/javascript" src="/af_backend_tema/static/src/js/lib/scrollbar.js" />-->
+            <link rel="stylesheet" type="text/css" href="/af_backend_tema/static/src/libs/simplebar/simplebar.css"/>
+            <!--     		<script type="text/javascript" src="/af_backend_tema/static/src/js/lib/scrollbar.js" />-->
             <link rel="stylesheet" href="/af_backend_tema/static/src/scss/style.scss"/>
             <link rel="stylesheet" type="text/scss" href="/af_backend_tema/static/src/scss/layout.scss"/>
             <link rel="stylesheet" type="text/scss" href="/af_backend_tema/static/src/scss/navbar.scss"/>
@@ -53,7 +53,7 @@
             <link rel="stylesheet" type="text/scss" href="/af_backend_tema/static/src/scss/settings.scss"/>
         </xpath>
         <xpath expr="//script[last()]" position="after">
-            <script type="text/javascript" src="/af_backend_tema/static/src/libs/simplebar/scrollbar.js" />
+            <script type="text/javascript" src="/af_backend_tema/static/src/libs/simplebar/scrollbar.js"/>
             <script type="text/javascript" src="/af_backend_tema/static/src/js/chrome/actions.js"/>
             <script type="text/javascript" src="/af_backend_tema/static/src/js/chrome/menu.js"/>
             <script type="text/javascript" src="/af_backend_tema/static/src/js/chrome/apps.js"/>

@@ -108,10 +108,14 @@ class ResPartner(models.Model):
         desired_time = datetime.now()
         # loop through appointments to be moved
         for appointment in appointment_ids:
-            appointment_length = appointment.duration 
+            appointment_length = appointment.duration
             location_id = appointment.location_id
             # find free occasions for meeting type 26
-            occasions = self.env['calendar.occasion'].sudo().get_bookable_occasions(desired_time, desired_time + timedelta(appointment_length), appointment_length, type_26, location_id, 1)
+            occasions = self.env['calendar.occasion'].sudo().get_bookable_occasions(desired_time,
+                                                                                    desired_time + timedelta(
+                                                                                        appointment_length),
+                                                                                    appointment_length, type_26,
+                                                                                    location_id, 1)
             # loop result until we find a free occasion
             for book_occasion in occasions:
                 if book_occasion and book_occasion[0]:

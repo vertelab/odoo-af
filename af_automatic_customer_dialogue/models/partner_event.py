@@ -1,6 +1,7 @@
-from odoo import models, fields, api, _
 import datetime
 from odoo.tools.safe_eval import safe_eval
+
+from odoo import models, fields, api, _
 
 
 class PartnerEvent(models.Model):
@@ -149,6 +150,7 @@ class PartnerEvent(models.Model):
 
 class EventEmailSchedule(models.Model):
     _name = 'partner.event.email.schedule'
+    _description = "Partner Event Email Schedule"
 
     name = fields.Text(string='Description')
     template_id = fields.Many2one('mail.template', string="Email Template")

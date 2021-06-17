@@ -1,5 +1,6 @@
-from odoo import models, api, _, fields
 from datetime import datetime
+
+from odoo import models, api, _, fields
 
 
 class CalendarAppointment(models.Model):

@@ -19,13 +19,15 @@
 #
 ##############################################################################
 
-import gc
-import tempfile
-import os
 import csv
-from odoo.tools import config
-from odoo import models, fields, api, _
+import gc
 import logging
+import os
+import tempfile
+from odoo.tools import config
+
+from odoo import models, fields, api, _
+
 _logger = logging.getLogger(__name__)
 
 
@@ -61,7 +63,7 @@ class ResPartner(models.Model):
         headers_header_jobs = ['SOK_SOKTYRKE.csv', 'Notering', 'Trans', 'Odoo']
         path_jobs = os.path.join(
             config.options.get('data_dir'),
-            'AIS-F/SOK_SOKTYRKE.csv') # testing purposes only
+            'AIS-F/SOK_SOKTYRKE.csv')  # testing purposes only
         path_jobs = "/usr/share/odoo-af/af_data_ais-f_loader/data/test_dumps/SOK_SOKTYRKE.csv"
         header_path_jobs = "/usr/share/odoo-af/af_data_ais-f_loader/data/SOK_SOKTYRKE_mapping.csv"
         # self.create_partners(headers_header_jobs, path_jobs, header_path_jobs)
@@ -173,53 +175,53 @@ class ResPartner(models.Model):
         transformations = {}
         for row in header_rows:
 
-            #_logger.info("header_rows row processing: %s" % row)
+            # _logger.info("header_rows row processing: %s" % row)
             if row['Odoo'] != '' and "!" not in row['Odoo']:
                 field_map.update({row['Odoo']: row[headers_header[0]]})
             # if row['Odoo2'] != '' and "!" not in row['Odoo2']:
             #     field_map.update({row['Odoo2']: row[headers_header[0]]})
             if row['Trans'] != '':
-                #_logger.info("transformations %s"%row['Trans'])
+                # _logger.info("transformations %s"%row['Trans'])
                 key = row['Trans'].split(",")[0]
                 value = row['Trans'].split(",")[1]
                 transformations.update({key: value})
             old_header.append(row[headers_header[0]])  # AIS-F fields
-        #_logger.info("old_header: %s" % old_header)
+        # _logger.info("old_header: %s" % old_header)
         reader = ReadCSV(path, old_header)
         iterations = 0
-        #_logger.info("get_data: %s" % next(reader.get_data()))
+        # _logger.info("get_data: %s" % next(reader.get_data()))
         # reader.seek_zero()
         for row in reader.get_data():
-            #_logger.info("row: %s" % row)
+            # _logger.info("row: %s" % row)
             r = {}
             header = list(field_map.keys())
-            #_logger.info("header: %s" % header)
+            # _logger.info("header: %s" % header)
             for i in range(len(header)):
                 if header[i] in field_map:
-                    #_logger.info("header %s: %s" % (i, row[field_map[header[i]]]))
+                    # _logger.info("header %s: %s" % (i, row[field_map[header[i]]]))
                     r.update({header[i]: row[field_map[header[i]]]})
-            #_logger.info("creating row %s" %r)
+            # _logger.info("creating row %s" %r)
             self.create_partner_from_row(r, transformations)
             iterations += 1
             if iterations > 500:
                 self.env.cr.commit()
-               # _loger.info("commit")
+                # _loger.info("commit")
                 iterations = 0
         reader.close()
 
     @api.model
     def create_partner_from_row(self, row, transformations):
-        #_logger.info("row: %s" % row)
+        # _logger.info("row: %s" % row)
         transformed_row_and_id = self.transform(row, transformations)
         if transformed_row_and_id != {}:
-            #_logger.info('transformed_row_and_id: %s' % transformed_row_and_id)
+            # _logger.info('transformed_row_and_id: %s' % transformed_row_and_id)
             external_xmlid = transformed_row_and_id['external_xmlid']
             transformed_row = transformed_row_and_id['row']
             secondary_address = transformed_row_and_id['secondary_address']
             secondary_address_transformations = transformed_row_and_id[
                 'secondary_address_transformations']
 
-            #_logger.info("creating partner: %s" % transformed_row)
+            # _logger.info("creating partner: %s" % transformed_row)
             if 'login' in transformed_row:
                 transformed_row.pop('country_id', None)
                 transformed_row.pop('type', None)
@@ -227,14 +229,14 @@ class ResPartner(models.Model):
                 transformed_row.pop('office_id', None)
                 user = self.env['res.users'].search([('login', '=', transformed_row['login'])])
                 employee_vals = {
-                            'firstname': transformed_row['firstname'],
-                            'lastname': transformed_row['lastname'],
-                            'user_id': user.id,
-                            }
+                    'firstname': transformed_row['firstname'],
+                    'lastname': transformed_row['lastname'],
+                    'user_id': user.id,
+                }
                 if not user:
                     user = self.env['res.users'].create(transformed_row)
-                    employee_vals['office_ids'] = [(4,office_id,0)]
-                    employee_vals['user_id'] = user.id  
+                    employee_vals['office_ids'] = [(4, office_id, 0)]
+                    employee_vals['user_id'] = user.id
                     self.env['hr.employee'].create(employee_vals)
 
                     self.env['ir.model.data'].create({
@@ -242,18 +244,18 @@ class ResPartner(models.Model):
                         'module': external_xmlid.split('.')[0],
                         'model': user._name,
                         'res_id': user.id
-                        })
+                    })
                 else:
                     for employee in user.employee_ids:
                         if office_id not in employee.mapped('office_ids.id'):
-                            employee_vals['office_ids'] = [(4,office_id,0)]
+                            employee_vals['office_ids'] = [(4, office_id, 0)]
                         employee.write(employee_vals)
             else:
                 partner = self.env['res.partner'].create(transformed_row)
 
-                #_logger.info("visitation address dict before create: %s" % visitation_address)
+                # _logger.info("visitation address dict before create: %s" % visitation_address)
                 if secondary_address != {}:
-                    #_logger.info("CREATING VISITATION ADDRESS")
+                    # _logger.info("CREATING VISITATION ADDRESS")
                     secondary_address.update({'parent_id': partner.id})
                     self.create_partner_from_row(
                         secondary_address, secondary_address_transformations)
@@ -271,9 +273,9 @@ class ResPartner(models.Model):
         external_xmlid = '%s.%s' % (self.xmlid_module, row['external_id'])
         row.pop('external_id', None)
         id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
-      #_logger.info("id_check: %s" % id_check)
+        # _logger.info("id_check: %s" % id_check)
         if not id_check:
-          #_logger.info("creating kpi: %s" % row)
+            # _logger.info("creating kpi: %s" % row)
             kpi = self.env['res.partner.kpi'].create(row)
 
             self.env['ir.model.data'].create({
@@ -283,7 +285,7 @@ class ResPartner(models.Model):
                 'res_id': kpi.id
             })
         # else:
-          #_logger.info("kpi external_id already in database, skipping")
+        # _logger.info("kpi external_id already in database, skipping")
 
     # @api.model #ska använda api istället, om det inte blir api, flytta till separat modul som körs efteråt
     # def create_daily_note_from_row(self, row):
@@ -303,12 +305,12 @@ class ResPartner(models.Model):
 
     @api.model
     def create_desired_jobs_from_row(self, row):
-      #_logger.info("got to create jobs")
+        # _logger.info("got to create jobs")
         external_xmlid = '%s.%s' % (self.xmlid_module, row['external_id'])
         row.pop('external_id', None)
         id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
         if not id_check:
-          #_logger.info("creating desired job: %s" % row)
+            # _logger.info("creating desired job: %s" % row)
 
             job = self.env['res.partner.jobs'].create(row)
 
@@ -319,7 +321,8 @@ class ResPartner(models.Model):
                 'res_id': job.id
             })
         # else:
-          #_logger.info("desired job external_id already in database, skipping")
+
+    # _logger.info("desired job external_id already in database, skipping")
 
     @api.model
     def create_office_from_row(self, row):
@@ -336,7 +339,7 @@ class ResPartner(models.Model):
                 'res_id': office.id
             })
         # else:
-          #_logger.info("desired job external_id already in database, skipping")
+        # _logger.info("desired job external_id already in database, skipping")
 
     @api.model
     def transform(self, row, transformations):
@@ -417,20 +420,21 @@ class ResPartner(models.Model):
                         "office_code": office_code,
                         "partner_id": partner.id,
                         "external_id": "%s%s" %
-                        (transformations['external_id'],
-                         office_code)}
+                                       (transformations['external_id'],
+                                        office_code)}
                     self.create_office_from_row(vals)
                     create = False
                 elif key == 'office_id':
                     office_code = row[key].zfill(4)
-                    office_id = self.env['hr.department'].search([('office_code','=', office_code)]).id
+                    office_id = self.env['hr.department'].search([('office_code', '=', office_code)]).id
                     if not office_id:
                         office_id = self.env['hr.department'].create({'name': row[key], 'office_code': office_code}).id
                     row[key] = office_id
                 elif key == 'user_id':
                     user_id = self.env['res.users'].search([('login', '=', row[key])]).id
                     if not user_id:
-                        user_id = self.env['res.users'].create({'login': row[key], 'firstname': 'placeholder', 'lastname':'jobseeker officer'}).id
+                        user_id = self.env['res.users'].create(
+                            {'login': row[key], 'firstname': 'placeholder', 'lastname': 'jobseeker officer'}).id
                     row[key] = user_id
                 elif key == 'partner_id':
                     if 'fiscal_year' in row:
@@ -452,8 +456,9 @@ class ResPartner(models.Model):
                         partner_xmlid_name = "%s%s" % (transform, row[key])
                         partner_xmlid = "%s.%s" % (self.xmlid_module, partner_xmlid_name)
                         partner_id = self.env['ir.model.data'].xmlid_to_res_id(partner_xmlid)
-                        
-                        partner = self.env['res.partner'].search_read([('id', '=', partner_id)], ['street', 'street2', 'city', 'zip'])[0]
+
+                        partner = self.env['res.partner'].search_read([('id', '=', partner_id)],
+                                                                      ['street', 'street2', 'city', 'zip'])[0]
 
                         if 'job_id' in row:
                             ssyk_xmlid = "res_ssyk.ssyk_%s" % row['job_id']
@@ -538,21 +543,21 @@ class ResPartner(models.Model):
                                 if 'city' in row:
                                     partner['city'] = row['city']
                                 self.env['res.partner'].browse(partner_id).write({
-                                        'street': partner['street'],
-                                        'street2': partner['street2'],
-                                        'zip': partner['zip'],
-                                        'city': partner['city']
-                                        })  
+                                    'street': partner['street'],
+                                    'street2': partner['street2'],
+                                    'zip': partner['zip'],
+                                    'city': partner['city']
+                                })
                             create = False
                             keys_to_delete.append('type')
                 elif key == 'parent_id':
                     parent_xmlid_name = "%s%s" % (transform, row[key])
                     parent_xmlid = "%s.%s" % (
                         self.xmlid_module, parent_xmlid_name)
-                    #_logger.info("parent xmlid: %s" % parent_xmlid)
+                    # _logger.info("parent xmlid: %s" % parent_xmlid)
                     parent_id = self.env['ir.model.data'].xmlid_to_res_id(
                         parent_xmlid)
-                    #_logger.info("parent res_id: %s" % parent_id)
+                    # _logger.info("parent res_id: %s" % parent_id)
                     if not parent_id:
                         keys_to_delete.append(key)
                         _logger.error(
@@ -578,7 +583,7 @@ class ResPartner(models.Model):
                         if 'street' not in row and 'state_id' not in row and 'city' not in row and 'zip' not in row:
                             keys_to_update.append({'street': row[key]})
                         if 'visitation_address_state_id' in row:
-                            #visitation_address.update({'state_id' : row['visitation_address_state_id']})
+                            # visitation_address.update({'state_id' : row['visitation_address_state_id']})
                             keys_to_delete.append(
                                 'visitation_address_state_id')
                             if 'visitation_address_state_id' in transformations:
@@ -615,7 +620,7 @@ class ResPartner(models.Model):
                                 {'country_id': row['visitation_address_country_id']})
                             keys_to_delete.append(
                                 'visitation_address_country_id')
-                        #_logger.info("visitation address dict: %s" % visitation_address)
+                        # _logger.info("visitation address dict: %s" % visitation_address)
                         keys_to_delete.append(key)
                         # for visitation_address_id in self.create_partner_from_rows([visitation_address], visitation_address_transformations):
                         #   row.update({key : visitation_address_id})
@@ -627,15 +632,16 @@ class ResPartner(models.Model):
                     elif transform == "part_jbskr_":
                         keys_to_update.append({'is_jobseeker': True})
                     xmlid_name = "%s%s" % (transform, row[key])
-                    #_logger.info("spliting external xmlid %s" % external_xmlid)
+                    # _logger.info("spliting external xmlid %s" % external_xmlid)
                     external_xmlid = "%s.%s" % (self.xmlid_module, xmlid_name)
                     keys_to_delete.append(key)
 
         for i in range(len(keys_to_update)):
             row.update(keys_to_update[i])
-            #_logger.info("row updated with %s, now %s" % (keys_to_update[i], row) )
+            # _logger.info("row updated with %s, now %s" % (keys_to_update[i], row) )
 
-        if create and (('name' not in row and 'lastname' not in row and 'firstname' not in row and 'type' not in row) or (
+        if create and (
+                ('name' not in row and 'lastname' not in row and 'firstname' not in row and 'type' not in row) or (
                 'name' not in row and 'lastname' not in row and 'firstname' not in row and row['type'] == 'contact')):
             row.update({'name': row['external_id']})
 
@@ -681,15 +687,15 @@ class ResPartner(models.Model):
                     row.pop('sun_ids', None)
 
         if 'education_level' in row:
-          #_logger.info("education_level: %s" % row['education_level'])
+            # _logger.info("education_level: %s" % row['education_level'])
             if row['education_level'] != '0':
                 education_level_xmlid = "res_sun.education_level_%s" % row['education_level']
-              #_logger.info("education_level_xmlid: %s" % education_level_xmlid)
+                # _logger.info("education_level_xmlid: %s" % education_level_xmlid)
                 education_level = self.env['ir.model.data'].xmlid_to_res_id(
                     education_level_xmlid)
                 if education_level:
                     row.update({'education_level': education_level})
-                  #_logger.info("adding education level to row %s" % row)
+                # _logger.info("adding education level to row %s" % row)
                 else:
                     _logger.warning(
                         "education_level res_sun.education_level_%s not found, leaving education_level for %s empty" %
@@ -704,15 +710,15 @@ class ResPartner(models.Model):
         for key in row.keys():
             if "skip" in key:
                 keys_to_delete.append(key)
-       #_logger.info("keys to delete: %s" % keys_to_delete)
+        # _logger.info("keys to delete: %s" % keys_to_delete)
         for i in range(len(keys_to_delete)):
             row.pop(keys_to_delete[i], None)
         id_check = self.env['ir.model.data'].xmlid_to_res_id(external_xmlid)
         if id_check:
             create = False
-            #_logger.warning("external id already in database, skipping")
+            # _logger.warning("external id already in database, skipping")
 
-       #_loger.info('create?: %s' % create)
+        # _loger.info('create?: %s' % create)
         if create:
             return {
                 'row': row,
@@ -728,7 +734,7 @@ class ReadCSV(object):
     def __init__(self, path, header):
         self.header = header
         try:
-            #rows = []
+            # rows = []
             self.f = open(path)
             self.f.seek(0)
             reader = csv.DictReader(self.f, delimiter=",")
@@ -770,7 +776,7 @@ class ReadCSV(object):
                 field_map.keys()), field_map)
         pairs = []
         while csvIter.hasNext():
-            #_logger.info("appending row %s" % csvIter.getRow())
+            # _logger.info("appending row %s" % csvIter.getRow())
             pairs.append(csvIter.getRow())
             csvIter.next()
         return pairs
@@ -788,7 +794,7 @@ class ReadCSV(object):
         pairs = []
         while csvIter.hasNext():
             csvIter.next()
-            #_logger.info("appending header row %s" % csvIter.getRow())
+            # _logger.info("appending header row %s" % csvIter.getRow())
             pairs.append(csvIter.getRow())
 
         return pairs
@@ -814,8 +820,8 @@ class CSVIterator(object):
         r = {}
         for i in range(len(self.header)):
             if self.header[i] in self.field_map:
-                #_logger.info("Updating row nr %s of %s %s : %s" % (self.row, self.rows, self.header[i], self.data[self.row][self.field_map[self.header[i]]]))
+                # _logger.info("Updating row nr %s of %s %s : %s" % (self.row, self.rows, self.header[i], self.data[self.row][self.field_map[self.header[i]]]))
                 r.update({self.header[i]: self.data[self.row]
-                          [self.field_map[self.header[i]]]})
+                [self.field_map[self.header[i]]]})
 
         return r

@@ -7,9 +7,6 @@
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
-    "description": """
-	 v12.0.1.3 KPD-516 - Change sortorder in Meetings-tab
-    """,
     "depends": ["calendar_af"],
     "external_dependencies": [],
     "data": [
@@ -17,7 +14,6 @@
         'views/appointment_report.xml',
         'views/updated_appointment_report.xml',
         'data/mail_template.xml',
-
     ],
     "application": True,
     "installable": True,

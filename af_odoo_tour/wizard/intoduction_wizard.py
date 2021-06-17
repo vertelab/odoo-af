@@ -19,17 +19,20 @@
 #
 ##############################################################################
 
-from datetime import datetime
-from odoo.tools.safe_eval import safe_eval
-from odoo.exceptions import Warning
-from odoo import models, fields, api, _
 import logging
 from datetime import date
+from datetime import datetime
+from odoo.exceptions import Warning
+from odoo.tools.safe_eval import safe_eval
+
+from odoo import models, fields, api, _
+
 _logger = logging.getLogger(__name__)
 
 
 class IntroductionWizard(models.Model):
     _name = "introduction.tour.wizard"
+    _description = "Introduction Tour Wizard"
 
     # employee_id = fields.Many2one(comodel_name='hr.employee', default=lambda self: self._default_hr_employee())
     # jobseekers_ids = fields.One2many('res.partner')
@@ -67,6 +70,7 @@ class IntroductionWizard(models.Model):
     # email_search = fields.Char(string="Email")
 
     search_domain = fields.Char(string="Search Filter")
+
     # other_reason = fields.Char(string="Other reason")
 
     @api.onchange('identification', 'social_sec_nr_search')
@@ -151,7 +155,7 @@ class IntroductionWizard(models.Model):
                     self.case_ids = [(4, case.id)]
             for note in partner.notes_ids:
                 if (note.create_uid.id == current_user_id or note.create_uid.id ==
-                        1) and note.create_date.date() == today_date:
+                    1) and note.create_date.date() == today_date:
                     self.daily_note_ids = [(4, note.id)]
             if partner.appointment_ids:
                 upcoming_meetings = partner.appointment_ids.filtered(

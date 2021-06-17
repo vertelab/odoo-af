@@ -23,15 +23,10 @@
     'name': 'Partner vCard',
     'version': '0.2',
     'category': '',
-    'description': """
-Electronic business card
-========================
-
-""",
     'author': 'Vertel AB',
     'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
-    'depends': ['website',],
+    'depends': ['website'],
     'data': [
         'views/templates.xml',
         ],

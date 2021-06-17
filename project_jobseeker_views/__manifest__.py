@@ -19,17 +19,15 @@
 #
 ##############################################################################
 {
-'name': 'Project Job Seeker',
-'version': '0.1',
-'summary': 'Project Job Seeker',
-'category': 'project',
-'description': """LProject Job Seeker.
-""",
-'author': 'Vertel AB',
-'website': 'http://www.vertel.se',
-'depends': ['project', 'sale', 'sale_timesheet'],
-'data': [
-    'views/project_view.xml',
-],
-'installable': True,
+    'name': 'Project Job Seeker',
+    'version': '0.1',
+    'summary': 'Project Job Seeker',
+    'category': 'project',
+    'author': 'Vertel AB',
+    'website': 'http://www.vertel.se',
+    'depends': ['project', 'sale', 'sale_timesheet'],
+    'data': [
+        'views/project_view.xml',
+    ],
+    'installable': True,
 }

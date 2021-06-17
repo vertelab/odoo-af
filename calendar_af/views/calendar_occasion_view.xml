@@ -46,11 +46,11 @@
                             <field name="duration" invisible="0"/>
                         </group>
                         <group>
-                            <field name="type_id" domain="[('channel', '=', %(calendar_channel.channel_local)d)]" 
-                                   required="1" />
-                            <field name="operation_id" required="1" />
-                            <field name="user_id" string="Case worker" widget="many2oneattendee" 
-                                   placeholder="Select case worker..." required="1" />
+                            <field name="type_id" domain="[('channel', '=', %(calendar_channel.channel_local)d)]"
+                                   required="1"/>
+                            <field name="operation_id" required="1"/>
+                            <field name="user_id" string="Case worker" widget="many2oneattendee"
+                                   placeholder="Select case worker..." required="1"/>
                         </group>
                     </group>
                 </sheet>
@@ -105,7 +105,7 @@
         <field name="priority" eval="2"/>
         <field name="arch" type="xml">
             <calendar string="Occasions" date_start="start" date_stop="stop" date_delay="duration" color="operation_id">
-                <field name="name" />
+                <field name="name"/>
             </calendar>
         </field>
     </record>
@@ -133,8 +133,8 @@
         <field name="model">calendar.occasion</field>
         <field name="arch" type="xml">
             <search string="Rules">
-                <field name="state" />
-                <field name="type_id" />
+                <field name="state"/>
+                <field name="type_id"/>
                 <field name="operation_id"/>
                 <field name="user_id"/>
                 <filter

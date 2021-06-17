@@ -1,5 +1,6 @@
 from odoo import models, fields, api, _
 
+
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
@@ -7,7 +8,7 @@ class SaleOrder(models.Model):
     def action_confirm(self):
         carreer_product_id = self.env.ref('af_sale_orders.kvd_01').id
         interpretor_product_ids = [self.env.ref('af_sale_orders.kvd_tlk_01').id,
-                      self.env.ref('af_sale_orders.kvd_tlk_02').id]
+                                   self.env.ref('af_sale_orders.kvd_tlk_02').id]
         is_interpretor = False
         is_carreer = False
         for line in self.order_line:
@@ -33,5 +34,5 @@ class SaleOrder(models.Model):
                     'name': "Task3",
                     'project_id': project.id
                 })
-                
+
         return super(SaleOrder, self).action_confirm()

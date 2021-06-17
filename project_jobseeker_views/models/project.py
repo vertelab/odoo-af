@@ -1,5 +1,6 @@
-from odoo import models, fields, api, _
 from datetime import datetime
+
+from odoo import models, fields, api, _
 
 
 class ProjectProject(models.Model):
@@ -28,5 +29,3 @@ class ProjectProject(models.Model):
                 ], limit=1, order="id desc")
                 if activity_ids:
                     rec.task_new_event = activity_ids.activity_type_id.name
-
-

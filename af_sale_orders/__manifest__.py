@@ -6,8 +6,6 @@
     'website': 'http://www.vertel.se',
     'category': 'Sale',
     'summary': 'Price-list with links to project and activities.',
-    'description': "This module adds 'Carreer advice' and 'Interpretor' products. When Sale order approves"
-                   "with these products created Project and Tasks.",
     'depends': [
         'sale',
         'project',

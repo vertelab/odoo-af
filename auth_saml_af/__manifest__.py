@@ -24,14 +24,13 @@
     "version": "12.0.1.0.1",
     "author": "Vertel AB",
     "license": "AGPL-3",
-    "description": "SAML Settings for Arbetsförmedlingen.",
     "website": "https://vertel.se/",
     "category": "Tools",
     "depends": [
         "auth_saml_ol_create_user",
         "auth_saml_ol_groups",
         "af_security",
-        ],
+    ],
     "data": [
         "data/af_saml.xml",
         "views/web_login.xml",

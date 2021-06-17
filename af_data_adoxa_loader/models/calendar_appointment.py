@@ -19,13 +19,15 @@
 #
 ##############################################################################
 
-import gc
-import tempfile
-import os
 import csv
-from odoo.tools import config
-from odoo import models, fields, api, _
+import gc
 import logging
+import os
+import tempfile
+from odoo.tools import config
+
+from odoo import models, fields, api, _
+
 _logger = logging.getLogger(__name__)
 
 
@@ -145,10 +147,10 @@ class CalendarOccasion(models.Model):
                             row[key] = partner[0].id
                         else:
                             _logger.warn(
-                            "could not find jobseeker corresponding to %s" %
-                            pnr)
+                                "could not find jobseeker corresponding to %s" %
+                                pnr)
                             row[key] = False
-                        
+
                     else:
                         _logger.warn(
                             "could not find person corresponding to %s, skipping" %
@@ -196,7 +198,7 @@ class CalendarOccasion(models.Model):
                             '7': 'fail',
                         }
                     row[key] = translation_dict[row[key]]
-                elif key == 'location_id': #location is found through user_id.location_id, this might be needed in the future
+                elif key == 'location_id':  # location is found through user_id.location_id, this might be needed in the future
                     row[key] = self.env['hr.location'].search([('location_code', '=', row[key])]).id
                     keys_to_delete.append(key)
                 elif key == 'user_id':
@@ -208,7 +210,6 @@ class CalendarOccasion(models.Model):
                         'Nej': False,
                     }
                     row[key] = translation_dict[row[key]]
-
 
                 keys_to_delete.append("date")
 
@@ -319,6 +320,6 @@ class CSVIterator(object):
         for i in range(len(self.header)):
             if self.header[i] in self.field_map:
                 r.update({self.header[i]: self.data[self.row]
-                          [self.field_map[self.header[i]]]})
+                [self.field_map[self.header[i]]]})
 
         return r

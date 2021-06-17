@@ -1,17 +1,17 @@
 <odoo>
     <data>
         <menuitem
-            id="parent_menu_hr_job_seeker"
-            name="Job Seeker"
-            groups="base.group_user"
-            web_icon="hr_jobseeker,static/description/icon.png"
-            sequence="75"/>
+                id="parent_menu_hr_job_seeker"
+                name="Job Seeker"
+                groups="base.group_user"
+                web_icon="hr_jobseeker,static/description/icon.png"
+                sequence="75"/>
 
         <menuitem
-            id="hr_job_seeker_configuration"
-            parent="hr_jobseeker.parent_menu_hr_job_seeker"
-            name="Configuration"
-            groups="base.group_user"
-            sequence="75"/>
+                id="hr_job_seeker_configuration"
+                parent="hr_jobseeker.parent_menu_hr_job_seeker"
+                name="Configuration"
+                groups="base.group_user"
+                sequence="75"/>
     </data>
 </odoo>

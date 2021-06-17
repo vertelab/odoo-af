@@ -36,19 +36,20 @@
             <field name="parent_id" ref="res_partner_category_0"/>
         </record>
 
-       <!--
-        Resource: res.partner
-        -->
+        <!--
+         Resource: res.partner
+         -->
 
         <record id="res_partner_1" model="res.partner">
             <field name="name">Träfabriken</field>
-            <field eval="[(6, 0, [ref('res_partner_category_14'), ref('res_partner_category_12')])]" name="category_id"/>
+            <field eval="[(6, 0, [ref('res_partner_category_14'), ref('res_partner_category_12')])]"
+                   name="category_id"/>
             <field name="supplier">1</field>
             <field eval="0" name="customer"/>
             <field name="is_company">1</field>
             <field name="street">Strandvägen 1</field>
             <field name="city">Stockholm</field>
-            <field name="state_id"  model="res.country.state" search="[('code','ilike','AZ')]"/>
+            <field name="state_id" model="res.country.state" search="[('code','ilike','AZ')]"/>
             <field name="zip">12015</field>
             <field name="country_id" ref="base.se"/>
             <field name="email">wood.corner26@example.com</field>
@@ -62,7 +63,7 @@
             <field name="is_company">1</field>
             <field name="street">325 Elsie Drive</field>
             <field name="city">Franklin</field>
-            <field name="state_id"  model="res.country.state" search="[('code','ilike','WV')]"/>
+            <field name="state_id" model="res.country.state" search="[('code','ilike','WV')]"/>
             <field name="zip">26807</field>
             <field name="country_id" ref="base.us"/>
             <field name="email">deco.addict82@example.com</field>
@@ -77,7 +78,7 @@
             <field name="is_company">1</field>
             <field name="street">1128 Lunetta Street</field>
             <field name="city">Tampa</field>
-            <field name="state_id"  model="res.country.state" search="[('code','ilike','FL')]"/>
+            <field name="state_id" model="res.country.state" search="[('code','ilike','FL')]"/>
             <field name="zip">33634</field>
             <field name="country_id" ref="base.us"/>
             <field name="email">gemini.furniture39@example.com</field>
@@ -85,16 +86,17 @@
             <field name="website">http://www.gemini-furniture.com/</field>
             <field name="image" type="base64" file="base/static/img/res_partner_3-image.png"/>
         </record>
-        
+
         <record id="res_partner_4" model="res.partner">
             <field name="name">Ready Mat</field>
-            <field eval="[(6, 0, [ref('res_partner_category_14'), ref('res_partner_category_12')])]" name="category_id"/>
+            <field eval="[(6, 0, [ref('res_partner_category_14'), ref('res_partner_category_12')])]"
+                   name="category_id"/>
             <field eval="0" name="customer"/>
             <field eval="1" name="supplier"/>
             <field name="is_company">1</field>
             <field name="street">92 Emily Drive</field>
             <field name="city">Columbia</field>
-            <field name="state_id"  model="res.country.state" search="[('code','ilike','SC')]"/>
+            <field name="state_id" model="res.country.state" search="[('code','ilike','SC')]"/>
             <field name="zip">29201</field>
             <field name="country_id" ref="base.us"/>
             <field name="email">ready.mat28@example.com</field>
@@ -106,23 +108,23 @@
         <record id="res_partner_10" model="res.partner">
             <field name="name">The Jackson Group</field>
             <field name="is_company">1</field>
-            <field name="street">823  Turkey Pen Lane</field>
+            <field name="street">823 Turkey Pen Lane</field>
             <field name="city">Auburn</field>
-            <field name="state_id"  model="res.country.state" search="[('code','ilike','AL')]"/>
+            <field name="state_id" model="res.country.state" search="[('code','ilike','AL')]"/>
             <field name="zip">36830</field>
             <field name="country_id" ref="base.us"/>
             <field name="email">jackson.group82@example.com</field>
             <field name="phone">(334)-502-1024</field>
             <field name="image" type="base64" file="base/static/img/res_partner_10-image.jpg"/>
         </record>
-  
+
         <record id="res_partner_12" model="res.partner">
             <field name="name">Azure Interior</field>
             <field eval="[(6, 0, [ref('res_partner_category_11')])]" name="category_id"/>
             <field name="supplier">1</field>
             <field name="customer">1</field>
             <field name="is_company">1</field>
-            <field name="street">3404  Edgewood Road</field>
+            <field name="street">3404 Edgewood Road</field>
             <field name="city">Jonesboro</field>
             <field name="state_id" model="res.country.state" search="[('code','ilike','AR')]"/>
             <field name="zip">72401</field>
@@ -136,7 +138,7 @@
         <record id="res_partner_18" model="res.partner">
             <field name="name">Lumber Inc</field>
             <field name="is_company">1</field>
-            <field name="street">3202  Hannah Street</field>
+            <field name="street">3202 Hannah Street</field>
             <field name="city">Asheville</field>
             <field name="state_id" model="res.country.state" search="[('code','ilike','NC')]"/>
             <field name="zip">28801</field>

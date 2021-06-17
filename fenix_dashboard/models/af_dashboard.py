@@ -1,7 +1,7 @@
 from odoo import models, fields, api, _
 
-class Dashboard(models.Model):
 
+class Dashboard(models.Model):
     _name = 'af.dashboard'
     _description = "AF Dashboard"
 
@@ -18,15 +18,14 @@ class Dashboard(models.Model):
     #                 rec.task_ids = [(4, task) for task in tasks]
     #                 print ("dfdsfdsgsdg", rec.task_ids)
 
-class ProjectTask(models.Model):
 
+class ProjectTask(models.Model):
     _inherit = 'project.task'
 
     af_dashboard_id = fields.Many2one('af.dashboard')
 
 
 class ResUsers(models.Model):
-
     _inherit = 'res.users'
 
     @api.model

@@ -2,12 +2,7 @@
 
 {
     'name': 'Arbetssokande Planering',
-    'summary': """ Innehåller de resurser Mina Sidor och ALF behöver från Planeringsverktyget och BÄR för Arbetssökandes planering""",
-    'description': """
-Jira
-===========================================
-AFC-1051 - Arbetssokande Planering (V12.0.1.0.0)
-""",
+    'summary': """Innehåller de resurser Mina Sidor och ALF behöver från Planeringsverktyget och BÄR för Arbetssökandes planering""",
     "version": "12.0.1.0.0",
     "author": "Vertel AB",
     "license": "AGPL-3",

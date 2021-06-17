@@ -1,10 +1,10 @@
 import base64
 import logging
+from odoo.exceptions import ValidationError, AccessError
+from odoo.modules.module import get_module_resource
 
 from odoo import api, fields, models, tools, SUPERUSER_ID
 from odoo import tools, _
-from odoo.exceptions import ValidationError, AccessError
-from odoo.modules.module import get_module_resource
 
 
 class JobSeeker(models.Model):
@@ -22,10 +22,10 @@ class JobSeeker(models.Model):
 
     name = fields.Char(string="Name")
     stage_id = fields.Many2one('hr.jobseeker.stage', strin="State",
-                            ondelete='restrict', track_visibility='onchange', index=True, copy=False,
-                            group_expand='_read_group_stage_ids',
-                            default=lambda self: self._default_stage_id()
-                            )
+                               ondelete='restrict', track_visibility='onchange', index=True, copy=False,
+                               group_expand='_read_group_stage_ids',
+                               default=lambda self: self._default_stage_id()
+                               )
     employee_id = fields.Many2one('hr.employee', string="Employee")
     date_begin = fields.Datetime(string="Start Date", required=True)
     date_end = fields.Datetime(string="End Date", required=True)

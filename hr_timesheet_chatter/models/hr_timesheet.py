@@ -15,14 +15,14 @@
 #  MA 02110-1301, USA.
 #  
 
-from odoo import api, fields, models, _
-from odoo.exceptions import UserError,Warning
-
 import logging
+from odoo.exceptions import UserError, Warning
+
+from odoo import api, fields, models, _
+
 _logger = logging.getLogger(__name__)
 
+
 class AccountAnalyticLine(models.Model):
-    _inherit = ['account.analytic.line','mail.thread', 'mail.activity.mixin']
+    _inherit = ['account.analytic.line', 'mail.thread', 'mail.activity.mixin']
     _name = 'account.analytic.line'
-    
-    

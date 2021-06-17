@@ -22,9 +22,9 @@
 import copy
 import logging
 import pytz
-from random import randint
 from datetime import datetime, timedelta, date
 from odoo.exceptions import Warning
+from random import randint
 
 from odoo import models, fields, api, _
 
@@ -99,7 +99,7 @@ class CalendarSchedule(models.Model):
             elif (schedule.scheduled_agents - no_occasions) < 0:
                 # TODO: handle this case better
                 pass
-        
+
         # recalculate possible start times
         self.comp_possible_starts()
 
@@ -115,7 +115,8 @@ class CalendarSchedule(models.Model):
 
         # 16 is the number of half/whole hour slots between 9 and 17. Hopefully.
         for j in range(16):
-            search_domain = [('type_id', '=', self.type_id.id), ('start', '=', loop_date), ('state', '=', 'ok'), ('appointment_id', '=', False)]
+            search_domain = [('type_id', '=', self.type_id.id), ('start', '=', loop_date), ('state', '=', 'ok'),
+                             ('appointment_id', '=', False)]
             if self.type_id.duration == 60:
                 no_occasions = self.env['calendar.occasion'].search_count(search_domain)
                 # compute possible appointment starts for this time and type
@@ -125,7 +126,8 @@ class CalendarSchedule(models.Model):
 
                 if no_possible_starts != 0:
                     occasions_true = self.env['calendar.occasion'].search(search_domain, limit=no_possible_starts)
-                    occasions_false = self.env['calendar.occasion'].search(search_domain + [('id', 'not in', occasions_true._ids)], limit=no_possible_starts)
+                    occasions_false = self.env['calendar.occasion'].search(
+                        search_domain + [('id', 'not in', occasions_true._ids)], limit=no_possible_starts)
                     for occ_true in occasions_true:
                         occ_true.is_possible_start = '1'
                     for occ_false in occasions_false:
@@ -246,7 +248,8 @@ class CalendarAppointmentSuggestion(models.Model):
     type_id = fields.Many2one(string='Type', comodel_name='calendar.appointment.type')
     channel = fields.Many2one(string='Channel', comodel_name='calendar.channel')
     operation_id = fields.Many2one(comodel_name="hr.operation", string="Operation")
-    office_id = fields.Many2one(comodel_name="hr.department", related="operation_id.department_id", string="Office", readonly=True)
+    office_id = fields.Many2one(comodel_name="hr.department", related="operation_id.department_id", string="Office",
+                                readonly=True)
     user_id = fields.Many2one(comodel_name='res.users', string="Case worker")
     weekday = fields.Char(string='Weekday', compute="_compute_weekday")
 
@@ -330,7 +333,7 @@ class CalendarAppointmentSuggestion(models.Model):
         # Write data to appointment_id
         occasions.write({'appointment_id': self.appointment_id.id})
         self.appointment_id.write(app_vals)
-    
+
     @api.multi
     def select_suggestion_move(self):
         # Perform access control.
@@ -394,13 +397,16 @@ class CalendarAppointment(models.Model):
                                         ('confirmed', 'Confirmed'),
                                         ('done', 'Done'),
                                         ('canceled', 'Canceled')],
-                                        string='State', 
-                                        default='free', 
-                                        help="Status of the meeting")
-    cancel_reason = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason', help="Cancellation reason")
-    cancel_reason_temp = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason', store=False, help="Cancellation reason")
+                             string='State',
+                             default='free',
+                             help="Status of the meeting")
+    cancel_reason = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason',
+                                    help="Cancellation reason")
+    cancel_reason_temp = fields.Many2one(string='Cancel reason', comodel_name='calendar.appointment.cancel_reason',
+                                         store=False, help="Cancellation reason")
     operation_id = fields.Many2one(string='Operation', comodel_name='hr.operation')
-    office_id = fields.Many2one(comodel_name='hr.department', string="Office", related="operation_id.department_id", readonly=True)
+    office_id = fields.Many2one(comodel_name='hr.department', string="Office", related="operation_id.department_id",
+                                readonly=True)
     occasion_ids = fields.One2many(comodel_name='calendar.occasion', inverse_name='appointment_id', string="Occasion")
     type_id = fields.Many2one(string='Type', required=True, comodel_name='calendar.appointment.type')
     channel = fields.Many2one(string='Channel', required=True, comodel_name='calendar.channel',
@@ -496,7 +502,7 @@ class CalendarAppointment(models.Model):
         if allowed and not denied:
             return True
         return False
-    
+
     @api.multi
     def check_access_planner_locations(self, locations):
         """Check if current user is planner with access to these locations."""
@@ -511,7 +517,7 @@ class CalendarAppointment(models.Model):
             if appointment.mapped('operation_id.location_id') not in locations:
                 return False
         return True
-    
+
     @api.multi
     def check_access_jobseeker_officer(self):
         """Check if the user has access to this jobseeker."""
@@ -540,15 +546,15 @@ class CalendarAppointment(models.Model):
         if self.channel_name != "PDM" and not self.operation_id:
             return
         # if self.cancel_reason_temp:
-        
-    
+
         start = self.start_meeting_search(self.type_id)
         stop = self.stop_meeting_search(start, self.type_id)
         self.show_suggestion_ids = True
         suggestion_ids = []
         if self.suggestion_ids:
             suggestion_ids.append((5,))
-        occasions = self.env['calendar.occasion'].get_bookable_occasions(start, stop, self.duration * 60, self.type_id, self.operation_id, max_depth = 1)
+        occasions = self.env['calendar.occasion'].get_bookable_occasions(start, stop, self.duration * 60, self.type_id,
+                                                                         self.operation_id, max_depth=1)
         for day in occasions:
             for day_occasions in day:
                 for occasion in day_occasions:
@@ -636,7 +642,7 @@ class CalendarAppointment(models.Model):
         else:
             self.active = True
         return self.active
-    
+
     def generate_cancel_daily_note(self, cancel_reason, appointment):
         pass
 
@@ -682,7 +688,6 @@ class CalendarAppointment(models.Model):
 
             return res
 
-
     @api.multi
     def write(self, vals):
         if (self.occasion_ids != False) and (self.channel == self.env.ref('calendar_channel.channel_local')) and (
@@ -697,7 +702,8 @@ class CalendarAppointment(models.Model):
     def _check_remaining_occasions(self):
         start_check = datetime.now() + timedelta(days=self.type_id.days_first)
         stop_check = datetime.now() + timedelta(days=self.type_id.days_last)
-        min_num = self.env['calendar.appointment.type.operation'].sudo().search([('operation_id', '=', self.operation_id.id), ('type_id', '=', self.type_id.id)], limit=1).warning_threshold
+        min_num = self.env['calendar.appointment.type.operation'].sudo().search(
+            [('operation_id', '=', self.operation_id.id), ('type_id', '=', self.type_id.id)], limit=1).warning_threshold
 
         if min_num:
             occ_num = self.env['calendar.occasion'].search_count([
@@ -718,15 +724,16 @@ class CalendarAppointment(models.Model):
                 else:
                     _logger.debug(_("No threshold users setup for operation %s") % self.operation_id.name)
         else:
-            _logger.debug(_("No threshold set for operation %s and meeting type %s") % (self.operation_id.name, self.type_id.name))
+            _logger.debug(_("No threshold set for operation %s and meeting type %s") % (
+            self.operation_id.name, self.type_id.name))
 
     @api.multi
     def move_meeting_action(self):
         self.show_suggestion_ids = False
         partner = (
             self.env["calendar.appointment"]
-            .browse(self._context.get("active_id"))
-            .partner_id
+                .browse(self._context.get("active_id"))
+                .partner_id
         )
         return {
             "name": _("Move meeting"),
@@ -745,8 +752,8 @@ class CalendarAppointment(models.Model):
     def cancel_meeting_action(self):
         partner = (
             self.env["calendar.appointment"]
-            .browse(self._context.get("active_id"))
-            .partner_id
+                .browse(self._context.get("active_id"))
+                .partner_id
         )
         return {
             "name": _("Cancel meeting"),
@@ -829,14 +836,15 @@ class CalendarOccasion(models.Model):
                                         ('fail', 'Rejected'),
                                         ('booked', 'Booked'),
                                         ('deleted', 'Deleted')],
-                                        string='Occasion state', 
-                                        default='request', 
-                                        help="Status of the meeting")
+                             string='Occasion state',
+                             default='request',
+                             help="Status of the meeting")
     operation_id = fields.Many2one(comodel_name='hr.operation', string="Operation")
-    office_id = fields.Many2one(comodel_name='hr.department', string="Office", related="operation_id.department_id", readonly=True)
+    office_id = fields.Many2one(comodel_name='hr.department', string="Office", related="operation_id.department_id",
+                                readonly=True)
     start_time = fields.Char(string='Occasion start time', readonly=True, compute='_occ_start_time_calc', store=True)
     weekday = fields.Char(string='Weekday', compute="_compute_weekday")
-    is_possible_start = fields.Selection(string='Is a possible start time', 
+    is_possible_start = fields.Selection(string='Is a possible start time',
                                          selection=[('', 'Not set'),
                                                     ('0', 'No'),
                                                     ('1', 'Yes')])
@@ -883,7 +891,8 @@ class CalendarOccasion(models.Model):
             self.stop = self.start + timedelta(minutes=int(self.duration * 60))
 
     @api.model
-    def _force_create_occasion(self, duration, start, type_id, channel, state, user=False, operation_id=False, additional_booking=True):
+    def _force_create_occasion(self, duration, start, type_id, channel, state, user=False, operation_id=False,
+                               additional_booking=True):
         """In case we need to force through a new occasion for some reason"""
         vals = {
             'name': _('%sm @ %s') % (duration, pytz.timezone(LOCAL_TZ).localize(start)),
@@ -928,9 +937,11 @@ class CalendarOccasion(models.Model):
         """Checks if a date has a mapped date, and returns the mapped date 
         if it exists """
         if operation_id:
-            mapped_date = self.env['calendar.mapped_dates'].search([('from_date', '=', date), ('operation_id', '=', operation_id.id)])
+            mapped_date = self.env['calendar.mapped_dates'].search(
+                [('from_date', '=', date), ('operation_id', '=', operation_id.id)])
         else:
-            mapped_date = self.env['calendar.mapped_dates'].search([('from_date', '=', date), ('operation_id', '=', False)])
+            mapped_date = self.env['calendar.mapped_dates'].search(
+                [('from_date', '=', date), ('operation_id', '=', False)])
         if mapped_date:
             res = mapped_date.to_date
         else:
@@ -964,7 +975,7 @@ class CalendarOccasion(models.Model):
                 # find employees listed as available for reserve bookings on operation
                 employee_ids = operation_id.reserve_admin_ids
                 # select random employee from the recordset
-                user_id = employee_ids[randint(0,len(employee_ids)-1)].user_id
+                user_id = employee_ids[randint(0, len(employee_ids) - 1)].user_id
             else:
                 # no user_id could be set.
                 raise Warning(_("No case worker could be set for operation %s") % operation_id.operation_code)
@@ -981,7 +992,7 @@ class CalendarOccasion(models.Model):
                 'type_id': type_id.id,
                 'channel': type_id.channel.id,
                 'operation_id': operation_id.id if operation_id else False,
-                'user_id': user_id.id if user_id else False, 
+                'user_id': user_id.id if user_id else False,
                 'additional_booking': True,
                 'state': 'ok',
             }
@@ -1018,7 +1029,7 @@ class CalendarOccasion(models.Model):
         if allowed and not denied:
             return True
         return False
-    
+
     @api.multi
     def publish_occasion(self):
         """User publishes suggested occasion"""
@@ -1046,7 +1057,7 @@ class CalendarOccasion(models.Model):
             # Checks passed. Run inner function with sudo.
             return self.sudo()._accept_occasion()
         raise Warning(_('You are not allowed to accept these occasions.'))
-    
+
     def _accept_occasion(self):
         if self.state == 'request' or self.state == 'fail':
             self.state = 'ok'
@@ -1145,9 +1156,10 @@ class CalendarOccasion(models.Model):
                 # loop within the day to find slots
                 while start_dt <= last_slot:
                     # get number of possbile meeting starts at start_dt
-                    count_current_starts = self.env['calendar.occasion'].search_count(domain + [('start', '=', start_dt)])
+                    count_current_starts = self.env['calendar.occasion'].search_count(
+                        domain + [('start', '=', start_dt)])
                     # compare to previous meeting starts
-                    count_prev_starts = max(count_current_starts-count_prev_starts,0)
+                    count_prev_starts = max(count_current_starts - count_prev_starts, 0)
                     # limit depth depending on this number
                     limit = min(count_prev_starts, max_depth)
                     # no need to do this if the depth is 0
@@ -1199,7 +1211,7 @@ class CalendarOccasion(models.Model):
         """Reserves an occasion."""
         start = occasion_ids[0].start
         stop = occasion_ids[len(occasion_ids) - 1].stop
-        duration = (stop - start).seconds/60/60
+        duration = (stop - start).seconds / 60 / 60
         # type_id = self.env.ref('calendar_meeting_type.type_00').id
         type_id = occasion_ids[0].type_id
 
@@ -1222,7 +1234,7 @@ class CalendarOccasion(models.Model):
                 'partner_id': False,
                 'state': 'reserved',
                 'operation_id': False,
-                'occasion_ids': occasion_ids, # I dont think this does anything?
+                'occasion_ids': occasion_ids,  # I dont think this does anything?
                 'reserved': datetime.now(),
             }
             appointment = self.env['calendar.appointment'].create(vals)

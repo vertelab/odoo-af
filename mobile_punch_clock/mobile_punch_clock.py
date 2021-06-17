@@ -18,40 +18,43 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from odoo import models, fields, api, _
-from odoo.exceptions import except_orm, Warning, RedirectWarning
-from odoo import http
-from odoo.http import request
-from odoo import SUPERUSER_ID
-from datetime import datetime
-import werkzeug
 import pytz
+import werkzeug
+from datetime import datetime
+from odoo.exceptions import except_orm, Warning, RedirectWarning
+from odoo.http import request
+
+from odoo import SUPERUSER_ID
+from odoo import http
+from odoo import models, fields, api, _
 
 
 class website_punch_clock(http.Controller):
 
-    @http.route(['/punchclock/<model("res.users"):user>', '/punchclock/<model("res.users"):user>/<string:clicked>', '/punchclock'], type='http', auth="user", csrf=False, website=True)
+    @http.route(['/punchclock/<model("res.users"):user>', '/punchclock/<model("res.users"):user>/<string:clicked>',
+                 '/punchclock'], type='http', auth="user", csrf=False, website=True)
     def signin_user(self, user=False, clicked=False, **post):
         cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
         if not user:
-            return werkzeug.utils.redirect("/punchclock/%s" %request.env.uid,302)
+            return werkzeug.utils.redirect("/punchclock/%s" % request.env.uid, 302)
         if clicked:
             user.employee_ids[0].attendance_action_change()
-        if post.get('signin_button',False): 
+        if post.get('signin_button', False):
             user.employee_ids[0].attendance_action_change()
-            
+
         tz = pytz.timezone(user.partner_id.tz) or pytz.utc
-        last = user.employee_ids[0].last_attendance_id.check_in if user.employee_ids[0].attendance_state == 'checked_in' else user.employee_ids[0].last_attendance_id.check_out
+        last = user.employee_ids[0].last_attendance_id.check_in if user.employee_ids[
+                                                                       0].attendance_state == 'checked_in' else \
+        user.employee_ids[0].last_attendance_id.check_out
         last = pytz.utc.localize(datetime.strptime(last, '%Y-%m-%d %H:%M:%S')).astimezone(tz).replace(tzinfo=None)
-    
+
         ctx = {
-            'user' : user,
-            'signed_in': _("Punch Out") if user.employee_ids[0].attendance_state == 'checked_in' else _("Punch In"), 
+            'user': user,
+            'signed_in': _("Punch Out") if user.employee_ids[0].attendance_state == 'checked_in' else _("Punch In"),
             'last': last,
             'attendance': user.employee_ids[0].last_attendance_id,
-            'employee': user.employee_ids[0],           
-            }
-    
+            'employee': user.employee_ids[0],
+        }
 
         return request.render('mobile_punch_clock.mobile_punch_clock_template', ctx)
 

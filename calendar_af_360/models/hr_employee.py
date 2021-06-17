@@ -74,7 +74,7 @@ class HrEmployee(models.Model):
             )
             rec.appointment_ids_all = appointment_record.filtered(
                 lambda a: a.start > datetime.now()
-                and a.state == "confirmed"
+                          and a.state == "confirmed"
                 # TODO: is this needed?
                 # and a.user_id.location_id == self.env.user.location_id
             )

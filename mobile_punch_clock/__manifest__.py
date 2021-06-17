@@ -23,12 +23,6 @@
     'name': 'Mobile Punch Clock',
     'version': '0.2',
     'category': 'hr',
-    'description': """
-Punch clock for sign in / out from mobile.
-==========================================
-url: /punchclock/
-
-""",
     'images': ['static/description/img.png'],
     'author': 'Vertel AB',
     'license': 'AGPL-3',

@@ -45,6 +45,7 @@ class SaleOrder(models.Model):
 
 class HRSkill(models.Model):
     _name = 'hr.employee.skill.sale'
+    _description = "HR Employee Skill Sale"
 
     sale_order_id = fields.Many2one('sale.order')
     employee_id = fields.Many2one(

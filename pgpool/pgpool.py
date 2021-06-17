@@ -24,6 +24,7 @@ from time import sleep
 
 _create_empty_database = odoo.service.db._create_empty_database
 
+
 def _create_empty_database_sleep(name):
     res = _create_empty_database(name)
     # We try to connect to the new database too fast for pgpool.
@@ -31,6 +32,7 @@ def _create_empty_database_sleep(name):
     # A 3 second wait should be more than enough to complete the sync.
     sleep(3)
     return res
+
 
 # Monkey patching our function into core.
 odoo.service.db._create_empty_database = _create_empty_database_sleep

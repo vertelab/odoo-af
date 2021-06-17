@@ -19,11 +19,13 @@
 #
 ##############################################################################
 
-import tempfile
-import os
 import csv
-from odoo import models, fields, api, _
 import logging
+import os
+import tempfile
+
+from odoo import models, fields, api, _
+
 _logger = logging.getLogger(__name__)
 
 
@@ -70,10 +72,10 @@ class ReadCSV(object):
             raise ValueError(e)
         if not list(
                 self.data[0].keys()) == [
-                'external_id',
-                'login',
-                'password',
-                'partner_id']:
+                   'external_id',
+                   'login',
+                   'password',
+                   'partner_id']:
             _logger.error(
                 u'Row 0 was looking for "id", "login", "password", "partner_id"')
             raise ValueError(
