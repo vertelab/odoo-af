@@ -25,9 +25,9 @@ v12.0.0.1.6 - Added saml provider, changed to new versioning scheme\n
     "depends": [ 
         "hr", 
         "calendar", 
-        "hr_employee_firstname_extension", 
-        "partner_daily_notes",
+        "hr_employee_firstname_extension",
         'auth_saml_af',
+        'hr_office'
     ],
     "data": [
         "views/res_partner.xml",
