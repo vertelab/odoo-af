@@ -27,6 +27,7 @@ from zeep.client import CachingClient
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 from odoo.http import request
+import requests
 
 _logger = logging.getLogger(__name__)
 TIMEOUT = 60 * 3
@@ -134,38 +135,6 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
 
     @api.multi
     def search_jobseeker(self):
-        domain = []
-        if self.social_sec_nr_search:
-            if (
-                len(self.social_sec_nr_search) == 13
-                and self.social_sec_nr_search[8] == "-"
-            ):
-                domain.append(("social_sec_nr", "=", self.social_sec_nr_search))
-            elif len(self.social_sec_nr_search) == 12:
-                domain.append(
-                    (
-                        "social_sec_nr",
-                        "=",
-                        "%s-%s"
-                        % (
-                            self.social_sec_nr_search[:8],
-                            self.social_sec_nr_search[8:12],
-                        ),
-                    )
-                )
-            else:
-                raise ValidationError(
-                    _("Incorrectly formatted social security number: %s")
-                    % self.social_sec_nr_search
-                )
-        if self.customer_id_search:
-            domain.append(("customer_id", "=", self.customer_id_search))
-        if self.email_search:
-            domain.append(("email", "=", self.email_search))
-        domain = ["|" for x in range(len(domain) - 1)] + domain
-        domain.insert(0, ("is_jobseeker", "=", True))
-        domain.insert(0, ("is_spu", "=", False))
-
         if self.identification == False:
             raise ValidationError(_("Identification must be set before searching"))
         elif self.search_reason == "other reason":
@@ -178,7 +147,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                     _("Other reason has to be at least 20 characters long")
                 )
 
-        partners = self.env["res.partner"].sudo().search(domain)
+        partners = self.env["res.partner"].sudo().search(self.get_domain())
         if not partners:
             # ”Hänvisning till Sök-A/AIS-F, den arbetssökande finns inte i Kundrelationssystemet”
             raise ValidationError(
@@ -192,7 +161,6 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             user=self.env.user,
             reason=self.search_reason or self.identification,
         )
-
         for partner in partners:
             vals = {
                 "logged_in_user": self.env.user.name,
@@ -201,7 +169,6 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                 "social_sec_num": partner.social_sec_nr,
                 "office": partner.office_id.name,
             }
-
         action = {
             "name": _("Jobseekers"),
             "domain": [("id", "=", partners._ids), ("is_jobseeker", "=", True)],
@@ -224,11 +191,70 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
 
     @api.multi
     def search_jobseeker_authority(self):
+        if self.search_reason == False:
+            raise ValidationError(_("Search reason must be set before searching"))
+        elif self.search_reason == "other reason":
+            if not self.other_reason:
+                raise ValidationError(
+                    _("Other reason selected but other reason field is not filled in")
+                )
+            if len(self.other_reason) < 20:
+                raise ValidationError(
+                    _("Other reason has to be at least 20 characters long")
+                )
+
+        partners = self.env["res.partner"].sudo().search(self.get_domain())
+        if not partners:
+            raise ValidationError(
+                _(
+                    "Refer to Sök-A/AIS-F, the jobseeker does not exist in the Kundrelationssystem"
+                )
+            )
+        # TODO: Set correct access level. Probably varies with the reason for the search.
+        partners._grant_jobseeker_access(
+            "MYCKET_STARK",
+            user=self.env.user,
+            reason=self.search_reason or self.identification,
+        )
+        for partner in partners:
+            vals = {
+                "logged_in_user": self.env.user.name,
+                "identification": self.identification,
+                "searched_partner": partner.name,
+                "social_sec_num": partner.social_sec_nr,
+                "office": partner.office_id.name,
+            }
+
+            _logger.info(json.dumps(vals))
+        action = {
+            "name": _("Jobseekers"),
+            "domain": [("id", "=", partners._ids), ("is_jobseeker", "=", True)],
+            "context": {"bos_postcode": True},
+            "res_model": "res.partner",
+            "view_ids": [
+                self.env.ref("partner_view_360.view_jobseeker_kanban").id,
+                self.env.ref("partner_view_360.view_jobseeker_form").id,
+                self.env.ref("partner_view_360.view_jobseeker_tree").id,
+            ],
+            "view_mode": "kanban,tree,form",
+            "type": "ir.actions.act_window",
+            "target": "main",
+        }
+        if len(partners) == 1:
+            action["view_id"] = self.env.ref("partner_view_360.view_jobseeker_form").id
+            action["res_id"] = partners.id
+            action["view_mode"] = "form"
+
+        return action
+
+
+    @api.multi
+    def get_domain(self):
         domain = []
         if self.social_sec_nr_search:
             if (
-                len(self.social_sec_nr_search) == 13
-                and self.social_sec_nr_search[8] == "-"
+                    len(self.social_sec_nr_search) == 13
+                    and self.social_sec_nr_search[8] == "-"
             ):
                 domain.append(("social_sec_nr", "=", self.social_sec_nr_search))
             elif len(self.social_sec_nr_search) == 12:
@@ -265,90 +291,33 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
         domain = ["|" for x in range(len(domain) - 1)] + domain
         domain.insert(0, ("is_jobseeker", "=", True))
         domain.insert(0, ("is_spu", "=", False))
-
-        if self.search_reason == False:
-            raise ValidationError(_("Search reason must be set before searching"))
-        elif self.search_reason == "other reason":
-            if not self.other_reason:
-                raise ValidationError(
-                    _("Other reason selected but other reason field is not filled in")
-                )
-            if len(self.other_reason) < 20:
-                raise ValidationError(
-                    _("Other reason has to be at least 20 characters long")
-                )
-
-        partners = self.env["res.partner"].sudo().search(domain)
-        if not partners:
-            raise ValidationError(
-                _(
-                    "Refer to Sök-A/AIS-F, the jobseeker does not exist in the Kundrelationssystem"
-                )
-            )
-        # TODO: Set correct access level. Probably varies with the reason for the search.
-        partners._grant_jobseeker_access(
-            "MYCKET_STARK",
-            user=self.env.user,
-            reason=self.search_reason or self.identification,
-        )
-
-        for partner in partners:
-            vals = {
-                "logged_in_user": self.env.user.name,
-                "identification": self.identification,
-                "searched_partner": partner.name,
-                "social_sec_num": partner.social_sec_nr,
-                "office": partner.office_id.name,
-            }
-
-            _logger.info(json.dumps(vals))
-
-        action = {
-            "name": _("Jobseekers"),
-            "domain": [("id", "=", partners._ids), ("is_jobseeker", "=", True)],
-            "context": {"bos_postcode": True},
-            "res_model": "res.partner",
-            "view_ids": [
-                self.env.ref("partner_view_360.view_jobseeker_kanban").id,
-                self.env.ref("partner_view_360.view_jobseeker_form").id,
-                self.env.ref("partner_view_360.view_jobseeker_tree").id,
-            ],
-            "view_mode": "kanban,tree,form",
-            "type": "ir.actions.act_window",
-            "target": "main",
-        }
-        if len(partners) == 1:
-            action["view_id"] = self.env.ref("partner_view_360.view_jobseeker_form").id
-            action["res_id"] = partners.id
-            action["view_mode"] = "form"
-
-        return action
+        return domain
 
     @api.multi
     def do_bankid(self):
         """Send BankID request and wait for user verification."""
         self.bank_id_ok = False
-        bankid = CachingClient(
-            self.env["ir.config_parameter"]
-            .sudo()
-            .get_param(
-                "hr_360_view.bankid_wsdl",
-                "http://bhipws.arbetsformedlingen.se/Integrationspunkt/ws/mobiltbankidinterntjanst?wsdl",
-            )
-        )  # create a Client instance
         if not self.social_sec_nr_search:
             raise ValidationError(_("Social security number missing"))
-        res = bankid.service.startaIdentifiering(
-            self.social_sec_nr_search.replace("-", ""), "crm"
+        ipf_auth = self.env.ref(
+            'af_ipf.bankid_endpoint_elegservice_auth').sudo()
+        ipf_collect = self.env.ref(
+            'af_ipf.bankid_endpoint_elegservice_collect').sudo()
+        res = ipf_auth.call(
+            body=
+            {
+                "systemID": "AFCRM",
+                "authSystem": "bankid",
+                "personalNumber": self.social_sec_nr_search.replace("-", ""),
+            }
         )
-        _logger.debug("res: %s" % res)
         order_ref = False
         try:
             order_ref = res["orderRef"]
-            if not orderRef:
+            if not order_ref:
                 self.bank_id_ok = False
                 try:
-                    self.bank_id_text = res["felStatusKod"]
+                    self.bank_id_text = res["infoCode"]
                 except KeyError:
                     self.bank_id_text = _("Error in communication with BankID")
         except KeyError:
@@ -358,13 +327,18 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             deadline = time.monotonic() + TIMEOUT
             time.sleep(9)  # Give user time to react before polling.
             while deadline > time.monotonic():
-                res = bankid.service.verifieraIdentifiering(order_ref, "crm")
-                if "statusText" in res and res["statusText"] == "OK":
-                    self.bank_id_text = res["statusText"]
+                res_collect = ipf_collect.call(body={
+                    "systemID": "AFCRM",
+                    "orderRef": order_ref
+                })
+                if "status" in res_collect and \
+                        res_collect["status"] == "complete":
+                    self.bank_id_text = res_collect["status"]
                     self.bank_id_ok = True
                     break
-                elif "felStatusKod" in res and self.bank_id_text["felStatusKod"]:
-                    self.bank_id_text = res["felStatusKod"]
+                elif "status" in res_collect and \
+                        res_collect["status"] == "failed":
+                    self.bank_id_text = res_collect["infoCode"]
                     self.bank_id_ok = False
                     break
                 time.sleep(3)
@@ -372,9 +346,12 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                 self.bank_id_text = _("User timeout")
                 self.bank_id_ok = False
 
-        partner = self.env["res.partner"].search_pnr(self.social_sec_nr_search)
+        partner = self.env["res.partner"].search_pnr(
+            self.social_sec_nr_search)
+
         if not partner:
-            raise ValidationError(_("Social security number not found in system"))
+            raise ValidationError(
+                _("Social security number not found in system"))
         # create bankid token to let user know status of bankid process
         bankid_vals = {
             "name": self.bank_id_text,
@@ -382,12 +359,13 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             "partner_id": partner.id,
         }
         request.env["res.partner.bankid"].create(bankid_vals)
-
-        action = (
-            self.env["ir.actions.act_window"]
-            .browse(self.env.ref("hr_360_view.search_jobseeker_wizard").id)
-            .read()[0]
-        )
-        action["res_id"] = self.id
-        action["view_mode"] = "form"
-        return action
+        if self.bank_id_ok:
+            action = (
+                self.env["ir.actions.act_window"]
+                    .browse(self.env.ref(
+                    "hr_360_view.search_jobseeker_wizard").id)
+                    .read()[0]
+            )
+            action["res_id"] = self.id
+            action["view_mode"] = "form"
+            return action
