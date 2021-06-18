@@ -136,7 +136,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     @api.multi
     def search_jobseeker(self):
         now_year = str(datetime.now().year)
-        before_year = str(datetime.now().year - 100)
+        last_century = str(int(now_year) - 100)[0:2]
         domain = []
         if self.social_sec_nr_search:
             if (
@@ -163,7 +163,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                 if self.social_sec_nr_search[0:2] < now_year[2:4]:
                     domain.append(("social_sec_nr", "=", now_year[0:2] + self.social_sec_nr_search))
                 else:
-                    domain.append(("social_sec_nr", "=", before_year[0:2] + self.social_sec_nr_search))
+                    domain.append(("social_sec_nr", "=", last_century + self.social_sec_nr_search))
             elif len(self.social_sec_nr_search) == 10 and "-" not in self.social_sec_nr_search:
                 if self.social_sec_nr_search[0:2] < now_year[2:4]:
                     domain.append(
@@ -184,7 +184,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                             "=",
                             "%s-%s"
                             % (
-                                before_year[0:2] + self.social_sec_nr_search[:6],
+                                last_century + self.social_sec_nr_search[:6],
                                 self.social_sec_nr_search[6:10],
                             ),
                         )
@@ -260,9 +260,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     @api.multi
     def search_jobseeker_authority(self):
         now_year = str(datetime.now().year)
-        # which gives 2021
-        before_year = str(datetime.now().year - 100)
-        # which gives 1921
+        last_century = str(int(now_year) - 100)[0:2]
         domain = []
         if self.social_sec_nr_search:
             if (
@@ -289,7 +287,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                 if self.social_sec_nr_search[0:2] < now_year[2:4]:
                     domain.append(("social_sec_nr", "=", now_year[0:2] + self.social_sec_nr_search))
                 else:
-                    domain.append(("social_sec_nr", "=", before_year[0:2] + self.social_sec_nr_search))
+                    domain.append(("social_sec_nr", "=", last_century + self.social_sec_nr_search))
             elif len(self.social_sec_nr_search) == 10 and "-" not in self.social_sec_nr_search:
                 if self.social_sec_nr_search[0:2] < now_year[2:4]:
                     domain.append(
@@ -310,7 +308,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                             "=",
                             "%s-%s"
                             % (
-                                before_year[0:2] + self.social_sec_nr_search[:6],
+                                last_century + self.social_sec_nr_search[:6],
                                 self.social_sec_nr_search[6:10],
                             ),
                         )
@@ -333,7 +331,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                         if pnr[0:2] < now_year[2:4]:
                             pnr = "%s-%s" % (now_year[0:2] + pnr[:6], pnr[6:10])
                         else:
-                            pnr = "%s-%s" % (before_year[0:2] + pnr[:6], pnr[6:10])
+                            pnr = "%s-%s" % (last_century + pnr[:6], pnr[6:10])
             if pnr:
                 domain.append(("social_sec_nr", "=", pnr))
             else:

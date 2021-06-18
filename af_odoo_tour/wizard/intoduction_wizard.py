@@ -108,7 +108,7 @@ class IntroductionWizard(models.Model):
         # TODO: This should be made into two separate functions so it's 100%
         # clear what the user is trying to do.
         now_year = str(datetime.now().year)
-        before_year = str(datetime.now().year - 100)
+        last_century = str(int(now_year) - 100)[0:2]
         domain = []
         if self.social_sec_nr_search:
             if len(
@@ -127,7 +127,7 @@ class IntroductionWizard(models.Model):
                         ("social_sec_nr", "=", now_year[0:2] + self.social_sec_nr_search))
                 else:
                     domain.append(
-                        ("social_sec_nr", "=", before_year[0:2] + self.social_sec_nr_search))
+                        ("social_sec_nr", "=", last_century + self.social_sec_nr_search))
 
             elif len(self.social_sec_nr_search) == 10 and "-" not in self.social_sec_nr_search:
                 if self.social_sec_nr_search[0:2] < now_year[2:4]:
@@ -138,7 +138,7 @@ class IntroductionWizard(models.Model):
                 else:
                     domain.append(("social_sec_nr",
                                    "=",
-                                   "%s-%s" % (before_year[0:2] + self.social_sec_nr_search[:6],
+                                   "%s-%s" % (last_century + self.social_sec_nr_search[:6],
                                               self.social_sec_nr_search[6:10])))
             else:
                 raise Warning(
