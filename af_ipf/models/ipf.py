@@ -120,6 +120,7 @@ class AfIpfEndpoint(models.Model):
 
     name = fields.Char(required=True)
     ipf_id = fields.Many2one(comodel_name='af.ipf', required=True, ondelete='cascade')
+    method = fields.Char(required=True)
 
     @api.multi
     def build_error_msg(self, response, data):
@@ -142,12 +143,20 @@ class AfIpfEndpoint(models.Model):
             self.ipf_id.port,
             self.name.format(**kw))
         _logger.debug("Unpack url: %s" % url)
-        response = requests.get(
-            url,
-            headers=headers,
-            auth=self.ipf_id.get_auth(),
-            **self.ipf_id.get_ssl_params()
-        )
+        if self.method == 'get':
+            response = requests.get(
+                url,
+                headers=headers,
+                auth=self.ipf_id.get_auth(),
+                **self.ipf_id.get_ssl_params()
+            )
+        elif self.method == 'post':
+            response = requests.post(
+                url,
+                headers=headers,
+                auth=self.ipf_id.get_auth(),
+                json=kw.get('body')
+            )
         _logger.debug("Unpack response: %s" % response)
         res = None
         try:

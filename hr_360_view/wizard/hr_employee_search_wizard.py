@@ -325,29 +325,32 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
 
         return action
 
+
     @api.multi
     def do_bankid(self):
         """Send BankID request and wait for user verification."""
         self.bank_id_ok = False
-
         if not self.social_sec_nr_search:
-             raise ValidationError(_("Social security number missing"))
-        url_collect = "https://bhipws.arbetsformedlingen.se/bhipws/rest/v1/elegservice/collect"
-        url_auth = "https://bhipws.arbetsformedlingen.se/bhipws/rest/v1/elegservice/auth"
-        body_auth = {
-            "systemID": "AFCRM",
-            "authSystem": "bankid",
-            "personalNumber": self.social_sec_nr_search.replace("-", ""),
-        }
-        response_auth = requests.post(url_auth, json=body_auth)
-        response_auth_json = response_auth.json()
+            raise ValidationError(_("Social security number missing"))
+        ipf_auth = self.env.ref(
+            'af_ipf.bankid_endpoint_elegservice_auth').sudo()
+        ipf_collect = self.env.ref(
+            'af_ipf.bankid_endpoint_elegservice_collect').sudo()
+        res = ipf_auth.call(
+            body=
+            {
+                "systemID": "AFCRM",
+                "authSystem": "bankid",
+                "personalNumber": self.social_sec_nr_search.replace("-", ""),
+            }
+        )
         order_ref = False
         try:
-            order_ref = response_auth_json["orderRef"]
+            order_ref = res["orderRef"]
             if not order_ref:
                 self.bank_id_ok = False
                 try:
-                    self.bank_id_text = response_auth_json["infoCode"]
+                    self.bank_id_text = res["infoCode"]
                 except KeyError:
                     self.bank_id_text = _("Error in communication with BankID")
         except KeyError:
@@ -357,19 +360,18 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             deadline = time.monotonic() + TIMEOUT
             time.sleep(9)  # Give user time to react before polling.
             while deadline > time.monotonic():
-                response_collect = requests.post(url_collect, json={
-                        "systemID": "AFCRM",
-                        "orderRef": order_ref
+                res_collect = ipf_collect.call(body={
+                    "systemID": "AFCRM",
+                    "orderRef": order_ref
                 })
-                response_collect_json = response_collect.json()
-                if "status" in response_collect_json and \
-                        response_collect_json["status"] == "complete":
-                    self.bank_id_text = response_collect_json["status"]
+                if "status" in res_collect and \
+                        res_collect["status"] == "complete":
+                    self.bank_id_text = res_collect["status"]
                     self.bank_id_ok = True
                     break
-                elif "status" in response_collect_json and \
-                        response_collect_json["status"] == "failed":
-                    self.bank_id_text = response_collect_json["infoCode"]
+                elif "status" in res_collect and \
+                        res_collect["status"] == "failed":
+                    self.bank_id_text = res_collect["infoCode"]
                     self.bank_id_ok = False
                     break
                 time.sleep(3)
@@ -379,6 +381,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
 
         partner = self.env["res.partner"].search_pnr(
             self.social_sec_nr_search)
+
         if not partner:
             raise ValidationError(
                 _("Social security number not found in system"))
@@ -392,8 +395,9 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
         if self.bank_id_ok:
             action = (
                 self.env["ir.actions.act_window"]
-                .browse(self.env.ref("hr_360_view.search_jobseeker_wizard").id)
-                .read()[0]
+                    .browse(self.env.ref(
+                    "hr_360_view.search_jobseeker_wizard").id)
+                    .read()[0]
             )
             action["res_id"] = self.id
             action["view_mode"] = "form"
