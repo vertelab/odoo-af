@@ -27,6 +27,7 @@ from zeep.client import CachingClient
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 from odoo.http import request
+import requests
 
 _logger = logging.getLogger(__name__)
 TIMEOUT = 60 * 3
@@ -246,6 +247,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
 
         return action
 
+
     @api.multi
     def get_domain(self):
         domain = []
@@ -295,27 +297,27 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     def do_bankid(self):
         """Send BankID request and wait for user verification."""
         self.bank_id_ok = False
-        bankid = CachingClient(
-            self.env["ir.config_parameter"]
-            .sudo()
-            .get_param(
-                "hr_360_view.bankid_wsdl",
-                "http://bhipws.arbetsformedlingen.se/Integrationspunkt/ws/mobiltbankidinterntjanst?wsdl",
-            )
-        )  # create a Client instance
         if not self.social_sec_nr_search:
             raise ValidationError(_("Social security number missing"))
-        res = bankid.service.startaIdentifiering(
-            self.social_sec_nr_search.replace("-", ""), "crm"
+        ipf_auth = self.env.ref(
+            'af_ipf.bankid_endpoint_elegservice_auth').sudo()
+        ipf_collect = self.env.ref(
+            'af_ipf.bankid_endpoint_elegservice_collect').sudo()
+        res = ipf_auth.call(
+            body=
+            {
+                "systemID": "AFCRM",
+                "authSystem": "bankid",
+                "personalNumber": self.social_sec_nr_search.replace("-", ""),
+            }
         )
-        _logger.debug("res: %s" % res)
         order_ref = False
         try:
             order_ref = res["orderRef"]
-            if not orderRef:
+            if not order_ref:
                 self.bank_id_ok = False
                 try:
-                    self.bank_id_text = res["felStatusKod"]
+                    self.bank_id_text = res["infoCode"]
                 except KeyError:
                     self.bank_id_text = _("Error in communication with BankID")
         except KeyError:
@@ -325,13 +327,18 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             deadline = time.monotonic() + TIMEOUT
             time.sleep(9)  # Give user time to react before polling.
             while deadline > time.monotonic():
-                res = bankid.service.verifieraIdentifiering(order_ref, "crm")
-                if "statusText" in res and res["statusText"] == "OK":
-                    self.bank_id_text = res["statusText"]
+                res_collect = ipf_collect.call(body={
+                    "systemID": "AFCRM",
+                    "orderRef": order_ref
+                })
+                if "status" in res_collect and \
+                        res_collect["status"] == "complete":
+                    self.bank_id_text = res_collect["status"]
                     self.bank_id_ok = True
                     break
-                elif "felStatusKod" in res and self.bank_id_text["felStatusKod"]:
-                    self.bank_id_text = res["felStatusKod"]
+                elif "status" in res_collect and \
+                        res_collect["status"] == "failed":
+                    self.bank_id_text = res_collect["infoCode"]
                     self.bank_id_ok = False
                     break
                 time.sleep(3)
@@ -339,9 +346,12 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                 self.bank_id_text = _("User timeout")
                 self.bank_id_ok = False
 
-        partner = self.env["res.partner"].search_pnr(self.social_sec_nr_search)
+        partner = self.env["res.partner"].search_pnr(
+            self.social_sec_nr_search)
+
         if not partner:
-            raise ValidationError(_("Social security number not found in system"))
+            raise ValidationError(
+                _("Social security number not found in system"))
         # create bankid token to let user know status of bankid process
         bankid_vals = {
             "name": self.bank_id_text,
@@ -349,12 +359,13 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             "partner_id": partner.id,
         }
         request.env["res.partner.bankid"].create(bankid_vals)
-
-        action = (
-            self.env["ir.actions.act_window"]
-            .browse(self.env.ref("hr_360_view.search_jobseeker_wizard").id)
-            .read()[0]
-        )
-        action["res_id"] = self.id
-        action["view_mode"] = "form"
-        return action
+        if self.bank_id_ok:
+            action = (
+                self.env["ir.actions.act_window"]
+                    .browse(self.env.ref(
+                    "hr_360_view.search_jobseeker_wizard").id)
+                    .read()[0]
+            )
+            action["res_id"] = self.id
+            action["view_mode"] = "form"
+            return action
