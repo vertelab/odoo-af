@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+	<data noupdate="0">
+		<record id="ipf_ais_bos" model="af.ipf">
+			<field name="name">IPF AIS BOS</field>
+			<field name="environment">T2</field>
+			<field name="systemid">AFCRM</field>
+			<field name="url">https://ipf-acc.arbetsformedlingen.se</field>
+			<field name="port">443</field>
+			<field name="enduserid">True</field>
+		</record>
+		<record id="ipf_endpoint_bos" model="af.ipf.endpoint">
+			<field name="name">ais-bos-regelverk/v2/krom/kromtyp-for-postnummer?client_id={clientid}&amp;client_secret={client_secret}&amp;postnummer={postnummer}</field>
+			<field name="ipf_id" ref="ipf_ais_bos"/>
+		</record>
+	</data>
+</odoo>

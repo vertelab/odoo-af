@@ -8,6 +8,9 @@
         <script src="/web/static/src/js/chrome/abstract_web_client.js" position="after">
             <script type="text/javascript" src="/af_web_gui/static/src/js/af_title.js"></script>
         </script>
+        <script src="/web/static/src/js/widgets/notification.js" position="after">
+            <script type="text/javascript" src="/af_web_gui/static/src/js/notifications.js"></script>
+        </script>
     </template>
 
 </odoo>

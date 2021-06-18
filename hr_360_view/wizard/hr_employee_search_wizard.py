@@ -172,6 +172,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             "name": _("Jobseekers"),
             "domain": [("id", "=", partners._ids), ("is_jobseeker", "=", True)],
             "res_model": "res.partner",
+            "context": {"bos_postcode": True},
             "view_ids": [
                 self.env.ref("partner_view_360.view_jobseeker_kanban").id,
                 self.env.ref("partner_view_360.view_jobseeker_form").id,
@@ -227,6 +228,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
         action = {
             "name": _("Jobseekers"),
             "domain": [("id", "=", partners._ids), ("is_jobseeker", "=", True)],
+            "context": {"bos_postcode": True},
             "res_model": "res.partner",
             "view_ids": [
                 self.env.ref("partner_view_360.view_jobseeker_kanban").id,
