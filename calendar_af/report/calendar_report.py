@@ -19,11 +19,12 @@
 #
 ##############################################################################
 
-from odoo import models, fields, api, _, tools
-from datetime import datetime, timedelta
-from copy import copy
-import pytz
 import logging
+import pytz
+from copy import copy
+from datetime import datetime, timedelta
+
+from odoo import models, fields, api, _, tools
 
 _logger = logging.getLogger(__name__)
 
@@ -34,16 +35,14 @@ BASE_DURATION = 30.0
 # BASE_DAY_START, BASE_DAY_STOP: The hours between which we normally accept appointments
 BASE_DAY_START = (
     pytz.timezone(LOCAL_TZ)
-    .localize(datetime.now().replace(hour=9, minute=0, second=0, microsecond=0))
-    .astimezone(pytz.utc)
+        .localize(datetime.now().replace(hour=9, minute=0, second=0, microsecond=0))
+        .astimezone(pytz.utc)
 )
 BASE_DAY_STOP = (
     pytz.timezone(LOCAL_TZ)
-    .localize(datetime.now().replace(hour=16, minute=0, second=0, microsecond=0))
-    .astimezone(pytz.utc)
+        .localize(datetime.now().replace(hour=16, minute=0, second=0, microsecond=0))
+        .astimezone(pytz.utc)
 )
-
-
 
 
 class CalendarAppointmentReport(models.Model):

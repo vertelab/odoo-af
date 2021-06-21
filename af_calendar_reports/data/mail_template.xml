@@ -9,11 +9,16 @@
                 <div style="margin: 0px; padding: 0px;">
                     <p style="margin: 0px; padding: 0px; font-size: 13px;">
                         Hello,
-                        <br/><br/>
+                        <br/>
+                        <br/>
                         This meeting is booked.
                         % set website_url = object.env['ir.config_parameter'].sudo().get_param('web.base.url')
-                        <br/><br/>
-                        View <a href='${website_url}/web#id=${object.id}&amp;view_type=form&amp;model=calendar.appointment' target="_blank"> meeting </a>
+                        <br/>
+                        <br/>
+                        View
+                        <a href='${website_url}/web#id=${object.id}&amp;view_type=form&amp;model=calendar.appointment'
+                           target="_blank">meeting
+                        </a>
                         <br/>
                     </p>
                 </div>
@@ -34,11 +39,16 @@
                 <div style="margin: 0px; padding: 0px;">
                     <p style="margin: 0px; padding: 0px; font-size: 13px;">
                         Hello,
-                        <br/><br/>
+                        <br/>
+                        <br/>
                         This meeting has been updated.
                         % set website_url = object.env['ir.config_parameter'].sudo().get_param('web.base.url')
-                        <br/><br/>
-                        View <a href='${website_url}/web#id=${object.id}&amp;view_type=form&amp;model=calendar.appointment' target="_blank"> meeting </a>
+                        <br/>
+                        <br/>
+                        View
+                        <a href='${website_url}/web#id=${object.id}&amp;view_type=form&amp;model=calendar.appointment'
+                           target="_blank">meeting
+                        </a>
                         <br/>
                     </p>
                 </div>
@@ -59,11 +69,16 @@
                 <div style="margin: 0px; padding: 0px;">
                     <p style="margin: 0px; padding: 0px; font-size: 13px;">
                         Hello,
-                        <br/><br/>
+                        <br/>
+                        <br/>
                         This meeting has been cancelled.
                         % set website_url = object.env['ir.config_parameter'].sudo().get_param('web.base.url')
-                        <br/><br/>
-                        View <a href='${website_url}/web#id=${object.id}&amp;view_type=form&amp;model=calendar.appointment' target="_blank"> cancelled meeting </a>
+                        <br/>
+                        <br/>
+                        View
+                        <a href='${website_url}/web#id=${object.id}&amp;view_type=form&amp;model=calendar.appointment'
+                           target="_blank">cancelled meeting
+                        </a>
                         <br/>
                     </p>
                 </div>

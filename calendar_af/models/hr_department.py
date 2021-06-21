@@ -19,8 +19,9 @@
 #
 ##############################################################################
 
-from odoo import models, fields, api, _
 import logging
+
+from odoo import models, fields, api, _
 
 _logger = logging.getLogger(__name__)
 
@@ -33,7 +34,7 @@ class hr_operation(models.Model):
         string="Reserve time managers",
         relation="hr_operation_hr_employee_reserve",
     )
-    
+
     app_warn_emp_ids = fields.Many2many(
         comodel_name="hr.employee", string="Appointment warnings"
     )
@@ -63,6 +64,7 @@ class hr_operation(models.Model):
 
 class AppointmentTypeOperation(models.Model):
     _name = "calendar.appointment.type.operation"
+    _description = "Calendar Appointment Type Operation"
 
     type_id = fields.Many2one(
         comodel_name="calendar.appointment.type",

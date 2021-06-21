@@ -19,30 +19,31 @@
 #
 ##############################################################################
 
-from datetime import date
 import json
 import logging
 import time
+from datetime import date
+from odoo.exceptions import Warning
+from odoo.http import request
+from odoo.tools.safe_eval import safe_eval
 from zeep.client import CachingClient
 
-
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
-from odoo.tools.safe_eval import safe_eval
-from odoo.http import request
 
 _logger = logging.getLogger(__name__)
 TIMEOUT = 60 * 3
 
+
 class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     _name = "hr.employee.jobseeker.search.wizard"
+    _description = "HR Employee Jobseeker Search Wizard"
 
     # gdpr_id = fields.Many2one('gdpr.inventory')
     # gdpr_reasons = fields.Many2one(related="gdpr_id.reasons?")
     employee_id = fields.Many2one(comodel_name='hr.employee', default=lambda self: self._default_hr_employee())
     jobseekers_ids = fields.One2many('res.partner', compute='_get_records')
-    
-    #this may be used in the future, but in that case move this code to partner_daily_notes and the partner_af_case module respectively instead
+
+    # this may be used in the future, but in that case move this code to partner_daily_notes and the partner_af_case module respectively instead
     # case_ids = fields.One2many('res.partner.case', compute='_get_records')
     # daily_note_ids = fields.One2many('res.partner.notes', compute='_get_records')
     # Looks like related doesn't work on computed fields :(
@@ -50,23 +51,24 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     # case_ids = fields.One2many(related='employee_id.case_ids')
     # daily_note_ids = fields.One2many(related='employee_id.daily_note_ids')
 
-    social_sec_nr_search = fields.Char(string="Social security number",default=lambda self: '%s' % request.session.pop('ssn',''))
+    social_sec_nr_search = fields.Char(string="Social security number",
+                                       default=lambda self: '%s' % request.session.pop('ssn', ''))
     bank_id_text = fields.Text(string=None)
 
     search_reason = fields.Selection(string="Search reason",
                                      selection=[('record incoming documents', 'Record incoming documents'), (
-                                     "follow-up of job seekers' planning", "Follow-up of job seekers' planning"),
+                                         "follow-up of job seekers' planning", "Follow-up of job seekers' planning"),
                                                 ('directory Assistance', 'Directory Assistance'),
                                                 ('matching', 'Matching'),
                                                 ('decisions for other officer', 'Decisions for other officer'), (
-                                                'administration of recruitment meeting/group activity/project',
-                                                'Administration of recruitment meeting/group activity/project'),
+                                                    'administration of recruitment meeting/group activity/project',
+                                                    'Administration of recruitment meeting/group activity/project'),
                                                 ('investigation', 'Investigation'), ('callback', 'Callback'),
                                                 ('other reason', 'Other reason')])  #
     identification = fields.Selection(string="Identification",
                                       selection=[('id document', 'ID document'), ('Digital ID', 'Digital ID'), (
-                                      'id document-card/residence permit card',
-                                      'ID document-card/Residence permit card'),
+                                          'id document-card/residence permit card',
+                                          'ID document-card/Residence permit card'),
                                                  ('known (previously identified)', 'Known (previously identified)'),
                                                  ('identified by certifier', 'Identified by certifier')])  #
 
@@ -243,9 +245,9 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
         """Send BankID request and wait for user verification."""
         bankid = CachingClient(
             self.env['ir.config_parameter'].sudo().get_param('hr_360_view.bankid_wsdl',
-            'http://bhipws.arbetsformedlingen.se/Integrationspunkt/ws/mobiltbankidinterntjanst?wsdl')) # create a Client instance
+                                                             'http://bhipws.arbetsformedlingen.se/Integrationspunkt/ws/mobiltbankidinterntjanst?wsdl'))  # create a Client instance
         res = bankid.service.startaIdentifiering(
-            self.social_sec_nr_search.replace('-',''),
+            self.social_sec_nr_search.replace('-', ''),
             'crm')
         _logger.warn("res: %s" % res)
         try:
@@ -260,9 +262,9 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
 
         if orderRef:
             deadline = time.monotonic() + TIMEOUT
-            time.sleep(9) # Give user time to react before polling.
+            time.sleep(9)  # Give user time to react before polling.
             while deadline > time.monotonic():
-                res = bankid.service.verifieraIdentifiering(orderRef,'crm')
+                res = bankid.service.verifieraIdentifiering(orderRef, 'crm')
                 _logger.warn("res: %s" % res)
                 if 'statusText' in res and res['statusText'] == 'OK':
                     self.bank_id_text = res['statusText']

@@ -19,40 +19,44 @@
 #
 ##############################################################################
 
-from odoo import models, fields, api, _
 import logging
+
+from odoo import models, fields, api, _
+
 _logger = logging.getLogger(__name__)
 
 import csv
 import os
 import tempfile
 
+
 class ResUsers(models.Model):
     _inherit = "res.users"
+
     @api.model
     def create_users(self):
         a = ReadCSV("/usr/share/odoo-af/test_data_af/data/arbetsg/res.users.csv")
         self.create_user(a.parse())
-    
+
     @api.model
     def create_user(self, rows):
         for row in rows:
             partner_id = self.env.ref("test_data_af.%s" % row['partner_id']).id
-            row.update({'partner_id' :  partner_id}) 
-            _logger.info("%s" % row['partner_id'])       
+            row.update({'partner_id': partner_id})
+            _logger.info("%s" % row['partner_id'])
             _logger.info("creating row %s" % row)
             self.env['res.users'].create(row)
 
+    # create a record using data from csv
 
-    #create a record using data from csv
 
 class ReadCSV(object):
-    def __init__(self, path):     
+    def __init__(self, path):
         try:
             rows = []
             f = open(path)
             f.seek(0)
-            reader = csv.DictReader(f,delimiter=",")
+            reader = csv.DictReader(f, delimiter=",")
             for row in reader:
                 rows.append(row)
             f.close()
@@ -62,10 +66,12 @@ class ReadCSV(object):
             raise ValueError(e)
         if not list(self.data[0].keys()) == ['external_id', 'login', 'password', 'partner_id']:
             _logger.error(u'Row 0 was looking for "id", "login", "password", "partner_id"')
-            raise ValueError("Wrong format, expected format: ['external_id', 'login', 'password', 'partner_id'], seems like we're getting: %s" % list(self.data[0].keys()))
+            raise ValueError(
+                "Wrong format, expected format: ['external_id', 'login', 'password', 'partner_id'], seems like we're getting: %s" % list(
+                    self.data[0].keys()))
 
     def parse(self):
-        a = CSVIterator(self.data,len(self.data),['external_id', 'login', 'password', 'partner_id'])
+        a = CSVIterator(self.data, len(self.data), ['external_id', 'login', 'password', 'partner_id'])
         rows = []
         while a.hasNext():
             _logger.info("appending row %s" % a.getRow())
@@ -87,9 +93,8 @@ class CSVIterator(object):
             self.row += 1
 
     def hasNext(self):
-        return self.row <= self.nrows -1
+        return self.row <= self.nrows - 1
 
     def getRow(self):
-        r = list(self.data[(self.row)].values())      
+        r = list(self.data[(self.row)].values())
         return {self.header[n]: r[n] for n in range(len(self.header))}
-    

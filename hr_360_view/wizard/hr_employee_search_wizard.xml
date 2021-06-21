@@ -15,9 +15,11 @@
                                 <field name="social_sec_nr_search"/>
                             </group>
                             <group>
-                                <button name="do_bankid"  string="BankID" type="object" attrs="{'invisible': [('identification','!=','Digital ID')]}"/>
+                                <button name="do_bankid" string="BankID" type="object"
+                                        attrs="{'invisible': [('identification','!=','Digital ID')]}"/>
                                 <br/>
-                                <field name="bank_id_text" string="" nolabel="1" readonly="1" attrs="{'invisible': [('identification','!=','Digital ID')]}" />
+                                <field name="bank_id_text" string="" nolabel="1" readonly="1"
+                                       attrs="{'invisible': [('identification','!=','Digital ID')]}"/>
                             </group>
                         </group>
                         <group></group>

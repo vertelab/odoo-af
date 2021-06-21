@@ -7,7 +7,6 @@
     'category': 'Human Resources',
     'sequence': 75,
     'summary': 'Adds demodata to the Employee module',
-    'description': "",
     'website': 'https://www.odoo.com/page/employees',
     'images': [
         'images/hr_department.jpeg',

@@ -19,18 +19,20 @@
 #
 ##############################################################################
 
-from odoo import models, fields, api, _
 import logging
+
+from odoo import models, fields, api, _
 
 _logger = logging.getLogger(__name__)
 
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
-    
-    #office_id for jobseekers and employers, not for administrative officers
+
+    # office_id for jobseekers and employers, not for administrative officers
     office_id = fields.Many2one(string="office", comodel_name="hr.department")
-    
+
+
 class ResUsers(models.Model):
     _inherit = "res.users"
 
@@ -56,20 +58,18 @@ class ResUsers(models.Model):
         for office in self.office_ids:
             office_codes.append(office.office_code)
         if office_codes:
-            self.office_codes = ','.join([str(code) for code in office_codes]) 
+            self.office_codes = ','.join([str(code) for code in office_codes])
         else:
             self.office_codes = ""
-
 
 
 class HrEmployee(models.Model):
     _inherit = "hr.employee"
 
-    operation_id = fields.Many2one(comodel_name="hr.operation", string="Operation") #workplace
+    operation_id = fields.Many2one(comodel_name="hr.operation", string="Operation")  # workplace
 
     office_ids = fields.Many2many(
         'hr.department', string='Offices')
-
 
     operation_ids = fields.Many2many(comodel_name="hr.operation", compute="_compute_operation_ids")
 

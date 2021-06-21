@@ -79,6 +79,7 @@ class ResPartner(models.Model):
 
 class ResPartnerCaseType(models.Model):
     _name = "res.partner.case.type"
+    _description = "RES Partner Case Type"
 
     case_id = fields.One2many(comodel_name="res.partner.case", inverse_name="case_type")
 

@@ -23,18 +23,10 @@
     'name': 'Partner BankID',
     'version': '12.0.1.2',
     'category': '',
-    'description': """
-A method for initiate BankID for a partner
-==========================================
-
-
-""",
     'author': 'Vertel AB',
     'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
-    'depends': [
-        'base',
-    ],
+    'depends': [],
     'data': [
         # ~ 'views/res_partner_view.xml',
     ],

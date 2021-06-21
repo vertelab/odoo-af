@@ -5,10 +5,7 @@
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
-	"description": """
-	 v12.0.0.0 AFC-1225 Hide settings for the logged in user
-    """,
-    "depends": ["base"],
+    "depends": [],
     "external_dependencies": [],
     "data": [
         'views/assets.xml'

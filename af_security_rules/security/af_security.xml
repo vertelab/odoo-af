@@ -78,9 +78,11 @@
         <record id="af_rule_appointment_same_office" model="ir.rule">
             <field name="name">calendar.appointment - Same Office</field>
             <field ref="calendar_af.model_calendar_appointment" name="model_id"/>
-            <field name="domain_force">['|', 
-                ('user_id.employee_ids.office_ids.operation_ids.location_id', 'in', user.mapped('employee_ids.office_ids.operation_ids.location_id.id')),
-                ('user_id', '=', user.id)]</field>
+            <field name="domain_force">['|',
+                ('user_id.employee_ids.office_ids.operation_ids.location_id', 'in',
+                user.mapped('employee_ids.office_ids.operation_ids.location_id.id')),
+                ('user_id', '=', user.id)]
+            </field>
             <field name="groups" eval="[(4, ref('base.group_user'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="False"/>
@@ -203,7 +205,9 @@
         <record id="af_rule_appointment_meeting_planner" model="ir.rule">
             <field name="name">calendar.appointment - Meeting Planner</field>
             <field ref="calendar_af.model_calendar_appointment" name="model_id"/>
-            <field name="domain_force">[('user_id.employee_ids.office_ids.operation_ids.location_id', 'in', user.mapped('employee_ids.office_ids.operation_ids.location_id.id'))]</field>
+            <field name="domain_force">[('user_id.employee_ids.office_ids.operation_ids.location_id', 'in',
+                user.mapped('employee_ids.office_ids.operation_ids.location_id.id'))]
+            </field>
             <field name="groups" eval="[(4, ref('af_security.af_meeting_planner'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="False"/>

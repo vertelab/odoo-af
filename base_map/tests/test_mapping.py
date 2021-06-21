@@ -1,5 +1,6 @@
-from odoo.tests.common import TransactionCase
 from odoo.tests import tagged
+from odoo.tests.common import TransactionCase
+
 
 @tagged('base_map')
 class TestMapping(TransactionCase):
@@ -7,7 +8,7 @@ class TestMapping(TransactionCase):
     def setUp(self):
         super(TestMapping, self).setUp()
 
-    def test_1_create_partner ():
+    def test_1_create_partner():
         # Create a res.partner
         self.partner = self.env['res.partner'].create({
             'company_id': self.env.ref("base.main_company").id,

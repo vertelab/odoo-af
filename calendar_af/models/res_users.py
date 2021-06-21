@@ -21,9 +21,9 @@
 
 import logging
 from datetime import timedelta
+from odoo.exceptions import Warning
 
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
 
 _logger = logging.getLogger(__name__)
 
@@ -101,7 +101,8 @@ class ResUsers(models.Model):
         # has one employee connected for now.
         # TODO: This should be reviewed in the future.
         if self.employee_ids and self.employee_ids[0].resource_calendar_id:
-            count_work_hours = self.employee_ids[0].resource_calendar_id.get_work_hours_count(check_datetime, check_datetime + timedelta(minutes=30))
+            count_work_hours = self.employee_ids[0].resource_calendar_id.get_work_hours_count(check_datetime,
+                                                                    check_datetime + timedelta(minutes=30))
             if count_work_hours == 0.5:
                 return True
             else:

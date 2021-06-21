@@ -305,6 +305,7 @@ class ResPartner(models.Model):
 
 class ResPartnerSKAT(models.Model):
     _name = 'res.partner.skat'
+    _description = "RES Partner SKAT"
 
     partner_id = fields.One2many(comodel_name='res.partner', inverse_name='jobseeker_category')
     code = fields.Char(string="code")

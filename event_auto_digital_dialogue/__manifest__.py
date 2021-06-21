@@ -21,20 +21,15 @@
 
 {
     'name': 'Event Automatic Digital Dialogue',
-    'version': '12.0.0.1',       
+    'version': '12.0.0.1',
     'category': '',
-    'description': """
-Module that changes event view to an automatic digital dialogue view
-================================================================================================
-This module alters, adds and removes fields in the event view
-""",
     'author': 'Vertel AB',
     'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
     'depends': ['website_event', 'event'],
     'data': [
-			'views/event_event.xml'
-        ],
+        'views/event_event.xml'
+    ],
     'application': False,
     'installable': True,
 }

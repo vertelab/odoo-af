@@ -29,6 +29,7 @@ _logger = logging.getLogger(__name__)
 
 LOCAL_TZ = 'Europe/Stockholm'
 
+
 class CalendarAppointmentSuggestion(models.Model):
     _inherit = "calendar.appointment.suggestion"
 

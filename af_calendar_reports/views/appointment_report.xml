@@ -4,14 +4,18 @@
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
                 <t t-call="web.external_layout">
-                    <t t-set="o" t-value="o.with_context(lang=lang)" />
-                    <div class="row col-12" style="display: flex; justify-content: flex-start; flex-direction: column; ">
-                        <img src='/web/binary/company_logo' class="float-right" style="width: 200px; height: 150px" alt="Logo"/>
-                        <span t-field="o.operation_id" />
+                    <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                    <div class="row col-12"
+                         style="display: flex; justify-content: flex-start; flex-direction: column; ">
+                        <img src='/web/binary/company_logo' class="float-right" style="width: 200px; height: 150px"
+                             alt="Logo"/>
+                        <span t-field="o.operation_id"/>
                     </div>
 
                     <div class="row col-12" style="display: flex; justify-content: flex-end;">
-                        <span t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}' style="text-align:right" />
+                        <span t-field="o.partner_id"
+                              t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'
+                              style="text-align:right"/>
                     </div>
 
                     <div class="page" style="margin-top: 20px;">
@@ -20,18 +24,26 @@
                                 <h1>Dags for planeringssamtal</h1>
                             </div>
                             <div class="col-12">
-                                <p>Hey! </p>
+                                <p>Hey!</p>
 
                                 <p>
-                                    <strong>Date:</strong> <span t-esc="o.start.strftime('%A %d %B %Y')"/> <br/>
-                                    <strong>Place:</strong> <span t-esc="o.operation_id.name"/> <br/>
-                                    <strong>Time:</strong> <span t-esc="o.start.strftime('%I')"/> <br/>
+                                    <strong>Date:</strong>
+                                    <span t-esc="o.start.strftime('%A %d %B %Y')"/>
+                                    <br/>
+                                    <strong>Place:</strong>
+                                    <span t-esc="o.operation_id.name"/>
+                                    <br/>
+                                    <strong>Time:</strong>
+                                    <span t-esc="o.start.strftime('%I')"/>
+                                    <br/>
                                 </p>
                             </div>
                             <div class="col-12">
                                 <p>
-                                    If you have any questions, please call us at 0771-416 416. <br/>
-                                    Greetings <br/>
+                                    If you have any questions, please call us at 0771-416 416.
+                                    <br/>
+                                    Greetings
+                                    <br/>
                                     Service Desk
                                 </p>
                             </div>

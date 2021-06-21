@@ -19,17 +19,18 @@
 #
 ##############################################################################
 
-from odoo import models, fields, api, _
+import logging
+import traceback
+from datetime import timedelta
 from odoo.tools import config
 from pytz import timezone
-from datetime import timedelta
+from uuid import uuid4
+from zeep import xsd
 from zeep.client import CachingClient
 from zeep.helpers import serialize_object
-from zeep import xsd
-import traceback
-from uuid import uuid4
 
-import logging
+from odoo import models, fields, api, _
+
 _logger = logging.getLogger(__name__)
 
 LOCAL_TZ = timezone('Europe/Stockholm')
@@ -77,6 +78,7 @@ class BHTJModel(models.AbstractModel):
 
 class ResPartnerNotes(models.Model):
     _name = 'res.partner.notes'
+    _description = "RES Partner Notes"
     _inherit = ['res.partner.notes', 'bhtj.model']
 
 
@@ -124,7 +126,7 @@ class ResPartner(models.Model):
         """
         _logger.debug(self.env.user)
         _logger.debug(self.env.context)
-        #raise Warning('foobar')
+        # raise Warning('foobar')
         # BHTJ data injected in _apply_ir_rules
         if 'bhtj_keys' in self._context:
             keys = self._context.get(
@@ -286,6 +288,7 @@ class ResPartner(models.Model):
         self.env.ref('base.res_partner_rule_private_employee').active = False
         self.env.ref('base.res_partner_rule_private_group').active = False
 
+
 class User(models.Model):
     _inherit = 'res.users'
 
@@ -300,6 +303,7 @@ class User(models.Model):
 
         def normalize_pnr(pnr):
             return '%s-%s' % (pnr[:8], pnr[8:12])
+
         try:
             # Fetch keys from BHTJ
             response = bhtj.service.hamtaNyckelknippa(self.login)

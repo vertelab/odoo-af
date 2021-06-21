@@ -18,9 +18,12 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from odoo import models, fields, api, _
 import logging
+
+from odoo import models, fields, api, _
+
 _logger = logging.getLogger(__name__)
+
 
 class Partner(models.Model):
     _inherit = 'res.partner'
@@ -28,17 +31,17 @@ class Partner(models.Model):
     @api.one
     def _has_drivers_license(self):
         self.har_drivers_license = len(self.drivers_license_ids) > 0
-    has_drivers_license = fields.Boolean(string="Has drivers license",compute=_has_drivers_license)
-    drivers_license_ids = fields.One2many(comodel_name='res.drivers_license', inverse_name='partner_id',string='Drivers license class')
+
+    has_drivers_license = fields.Boolean(string="Has drivers license", compute=_has_drivers_license)
+    drivers_license_ids = fields.One2many(comodel_name='res.drivers_license', inverse_name='partner_id',
+                                          string='Drivers license class')
     has_car = fields.Boolean(string="Has access to car")
 
 
-
-class ResDriversLicense(models.Model): 
+class ResDriversLicense(models.Model):
     _name = 'res.drivers_license'
+    _description = "RES Drivers License"
 
     partner_id = fields.Many2one(comodel_name="res.partner")
-    name = fields.Char(string='Class', required=True) #A,B etc.
+    name = fields.Char(string='Class', required=True)  # A,B etc.
     description = fields.Char(string='Description')
-
-

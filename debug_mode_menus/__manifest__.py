@@ -16,7 +16,6 @@
     ],
     "data": [
         'views/debug_mode_menu.xml',
-
     ],
     "application": True,
     "installable": True,

@@ -23,17 +23,13 @@
     'name': 'Event Automatic Digital Dialogue partners',
     'version': '0.1',
     'category': '',
-    'description': """
-Manages partners and related values
-================================================================================================
-""",
     'author': 'Vertel AB',
     'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
     'depends': ['activity_field', 'event', 'base'],
     'data': [
-			'views/event_event.xml'
-        ],
+        'views/event_event.xml'
+    ],
     'application': False,
     'installable': True,
 }

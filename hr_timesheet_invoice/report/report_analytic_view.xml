@@ -114,7 +114,7 @@
                     <field name="month"/>
                     <field name="product_id"/>
                     <field name="account_id" groups="analytic.group_analytic_accounting"/>
-               </search>
+                </search>
             </field>
         </record>
 
@@ -128,7 +128,9 @@
 
         <record id="act_acc_analytic_acc_2_report_acc_analytic_line_to_invoice" model="ir.actions.act_window">
             <field name="domain">[]</field>
-            <field name="context">{'search_default_account_id': [active_id], 'default_account_id': active_id,'search_default_to_invoice': 1}</field>
+            <field name="context">{'search_default_account_id': [active_id], 'default_account_id':
+                active_id,'search_default_to_invoice': 1}
+            </field>
             <field name="name">To Invoice</field>
             <field name="res_model">account.analytic.line</field>
             <field name="src_model">account.analytic.account</field>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-	
-	<template id="webclient_bootstrap" name="Web Client" inherit_id="web.webclient_bootstrap">
+
+    <template id="webclient_bootstrap" name="Web Client" inherit_id="web.webclient_bootstrap">
         <xpath expr="//t[@t-set='body_classname']" position="after">
             <t t-set="body_classname" t-value="'o_web_client af_sidebar_type_' + 'large'"/>
         </xpath>
@@ -9,5 +9,5 @@
             <attribute name="t-attf-class">o_main af_chatter_position_#{'normal'}</attribute>
         </xpath>
     </template>
-	
+
 </odoo>

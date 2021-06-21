@@ -8,7 +8,7 @@
     "website": "https://vertel.se/",
     'category': 'Tools',
     'version': '12.0.1.0',
-    'depends': ['calendar','website','contacts'],
+    'depends': ['calendar', 'website', 'contacts'],
     'data': [
         'security/security_view.xml',
     ],

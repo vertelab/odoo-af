@@ -20,11 +20,13 @@
 ##############################################################################
 
 import datetime
-from odoo import api, fields, models, _
+import logging
 from odoo.exceptions import Warning
 
-import logging
+from odoo import api, fields, models, _
+
 _logger = logging.getLogger(__name__)
+
 
 #
 # Create an final invoice based on selected timesheet lines
@@ -41,7 +43,8 @@ class final_invoice_create(models.TransientModel):
     time = fields.Boolean(string='Time Spent', help='Display time in the history of works')
     name = fields.Boolean(string='Log of Activity', help='Display detail of work in the invoice line.')
     price = fields.Boolean(string='Cost', help='Display cost of the item you reinvoice')
-    product = fields.Many2one(comodel_name='product.product', string='Product', help='The product that will be used to invoice the remaining amount')
+    product = fields.Many2one(comodel_name='product.product', string='Product',
+                              help='The product that will be used to invoice the remaining amount')
 
     @api.multi
     def do_create(self):
@@ -49,13 +52,13 @@ class final_invoice_create(models.TransientModel):
         # hack for fixing small issue (context should not propagate implicitly between actions)
         if 'default_type' in self._context:
             del self._context['default_type']
-        self.env['account.analytic.line'].search([('invoice_id','=',False),('to_invoice','<>', False), ('id', 'in', self._context['active_ids'])]).invoice_cost_create(data)
+        self.env['account.analytic.line'].search([('invoice_id', '=', False), ('to_invoice', '<>', False),
+                                                  ('id', 'in', self._context['active_ids'])]).invoice_cost_create(data)
         mod_ids = self.env['ir.model.data'].search([('name', '=', 'action_invoice_tree1')])
         res_id = mod_ids.read(['res_id'])[0]['res_id']
         act_win = self.env['ir.actions.act_window'].read([res_id]).read()[0]
-        act_win['domain'] = [('id','in',[i.id for i in invs]),('type','=','out_invoice')]
+        act_win['domain'] = [('id', 'in', [i.id for i in invs]), ('type', '=', 'out_invoice')]
         act_win['name'] = _('Invoices')
         return act_win
-
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

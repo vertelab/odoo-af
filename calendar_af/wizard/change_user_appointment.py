@@ -19,12 +19,10 @@
 #
 ##############################################################################
 
+import logging
 from datetime import timedelta
 
-import logging
-
 from odoo import api, fields, models, _
-
 
 _logger = logging.getLogger(__name__)
 
@@ -43,8 +41,8 @@ class ChangeUserAppointment(models.TransientModel):
         if self._context.get("active_model") == 'calendar.appointment':
             return (
                 self.env["calendar.appointment"]
-                .browse(self._context.get("active_id"))
-                .start
+                    .browse(self._context.get("active_id"))
+                    .start
             )
 
     appointment_id = fields.Many2one(
@@ -69,8 +67,8 @@ class ChangeUserAppointment(models.TransientModel):
                 "id",
                 "in",
                 self.env["calendar.appointment"]
-                .browse(self._context.get("active_id"))
-                .office_id.employee_ids._ids,
+                    .browse(self._context.get("active_id"))
+                    .office_id.employee_ids._ids,
             )
         ] if self._context.get("active_model") == 'calendar.appointment' else [],
     )

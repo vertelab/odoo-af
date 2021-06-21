@@ -23,10 +23,6 @@
     'name': 'Attendance Kiosk View',
     'version': '12.0.1',
     'category': 'hr',
-    'description': """
-Modified view for attendance kiosk mode to match with Vertels language and needs.
-
-""",
     'images': ['static/description/img.png'],
     'author': 'Vertel AB',
     'license': 'AGPL-3',

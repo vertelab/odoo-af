@@ -23,16 +23,9 @@
     'name': 'Timesheet chatter',
     'version': '1.0',
     'category': 'Human Resorces',
-    'description': """
-Add chatter to timesheets
-=========================
-
-Module to add chatter to timesheets analytic line.
-
-""",
     'author': 'Vertel AB',
     'website': 'https://vertel.se',
-    'depends': ['hr_timesheet',],
+    'depends': ['hr_timesheet'],
     'data': ['views/hr_timesheet_view.xml'],
     'installable': True,
     'auto_install': False,

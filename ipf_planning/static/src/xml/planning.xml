@@ -7,10 +7,12 @@
                 <tbody>
                     <tr>
                         <td class="o_td_label">
-                            <label class="o_form_label o_readonly_modifier" data-original-title="" title="">Handlingsplan</label>
+                            <label class="o_form_label o_readonly_modifier" data-original-title="" title="">
+                                Handlingsplan
+                            </label>
                         </td>
                         <td style="width: 100%;">
-                            <span class="o_field_widget o_readonly_modifier" t-esc="widget.get_source()" />
+                            <span class="o_field_widget o_readonly_modifier" t-esc="widget.get_source()"/>
                         </td>
                     </tr>
                 </tbody>

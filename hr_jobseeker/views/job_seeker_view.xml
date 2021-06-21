@@ -9,7 +9,8 @@
                         <field name="stage_id" widget="statusbar" options="{'clickable': '1', 'fold_field': 'fold'}"/>
                     </header>
                     <sheet>
-                        <field name="image" widget='image' class="oe_avatar" options='{"preview_image":"image_medium"}'/>
+                        <field name="image" widget='image' class="oe_avatar"
+                               options='{"preview_image":"image_medium"}'/>
                         <div class="oe_title">
                             <label for="name" class="oe_edit_only"/>
                             <h1>
@@ -69,27 +70,31 @@
                     <field name="message_needaction_counter"/>
                     <templates>
                         <t t-name="kanban-box">
-                        <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_hr_kanban_record">
-                            <!-- Medium employee's picture -->
-                            <div class="o_kanban_image_fill_left d-none d-md-block" t-attf-style="background-image: url(#{kanban_image('hr.jobseeker', 'image_medium', record.id.raw_value)})" role="img"/>
-                            <!-- Employee's picture optimized for mobile -->
-                            <div class="o_kanban_image d-md-none rounded-circle" t-attf-style="background-image: url(#{kanban_image('hr.jobseeker', 'image_small', record.id.raw_value)})" role="img"/>
+                            <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_hr_kanban_record">
+                                <!-- Medium employee's picture -->
+                                <div class="o_kanban_image_fill_left d-none d-md-block"
+                                     t-attf-style="background-image: url(#{kanban_image('hr.jobseeker', 'image_medium', record.id.raw_value)})"
+                                     role="img"/>
+                                <!-- Employee's picture optimized for mobile -->
+                                <div class="o_kanban_image d-md-none rounded-circle"
+                                     t-attf-style="background-image: url(#{kanban_image('hr.jobseeker', 'image_small', record.id.raw_value)})"
+                                     role="img"/>
 
-                            <div class="oe_kanban_details">
-                                <div class="o_kanban_record_top">
-                                    <div class="o_kanban_record_headings">
-                                        <strong class="o_kanban_record_title">
-                                            <field name="name"/>
-                                        </strong>
-<!--                                        <span t-if="record.job_id.raw_value" class="o_kanban_record_subtitle"><field name="job_id"/></span>-->
+                                <div class="oe_kanban_details">
+                                    <div class="o_kanban_record_top">
+                                        <div class="o_kanban_record_headings">
+                                            <strong class="o_kanban_record_title">
+                                                <field name="name"/>
+                                            </strong>
+                                            <!--                                        <span t-if="record.job_id.raw_value" class="o_kanban_record_subtitle"><field name="job_id"/></span>-->
+                                        </div>
                                     </div>
+                                    <!--                                <field name="category_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>-->
+                                    <!--                                <ul>-->
+                                    <!--                                    <li t-if="record.work_location.raw_value"><field name="work_location"/></li>-->
+                                    <!--                                </ul>-->
                                 </div>
-<!--                                <field name="category_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>-->
-<!--                                <ul>-->
-<!--                                    <li t-if="record.work_location.raw_value"><field name="work_location"/></li>-->
-<!--                                </ul>-->
                             </div>
-                        </div>
                         </t>
                     </templates>
                 </kanban>
@@ -100,7 +105,8 @@
             <field name="name">HR Job Seeker</field>
             <field name="model">hr.jobseeker</field>
             <field name="arch" type="xml">
-                <calendar string="Leads Generation" date_start="date_begin" date_stop="date_end" quick_add="False" color="employee_id">
+                <calendar string="Leads Generation" date_start="date_begin" date_stop="date_end" quick_add="False"
+                          color="employee_id">
                     <field name="name"/>
                     <field name="employee_id"/>
                 </calendar>
@@ -127,12 +133,12 @@
         </record>
 
         <menuitem
-            id="menu_hr_job_seeker"
-            parent="hr_jobseeker.parent_menu_hr_job_seeker"
-            action="hr_jobseeker.hr_jobseeker_action"
-            name="Job Seeker"
-            groups="base.group_user"
-            sequence="5"/>
+                id="menu_hr_job_seeker"
+                parent="hr_jobseeker.parent_menu_hr_job_seeker"
+                action="hr_jobseeker.hr_jobseeker_action"
+                name="Job Seeker"
+                groups="base.group_user"
+                sequence="5"/>
 
     </data>
 </odoo>

@@ -10,9 +10,10 @@ class HR(models.Model):
 
     related_partner_id = fields.Many2one('res.partner', string="Related Partner", related='user_id.partner_id')
     jobseekers_ids = fields.One2many('res.partner', compute='_get_records')
-    #this may be used in the future, but in that case move this code to partner_daily_notes and the partner_af_case module respectively instead
+
+    # this may be used in the future, but in that case move this code to partner_daily_notes and the partner_af_case module respectively instead
     # case_ids = fields.One2many('res.partner.case', compute='_get_records')
-    #daily_note_ids = fields.One2many('res.partner.notes', compute='_get_records')
+    # daily_note_ids = fields.One2many('res.partner.notes', compute='_get_records')
 
     @api.depends('user_id')
     def _get_records(self):
@@ -20,7 +21,7 @@ class HR(models.Model):
             if rec.user_id:
                 rec.jobseekers_ids = rec.env['res.partner'].search([('user_id', '=', rec.user_id.id)])
                 # rec.case_ids = rec.env['res.partner.case'].search([('administrative_officer', '=', rec.user_id.id)])
-                #rec.daily_note_ids = rec.env['res.partner.notes'].search(
+                # rec.daily_note_ids = rec.env['res.partner.notes'].search(
                 #    [('administrative_officer', '=', rec.user_id.id)])
 
     @api.multi

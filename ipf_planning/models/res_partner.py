@@ -19,20 +19,21 @@
 #
 ##############################################################################
 
-from odoo import models, fields, api, _
-import requests
-from requests.auth import HTTPBasicAuth
 import json
-from uuid import uuid4
 import logging
+import requests
 from odoo.exceptions import Warning
+from requests.auth import HTTPBasicAuth
+from uuid import uuid4
+
+from odoo import models, fields, api, _
 
 _logger = logging.getLogger(__name__)
 
+
 class Partner(models.Model):
     _inherit = 'res.partner'
-    
-   
+
     @api.multi
     def ipf_load_planning(self):
         self.ensure_one()
@@ -55,5 +56,3 @@ class Partner(models.Model):
                 return pnr
         except:
             _logger.warn("Invalid personal identification number: %s" % self.company_registry)
-
-

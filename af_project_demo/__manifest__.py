@@ -1,4 +1,3 @@
-  
 # -*- coding: utf-8 -*-
 
 {
@@ -14,7 +13,7 @@
     ],
     'description': "Changed order of the name.",
     'data': [
-        #'data/project_data_se.xml',
+        # 'data/project_data_se.xml',
     ],
     # 'demo': ['data/project_demo_se.xml'],
     'test': [

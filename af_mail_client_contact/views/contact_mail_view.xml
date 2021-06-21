@@ -23,7 +23,8 @@
             <field name="search_view_id" ref="view_contact_messages_search"/>
         </record>
 
-        <menuitem name="Messages" id="contact_menu_mail_messages" parent="contacts.menu_contacts" action="action_view_contact_mail_message" sequence="200"/>
+        <menuitem name="Messages" id="contact_menu_mail_messages" parent="contacts.menu_contacts"
+                  action="action_view_contact_mail_message" sequence="200"/>
 
     </data>
 </odoo>

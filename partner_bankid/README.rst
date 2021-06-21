@@ -1,0 +1,17 @@
+==============
+Partner BankID
+==============
+
+A method for initiate BankID for a partner.
+
+The module is maintained here: https://github.com/vertelab/odoo-af/tree/Dev-12.0-Fenix-Sprint-02/partner_bankid
+
+Different version submitted
+===========================
+
+
+
+Maintainers
+~~~~~~~~~~~
+
+This module is maintained by Vertal.

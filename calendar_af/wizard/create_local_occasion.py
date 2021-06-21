@@ -24,9 +24,9 @@ import logging
 import pytz
 from datetime import datetime, timedelta
 from odoo.exceptions import UserError
+from odoo.exceptions import Warning
 
 from odoo import api, fields, models, _
-from odoo.exceptions import Warning
 
 _logger = logging.getLogger(__name__)
 
@@ -71,7 +71,8 @@ class CreateLocalOccasion(models.TransientModel):
         required=True,
     )
     operation_id = fields.Many2one(comodel_name="hr.operation", string="Operation")
-    location_ids = fields.Many2many(comodel_name='hr.location', string="Allowed Locations", default=lambda self: self.default_location_ids())
+    location_ids = fields.Many2many(comodel_name='hr.location', string="Allowed Locations",
+                                    default=lambda self: self.default_location_ids())
     # fields describing how to create occasions:
     create_type = fields.Selection(
         string="Type",
@@ -142,8 +143,8 @@ class CreateLocalOccasion(models.TransientModel):
 
     def _action_create_occasions(self):
         if not (
-            (self.start.minute in [0, 30] and self.stop.second == 0)
-            and (self.stop.minute in [0, 30] and self.stop.second == 0)
+                (self.start.minute in [0, 30] and self.stop.second == 0)
+                and (self.stop.minute in [0, 30] and self.stop.second == 0)
         ):
             raise Warning("Start or stop time is not and exacly an hour or halfhour.")
 
@@ -153,7 +154,7 @@ class CreateLocalOccasion(models.TransientModel):
             # check if date is a holiday
             # TODO: do we do this check in check_resource_calendar_occasion() now?
             if not self.env["calendar.appointment"]._check_resource_calendar_date(
-                self.start
+                    self.start
             ):
                 raise Warning("This day is a holiday.")
 

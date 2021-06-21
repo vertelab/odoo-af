@@ -18,19 +18,21 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from odoo import models, fields, api, _
-from odoo.exceptions import except_orm, Warning, RedirectWarning
-from odoo import http
-from odoo.http import request
-from odoo import SUPERUSER_ID
 import logging
+from odoo.exceptions import except_orm, Warning, RedirectWarning
+from odoo.http import request
+
 import odoo
+from odoo import SUPERUSER_ID
+from odoo import http
+from odoo import models, fields, api, _
 
 _logger = logging.getLogger(__name__)
 
 
 class cache(models.TransientModel):
     _name = 'hr.cache'
+    _description = "HR Cache"
     _transient_max_hours = 120
 
     employee_id = fields.Integer()
@@ -46,7 +48,4 @@ class cache(models.TransientModel):
     #         self.env['hr.cache'].create({
     #             'barcode':employee_id.barcode
     #             'employee_id':employee_id
-    #             }) 
-
-
-    
+    #             })

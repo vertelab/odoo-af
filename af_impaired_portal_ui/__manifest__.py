@@ -5,15 +5,11 @@
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
-	"description": """
-	 v12.0.0.0 AFC-1225 Added Contact Access to Portal
-    """,
-    "depends": ["base", "portal"],
+    "depends": ["portal"],
     "external_dependencies": [],
     "data": [
         'views/portal_templates.xml'
     ],
-
     "application": True,
     "installable": True,
 }
