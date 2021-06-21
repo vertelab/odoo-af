@@ -260,6 +260,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             ):
                 domain.append(("social_sec_nr", "=", self.social_sec_nr_search))
             elif len(self.social_sec_nr_search) == 12 and "-" not in self.social_sec_nr_search:
+
                 domain.append(
                     (
                         "social_sec_nr",

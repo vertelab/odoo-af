@@ -10,11 +10,31 @@
 			<field name="port">443</field>
 			<field name="ssl_verify">True</field>
 		</record>
+		<record id="visma_bankid" model="af.ipf">
+			<field name="name">Visma BankId</field>
+			<field name="environment">T2</field>
+			<field name="systemid">AFCRM</field>
+			<field name="url">https://bhipws.arbetsformedlingen.se</field>
+			<field name="port">443</field>
+			<field name="ssl_verify">True</field>
+			<field name="use_ssl">False</field>
+		</record>
 	</data>
 	<data>
 		<record id="ipf_endpoint_customer" model="af.ipf.endpoint">
 			<field name="name">customer/v1/customers/ids?customer_id={customer_id}&amp;client_id={clientid}&amp;client_secret={client_secret}</field>
 			<field name="ipf_id" ref="ipf_customer"/>
-	</record>
+			<field name="method">get</field>
+		</record>
+		<record id="bankid_endpoint_elegservice_auth" model="af.ipf.endpoint">
+			<field name="name">bhipws/rest/v1/elegservice/auth</field>
+			<field name="ipf_id" ref="visma_bankid"/>
+			<field name="method">post</field>
+		</record>
+		<record id="bankid_endpoint_elegservice_collect" model="af.ipf.endpoint">
+			<field name="name">bhipws/rest/v1/elegservice/collect</field>
+			<field name="ipf_id" ref="visma_bankid"/>
+			<field name="method">post</field>
+		</record>
 	</data>
 </odoo>

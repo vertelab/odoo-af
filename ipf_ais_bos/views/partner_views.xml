@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="bos_jobseeker_form" model="ir.ui.view">
+        <field name="name">res.partner.form.jobseeker.bos</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="partner_view_360.view_jobseeker_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='share_info_with_employers']/.." position="after">
+                <div class="af_field_group">
+                    <label for="match_area"/>
+                    <field name="match_area"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
