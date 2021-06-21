@@ -317,9 +317,9 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
             if res:
                 pnr = res.get("ids", {}).get("pnr")
                 if pnr:
-                    if len(pnr) == 12:
+                    if len(pnr) == 12 and '-' not in pnr:
                         pnr = "%s-%s" % (pnr[:8], pnr[8:12])
-                    elif len(pnr) == 10:
+                    elif len(pnr) == 10 and '-' not in pnr:
                         if pnr[0:2] < now_year[2:4]:
                             pnr = "%s-%s" % (now_year[0:2] + pnr[:6], pnr[6:10])
                         else:
