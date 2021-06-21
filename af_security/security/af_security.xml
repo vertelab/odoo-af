@@ -99,13 +99,6 @@
             <field name="comment"></field>
         </record>
 
-        <record id="af_newsletter_editor" model="res.groups">
-            <field name="name">Automatic editor</field>
-            <field name="category_id" ref="module_category_af_newsletter"/>
-            <field name="implied_ids" eval="[(4, ref('af_newsletter_automatic'))]"/>
-            <field name="comment"></field>
-        </record>
-
         <!-- Support -->
 
         <record model="ir.module.category" id="module_category_af_support">
