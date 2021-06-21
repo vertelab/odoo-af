@@ -26,16 +26,7 @@ v12.0.2.1.1 AFC-2230 - Recovered screen pop-up. \n
 v12.0.2.1.2 AFC-2388 - Changed position of search buttons. \n
 v12.0.2.1.3 AFC-2234 - Refactored code, fixed customer number search. \n
 v12.0.2.2.0 AFC-2459 - Changed bankid to visma rest api. \n
-<<<<<<< HEAD
 v12.0.2.2.1 AFC-2266 - Updated format of person number for searching. \n
-
-=======
-<<<<<<< HEAD
-v12.0.2.2.1 AFC-2266 - Updated format of person number for searching. \n
-=======
->>>>>>> 12.0-test
->>>>>>> fe7246f7a93801d2b54370abb6c540e3b56562e8
-
 """,
     'author': 'Vertel AB',
     'license': 'AGPL-3',
