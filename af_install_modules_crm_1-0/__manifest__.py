@@ -40,8 +40,6 @@
 	    "af_data_jobseeker_api_loader",
         "af_web_gui",           # odoo-af
         "contact_links", 		# odoo-af/
-        "edi_af_aisf_rask",		# odoo-edi/
-        "edi_af_aisf_rask_get_jobseeker", # odoo-edi/
         "edi_af_aisf_trask",		# odoo-edi/
         "edi_af_bar_arbetsuppgifter", 	# odoo-edi/
         "edi_af_facility",		    # odoo-edi/
