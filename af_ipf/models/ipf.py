@@ -146,8 +146,9 @@ class AfIpfEndpoint(models.Model):
         _logger.debug("Unpack url: %s" % url)
 
         try:
-            if hasattr(requests, self.method):
-                method_function = getattr(requests, self.method)
+            method = self.method.lower()
+            if hasattr(requests, method):
+                method_function = getattr(requests, method)
                 response = method_function(
                         url,
                         headers=headers,
