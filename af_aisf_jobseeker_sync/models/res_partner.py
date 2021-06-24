@@ -190,6 +190,15 @@ class Partner(models.Model):
             else:
                 registered_through = False
 
+            if res.get("medgivande", {}).get("infoTillArbetsgivare"):
+                share_info_with_employers = "True"
+            else:
+                share_info_with_employers = "False"
+
+            if res.get("medgivande", {}).get("paminnelseViaSms"):
+                sms_reminders = "True"
+            else:
+                sms_reminders = "False"
             education_level = res.get("utbildning", {}).get("utbildningsniva")
             if education_level is not None:
                 try:
@@ -227,9 +236,7 @@ class Partner(models.Model):
                 "customer_id": customer_id,
                 "social_sec_nr": res.get("arbetssokande", {}).get("personnummer"),
                 "customer_since": res.get("processStatus", {}).get("aktuellSedanDatum"),
-                "share_info_with_employers": res.get("medgivande", {}).get(
-                    "infoTillArbetsgivare"
-                ),
+                "share_info_with_employers": share_info_with_employers,
                 "phone": res.get("kontaktuppgifter", {}).get("telefonBostad"),
                 "work_phone": res.get("kontaktuppgifter", {}).get("telefonArbetet"),
                 "mobile": res.get("kontaktuppgifter", {}).get("telefonMobil"),
@@ -245,7 +252,7 @@ class Partner(models.Model):
                 "state_id": state,
                 "registered_through": registered_through,
                 "user_id": user,
-                "sms_reminders": res.get("medgivande", {}).get("paminnelseViaSms"),
+                "sms_reminders": sms_reminders,
                 "next_contact_date": res.get("kontakt", {}).get("nastaKontaktdatum"),
                 "next_contact_time": res.get("kontakt", {}).get("nastaKontaktTid"),
                 "next_contact_type": next_contact_type,
