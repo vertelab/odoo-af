@@ -12,6 +12,7 @@
                             <group>
                                 <field name="social_sec_nr_search" class="o_required_modifier"/>
                                 <field name="identification" class="o_required_modifier"/>
+                                <button name="search_jobseeker" string="search" type="object" class="btn-primary" attrs="{'invisible': [('identification','==','Digital ID'),('bank_id_ok','!=',True)]}"/>
                                 <field name="bank_id_ok" invisible="1"/>
                             </group>
                             <group>
@@ -21,7 +22,6 @@
                             </group>
                         </group>
                         <group></group>
-                        <button name="search_jobseeker" string="search" type="object" class="btn-primary" attrs="{'invisible': [('identification','==','Digital ID'),('bank_id_ok','!=',True)]}"/>
                         <button string="Cancel" class="btn-secondary" special="cancel"/>
                     </page>
                     <page string="Based on the needs of the authority">
@@ -32,6 +32,7 @@
                                 <field name="social_sec_nr_search"/>
                                 <field name="customer_id_search"/>
                                 <field name="email_search"/>
+                                <button name="search_jobseeker_authority" string="search" type="object" class="btn-primary"  />
                             </group>
                             <group>
                                 <p attrs="{'invisible': [('search_reason','!=','other reason')]}" style="color:red;">
@@ -41,7 +42,6 @@
                             </group>
                         </group>
                         <group></group>
-                        <button name="search_jobseeker_authority" string="search" type="object" class="btn-primary"  />
                         <button string="Cancel" class="btn-secondary" special="cancel"/>
                     </page>
                 </notebook>

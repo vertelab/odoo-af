@@ -3,7 +3,7 @@
     'summary': """
         A dashboard for employees to search for job seekers.
         """,
-    'version': '12.0.2.1.1',
+    'version': '12.0.2.2.1',
     'category': 'Human resources',
     'description': """
 Jiras
@@ -23,7 +23,10 @@ v12.0.1.4.0 AFC-2097 - misc bugfixes. \n
 v12.0.2.0.0 AFC-2260 - Changed error messages. Tried to fix log and version numbers. \n
 v12.0.2.1.0 AFC-2230 - Changed txt when a person is not in the database and deleted screen pop-up. \n
 v12.0.2.1.1 AFC-2230 - Recovered screen pop-up. \n
-
+v12.0.2.1.2 AFC-2388 - Changed position of search buttons. \n
+v12.0.2.1.3 AFC-2234 - Refactored code, fixed customer number search. \n
+v12.0.2.2.0 AFC-2459 - Changed bankid to visma rest api. \n
+v12.0.2.2.1 AFC-2266 - Updated format of person number for searching. \n
 """,
     'author': 'Vertel AB',
     'license': 'AGPL-3',

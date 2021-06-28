@@ -107,17 +107,39 @@ class IntroductionWizard(models.Model):
     def search_jobseeker(self):
         # TODO: This should be made into two separate functions so it's 100%
         # clear what the user is trying to do.
+        now_year = str(datetime.now().year)
+        last_century = str(int(now_year) - 100)[0:2]
         domain = []
         if self.social_sec_nr_search:
             if len(
                     self.social_sec_nr_search) == 13 and self.social_sec_nr_search[8] == "-":
                 domain.append(
                     ("social_sec_nr", "=", self.social_sec_nr_search))
-            elif len(self.social_sec_nr_search) == 12:
+            elif len(self.social_sec_nr_search) == 12 and "-" not in self.social_sec_nr_search:
                 domain.append(("social_sec_nr",
                                "=",
                                "%s-%s" % (self.social_sec_nr_search[:8],
                                           self.social_sec_nr_search[8:12])))
+            elif len(
+                    self.social_sec_nr_search) == 11 and self.social_sec_nr_search[6] == "-":
+                if self.social_sec_nr_search[0:2] < now_year[2:4]:
+                    domain.append(
+                        ("social_sec_nr", "=", now_year[0:2] + self.social_sec_nr_search))
+                else:
+                    domain.append(
+                        ("social_sec_nr", "=", last_century + self.social_sec_nr_search))
+
+            elif len(self.social_sec_nr_search) == 10 and "-" not in self.social_sec_nr_search:
+                if self.social_sec_nr_search[0:2] < now_year[2:4]:
+                    domain.append(("social_sec_nr",
+                                   "=",
+                                   "%s-%s" % (now_year[0:2] + self.social_sec_nr_search[:6],
+                                              self.social_sec_nr_search[6:10])))
+                else:
+                    domain.append(("social_sec_nr",
+                                   "=",
+                                   "%s-%s" % (last_century + self.social_sec_nr_search[:6],
+                                              self.social_sec_nr_search[6:10])))
             else:
                 raise Warning(
                     _("Incorrectly formated social security number: %s" % self.social_sec_nr_search))

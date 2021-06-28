@@ -74,6 +74,7 @@ class AfIpf(models.Model):
     ssl_verify = fields.Char()
     ssl_cert = fields.Char()
     ssl_key = fields.Char()
+    use_ssl = fields.Boolean(default=True)
 
     @api.multi
     def get_auth(self):
@@ -120,6 +121,7 @@ class AfIpfEndpoint(models.Model):
 
     name = fields.Char(required=True)
     ipf_id = fields.Many2one(comodel_name='af.ipf', required=True, ondelete='cascade')
+    method = fields.Char(required=True, default='get')
 
     @api.multi
     def build_error_msg(self, response, data):
@@ -142,12 +144,21 @@ class AfIpfEndpoint(models.Model):
             self.ipf_id.port,
             self.name.format(**kw))
         _logger.debug("Unpack url: %s" % url)
-        response = requests.get(
-            url,
-            headers=headers,
-            auth=self.ipf_id.get_auth(),
-            **self.ipf_id.get_ssl_params()
-        )
+
+        try:
+            method = self.method.lower()
+            if hasattr(requests, method):
+                method_function = getattr(requests, method)
+                response = method_function(
+                        url,
+                        headers=headers,
+                        auth=self.ipf_id.get_auth(),
+                        **self.ipf_id.get_ssl_params() if self.ipf_id.use_ssl else {},
+                        json=kw.get('body', {})
+                    )
+        except Exception as e:
+            _logger.warning('Error in IPF call method ', exc_info=e)
+
         _logger.debug("Unpack response: %s" % response)
         res = None
         try:

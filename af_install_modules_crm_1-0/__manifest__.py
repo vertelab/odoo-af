@@ -2,7 +2,7 @@
 
 {
     "name": "Af CRM 1.0 Install all modules ",
-    "version": "12.0.1.0.8",
+    "version": "12.0.1.0.9",
     "author": "Vertel AB",
     "description": """
 	This module installs all AF-modules at one go.\n
@@ -19,6 +19,7 @@
 	v12.0.1.0.6  -  Disabled af_statistics to speed up theme-loading \n	
 	v12.0.1.0.7  -  Added af_web_gui \n	
 	v12.0.1.0.8 AFC-2415: Removed edi_af_bos \n
+	v12.0.1.0.9 AFC-2440: Added ipf_ais_bos \n
 	\n
 	Once the module is installed, please de-install it to avoid depencency-problems.\n
 	\n
@@ -39,8 +40,6 @@
 	    "af_data_jobseeker_api_loader",
         "af_web_gui",           # odoo-af
         "contact_links", 		# odoo-af/
-        "edi_af_aisf_rask",		# odoo-edi/
-        "edi_af_aisf_rask_get_jobseeker", # odoo-edi/
         "edi_af_aisf_trask",		# odoo-edi/
         "edi_af_bar_arbetsuppgifter", 	# odoo-edi/
         "edi_af_facility",		    # odoo-edi/
@@ -50,6 +49,7 @@
         "hr_employee_firstname",	# OCA
         "hr_employee_firstname_extension", # odoo-hr
         "hr_office", 			    # odoo-hr
+        "ipf_ais_bos",			    # odoo-af/
         "ipf_case", 			    # Use new api to integrate to AIS-Å and BÄR
         "ipf_planning",			    # odoo-af/
 	    "monitoring_status",		# adds a monitoring value for automatic montitoring
