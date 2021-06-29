@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <odoo>
-    <data noupdate="1">
+    <data noupdate="0">
 		<record id="ipf_case" model="af.ipf">
 			<field name="name">IPF Cases</field>
 			<field name="environment">T2</field>
@@ -10,9 +10,20 @@
 			<field name="port">443</field>
 			<field name="enduserid">True</field>
 		</record>
+		<record id="ipf_case_genomforanden" model="af.ipf">
+			<field name="name">IPF Cases Genomforanden</field>
+			<field name="environment">T2</field>
+			<field name="systemid">AFCRM</field>
+			<field name="url">https://ipf-acc.arbetsformedlingen.se</field>
+			<field name="enduserid">False</field>
+		</record>
 		<record id="ipf_endpoint_case" model="af.ipf.endpoint">
 			<field name="name">arende-for-system/v2/arbetssokande/arenden?client_id={clientid}&amp;client_secret={client_secret}&amp;personnummer={personnummer}</field>
 			<field name="ipf_id" ref="ipf_case"/>
-	</record>
+		</record>
+		<record id="ipf_endpoint_case_genomforanden2" model="af.ipf.endpoint">
+			<field name="name">genomforande-for-system/v2/arbetssokande/genomforanden?client_id={clientid}&amp;client_secret={client_secret}&amp;personnummer={personnummer}</field>
+			<field name="ipf_id" ref="ipf_case_genomforanden"/>
+		</record>
 	</data>
 </odoo>
