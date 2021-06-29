@@ -21,7 +21,7 @@
 			<field name="name">arende-for-system/v2/arbetssokande/arenden?client_id={clientid}&amp;client_secret={client_secret}&amp;personnummer={personnummer}</field>
 			<field name="ipf_id" ref="ipf_case"/>
 		</record>
-		<record id="ipf_endpoint_case_genomforanden2" model="af.ipf.endpoint">
+		<record id="ipf_endpoint_case_genomforanden" model="af.ipf.endpoint">
 			<field name="name">genomforande-for-system/v2/arbetssokande/genomforanden?client_id={clientid}&amp;client_secret={client_secret}&amp;personnummer={personnummer}</field>
 			<field name="ipf_id" ref="ipf_case_genomforanden"/>
 		</record>
