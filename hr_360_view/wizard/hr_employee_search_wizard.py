@@ -306,9 +306,76 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                         )
                     )
             else:
-                raise ValidationError(
-                    _("Incorrectly formatted social security number: %s")
-                    % self.social_sec_nr_search
+                if (
+                        len(self.social_sec_nr_search) == 13
+                        or len(self.social_sec_nr_search) == 12
+                ):
+                    if self.social_sec_nr_search[4] != 0 and self.social_sec_nr_search[5] != 2:
+                        if (
+                                int(self.social_sec_nr_search[0:4]) > int(now_year[0:4])
+                                or int(self.social_sec_nr_search[4:6]) > 12
+                                or int(self.social_sec_nr_search[6:8]) > 31
+                        ):
+                            raise ValidationError(
+                                _("Invalid input: %s")
+                                % self.social_sec_nr_search
+                            )
+                    else:
+                        if self.social_sec_nr_search[0:4] % 4 == 0:
+                            if (
+                                    int(self.social_sec_nr_search[0:4]) > int(now_year[0:4])
+                                    or int(self.social_sec_nr_search[4:6]) > 12
+                                    or int(self.social_sec_nr_search[6:8]) > 29
+                            ):
+                                raise ValidationError(
+                                    _("Invalid input: %s")
+                                    % self.social_sec_nr_search
+                                )
+                        else:
+                            if (
+                                    int(self.social_sec_nr_search[0:4]) > int(now_year[0:4])
+                                    or int(self.social_sec_nr_search[4:6]) > 12
+                                    or int(self.social_sec_nr_search[6:8]) > 28
+                            ):
+                                raise ValidationError(
+                                    _("Invalid input: %s")
+                                    % self.social_sec_nr_search
+                                )
+                elif (
+                        len(self.social_sec_nr_search) == 11
+                        or len(self.social_sec_nr_search) == 10
+                ):
+                    if self.social_sec_nr_search[2] == 0 and self.social_sec_nr_search[3] == 2:
+                        if (
+                                int(self.social_sec_nr_search[0:4]) % 4 == 0
+                                and int(self.social_sec_nr_search[4:6]) > 29
+                        ):
+                            raise ValidationError(
+                                _("Invalid input: %s")
+                                % self.social_sec_nr_search
+                            )
+                    else:
+                        if (
+                                int(self.social_sec_nr_search[2:4]) > 12
+                                or int(self.social_sec_nr_search[4:6]) > 28
+                        ):
+                            raise ValidationError(
+                                _("Invalid input: %s")
+                                % self.social_sec_nr_search
+                            )
+                        else:
+                            if (
+                                    int(self.social_sec_nr_search[2:4]) > 12
+                                    or int(self.social_sec_nr_search[4:6]) > 28
+                            ):
+                                raise ValidationError(
+                                    _("Invalid input: %s")
+                                    % self.social_sec_nr_search
+                                )
+                else:
+                    raise ValidationError(
+                        _("Incorrectly formatted social security number: %s")
+                        % self.social_sec_nr_search
                 )
         if self.customer_id_search:
             ipf = self.env.ref("af_ipf.ipf_endpoint_customer").sudo()
