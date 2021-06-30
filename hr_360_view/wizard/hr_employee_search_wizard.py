@@ -21,7 +21,8 @@
 
 import json
 import logging
-from datetime import datetime, time
+from datetime import datetime
+import time
 from zeep.client import CachingClient
 
 from odoo import models, fields, api, _
@@ -353,16 +354,16 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                 "personalNumber": self.social_sec_nr_search.replace("-", ""),
             }
         )
-        order_ref = False
+        order_ref = None
         try:
             order_ref = res["orderRef"]
             if not order_ref:
                 self.bank_id_ok = False
                 try:
                     self.bank_id_text = res["infoCode"]
-                except KeyError:
+                except (KeyError, TypeError):
                     self.bank_id_text = _("Error in communication with BankID")
-        except KeyError:
+        except (KeyError, TypeError):
             self.bank_id_text = _("Error in communication with BankID")
             self.bank_id_ok = False
         if order_ref:
