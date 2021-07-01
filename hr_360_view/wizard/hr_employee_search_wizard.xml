@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <form string="Search Partner" create="false" class="search-jobseeker-wizard">
                 <h1>Search Jobseekers</h1>
-                <notebook>
+                <notebook name="jobseeker_page">
                     <page string="When in contact">
                         <group>
                             <group>
@@ -47,7 +47,7 @@
                 </notebook>
 
 
-                <notebook>
+                <notebook name="employee_page">
                     <field name="employee_id" invisible="1"/>
                     <page name="jobseekers" string="My Jobseekers" groups="base.group_no_one">
                         <!-- <field name="user_id" invisible="1"/> -->
