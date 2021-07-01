@@ -47,6 +47,14 @@ class Partner(models.Model):
                         record.case_ids = record.env['res.partner.case']
                         for arende in res.get('arenden', []):
                             record.case_ids |= record.env['res.partner.case'].create_arende(arende, record.id)
+
+                        ipf = self.env.ref('ipf_case.ipf_endpoint_case_genomforanden').sudo()
+                        res = ipf.call(personnummer=personnummer)
+                        for genomforande in res.get('genomforanden', []):
+                            record.case_ids |= record.env['res.partner.case'].create_arende(genomforande,
+                                                                                                  record.id,
+                                                                                                  genomforande=True)
+
                     except Exception as e:
                         _logger.warning('Error in IPF CASE integration.', exc_info=e)
                         record.case_ids = None
@@ -76,22 +84,27 @@ class PartnerArende(models.TransientModel):
     case_type = fields.Char(string="Case type")
     partner_id = fields.Many2one(
         comodel_name="res.partner", string="Job seeker")
+    genomforande = fields.Boolean()
 
     @api.model
-    def create_arende(self, vals, partner_id):
-        start_date = vals.get('beslut_period', {}).get('startdatum')
-        stop_date = vals.get('beslut_period', {}).get('slutdatum')
+    def create_arende(self, vals, partner_id, genomforande=False):
+        if genomforande:
+            start_date = vals.get('genomforande_period', {}).get('startdatum')
+            stop_date = vals.get('genomforande_period', {}).get('slutdatum')
+        else:
+            start_date = vals.get('beslut_period', {}).get('startdatum')
+            stop_date = vals.get('beslut_period', {}).get('slutdatum')
         short_name = vals['arendetyp_kortnamn']
         name_desc = vals['arendetyp_benamning']
 
         return self.create({
             'partner_id': partner_id,
-            #  AIS is to be changed in future to show BÄR.
-            'source': 'AIS',
+            'source': 'AIS & BÄR',
             'name': vals['arende_id'],
             'res_officer': vals.get('beslut_handlaggare', {}).get('signatur'),
-            'status': vals['status'],
+            'status': vals.get('status') if not genomforande else vals.get('genomforande_fas'),
             'case_type': f'{name_desc}({short_name})',
             'start': datetime.strptime(start_date, '%Y-%m-%d') if start_date else False,
             'stop': datetime.strptime(stop_date, '%Y-%m-%d') if stop_date else False,
+            'genomforande': genomforande,
         })
