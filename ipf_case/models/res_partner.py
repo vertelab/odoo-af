@@ -48,7 +48,7 @@ class Partner(models.Model):
                         for arende in res.get('arenden', []):
                             record.case_ids |= record.env['res.partner.case'].create_arende(arende, record.id)
 
-                        ipf = self.env.ref('ipf_case.ipf_endpoint_case_genomforanden2').sudo()
+                        ipf = self.env.ref('ipf_case.ipf_endpoint_case_genomforanden').sudo()
                         res = ipf.call(personnummer=personnummer)
                         for genomforande in res.get('genomforanden', []):
                             record.case_ids |= record.env['res.partner.case'].create_arende(genomforande,
