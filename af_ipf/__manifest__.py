@@ -2,7 +2,7 @@
 
 {
     "name": "AF IPF Integration",
-    "version": "12.0.1.0.6",
+    "version": "12.0.1.0.7",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
@@ -17,6 +17,7 @@ v12.0.1.0.3 AFC-2001: updated default IPF url
 v12.0.1.0.4 AFC-2239: Fixed bug for getting users
 v12.0.1.0.5 AFC-1051: Moved data files to respective modules
 v12.0.1.0.6 AFC-2550: Fixed bug in response
+v12.0.1.0.7 AFC-2543: Updated get_ssl_params method
 """,
     "depends": ["af_security"],
     "external_dependencies": {"python": ["requests"]},
