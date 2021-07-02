@@ -115,6 +115,7 @@ class AfIpf(models.Model):
             ssl_params['cert'] = (self.ssl_cert, self.ssl_key)
         return ssl_params
 
+
 class AfIpfEndpoint(models.Model):
     _name = 'af.ipf.endpoint'
     _description = 'IPF Endpoint'
