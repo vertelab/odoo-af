@@ -4,7 +4,8 @@
         <field name="name">res.partner.case.tree</field>
         <field name="model">res.partner.case</field>
         <field name="arch" type="xml">
-            <tree string="Case">
+            <tree string="Case" default_order="genomforande desc, start desc">
+                <field name="genomforande" invisible="1"/>
                 <field name="source"/>
                 <field name="name"/>
                 <field name="res_officer"/>

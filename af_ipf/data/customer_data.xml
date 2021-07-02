@@ -16,8 +16,6 @@
 			<field name="systemid">AFCRM</field>
 			<field name="url">https://bhipws.arbetsformedlingen.se</field>
 			<field name="port">443</field>
-			<field name="ssl_verify">True</field>
-			<field name="use_ssl">False</field>
 		</record>
 	</data>
 	<data>
