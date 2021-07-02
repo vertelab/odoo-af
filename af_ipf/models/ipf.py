@@ -74,7 +74,6 @@ class AfIpf(models.Model):
     ssl_verify = fields.Char()
     ssl_cert = fields.Char()
     ssl_key = fields.Char()
-    use_ssl = fields.Boolean(default=True)
 
     @api.multi
     def get_auth(self):
@@ -108,10 +107,12 @@ class AfIpf(models.Model):
         }
         if not self.ssl_verify:
             ssl_params['verify'] = False
+        elif self.ssl_verify == 'True':
+            ssl_params['verify'] = True
         else:
             ssl_params['verify'] = self.ssl_verify
         if self.ssl_cert and self.ssl_key:
-            ssl_params['cert'] = (ssl_cert, ssl_key)
+            ssl_params['cert'] = (self.ssl_cert, self.ssl_key)
         return ssl_params
 
 
@@ -144,7 +145,7 @@ class AfIpfEndpoint(models.Model):
             self.ipf_id.port,
             self.name.format(**kw))
         _logger.debug("Unpack url: %s" % url)
-
+        response = None
         try:
             method = self.method.lower()
             if hasattr(requests, method):
@@ -153,7 +154,7 @@ class AfIpfEndpoint(models.Model):
                         url,
                         headers=headers,
                         auth=self.ipf_id.get_auth(),
-                        **self.ipf_id.get_ssl_params() if self.ipf_id.use_ssl else {},
+                        **self.ipf_id.get_ssl_params(),
                         json=kw.get('body', {})
                     )
         except Exception as e:
@@ -165,7 +166,7 @@ class AfIpfEndpoint(models.Model):
             res = response.json()
         except:
             pass
-        if response.status_code != 200:
+        if response and response.status_code != 200:
             error_msg = self.build_error_msg(response, res)
             _logger.warn(error_msg)
             if raise_on_error:
