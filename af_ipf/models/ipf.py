@@ -107,10 +107,12 @@ class AfIpf(models.Model):
         }
         if not self.ssl_verify:
             ssl_params['verify'] = False
+        elif self.ssl_verify == 'True':
+            ssl_params['verify'] = True
         else:
             ssl_params['verify'] = self.ssl_verify
         if self.ssl_cert and self.ssl_key:
-            ssl_params['cert'] = (ssl_cert, ssl_key)
+            ssl_params['cert'] = (self.ssl_cert, self.ssl_key)
         return ssl_params
 
 
