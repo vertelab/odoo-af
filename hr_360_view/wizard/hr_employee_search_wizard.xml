@@ -114,7 +114,7 @@
     <menuitem id="res_partner_jobseeker_search_wizard_menu"
               name="My Administrative Officer Area"
               action="search_jobseeker_wizard"
-              sequence="3"
+              sequence="0"
               web_icon="hr_360_view,static/description/icon.png"/>
 
     <!--

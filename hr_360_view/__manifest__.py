@@ -3,7 +3,7 @@
     'summary': """
         A dashboard for employees to search for job seekers.
         """,
-    'version': '12.0.2.2.3',
+    'version': '12.0.2.2.4',
     'category': 'Human resources',
     'description': """
 Jiras
@@ -29,7 +29,7 @@ v12.0.2.2.0 AFC-2459 - Changed bankid to visma rest api. \n
 v12.0.2.2.1 AFC-2266 - Updated format of person number for searching. \n
 v12.0.2.2.2 AFC-2550 - Fixed import bug and impored Error handeling \n
 v12.0.2.2.3 AFC-2449 - Fixed bug when searching is not found page changed to another page. \n
-
+v12.0.2.2.4 AFC-2540 - Changed sequence of My Administrative Officer Area menu \n
 """,
     'author': 'Vertel AB',
     'license': 'AGPL-3',
