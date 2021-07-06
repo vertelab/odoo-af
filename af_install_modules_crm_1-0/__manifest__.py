@@ -20,6 +20,7 @@
 	v12.0.1.0.7  -  Added af_web_gui \n	
 	v12.0.1.0.8 AFC-2415: Removed edi_af_bos \n
 	v12.0.1.0.9 AFC-2440: Added ipf_ais_bos \n
+	v12.0.1.0.10
 	\n
 	Once the module is installed, please de-install it to avoid depencency-problems.\n
 	\n
@@ -36,8 +37,8 @@
         "auth_saml_ol_groups",		#
         "auth_signup",			    #
         "audit_logger",			    # odoo-server-tools/ Adds JSON-Formated logging
-	    "af_data_ais-f_loader",
-	    "af_data_jobseeker_api_loader",
+        "af_data_ais-f_loader",
+        "af_data_jobseeker_api_loader",
         "af_web_gui",           # odoo-af
         "contact_links", 		# odoo-af/
         "edi_af_aisf_trask",		# odoo-edi/
@@ -52,14 +53,15 @@
         "ipf_ais_bos",			    # odoo-af/
         "ipf_case", 			    # Use new api to integrate to AIS-Å and BÄR
         "ipf_planning",			    # odoo-af/
-	    "monitoring_status",		# adds a monitoring value for automatic montitoring
+        "monitoring_status",		# adds a monitoring value for automatic montitoring
         "partner_desired_jobs",		# odoo-base/
-	    "partner_education_360",
+        "partner_education_360",
         "partner_fax", 			    # OCA Adds fax-number for AG
         "partner_firstname", 		# OCA
-	    "partner_flip_firstname",	# odoo-base/ Flips firstname and lastname
+        "partner_flip_firstname",	# odoo-base/ Flips firstname and lastname
         "partner_mq_ipf", 		    # odoo-base/ Listens for changes in AIS-F
         "res_drivers_license",		# odoo-base/
+	"res_occupation_demand",	# odoo-base/
         "res_sni",			# odoo-base/
         "res_ssyk",			# odoo-base/
         "res_sun",			# odoo-base/
