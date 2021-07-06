@@ -2,7 +2,7 @@
 
 {
     "name": "Af CRM 1.0 Install all modules ",
-    "version": "12.0.1.0.9",
+    "version": "12.0.1.0.10",
     "author": "Vertel AB",
     "description": """
 	This module installs all AF-modules at one go.\n
@@ -20,7 +20,7 @@
 	v12.0.1.0.7  -  Added af_web_gui \n	
 	v12.0.1.0.8 AFC-2415: Removed edi_af_bos \n
 	v12.0.1.0.9 AFC-2440: Added ipf_ais_bos \n
-	v12.0.1.0.10
+	v12.0.1.0.10 Added res_occupation_demand
 	\n
 	Once the module is installed, please de-install it to avoid depencency-problems.\n
 	\n
