@@ -26,12 +26,26 @@ import time
 from zeep.client import CachingClient
 
 from odoo import models, fields, api, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, Warning
 from odoo.http import request
+
 import requests
 
 _logger = logging.getLogger(__name__)
 TIMEOUT = 60 * 3
+
+
+def validate_personnummer(ssnid):
+    control_digit = int(ssnid[-1])
+    tot = 0
+    multiplicator = 2
+    for digit in ssnid[:-1]:
+        res = int(digit) * multiplicator
+        if res > 9:
+            res = 1 + res % 10
+        tot += res
+        multiplicator = (multiplicator % 2) + 1
+    return (10 - (tot % 10)) % 10 == control_digit
 
 
 class HrEmployeeJobseekerSearchWizard(models.TransientModel):
@@ -255,6 +269,18 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
         last_century = str(int(now_year) - 100)[0:2]
         domain = []
         if self.social_sec_nr_search:
+            pnr = self.social_sec_nr_search.strip().replace('-', '')
+            if not pnr.isdigit():
+                raise Warning("Please only enter digit!")
+            if len(pnr) not in (10, 12):
+                raise Warning(_("Incorrectly formatted social security number: %s")
+                              % self.social_sec_nr_search)
+            if len(pnr) == 12:
+                if pnr[:2] not in (last_century, now_year[0:2]):
+                    raise Warning("Invalid year!")
+                pnr = pnr[2:]
+            if not validate_personnummer(pnr):
+                raise Warning("Invalid control number!")
             if (
                     len(self.social_sec_nr_search) == 13
                     and self.social_sec_nr_search[8] == "-"
