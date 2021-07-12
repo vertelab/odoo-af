@@ -143,6 +143,8 @@
     <menuitem action="action_partner_links" id="menu_partner_links" groups="group_partner_link"
               parent="contacts.res_partner_menu_config" sequence="10" name="Links Administration"/>
 
+    <menuitem id="menu_links" parent="contacts.menu_contacts" sequence="100" name="Links"/>
+
     <template id="assets_backend" inherit_id="web.assets_backend" name="Contact Links Assets">
         <xpath expr="//script[@src='/web/static/src/js/views/form/form_renderer.js']" position="after">
             <script src="/contact_links/static/src/js/contact_links.js" type="text/javascript"></script>

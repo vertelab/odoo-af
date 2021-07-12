@@ -2,7 +2,7 @@
 
 {
     'name': 'AF Contact Links',
-    'version': '12.0.0.2.1',
+    'version': '12.0.0.2.2',
     'category': '',
     'description': """
 Cases
@@ -23,6 +23,7 @@ v12.0.0.1.5: Updated link URLs. \n
 v12.0.0.1.6: Added AIS link. \n
 v12.0.0.2.0 AFC-2229: Added sort order for links. \n
 v12.0.0.2.1 AFC-2254: Updated URL for a few links. \n
+v12.0.0.2.2 AFC-2375: Added Server action to create menu for each link. \n
 
 """,
     'author': 'Vertel AB',
@@ -39,6 +40,7 @@ v12.0.0.2.1 AFC-2254: Updated URL for a few links. \n
         'views/res_partner_view.xml',
         'security/ir.model.access.csv',
         'data/partner.links.csv',
+        'data/server_action.xml'
     ],
     'demo': [
     ],

@@ -29,6 +29,26 @@ class PartnerLinks(models.Model):
     _description = "Partner Links"
     _order = "sequence"
 
+    def create_menu_for_link(self):
+        menu_obj = self.env['ir.ui.menu']
+        action_obj = self.env['ir.actions.act_url']
+        parent_menu = self.env.ref('contact_links.menu_links')
+        for link in self:
+            action = action_obj.search([('name', '=', link.name), ('url', '=', link.link)], limit=1)
+            if not action:
+                action = action_obj.create({
+                    'name': link.name,
+                    'type': 'ir.actions.act_url',
+                    'url': link.link,
+                    'target': 'new',
+                })
+            menu = menu_obj.search([('name', '=', link.name), ('parent_id', '=', parent_menu.id)], limit=1)
+            if not menu:
+                menu_obj.create({'name': link.name,
+                                 'action': 'ir.actions.act_url,%d' % (action.id,),
+                                 'parent_id': parent_menu.id
+                                 })
+
     name = fields.Char("Display Name")
     link = fields.Char(
         "Link",
