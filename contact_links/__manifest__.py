@@ -2,7 +2,7 @@
 
 {
     'name': 'AF Contact Links',
-    'version': '12.0.0.2.2',
+    'version': '12.0.0.3.0',
     'category': '',
     'description': """
 Cases

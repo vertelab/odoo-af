@@ -1,13 +1,16 @@
 <odoo>
-<!--	<record model="ir.actions.server" id="action_sync_link">-->
-<!--        <field name="name">Update Link</field>-->
-<!--        <field name="model_id" ref="base.model_res_partner"/>-->
-<!--        <field name="state">code</field>-->
-<!--        <field name="code">-->
-<!--            if records:-->
-<!--                records.sync_link()-->
-<!--        </field>-->
-<!--    </record>-->
+    <!--Commenting this server action because this file was not added in manifest and to add new server action
+    added this file in manifest and commenting this server action-->
+
+    <!--	<record model="ir.actions.server" id="action_sync_link">-->
+    <!--        <field name="name">Update Link</field>-->
+    <!--        <field name="model_id" ref="base.model_res_partner"/>-->
+    <!--        <field name="state">code</field>-->
+    <!--        <field name="code">-->
+    <!--            if records:-->
+    <!--                records.sync_link()-->
+    <!--        </field>-->
+    <!--    </record>-->
 
     <record model="ir.actions.server" id="action_create_menu_for_link">
         <field name="name">Create Menu for Link</field>
