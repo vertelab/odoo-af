@@ -270,7 +270,7 @@ msgstr "Partner-relaterad data om användaren"
 #: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:275
 #, python-format
 msgid "Please only enter digit!"
-msgstr ""
+msgstr "Ogiltig inmatning"
 
 #. module: hr_360_view
 #: selection:hr.employee.jobseeker.search.wizard,search_reason:0
