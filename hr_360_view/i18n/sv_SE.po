@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 12.0-20210129\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-02 12:42+0000\n"
-"PO-Revision-Date: 2021-07-20 16:59+0200\n"
+"PO-Revision-Date: 2021-07-21 11:12+0200\n"
 "Last-Translator: Sebastian Gieser <sebastian.gieser@vertel.se>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -63,7 +63,7 @@ msgstr "Utifrån myndighetens behov"
 #. module: hr_360_view
 #: selection:hr.employee.jobseeker.search.wizard,search_reason:0
 msgid "Callback"
-msgstr "Återkalla"
+msgstr "Motringning"
 
 #. module: hr_360_view
 #: model_terms:ir.ui.view,arch_db:hr_360_view.search_jobseeker_form
