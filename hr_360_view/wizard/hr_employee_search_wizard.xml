@@ -12,13 +12,13 @@
                             <group>
                                 <field name="social_sec_nr_search" class="o_required_modifier"/>
                                 <field name="identification" class="o_required_modifier"/>
-                                <button name="search_jobseeker" string="search" type="object" class="btn-primary" attrs="{'invisible': [('identification','==','Digital ID'),('bank_id_ok','!=',True)]}"/>
+                                <span>
+                                    <button name="search_jobseeker" string="search" type="object" class="btn-primary" attrs="{'invisible': [('identification','==','Digital ID'),('bank_id_ok','!=',True)]}"/>
+                                    <button name="do_bankid" string="BankID" type="object" attrs="{'invisible': [('identification','!=','Digital ID')]}"/>
+                                    <button string="BankID" type="object" attrs="{'invisible': [('identification','=','Digital ID')]}" disabled="" />
+                                    <field name="bank_id_text" string="" nolabel="1" readonly="1" attrs="{'invisible': [('identification','!=','Digital ID')]}"/>
+                                </span>
                                 <field name="bank_id_ok" invisible="1"/>
-                            </group>
-                            <group>
-                                <button name="do_bankid" string="BankID" type="object" attrs="{'invisible': [('identification','!=','Digital ID')]}"/>
-                                <br/>
-                                <field name="bank_id_text" string="" nolabel="1" readonly="1" attrs="{'invisible': [('identification','!=','Digital ID')]}" />
                             </group>
                         </group>
                         <group></group>
