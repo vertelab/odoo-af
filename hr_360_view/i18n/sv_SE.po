@@ -171,6 +171,12 @@ msgstr "Felformaterat personnummer: %s\n"
 "Ange format: yyyymmdd-nnnn eller yymmdd-nnnn"
 
 #. module: hr_360_view
+#: code:addons/hr_360_view/wizard/hr_employee_search_wizard.py:283
+#, python-format
+msgid "Invalid control number!"
+msgstr "Ogiltigt personnummer"
+
+#. module: hr_360_view
 #: selection:hr.employee.jobseeker.search.wizard,search_reason:0
 msgid "Investigation"
 msgstr "Utredning"

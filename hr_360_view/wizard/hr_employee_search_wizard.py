@@ -280,7 +280,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                     raise Warning("Invalid year!")
                 pnr = pnr[2:]
             if not validate_personnummer(pnr):
-                raise Warning("Invalid control number!")
+                raise Warning(_("Invalid control number!"))
             if (
                     len(self.social_sec_nr_search) == 13
                     and self.social_sec_nr_search[8] == "-"
