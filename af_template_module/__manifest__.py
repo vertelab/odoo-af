@@ -1,13 +1,14 @@
 {
     "name": "Af Template Module",
-    "version": "12.0.1.2.3",     
+    "version": "12.0.1.2.4",     
     "author": "Vertel AB",
     "maintainer": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
     "depends": [
-        'contacts'
+        'contacts',
+        'web_backend_theme_af'
     ],
     "external_dependencies": [
     ],
