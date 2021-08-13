@@ -22,7 +22,7 @@
                                 <field name="bank_id_ok" invisible="1"/>
                             </group>
                         </group>
-                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                        <group></group>
                     </page>
                     <page string="Based on the needs of the authority">
                         <group>
@@ -42,7 +42,6 @@
                             </group>
                         </group>
                         <group></group>
-                        <button string="Cancel" class="btn-secondary" special="cancel"/>
                     </page>
                 </notebook>
 
