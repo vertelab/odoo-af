@@ -333,6 +333,6 @@ msgstr "hr_360_view-sökvizard"
 
 #. module: hr_360_view
 #: model_terms:ir.ui.view,arch_db:hr_360_view.search_jobseeker_form
-msgid "search"
-msgstr "Sök"
+msgid "Open"
+msgstr "Öppna"
 
