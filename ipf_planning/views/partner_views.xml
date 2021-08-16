@@ -6,14 +6,13 @@
         <field name="inherit_id" ref="partner_view_360.view_jobseeker_form" />
         <field name="arch" type="xml">
             <field name="name" position="after">
-                <div style="text-align:center">
-                    <button name="action_redirect_planning_url"
-                                type="object"
-                                string="Visa handlingsplan"
-                                attrs="{'invisible':[('has_ipf_planning','=',False)]}"
-                                class="btn-primary"
-                    />
-                </div>
+                <button name="action_redirect_planning_url"
+                            type="object"
+                            string="Visa handlingsplan"
+                            attrs="{'invisible':[('has_ipf_planning','=',False)]}"
+                            class="btn-primary"
+                            style="margin-top:4px"
+                />
                 <field name="has_ipf_planning" invisible="1"/>
             </field>
         </field>
