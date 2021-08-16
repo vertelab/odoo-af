@@ -416,6 +416,9 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
                 self.bank_id_text = _("User timeout")
                 self.bank_id_ok = False
 
+        if not self.bank_id_ok:
+            raise ValidationError(self.bank_id_text)
+
         partner = self.env["res.partner"].search_pnr(
             self.social_sec_nr_search)
 

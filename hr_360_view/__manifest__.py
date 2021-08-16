@@ -3,7 +3,7 @@
     'summary': """
         A dashboard for employees to search for job seekers.
         """,
-    'version': '12.0.2.3.0',
+    'version': '12.0.2.3.1',
     'category': 'Human resources',
     'description': """
 Jiras
@@ -31,6 +31,7 @@ v12.0.2.2.3 AFC-2449 - Fixed bug when searching is not found page changed to ano
 v12.0.2.2.4 AFC-2540 - Changed sequence of My Administrative Officer Area menu \n
 v12.0.2.2.5 AFC-2544 - Updated txt for different situation for searching. \n
 v12.0.2.3.0 AFC-2387 - Deleted cancel button for searching page. \n
+v12.0.2.3.1 AFC-2382 - Changed placement of bankid and search button and made it enabled/disabled instead of invisible. \n
 """,
     'author': 'Vertel AB',
     'license': 'AGPL-3',
