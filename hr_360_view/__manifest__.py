@@ -7,7 +7,6 @@
     'category': 'Human resources',
     'description': """
 Jiras
-===============================================================================
 v12.0.0.8.0 AFC-2204 - Renamed variable in po file \n
 v12.0.0.7.0          - The "Breadcrumb" does not lead back to the start\n
 v12.0.0.6.0 AFC-1247 - change from Handläggaryta to Jobbsekers in Breadcrumbs\n
