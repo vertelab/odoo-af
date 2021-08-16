@@ -75,6 +75,7 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
     social_sec_nr_search = fields.Char(
         string="Social security number",
         default=lambda self: "%s" % self._get_default_social_sec_nr_search(),
+        help="It's also possible to search for co-ordination number"
     )
     bank_id_text = fields.Text(string=None)
     bank_id_ok = fields.Boolean(string=None, default=False)
@@ -271,16 +272,16 @@ class HrEmployeeJobseekerSearchWizard(models.TransientModel):
         if self.social_sec_nr_search:
             pnr = self.social_sec_nr_search.strip().replace('-', '')
             if not pnr.isdigit():
-                raise Warning("Please only enter digit!")
+                raise Warning(_("Please only enter digit!"))
             if len(pnr) not in (10, 12):
                 raise Warning(_("Incorrectly formatted social security number: %s")
                               % self.social_sec_nr_search)
             if len(pnr) == 12:
                 if pnr[:2] not in (last_century, now_year[0:2]):
-                    raise Warning("Invalid year!")
+                    raise Warning(_("Invalid year!"))
                 pnr = pnr[2:]
             if not validate_personnummer(pnr):
-                raise Warning("Invalid control number!")
+                raise Warning(_("Invalid control number!"))
             if (
                     len(self.social_sec_nr_search) == 13
                     and self.social_sec_nr_search[8] == "-"
