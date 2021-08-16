@@ -22,7 +22,6 @@
                             </group>
                         </group>
                         <group></group>
-                        <button string="Cancel" class="btn-secondary" special="cancel"/>
                     </page>
                     <page string="Based on the needs of the authority">
                         <group>
@@ -42,7 +41,6 @@
                             </group>
                         </group>
                         <group></group>
-                        <button string="Cancel" class="btn-secondary" special="cancel"/>
                     </page>
                 </notebook>
 
