@@ -2,6 +2,7 @@
 
 {
     'name': 'Arbetssokande Planering',
+    "version": "12.0.2.1.2",
     'summary': """ Innehåller de resurser Mina Sidor och ALF behöver från Planeringsverktyget och BÄR för Arbetssökandes planering""",
     "description": """
 Jira
@@ -13,7 +14,6 @@ v12.0.2.1.0 AFC-2305: Moved button 'Visa handlingsplan' and added redirect url f
 v12.0.2.1.1 AFC-2474: Bugfix in function _check_ipf_planning \n
 v12.0.2.1.2 AFC-2447: Handlingsplan icon place in the middle of the text. \n
 """,
-    "version": "12.0.2.1.2",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
