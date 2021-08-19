@@ -25,6 +25,7 @@ v12.0.1.0.7 AFC-2543: Updated get_ssl_params method
         "views/ipf_views.xml",
         "data/customer_data.xml",
         "data/rask_data.xml",
+        "data/mask_data.xml",
         "security/ir.model.access.csv",
     ],
     "application": True,
