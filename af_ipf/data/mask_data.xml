@@ -6,7 +6,7 @@
 			<field name="name">IPF MASK</field>
 			<field name="environment">T2</field>
 			<field name="systemid">AFCRM</field>
-			<field name="url">http://t2.ft.arbetsformedlingen.se</field>
+			<field name="url">https://ipfapi.arbetsformedlingen.se</field>
 			<field name="port">80</field>
 		</record>
 	</data>
