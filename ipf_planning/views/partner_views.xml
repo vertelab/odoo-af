@@ -11,6 +11,7 @@
                             string="Visa handlingsplan"
                             attrs="{'invisible':[('has_ipf_planning','=',False)]}"
                             class="btn-primary"
+                            style="margin-top:4px"
                 />
                 <field name="has_ipf_planning" invisible="1"/>
             </field>
