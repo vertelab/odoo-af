@@ -224,6 +224,8 @@ class Partner(models.Model):
             next_contact_type = (
                 res.get("kontakt", {}).get("nastaKontakttyper", {}) or False
             )
+            if next_contact_type:
+                next_contact_type = next_contact_type[0][0]
             jobseeker_dict = {
                 "firstname": res.get("arbetssokande", {}).get(
                     "fornamn", "MISSING FIRSTNAME"
