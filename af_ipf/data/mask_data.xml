@@ -6,13 +6,13 @@
 			<field name="name">IPF MASK</field>
 			<field name="environment">T2</field>
 			<field name="systemid">AFCRM</field>
-			<field name="url">https://ipfapi.arbetsformedlingen.se</field>
-			<field name="port">80</field>
+			<field name="url">https://ipf-acc.arbetsformedlingen.se</field>
+			<field name="port">443</field>
 		</record>
 	</data>
 	<data>
 		<record id="ipf_endpoint_mask" model="af.ipf.endpoint">
-			<field name="name">merit/somSystem/{customer_id}</field>
+			<field name="name">matchningsinformation-for-system/v1/merit/somSystem/{customer_id}?client_id={clientid}&client_secret={client_secret}</field>
 			<field name="ipf_id" ref="ipf_mask"/>
 	</record>
 	</data>
