@@ -24,6 +24,7 @@ Please see the depend-tab (with debug-mode) for a list of which modules are inst
 13.   v12.0.1.1.1  - Consolidation of MVP1 and MVP2 into DAFA 1.0
 14.   v12.0.1.1.2  - test of version bump
 15.   v12.0.1.1.3  - Moved manifest description to rst file to avoid module description conflicts
+16.   v12.0.1.1.4 - Added a repos folder AFC-1806
 
 # Vertel Repositories
 =====================
