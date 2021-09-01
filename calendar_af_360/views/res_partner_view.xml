@@ -17,7 +17,7 @@
     <field name="arch" type="xml">
       <page name="upcoming_meetings" position="inside">
           <group>
-            <button name="create_appointment" type="object" string="New appointment" icon="fa-calendar" />
+            <button name="create_appointment" type="object" string="New appointment" icon="fa-calendar" disabled=""/>
           </group>
           <field name="appointment_ids_ahead" mode="tree" nolabel="1">
             <tree editable="bottom" default_order="start asc">
@@ -28,8 +28,8 @@
               <field name="case_worker_name" />
               <field name="channel_name" />
               <field name="operation_id" />
-              <button name="cancel_meeting_action" type="object" string="Cancel" icon="fa-times" context="{'active_id': id}" />
-              <button name="move_meeting_action" type="object" string="Move" icon="fa-repeat" context="{'active_id': id}" />
+              <button name="cancel_meeting_action" type="object" string="Cancel" icon="fa-times" context="{'active_id': id}" disabled="" />
+              <button name="move_meeting_action" type="object" string="Move" icon="fa-repeat" context="{'active_id': id}" disabled=""/>
             </tree>
           </field>
         </page>
