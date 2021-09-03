@@ -1,10 +1,11 @@
-from odoo import models, api, registry
-import odoo
-from uuid import uuid4
-from psycopg2 import IntegrityError, InternalError
-import traceback
-import time
+
 import logging
+import time
+import traceback
+from psycopg2 import IntegrityError, InternalError
+from uuid import uuid4
+import odoo
+from odoo import models, api, registry
 
 _logger = logging.getLogger(__name__)
 
