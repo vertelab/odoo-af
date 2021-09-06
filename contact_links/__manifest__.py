@@ -2,7 +2,7 @@
 
 {
     'name': 'AF Contact Links',
-    'version': '12.0.0.2.2',
+    'version': '12.0.0.2.3',
     'category': '',
     'description': """
 Cases
@@ -24,6 +24,7 @@ v12.0.0.1.6: Added AIS link. \n
 v12.0.0.2.0 AFC-2229: Added sort order for links. \n
 v12.0.0.2.1 AFC-2254: Updated URL for a few links. \n
 v12.0.0.2.2 AFC-2537: Updated URL for a link. \n
+v12.0.0.2.3 AFC-2711: Fixed error when creat a new job seeker or employee. \n
 
 """,
     'author': 'Vertel AB',
