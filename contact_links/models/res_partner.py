@@ -12,7 +12,6 @@ class ResPartner(models.Model):
     @api.multi
     def get_contact_links(self):
         """Generate link json data for this partner. Used by the ContactLinks widget."""
-        self.ensure_one()
         links = self.env["partner.links"].search(
             [
                 "|",
