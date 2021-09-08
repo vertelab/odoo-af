@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data noupdate="1">
+		<record id="ipf_mask_merit" model="af.ipf">
+			<field name="name">IPF MASK</field>
+			<field name="environment">T2</field>
+			<field name="systemid">AFCRM</field>
+			<field name="url">https://ipf-acc.arbetsformedlingen.se</field>
+			<field name="port">443</field>
+		</record>
+	</data>
+	<data>
+		<record id="ipf_endpoint_mask_merit" model="af.ipf.endpoint">
+			<field name="name">matchningsinformation-for-system/v1/merit/somSystem/{customer_id}?client_id={clientid}&amp;client_secret={client_secret}</field>
+			<field name="ipf_id" ref="ipf_mask_merit"/>
+	</record>
+	</data>
+</odoo>
