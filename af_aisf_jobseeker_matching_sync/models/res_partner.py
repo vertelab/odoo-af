@@ -1,10 +1,11 @@
-from odoo import models, api, registry
-import odoo
-from uuid import uuid4
-from psycopg2 import IntegrityError, InternalError
-import traceback
-import time
+
 import logging
+import time
+import traceback
+from psycopg2 import IntegrityError, InternalError
+from uuid import uuid4
+import odoo
+from odoo import models, api, registry
 
 _logger = logging.getLogger(__name__)
 
@@ -16,7 +17,7 @@ class Partner(models.Model):
     _inherit = "res.partner"
 
     @api.model
-    def _aisf_sync_jobseeker(
+    def _aisf_sync_jobseeker_matching(
         self,
         db_values,
         process_name,
@@ -42,20 +43,20 @@ class Partner(models.Model):
             partner = self.env["res.partner"].search_pnr(social_sec_nr)
         eventid = eventid or uuid4()
 
-        rask = self.env.ref("af_ipf.ipf_endpoint_rask").sudo()
+        mask_matching = self.env.ref("af_ipf.ipf_endpoint_mask_matching").sudo()
         try:
             if not batch:
-                log.log_message(process_name, eventid, RASK_SYNC, objectid=customer_id)
+                log.log_message(process_name, eventid, MASK_SYNC, objectid=customer_id)
             start_time = time.time()
-            res = rask.call(customer_id=int(customer_id))
+            res = mask_matching.call(customer_id=int(customer_id))
             end_time = time.time()
-            time_for_call_to_rask = end_time - start_time
+            time_for_call_to_mask_matching = end_time - start_time
         except Exception:
             em = traceback.format_exc()
             log.log_message(
                 process_name,
                 eventid,
-                RASK_SYNC,
+                MASK_SYNC,
                 objectid=customer_id,
                 error_message=em,
                 status=False,
@@ -65,11 +66,11 @@ class Partner(models.Model):
             log.log_message(
                 process_name,
                 eventid,
-                RASK_SYNC,
+                MASK_SYNC,
                 objectid=customer_id,
                 error_message="NOT IN AIS-F",
                 status=False,
-                info_1=time_for_call_to_rask,
+                info_1=time_for_call_to_mask_matching,
             )
             return
         customer_id = res.get("arbetssokande", {}).get("sokandeId")
@@ -102,10 +103,10 @@ class Partner(models.Model):
                     log.log_message(
                         process_name,
                         eventid,
-                        RASK_SYNC,
+                        MASK_SYNC,
                         objectid=customer_id,
                         error_message="SPU",
-                        info_1=time_for_call_to_rask,
+                        info_1=time_for_call_to_mask_matching,
                         info_2="delete",
                     )
                 else:
@@ -113,10 +114,10 @@ class Partner(models.Model):
                     log.log_message(
                         process_name,
                         eventid,
-                        RASK_SYNC,
+                        MASK_SYNC,
                         objectid=customer_id,
                         error_message="SPU",
-                        info_1=time_for_call_to_rask,
+                        info_1=time_for_call_to_mask_matching,
                         info_2=res_unlink,
                     )
                 cr_unlink.close()
@@ -124,10 +125,10 @@ class Partner(models.Model):
                 log.log_message(
                     process_name,
                     eventid,
-                    RASK_SYNC,
+                    MASK_SYNC,
                     objectid=customer_id,
                     error_message="SPU",
-                    info_1=time_for_call_to_rask,
+                    info_1=time_for_call_to_mask_matchingk,
                     info_2="not created",
                 )
             return True
@@ -224,8 +225,6 @@ class Partner(models.Model):
             next_contact_type = (
                 res.get("kontakt", {}).get("nastaKontakttyper", {}) or False
             )
-            if next_contact_type:
-                next_contact_type = next_contact_type[0][0]
             jobseeker_dict = {
                 "firstname": res.get("arbetssokande", {}).get(
                     "fornamn", "MISSING FIRSTNAME"
@@ -275,7 +274,7 @@ class Partner(models.Model):
                         pass
                     else:
                         # delete education with source from AIS-F
-                        aisf_edu = partner.education_ids.filtered(lambda e: e.is_rask)
+                        aisf_edu = partner.education_ids.filtered(lambda e: e.is_mask_matching)
                         if aisf_edu:
                             aisf_edu.unlink()
                         # add empty list to jobseeker_dict to trigger next if
@@ -290,7 +289,7 @@ class Partner(models.Model):
                             {
                                 "sun_id": sun,
                                 "education_level_id": education_level,
-                                "is_rask": True,
+                                "is_mask_matching": True,
                             },
                         )
                     )
@@ -376,7 +375,7 @@ class Partner(models.Model):
             log.log_message(
                 process_name,
                 eventid,
-                RASK_SYNC,
+                MASK_SYNC,
                 objectid=customer_id,
                 error_message=em,
                 status=False,
@@ -388,7 +387,7 @@ class Partner(models.Model):
             eventid,
             "SYNC COMPLETED",
             objectid=customer_id,
-            info_1=time_for_call_to_rask,
+            info_1=time_for_call_to_mask_matching,
             info_2=create_update,
         )
 
