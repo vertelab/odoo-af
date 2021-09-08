@@ -2,7 +2,7 @@
 
 {
     "name": "AF IPF Integration",
-    "version": "12.0.2.0.0",
+    "version": "12.0.2.1.0",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
@@ -18,7 +18,8 @@ v12.0.1.0.4 AFC-2239: Fixed bug for getting users
 v12.0.1.0.5 AFC-1051: Moved data files to respective modules
 v12.0.1.0.6 AFC-2550: Fixed bug in response
 v12.0.1.0.7 AFC-2543: Updated get_ssl_params method
-v12.0.2.0.0 AFC-2532: Added Mask data file
+v12.0.2.0.0 AFC-2532: Added Mask data file for merit
+v12.0.2.1.0 AFC-2534: Added Mask matching port
 """,
     "depends": ["af_security"],
     "external_dependencies": {"python": ["requests"]},
