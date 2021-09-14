@@ -227,7 +227,6 @@ class Partner(models.Model):
             if next_contact_type:
                 list_next_contact_type = [w[0] for w in next_contact_type]
                 next_contact_type = ''.join(list_next_contact_type)
-            print(next_contact_type)
             jobseeker_dict = {
                 "firstname": res.get("arbetssokande", {}).get(
                     "fornamn", "MISSING FIRSTNAME"
