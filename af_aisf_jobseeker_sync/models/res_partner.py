@@ -31,6 +31,7 @@ class Partner(models.Model):
         :param eventid: The MQ message id for logging purposes.
         :returns: True if sync succeeded.
         """
+        eventid = eventid or uuid4()
         log = self.env["af.process.log"]
         if not batch:
             log.log_message(process_name, eventid, "SYNC STARTED", objectid=customer_id)
@@ -40,7 +41,6 @@ class Partner(models.Model):
         )
         if not partner and social_sec_nr:
             partner = self.env["res.partner"].search_pnr(social_sec_nr)
-        eventid = eventid or uuid4()
 
         rask = self.env.ref("af_ipf.ipf_endpoint_rask").sudo()
         try:
@@ -225,7 +225,8 @@ class Partner(models.Model):
                 res.get("kontakt", {}).get("nastaKontakttyper", {}) or False
             )
             if next_contact_type:
-                next_contact_type = next_contact_type[0][0]
+                list_next_contact_type = [w[0] for w in next_contact_type]
+                next_contact_type = ''.join(list_next_contact_type)
             jobseeker_dict = {
                 "firstname": res.get("arbetssokande", {}).get(
                     "fornamn", "MISSING FIRSTNAME"
