@@ -44,7 +44,7 @@
         "l10n_se_mis",
         "mail_outplacement_report",
         "mis_builder",
-        "monitoring_status",		        # Module from Camptocamp. adds a monitoring value for automatic montitoring. We have a version here https://github.com/vertelab/odoo-base
+        "monitoring_status",		        # OCA Module from https://github.com/camptocamp/odoo-cloud-platform/tree/12.0/monitoring_status. adds a monitoring value for automatic montitoring. We have a version here https://github.com/vertelab/odoo-base
         "outplacement",                     # dependancy to base, hr, mail
         "outplacement_completion_report_ipf_client",    # dependancy to res_joint_planning_af
         # "outplacement_crmsync",           # Module to be installed at a DAFA server and communicate with outplacement_dafasync" 
