@@ -53,7 +53,7 @@
         "ipf_ais_bos",			    # odoo-af/
         "ipf_case", 			    # Use new api to integrate to AIS-Å and BÄR
         "ipf_planning",			    # odoo-af/
-        "monitoring_status",		# adds a monitoring value for automatic montitoring
+        "monitoring_status",		# adds a monitoring value for automatic montitoring https://github.com/camptocamp/odoo-cloud-platform/tree/12.0/ is planned to be replace by https://github.com/vertelab/odoo-base/tree/Dev-12.0-Fenix-Sprint-02/monitoring_status_af
         "partner_desired_jobs",		# odoo-base/
         "partner_education_360",
         "partner_fax", 			    # OCA Adds fax-number for AG
