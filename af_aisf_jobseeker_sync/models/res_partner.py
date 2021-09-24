@@ -372,6 +372,175 @@ class Partner(models.Model):
                 )
                 if given_address_object:
                     given_address_object.unlink()
+
+            utbildningsplikt_kod_id = self.env['res.arbetssokande.vf.' \
+                                               'utbildningsplikt'].search(
+                [
+                    ('code', '=', res.get("utbildning", {}).get("utbildningspliktKod"))
+                ]
+            )
+            intensivar_id = self.env['res.arbetssokande.vf.intensivar'].search(
+                [
+                    ('description', '=', res.get("intensivar", {}).get("status"))
+                ]
+            ).id
+            fordjupad_samverkan_insatstyps_kod_id = self.env['res.arbetssokande.vf.' \
+                                                             'insatstyp_kod'].search(
+                [
+                    ('code', '=', res.get("fordjupadSamverkan", {}).get("insatstypsKod"))
+                ]
+            ).id
+            antal_forbr_akassadagar_id = self.env['res.arbetssokande.vf.' \
+                                                  'antal_forbr_akassadagar'].search(
+                [
+                    ("code",
+                     "=",
+                     res.get("akassa", {}).get("antalForbrAkassadagar")
+                     )
+                ]
+            ).id
+            akassa_kod_id = self.env['res.arbetssokande.vf.' \
+                                     'akassa_kod'].search(
+                [
+                    ("code",
+                     "=",
+                     res.get("akassa", {}).get("akassaKod")
+                     )
+                ]
+            ).id
+            if res.get("etablering", {}).get("tillhorEtablering2010"):
+                tillhor_etablering = "2010"
+            elif res.get("etablering", {}).get("tillhorEtablering2017"):
+                tillhor_etablering = "2017"
+            else:
+                tillhor_etablering = False
+
+            arbetssokande_dict = {
+                "fodelsedatum": res.get("arbetssokande", {}).get("fodelsedatum"),
+                "uppdat_vecka_akassadagar": res.get("akassa", {}).get(
+                    "uppdatVeckaAkassadagar"
+                ),
+                "akasse_status": res.get("akassa", {}).get("akasseStatus"),
+                "af_akasse_status": res.get("akassa", {}).get("afAkasseStatus"),
+                "utrikesfodd": res.get("etablering", {}).get("utrikesfodd"),
+                "etableringssamtal_datum": res.get("etablering", {}).get("etableringssamtalDatum"),
+                "fordjupad_samverkan_startdatum": res.get("fordjupadSamverkan", {}).get("startdatum"),
+                "fordjupad_samverkan_slutdatum": res.get("fordjupadSamverkan", {}).get("slutdatum"),
+                "avslutsorsaks_kod": res.get("fordjupadSamverkan", {}).get("avslutsorsaksKod"),
+                "sokandekategori_sedan": res.get("kontakt", {}).get("sokandekategoriSedan"),
+                "kontor_sektionskod": res.get("kontor", {}).get("sektionsKod"),
+                "info_till_arbetsgivare_via_epost": res.get("medgivande", {}).get("infoTillArbetsgivareViaEpost"),
+                "beraknad_sysselsattnings_datum": res.get("processStatus", {}).get("beraknadSysselsattningsDatum"),
+                "accepterar_automatisk_utskrivning": res.get("processStatus", {}).get("accepterarAutomatiskUtskrivning"),
+                "skatteverket_sekretessmarkering": res.get("processStatus", {}).get("skatteverketSekretessmarkering"),
+                "skatteverket_skyddad_folkbokforing": res.get("processStatus", {}).get("skatteverketSkyddadFolkbokforing"),
+                "spar_status": res.get("processStatus", {}).get("sparStatus"),
+                "lagrad": res.get("processStatus", {}).get("lagrad"),
+                "sjalvinskriven": res.get("processStatus", {}).get("sjalvinskriven"),
+                "fastTillaggskodAF1": res.get("tillaggskod", {}).get("fastTillaggskodAF1"),
+                "fastTillaggskodAF2": res.get("tillaggskod", {}).get("fastTillaggskodAF2"),
+                "fastTillaggskodKontor": res.get("tillaggskod", {}).get("fastTillaggskodKontor"),
+                "tillfTillaggskodKontor": res.get("tillaggskod", {}).get("tillfTillaggskodKontor"),
+                "tillhor_etablering": tillhor_etablering,
+                "akassa_kod_id": akassa_kod_id,
+                "antal_forbr_akassadagar_id": antal_forbr_akassadagar_id,
+                "fordjupad_samverkan_insatstyps_kod_id": fordjupad_samverkan_insatstyps_kod_id,
+                "intensivar_id": intensivar_id,
+                "utbildningsplikt_kod_id": utbildningsplikt_kod_id
+            }
+            arbetssokande_id = self.env['res.arbetssokande'].create(arbetssokande_dict)
+
+            for akassa_period in res.get("akassa", {}).get("akassaperioder", []):
+                akasseperiod_id = (0, 0, {
+                    'start_datum': akassa_period.get("startdatum"),
+                    'slut_datum': akassa_period.get("slutdatum"),
+                    'arbetssokande_id': arbetssokande_id
+                })
+                self.env['res.arbetssokande.akassaperiod'].create(akasseperiod_id)
+
+            for funktionsnedsattning in res.get("funktionsnedsattning", {}).get(
+                    "funktionsnedsattningar"):
+                funktionsnedsattning_id = (0, 0, {
+                    'funktionsnedsattning_id': self.env['res.arbetssokande.vf.' \
+                                                        'funktionsnedsattning'].search(
+                        [
+                            (
+                                "code",
+                                "=",
+                                funktionsnedsattning.get("kod")
+                            )
+                        ]
+                    ).id,
+                    'arbetssokande_id': arbetssokande_id
+                })
+                self.env['res.arbetssokande.akassaperiod'].create(akasseperiod_id)
+
+            for overhoppningsbar_tid in res.get("overhoppningsbarTid", {}).get(
+                    "overhoppningsbaraTider"):
+                overhoppningsbar_tid_id = (0, 0, {
+                    'overhoppningsbar_tid_typ_id': self.env['res.arbetssokande.vf.' \
+                                                            'overhoppningsbar_tid'].search(
+                        [
+                            (
+                                "description",
+                                "=",
+                                overhoppningsbar_tid.get("typ")
+                            )
+                        ]
+                    ).id,
+                    'arbetssokande_id': arbetssokande_id,
+                    'start_datum': overhoppningsbar_tid.get("startdatum"),
+                    'slut_datum': overhoppningsbar_tid.get("slutdatum"),
+                })
+                self.env['res.arbetssokande.akassaperiod'].create(akasseperiod_id)
+
+            remaining_values_dict = {
+                "funktionsnedsattning": {
+                    "ungMedFunktionsnedsattning": false,
+                },
+                "kontakt": {
+                    "tolksprak": "en",
+                    "tolkleveranssatt": "Expresstolk"
+                },
+                "kontor": {
+                    "ekonomisktBeslutVidAndraKontorsKoder": [
+                        "\\\"2427\\\"",
+                        "\\\"2425\\\"",
+                        "\\\"2426\\\""
+                    ]
+                },
+                "personnummerbyte": {
+                    "personnummerbyteBestallt": false,
+                    "personnummerbyten": [
+                        {
+                            "bytesdatum": "2015-01-01",
+                            "tidigarePersonnummer": 199304162390
+                        }
+                    ]
+                },
+                "rehabSamverkan": {
+                    "malgruppsKod": "1",
+                    "startdatum": "2017-01-01",
+                    "slutdatum": "2017-01-01",
+                    "avslutsorsaksKod": "2"
+                },
+                "tidigInsats": {
+                    "status": "BEHOV_FINNS",
+                    "startdatum": "2018-11-23",
+                    "slutdatum": "2019-11-23"
+                },
+                "tillaggsdag": {
+                    "tillaggsdagar": [
+                        {
+                            "startdatum": "2015-01-01",
+                            "slutdatum": "2015-01-05",
+                            "antaldagar": 4,
+                            "Raderad": true
+                        }
+                    ]
+                },
+            }
+
         except Exception:
             em = traceback.format_exc()
             log.log_message(
