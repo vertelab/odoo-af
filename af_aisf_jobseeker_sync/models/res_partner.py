@@ -53,7 +53,6 @@ class Partner(models.Model):
         except ValueError as e:
             error, res = e.args
             if res.status_code == 404:
-                _logger.info("here")
                 log.log_message(
                     process_name,
                     eventid,
