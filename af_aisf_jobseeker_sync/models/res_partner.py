@@ -373,24 +373,24 @@ class Partner(models.Model):
                 if given_address_object:
                     given_address_object.unlink()
 
-            utbildningsplikt_kod_id = self.env['res.arbetssokande.vf.' \
+            utbildningsplikt_kod_id = self.env['arbetssokande.vf.' \
                                                'utbildningsplikt'].search(
                 [
                     ('code', '=', res.get("utbildning", {}).get("utbildningspliktKod"))
                 ]
-            )
-            intensivar_id = self.env['res.arbetssokande.vf.intensivar'].search(
+            ).id
+            intensivar_id = self.env['arbetssokande.vf.intensivar'].search(
                 [
                     ('description', '=', res.get("intensivar", {}).get("status"))
                 ]
             ).id
-            fordjupad_samverkan_insatstyps_kod_id = self.env['res.arbetssokande.vf.' \
+            fordjupad_samverkan_insatstyps_kod_id = self.env['arbetssokande.vf.' \
                                                              'insatstyp_kod'].search(
                 [
                     ('code', '=', res.get("fordjupadSamverkan", {}).get("insatstypsKod"))
                 ]
             ).id
-            antal_forbr_akassadagar_id = self.env['res.arbetssokande.vf.' \
+            antal_forbr_akassadagar_id = self.env['arbetssokande.vf.' \
                                                   'antal_forbr_akassadagar'].search(
                 [
                     ("code",
@@ -399,7 +399,7 @@ class Partner(models.Model):
                      )
                 ]
             ).id
-            akassa_kod_id = self.env['res.arbetssokande.vf.' \
+            akassa_kod_id = self.env['arbetssokande.vf.' \
                                      'akassa_kod'].search(
                 [
                     ("code",
@@ -416,6 +416,7 @@ class Partner(models.Model):
                 tillhor_etablering = False
 
             arbetssokande_dict = {
+                'partner_id': partner.id,
                 "fodelsedatum": res.get("arbetssokande", {}).get("fodelsedatum"),
                 "uppdat_vecka_akassadagar": res.get("akassa", {}).get(
                     "uppdatVeckaAkassadagar"
@@ -448,20 +449,20 @@ class Partner(models.Model):
                 "intensivar_id": intensivar_id,
                 "utbildningsplikt_kod_id": utbildningsplikt_kod_id
             }
-            arbetssokande_id = self.env['res.arbetssokande'].create(arbetssokande_dict)
+            arbetssokande_id = self.env['arbetssokande'].create(arbetssokande_dict)
 
             for akassa_period in res.get("akassa", {}).get("akassaperioder", []):
-                akasseperiod_id = (0, 0, {
+                akasseperiod_dict = {
                     'start_datum': akassa_period.get("startdatum"),
                     'slut_datum': akassa_period.get("slutdatum"),
                     'arbetssokande_id': arbetssokande_id
-                })
-                self.env['res.arbetssokande.akassaperiod'].create(akasseperiod_id)
+                }
+                self.env['arbetssokande.akassaperiod'].create(akasseperiod_dict)
 
             for funktionsnedsattning in res.get("funktionsnedsattning", {}).get(
                     "funktionsnedsattningar"):
-                funktionsnedsattning_id = (0, 0, {
-                    'funktionsnedsattning_id': self.env['res.arbetssokande.vf.' \
+                funktionsnedsattning_dict = {
+                    'funktionsnedsattning_id': self.env['arbetssokande.vf.' \
                                                         'funktionsnedsattning'].search(
                         [
                             (
@@ -472,13 +473,14 @@ class Partner(models.Model):
                         ]
                     ).id,
                     'arbetssokande_id': arbetssokande_id
-                })
-                self.env['res.arbetssokande.akassaperiod'].create(akasseperiod_id)
+                }
+                self.env['arbetssokande.funktionsnedsattning'].create(
+                    funktionsnedsattning_dict)
 
             for overhoppningsbar_tid in res.get("overhoppningsbarTid", {}).get(
                     "overhoppningsbaraTider"):
-                overhoppningsbar_tid_id = (0, 0, {
-                    'overhoppningsbar_tid_typ_id': self.env['res.arbetssokande.vf.' \
+                overhoppningsbar_tid_dict = {
+                    'overhoppningsbar_tid_typ_id': self.env['arbetssokande.vf.' \
                                                             'overhoppningsbar_tid'].search(
                         [
                             (
@@ -491,26 +493,31 @@ class Partner(models.Model):
                     'arbetssokande_id': arbetssokande_id,
                     'start_datum': overhoppningsbar_tid.get("startdatum"),
                     'slut_datum': overhoppningsbar_tid.get("slutdatum"),
-                })
-                self.env['res.arbetssokande.akassaperiod'].create(akasseperiod_id)
+                }
+                self.env['arbetssokande.overhoppningsbar_tid'].create(
+                    overhoppningsbar_tid_dict)
 
-            remaining_values_dict = {
+            for office_code in res.get("kontor", {}).get(
+                    "ekonomisktBeslutVidAndraKontorsKoder"):
+                ekonomiskt_beslut_vid_andra_kontors_koder_dict = {
+                    'arbetssokande_id': arbetssokande_id,
+                    'kontors_id': self.env['hr.department'].search([
+                        ('office_code', '=', office_code)
+                    ]).id,
+                }
+                self.env['arbetssokande.ekonomiskt_beslut_vid_andra_kontors_kod'].create(
+                    ekonomiskt_beslut_vid_andra_kontors_koder_dict)
+
+            remaining_keys_dict = {
                 "funktionsnedsattning": {
-                    "ungMedFunktionsnedsattning": false,
+                    "ungMedFunktionsnedsattning": "false",
                 },
                 "kontakt": {
                     "tolksprak": "en",
                     "tolkleveranssatt": "Expresstolk"
                 },
-                "kontor": {
-                    "ekonomisktBeslutVidAndraKontorsKoder": [
-                        "\\\"2427\\\"",
-                        "\\\"2425\\\"",
-                        "\\\"2426\\\""
-                    ]
-                },
                 "personnummerbyte": {
-                    "personnummerbyteBestallt": false,
+                    "personnummerbyteBestallt": "false",
                     "personnummerbyten": [
                         {
                             "bytesdatum": "2015-01-01",
@@ -535,7 +542,7 @@ class Partner(models.Model):
                             "startdatum": "2015-01-01",
                             "slutdatum": "2015-01-05",
                             "antaldagar": 4,
-                            "Raderad": true
+                            "Raderad": "true"
                         }
                     ]
                 },
