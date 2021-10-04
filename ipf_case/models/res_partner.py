@@ -30,33 +30,33 @@ _logger = logging.getLogger(__name__)
 class Partner(models.Model):
     _inherit = 'res.partner'
 
-    case_ids = fields.One2many(comodel_name='res.partner.case',
-                               string='Cases',
-                               inverse_name="partner_id",
-                               compute='compute_case_ids')
+    genomforande_ids = fields.One2many(comodel_name='res.partner.genomforande',
+                                       string='Genomforande',
+                                       inverse_name="partner_id",
+                                       compute='compute_genomforande_ids')
 
     @api.multi
-    def compute_case_ids(self):
+    def compute_genomforande_ids(self):
         for record in self:
             if record.is_jobseeker:
                 personnummer = record.get_case_pnr()
                 if personnummer:
                     try:
-                        ipf = self.env.ref('ipf_case.ipf_endpoint_case').sudo()
-                        res = ipf.call(personnummer=personnummer)
-                        record.case_ids = record.env['res.partner.case']
-                        for arende in res.get('arenden', []):
-                            record.case_ids |= record.env['res.partner.case'].create_arende(arende, record.id)
+                        # ipf = self.env.ref('ipf_case.ipf_endpoint_case').sudo()
+                        # res = ipf.call(personnummer=personnummer)
+                        # record.case_ids = record.env['res.partner.case']
+                        # for arende in res.get('arenden', []):
+                        # record.case_ids |= record.env['res.partner.case'].create_arende(arende, record.id)
 
                         ipf = self.env.ref('ipf_case.ipf_endpoint_case_genomforanden').sudo()
                         res = ipf.call(personnummer=personnummer)
                         for genomforande in res.get('genomforanden', []):
-                            record.case_ids |= record.env['res.partner.case'].create_arende(genomforande,
-                                                                                                  record.id,
-                                                                                                  genomforande=True)
+                            record.genomforande_ids |= record.env['res.partner.genomforande'].create_genomforande(
+                                genomforande,
+                                record.id)
 
                     except Exception as e:
-                        _logger.warning('Error in IPF CASE integration.', exc_info=e)
+                        _logger.warning('Error in IPF Genomforande integration.', exc_info=e)
                         record.case_ids = None
 
     @api.multi
@@ -69,42 +69,56 @@ class Partner(models.Model):
             raise UserError("Invalid personal identification number: %s" % self.social_sec_nr)
 
 
-class PartnerArende(models.TransientModel):
-    _name = 'res.partner.case'
-    _description = 'Ärende För System'
+class PartnerGenomforande(models.TransientModel):
+    _name = 'res.partner.genomforande'
+    _description = 'Genomförande För System'
 
+    partner_id = fields.Many2one(
+        comodel_name="res.partner", string="Job seeker")
     source = fields.Char(string='Source')
-    name = fields.Char(string="Case number")
-    res_officer = fields.Char(string='Case officer')
+    refers_to = fields.Char(string='Refers to')
     status = fields.Char(string='Status')
     start = fields.Date(string='Start date')
     stop = fields.Date(string='End date')
-    short_names = fields.Char(string='Short name')
-    name_desc = fields.Char(string='Description')
-    case_type = fields.Char(string="Case type")
-    partner_id = fields.Many2one(
-        comodel_name="res.partner", string="Job seeker")
-    genomforande = fields.Boolean()
+    source = fields.Char(string='Source')
+    extent = fields.Char(string='Extent')
+    organiser = fields.Char(string='Organiser')
 
     @api.model
-    def create_arende(self, vals, partner_id, genomforande=False):
-        if genomforande:
-            start_date = vals.get('genomforande_period', {}).get('startdatum')
-            stop_date = vals.get('genomforande_period', {}).get('slutdatum')
+    def create_genomforande(self, vals, partner_id):
+
+        start_date = vals.get('genomforande_period', {}).get('startdatum')
+        stop_date = vals.get('genomforande_period', {}).get('slutdatum')
+        support_type_short = vals.get('stodtyp_forkortning')
+        case_type_short = vals.get('arendetyp_kortnamn')
+        extent = vals.get('tjanstgoringsgrad')
+        status = vals.get('genomforande_fas')
+        organiser = vals.get('anordnare', {}).get('arbetsstalle_organisationsnummer')
+
+        if len(vals['arende_id']) > 8:
+            source = 'BÄR'
         else:
-            start_date = vals.get('beslut_period', {}).get('startdatum')
-            stop_date = vals.get('beslut_period', {}).get('slutdatum')
-        short_name = vals['arendetyp_kortnamn']
-        name_desc = vals['arendetyp_benamning']
+            source = 'AIS'
+
+        if support_type_short:
+            refers_to = f'{case_type_short} ({support_type_short})'
+        else:
+            refers_to = case_type_short
+
+        if status == 'Inväntar periodstart':
+            status = 'Väntar'
+        elif status == 'Genomförandeperiod':
+            status = 'Genomförande'
+        elif status == 'Period avslutas':
+            status = 'Avslutad'
 
         return self.create({
             'partner_id': partner_id,
-            'source': 'AIS & BÄR',
-            'name': vals['arende_id'],
-            'res_officer': vals.get('beslut_handlaggare', {}).get('signatur'),
-            'status': vals.get('status') if not genomforande else vals.get('genomforande_fas'),
-            'case_type': f'{name_desc}({short_name})',
+            'source': source,
+            'refers_to': refers_to,
+            'status': status,
             'start': datetime.strptime(start_date, '%Y-%m-%d') if start_date else False,
             'stop': datetime.strptime(stop_date, '%Y-%m-%d') if stop_date else False,
-            'genomforande': genomforande,
+            'extent': f'{extent} %' if extent is not None else '',
+            'organiser': f'{organiser[:6]}-{organiser[6:]}' if organiser is not None else '',
         })
