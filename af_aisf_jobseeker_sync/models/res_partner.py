@@ -373,24 +373,24 @@ class Partner(models.Model):
                 if given_address_object:
                     given_address_object.unlink()
 
-            utbildningsplikt_kod_id = self.env['vf_' \
+            utbildningsplikt_kod_id = self.env['vf.' \
                                                'utbildningsplikt'].search(
                 [
                     ('code', '=', res.get("utbildning", {}).get("utbildningspliktKod"))
                 ]
             ).id
-            intensivar_id = self.env['vf_intensivar'].search(
+            intensivar_id = self.env['vf.intensivar'].search(
                 [
                     ('description', '=', res.get("intensivar", {}).get("status"))
                 ]
             ).id
-            fordjupad_samverkan_insatstyps_kod_id = self.env['vf_' \
+            fordjupad_samverkan_insatstyps_kod_id = self.env['vf.' \
                                                              'insatstyp_kod'].search(
                 [
                     ('code', '=', res.get("fordjupadSamverkan", {}).get("insatstypsKod"))
                 ]
             ).id
-            antal_forbr_akassadagar_id = self.env['vf_' \
+            antal_forbr_akassadagar_id = self.env['vf.' \
                                                   'antal_forbr_akassadagar'].search(
                 [
                     ("code",
@@ -399,7 +399,7 @@ class Partner(models.Model):
                      )
                 ]
             ).id
-            akassa_kod_id = self.env['vf_' \
+            akassa_kod_id = self.env['vf.' \
                                      'akassa_kod'].search(
                 [
                     ("code",
@@ -462,7 +462,7 @@ class Partner(models.Model):
             for funktionsnedsattning in res.get("funktionsnedsattning", {}).get(
                     "funktionsnedsattningar"):
                 funktionsnedsattning_dict = {
-                    'funktionsnedsattning_id': self.env['vf_' \
+                    'funktionsnedsattning_id': self.env['vf.' \
                                                         'funktionsnedsattning'].search(
                         [
                             (
@@ -480,7 +480,7 @@ class Partner(models.Model):
             for overhoppningsbar_tid in res.get("overhoppningsbarTid", {}).get(
                     "overhoppningsbaraTider"):
                 overhoppningsbar_tid_dict = {
-                    'overhoppningsbar_tid_typ_id': self.env['vf_' \
+                    'overhoppningsbar_tid_typ_id': self.env['vf.' \
                                                             'overhoppningsbar_tid'].search(
                         [
                             (
