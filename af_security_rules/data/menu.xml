@@ -38,5 +38,9 @@
             <field name="groups_id" eval="[(6, 0, [ref('base.group_system')])]"/>
         </record>
 
+        <record id="calendar_af.menu_calendar" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('base.group_system')])]"/>
+        </record>
+
     </data>
 </odoo>

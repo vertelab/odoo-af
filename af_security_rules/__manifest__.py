@@ -2,7 +2,7 @@
 
 {
     "name": "AF Security Rules",
-    "version": "12.0.1.2.0",
+    "version": "12.0.1.2.1",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "description": """Security rules for Arbetsförmedlingen.
@@ -10,7 +10,8 @@
 v12.0.1.1.1 AFC-2168: Changed groups of various menus.
 v12.0.1.1.2 AFC-2227: Fixed a bug when finding logged in user.
 v12.0.1.1.3 AFC-2239: Hid menu Lokalkontor.
-v12.0.1.2.0 AFC-2298: Fixed access rights. jobseeker_officer, meeting_planner, and meeting_admin.
+v12.0.1.2.0 AFC-2298: Fixed access rights: jobseeker_officer, meeting_planner, and meeting_admin.
+v12.0.1.2.1 AFC-2814: Fixed access rights: calendar_af 
     """,
     "website": "https://vertel.se/",
     "category": "Tools",

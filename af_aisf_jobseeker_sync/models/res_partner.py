@@ -50,6 +50,28 @@ class Partner(models.Model):
             res = rask.call(customer_id=int(customer_id))
             end_time = time.time()
             time_for_call_to_rask = end_time - start_time
+        except ValueError as e:
+            error, res = e.args
+            if res.status_code == 404:
+                log.log_message(
+                    process_name,
+                    eventid,
+                    RASK_SYNC,
+                    objectid=customer_id,
+                    error_message="NOT IN AIS-F",
+                    status=False,
+                )
+            else:
+                em = traceback.format_exc()
+                log.log_message(
+                    process_name,
+                    eventid,
+                    RASK_SYNC,
+                    objectid=customer_id,
+                    error_message=em,
+                    status=False,
+                )
+            return
         except Exception:
             em = traceback.format_exc()
             log.log_message(
@@ -59,17 +81,6 @@ class Partner(models.Model):
                 objectid=customer_id,
                 error_message=em,
                 status=False,
-            )
-            return
-        if not res:
-            log.log_message(
-                process_name,
-                eventid,
-                RASK_SYNC,
-                objectid=customer_id,
-                error_message="NOT IN AIS-F",
-                status=False,
-                info_1=time_for_call_to_rask,
             )
             return
         customer_id = res.get("arbetssokande", {}).get("sokandeId")
