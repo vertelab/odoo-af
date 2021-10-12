@@ -373,24 +373,24 @@ class Partner(models.Model):
                 if given_address_object:
                     given_address_object.unlink()
 
-            utbildningsplikt_kod_id = self.env['arbetssokande.vf.' \
+            utbildningsplikt_kod_id = self.env['vf_' \
                                                'utbildningsplikt'].search(
                 [
                     ('code', '=', res.get("utbildning", {}).get("utbildningspliktKod"))
                 ]
             ).id
-            intensivar_id = self.env['arbetssokande.vf.intensivar'].search(
+            intensivar_id = self.env['vf_intensivar'].search(
                 [
                     ('description', '=', res.get("intensivar", {}).get("status"))
                 ]
             ).id
-            fordjupad_samverkan_insatstyps_kod_id = self.env['arbetssokande.vf.' \
+            fordjupad_samverkan_insatstyps_kod_id = self.env['vf_' \
                                                              'insatstyp_kod'].search(
                 [
                     ('code', '=', res.get("fordjupadSamverkan", {}).get("insatstypsKod"))
                 ]
             ).id
-            antal_forbr_akassadagar_id = self.env['arbetssokande.vf.' \
+            antal_forbr_akassadagar_id = self.env['vf_' \
                                                   'antal_forbr_akassadagar'].search(
                 [
                     ("code",
@@ -399,7 +399,7 @@ class Partner(models.Model):
                      )
                 ]
             ).id
-            akassa_kod_id = self.env['arbetssokande.vf.' \
+            akassa_kod_id = self.env['vf_' \
                                      'akassa_kod'].search(
                 [
                     ("code",
@@ -462,7 +462,7 @@ class Partner(models.Model):
             for funktionsnedsattning in res.get("funktionsnedsattning", {}).get(
                     "funktionsnedsattningar"):
                 funktionsnedsattning_dict = {
-                    'funktionsnedsattning_id': self.env['arbetssokande.vf.' \
+                    'funktionsnedsattning_id': self.env['vf_' \
                                                         'funktionsnedsattning'].search(
                         [
                             (
@@ -480,7 +480,7 @@ class Partner(models.Model):
             for overhoppningsbar_tid in res.get("overhoppningsbarTid", {}).get(
                     "overhoppningsbaraTider"):
                 overhoppningsbar_tid_dict = {
-                    'overhoppningsbar_tid_typ_id': self.env['arbetssokande.vf.' \
+                    'overhoppningsbar_tid_typ_id': self.env['vf_' \
                                                             'overhoppningsbar_tid'].search(
                         [
                             (
@@ -507,46 +507,6 @@ class Partner(models.Model):
                 }
                 self.env['arbetssokande.ekonomiskt_beslut_vid_andra_kontors_kod'].create(
                     ekonomiskt_beslut_vid_andra_kontors_koder_dict)
-
-            remaining_keys_dict = {
-                "funktionsnedsattning": {
-                    "ungMedFunktionsnedsattning": "false",
-                },
-                "kontakt": {
-                    "tolksprak": "en",
-                    "tolkleveranssatt": "Expresstolk"
-                },
-                "personnummerbyte": {
-                    "personnummerbyteBestallt": "false",
-                    "personnummerbyten": [
-                        {
-                            "bytesdatum": "2015-01-01",
-                            "tidigarePersonnummer": 199304162390
-                        }
-                    ]
-                },
-                "rehabSamverkan": {
-                    "malgruppsKod": "1",
-                    "startdatum": "2017-01-01",
-                    "slutdatum": "2017-01-01",
-                    "avslutsorsaksKod": "2"
-                },
-                "tidigInsats": {
-                    "status": "BEHOV_FINNS",
-                    "startdatum": "2018-11-23",
-                    "slutdatum": "2019-11-23"
-                },
-                "tillaggsdag": {
-                    "tillaggsdagar": [
-                        {
-                            "startdatum": "2015-01-01",
-                            "slutdatum": "2015-01-05",
-                            "antaldagar": 4,
-                            "Raderad": "true"
-                        }
-                    ]
-                },
-            }
 
         except Exception:
             em = traceback.format_exc()
