@@ -21,7 +21,7 @@
 import json
 import logging
 import requests
-from odoo.exceptions import Warning
+from odoo.exceptions import UserError
 from requests.auth import HTTPBasicAuth
 from uuid import uuid4
 
@@ -159,18 +159,22 @@ class AfIpfEndpoint(models.Model):
                     )
         except Exception as e:
             _logger.warning('Error in IPF call method ', exc_info=e)
+            raise e
 
         _logger.debug("Unpack response: %s" % response)
+
         res = None
         try:
             res = response.json()
-        except:
-            pass
+        except ValueError as e:
+            _logger.error("Failed to parse JSON from response", exc_info=e)
+            raise ValueError(e, response)
+
         if response and response.status_code != 200:
             error_msg = self.build_error_msg(response, res)
             _logger.warn(error_msg)
             if raise_on_error:
-                raise Warning(error_msg)
+                raise UserError(error_msg)
         # Undocumented response from Customer. No data returned in body.
         # if response.status_code == 204:
         #    return

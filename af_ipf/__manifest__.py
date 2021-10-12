@@ -20,6 +20,7 @@ v12.0.1.0.6 AFC-2550: Fixed bug in response
 v12.0.1.0.7 AFC-2543: Updated get_ssl_params method
 v12.0.2.0.0 AFC-2532: Added Mask data file for merit
 v12.0.2.1.0 AFC-2534: Added Mask matching port
+v12.0.2.1.1 AFC-2675: Raise exceptions when errors occur
 """,
     "depends": ["af_security"],
     "external_dependencies": {"python": ["requests"]},

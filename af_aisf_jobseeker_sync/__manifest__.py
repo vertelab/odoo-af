@@ -11,6 +11,7 @@ v12.0.0.2.0 AFC-2245: Added better handling of jobseekers with SPU. \n
 v12.0.0.2.1 AFC-2254: Misc changes \n
 v12.0.0.2.2 AFC-2263: Changed boolean to selection field \n
 v12.0.0.2.3 AFC-2324: Enabled multiple next contact types \n
+v12.0.0.2.4 AFC-2675: Fixed error handling and logging \n
 v12.0.0.3.0 AFC-2728: Added fields for res.arbetssokande \n
 """,
     'category': 'Technical Settings',
