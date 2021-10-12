@@ -18,7 +18,7 @@ msgstr ""
 #. module: ipf_case
 #: model_terms:ir.ui.view,arch_db:ipf_case.view_errand_tree
 msgid "Case"
-msgstr "Ärende"
+msgstr "Insatser & program"
 
 #. module: ipf_case
 #: model:ir.model.fields,field_description:ipf_case.field_res_partner_case__name
@@ -39,8 +39,8 @@ msgstr "Program/Insats"
 #: model:ir.model.fields,field_description:ipf_case.field_res_partner__case_ids
 #: model:ir.model.fields,field_description:ipf_case.field_res_users__case_ids
 #: model_terms:ir.ui.view,arch_db:ipf_case.view_jobseeker_form
-msgid "Cases"
-msgstr "Ärende"
+msgid "Genomforande"
+msgstr "Insatser & program"
 
 #. module: ipf_case
 #: model:ir.model,name:ipf_case.model_res_partner
@@ -68,7 +68,7 @@ msgid "Display Name"
 msgstr "Visningsnamn"
 
 #. module: ipf_case
-#: model:ir.model.fields,field_description:ipf_case.field_res_partner_case__stop
+#: model:ir.model.fields,field_description:ipf_case.field_res_partner_genomforande__stop
 msgid "End date"
 msgstr "Slutdatum"
 
@@ -103,19 +103,34 @@ msgid "Short name"
 msgstr ""
 
 #. module: ipf_case
-#: model:ir.model.fields,field_description:ipf_case.field_res_partner_case__source
+#: model:ir.model.fields,field_description:ipf_case.field_res_partner_genomforande__source
 msgid "Source"
 msgstr "Källa"
 
 #. module: ipf_case
-#: model:ir.model.fields,field_description:ipf_case.field_res_partner_case__start
+#: model:ir.model.fields,field_description:ipf_case.field_res_partner_genomforande__start
 msgid "Start date"
 msgstr "Startdatum"
 
 #. module: ipf_case
-#: model:ir.model.fields,field_description:ipf_case.field_res_partner_case__status
+#: model:ir.model.fields,field_description:ipf_case.field_res_partner_genomforande__refers_to
+msgid "Refers to"
+msgstr "Avser"
+
+#. module: ipf_case
+#: model:ir.model.fields,field_description:ipf_case.field_res_partner_genomforande__extent
+msgid "Extent"
+msgstr "Omfattning"
+
+#. module: ipf_case
+#: model:ir.model.fields,field_description:ipf_case.field_res_partner_genomforande__organiser
+msgid "Organiser"
+msgstr "Anordnare"
+
+#. module: ipf_case
+#: model:ir.model.fields,field_description:ipf_case.field_res_partner_genomforande__status
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #. module: ipf_case
 #: model:ir.model,name:ipf_case.model_res_partner_case
