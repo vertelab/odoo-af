@@ -7,9 +7,9 @@
     "version": "12.0.0.1.0",
     "category": "Utility",
     "description": """
-        Jira
-        ===================================================================== \n
-        V12.0.0.1.0 AFC-2807: Added button for error reporting \n
+    Jira
+===================================================================== \n
+    V12.0.0.1.0 AFC-2807: Added button for error reporting \n
     """,
     "author": "Arbetsförmedlingen",
     "license": "LGPL-3",
