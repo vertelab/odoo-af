@@ -42,5 +42,14 @@
             <field name="groups_id" eval="[(6, 0, [ref('base.group_system')])]"/>
         </record>
 
+        <!-- make calendar_af invisible for everyone -->
+        <record id="make_invisible" model="res.groups">
+            <field name="name">Invisible</field>
+        </record>
+
+        <record id="calendar_af.menu_calendar" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('make_invisible')])]"/>
+        </record>
+
     </data>
 </odoo>
