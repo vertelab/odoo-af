@@ -1,0 +1,23 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* af_error_reporting
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0-20210917\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-10-18 08:11+0000\n"
+"PO-Revision-Date: 2021-10-18 08:11+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: af_error_reporting
+#: model:ir.actions.act_url,name:af_error_reporting.error_reporting_action
+#: model:ir.ui.menu,name:af_error_reporting.menu_error_reporting
+msgid "Error reporting"
+msgstr "Felanmälan"
+
