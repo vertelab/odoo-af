@@ -4,7 +4,7 @@
         <record id="error_reporting_action" model="ir.actions.act_url">
             <field name="name">Error reporting</field>
             <field name="type">ir.actions.act_url</field>
-            <field name="target">self</field>
+            <field name="target">new</field>
             <field name="url">https://serviceportal.arbetsformedlingen.se/sp?id=sc_cat_item&amp;sys_id=733449fedb162300c66a547adc9619cf</field>
         </record>
 
