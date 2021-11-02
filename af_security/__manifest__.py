@@ -2,7 +2,7 @@
 
 {
     "name": "AF Security",
-    "version": "12.0.1.1.0",
+    "version": "12.0.1.2.0",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "description": """
@@ -14,6 +14,8 @@ v12.0.1.0.2: versions before good version control \n
 v12.0.1.0.3: added .js to remove core context options \n
 v12.0.1.1.0: Changed translation to prepare for removal of ADKD Automatic Editor role \n
 v12.0.1.1.1: Removed ADKD Automatic Editor role \n
+v12.0.1.2.0: AFC-3028 Created new access group ADKD manual guest and adjusted access right \n
+\n
     """
      ,
     "website": "https://vertel.se/",
