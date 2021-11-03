@@ -1,24 +1,25 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* web_a11y_report
+# 	* af_error_reporting
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 12.0-20210917\n"
+"Project-Id-Version: Odoo Server 12.0-20210816\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-18 08:28+0000\n"
-"PO-Revision-Date: 2021-10-18 08:28+0000\n"
-"Last-Translator: Adam Andersson <adam.x.andersson@arbetsformedlingen.se>\n"
+"POT-Creation-Date: 2021-11-03 09:48+0000\n"
+"PO-Revision-Date: 2021-11-03 10:49+0100\n"
+"Last-Translator: Sebastian Gieser <sebastian.gieser@arbetsformedlingen.se>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
-"Plural-Forms: \n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.4.2\n"
+"Language: sv\n"
 
-#. module: web_a11y_report
+#. module: af_error_reporting
 #. openerp-web
-#: code:addons/web_a11y_report/static/src/xml/systray.xml:6
+#: code:addons/af_error_reporting/static/src/xml/systray.xml:6
 #, python-format
-msgid "Accessibility Report"
-msgstr "Tillgänglighetsrapport"
-
+msgid "Error Report"
+msgstr "Felanmälan"
