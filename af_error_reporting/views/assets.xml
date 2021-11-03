@@ -1,16 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <record id="error_reporting_action" model="ir.actions.act_url">
-            <field name="name">Error reporting</field>
-            <field name="type">ir.actions.act_url</field>
-            <field name="target">new</field>
-            <field name="url">https://serviceportal.arbetsformedlingen.se/sp?id=sc_cat_item&amp;sys_id=733449fedb162300c66a547adc9619cf</field>
-        </record>
 
-        <menuitem action="error_reporting_action"
-                  name="Error reporting"
-                  id="menu_error_reporting"
-                  sequence="999"/>
+        <template id="af_error_reporting_assets_backend" name="Error Report assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                 <script type="text/javascript" src="/af_error_reporting/static/src/js/activity_menu.js"/>
+                <link rel="stylesheet" type="text/scss" href="/af_error_reporting/static/src/scss/systray.scss"/>
+            </xpath>
+        </template>
     </data>
 </odoo>
