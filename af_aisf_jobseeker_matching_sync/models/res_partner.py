@@ -84,66 +84,49 @@ class Partner(models.Model):
                 "soker_inom_eu": res.get("sokerInomEu"),
                 "matchningsbar": res.get("matchningsbar"),
                 "kompl_matchning_info": res.get("komplMatchningInfo"),
-                "korkort": res.get("korkort"),
                 "tillgang_bil": res.get("tillgangBil"),
                 "ssyk_kompetensutveckling": res.get("ssykKompetensutveckling"),
-                "yrke_id_kompetensutveckling": res.get("yrkeIdKompetensutveckling"),
+                "yrke_kompetensutveckling": res.get("yrkeKompetensutveckling"),
                 "onskat_yrke_ssyk": res.get("onskatYrkeSsyk"),
-                "onskat_yrke_id": res.get("onskatYrkeId"),
+                "onskat_yrke": res.get("onskatYrke"),
                 "validering_onskat_yrke": res.get("valideringOnskatYrke"),
-                "varaktighet1": res.get("varaktighet1"),
-                "varaktighet2": res.get("varaktighet2"),
+                "varaktighet_fran": res.get("varaktighetFran"), # "qQUd_4qe_NDT"
+                "varaktighet_till": res.get("varaktighetTill"), # "a7uU_j21_mkL"
+                "kan_ej_valja_yrke": res.get("kanEjValjaYrke"),
+                "kan_ej_ta_tidigare_yrke": res.get("kanEjTaTidigareYrke"),
             }
-            for yrke in res.get("soktaYrken"):
+            for yrke in res.get("yrkenAttSoka"):
                 yrke_dict = {
-                    "yrke_id": yrke.get("yrkeId"),
-                    "ssyk": yrke.get("ssyk"),
+                    "yrke": yrke.get("yrke"), # search ssyk
                     "utbildning": yrke.get("utbildning"),
                     "erfarenhet": yrke.get("erfarenhet")
                 }
-            for matchningsord in res.get("matchningsord"):
+
+            for sokord in res.get("sokord"):
                 matchningsord_dict = {
-                    "taxonomyId": matchningsord.get("taxonomyId"),
-                    "matchningsord": matchningsord.get("matchningsord"),
-                    "typ": matchningsord.get("typ")
+                    "benamning": sokord.get("benamning"),
+                    "nyckel": sokord.get("nyckel"),
                 }
 
+            for sprak in res.get("sprak"):
+                sprak.get("konceptId") # search sprak
+
+            for kompetensord in res.get("kompetensord"):
+                kompetensord.get("konceptId") # search ?
+
+            for sokt_omrade in res.get("soktaOmraden"):
+                pass
+
+
             mask_keys = {
-                "arbetstid": "HELTID",
-                "arbetstidBeskrivning": "string",
-                "meriterFinns": "true",
-                "meriterUppdatDatum": "2020-07-22T08:39:27.300Z",
-                "flyttaVeckopendla": "true",
-                "sokerInomEu": "true",
-                "matchningsbar": "true",
-                "komplMatchningInfo": "string",
-                "korkort": "string",
-                "tillgangBil": "true",
-                "ssykKompetensutveckling": "string",
-                "yrkeIdKompetensutveckling": 0,
-                "onskatYrkeSsyk": "string",
-                "onskatYrkeId": 0,
-                "valideringOnskatYrke": "BEHOV_AV_FORDJUPAD_KOMPETENSKARTLAGGNING",
-                "varaktighet1": "ODEFINERAD",
-                "varaktighet2": "ODEFINERAD",
-                "soktaYrken": [
+                "korkort": ["VTK8_WRx_GcM","hK8X_cX9_5P4","hK1a_wsQ_4UG"],
+
+                "soktaOmraden": "[\"TpRZ_bFL_jhL\",\"n6r4_fjK_kRr\",\"Bbs5_JUs_Qh5\"]",
+                "kompetensord": [
                     {
-                        "yrkeId": 0,
-                        "ssyk": "string",
-                        "utbildning": "true",
-                        "erfarenhet": "true"
+                        "konceptId": "iFai_q8e_KNo"
                     }
                 ],
-                "soktaKommuner": [
-                    "string"
-                ],
-                "matchningsord": [
-                    {
-                        "taxonomyId": 0,
-                        "matchningsord": "string",
-                        "typ": "string"
-                    }
-                ]
             }
 
         except Exception:
