@@ -86,17 +86,17 @@
             <field name="sequence">1</field>
         </record>
 
+        <record id="af_newsletter_manual_guest" model="res.groups">
+            <field name="name">Manual Guest</field>
+            <field name="category_id" ref="module_category_af_newsletter"/>
+            <field name="comment">Manual Guest user</field>
+        </record>
+
         <record id="af_newsletter_manual" model="res.groups">
             <field name="name">Manual</field>
             <field name="category_id" ref="module_category_af_newsletter"/>
             <field name="implied_ids" eval="[(4, ref('af_newsletter_manual_guest'))]"/>
             <field name="comment">Manual user</field>
-        </record>
-
-        <record id="af_newsletter_manual_guest" model="res.groups">
-            <field name="name">Manual Guest</field>
-            <field name="category_id" ref="module_category_af_newsletter"/>
-            <field name="comment">Manual Guest user</field>
         </record>
 
         <record id="af_newsletter_automatic" model="res.groups">
