@@ -1,0 +1,10 @@
+<templates id="template" xml:space="preserve">
+
+    <t t-extend="mail.systray.ActivityMenu">
+        <t t-jquery="li" t-operation="before">
+             <li class="af_error_reporting" style="color:white">
+              <a class="af_error_reporting">Error Report</a>
+             </li>
+        </t>
+    </t>
+</templates>
