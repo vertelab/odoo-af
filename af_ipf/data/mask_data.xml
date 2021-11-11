@@ -27,7 +27,7 @@
 	</data>
 	<data>
 		<record id="ipf_endpoint_mask_matching" model="af.ipf.endpoint">
-			<field name="name">ais-f-matchningsinformation/v1/somSystem/sokandeId/{customer_id}?client_id={clientid}&amp;client_secret={client_secret}</field>
+			<field name="name">ais-f-matchningsinformation/v2/somSystem/sokandeId/{customer_id}?client_id={clientid}&amp;client_secret={client_secret}</field>
 			<field name="ipf_id" ref="ipf_mask_matching"/>
 	</record>
 	</data>

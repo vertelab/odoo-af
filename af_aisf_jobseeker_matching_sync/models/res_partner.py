@@ -13,8 +13,8 @@ RASK_SYNC = "RASK SYNC"
 MASK_SYNC = "MASK SYNC"
 
 
-class Partner(models.Model):
-    _inherit = "res.partner"
+class Arbetssokande(models.Model):
+    _inherit = "arbetssokande"
 
     @api.model
     def _aisf_sync_jobseeker_matching(
@@ -36,11 +36,11 @@ class Partner(models.Model):
         if not batch:
             log.log_message(process_name, eventid, "SYNC STARTED", objectid=customer_id)
 
-        partner = self.env["res.partner"].search(
-            [("customer_id", "=", customer_id), ("is_jobseeker", "=", True)]
+        partner = self.env["arbetssokande"].search(
+            [("customer_id", "=", customer_id)]
         )
         if not partner and social_sec_nr:
-            partner = self.env["res.partner"].search_pnr(social_sec_nr)
+            partner = self.env["arbetssokande"].search_pnr(social_sec_nr)
         eventid = eventid or uuid4()
 
         mask_matching = self.env.ref("af_ipf.ipf_endpoint_mask_matching").sudo()
@@ -75,59 +75,102 @@ class Partner(models.Model):
             return
 
         try:
-            {
-                "arbetstid": res.get("arbetstid"),
+
+
+            # "kompl_matchning_info": res.get("komplMatchningInfo"), # ovrig_erfarenhet, not implemented
+
+            # arbetssokande.yrke.yrke_id on both and what even is that?
+            # "ssyk_kompetensutveckling": res.get("ssykKompetensutveckling"),
+            # "yrke_kompetensutveckling": res.get("yrkeKompetensutveckling"),
+
+            # yrke.yrkesgrupp_id on both and once again what even is that?
+            # "onskat_yrke_ssyk": res.get("onskatYrkeSsyk"),
+            # "onskat_yrke": res.get("onskatYrke"),
+
+            # arbetssokande.yrke.validering_onskat_yrke once again none of this makes any sense to me
+            # "validering_onskat_yrke": res.get("valideringOnskatYrke"),
+
+            varaktighet_fran = res.get("varaktighetFran"),
+            varaktighet_till = res.get("varaktighetTill"),
+            varaktighet_fran_id = self.env['vf.varaktighet'].search([('concept_id', '=', varaktighet_fran)]).id
+            varaktighet_till_id = self.env['vf.arbetstid'].search([('concept_id', '=', varaktighet_till)]).id
+            arbetstid = res.get("arbetstid")
+            arbetstid_id = self.env['vf.arbetstid'].search([('concept_id', '=', arbetstid)]).id
+
+            onskade_anstallningsvillkor_dict = {
+                "arbetstid_id": arbetstid_id,
+                "varaktighet_fran": varaktighet_fran_id,
+                "varaktighet_till": varaktighet_till_id,
                 "arbetstid_beskrivning": res.get("arbetstidBeskrivning"),
-                "meriter_finns": res.get("meriterFinns"),
                 "meriter_uppdat_datum": res.get("meriterUppdatDatum"),
                 "flytta_veckopendla": res.get("flyttaVeckopendla"),
                 "soker_inom_eu": res.get("sokerInomEu"),
-                "matchningsbar": res.get("matchningsbar"),
-                "kompl_matchning_info": res.get("komplMatchningInfo"),
-                "tillgang_bil": res.get("tillgangBil"),
-                "ssyk_kompetensutveckling": res.get("ssykKompetensutveckling"),
-                "yrke_kompetensutveckling": res.get("yrkeKompetensutveckling"),
-                "onskat_yrke_ssyk": res.get("onskatYrkeSsyk"),
-                "onskat_yrke": res.get("onskatYrke"),
-                "validering_onskat_yrke": res.get("valideringOnskatYrke"),
-                "varaktighet_fran": res.get("varaktighetFran"), # "qQUd_4qe_NDT"
-                "varaktighet_till": res.get("varaktighetTill"), # "a7uU_j21_mkL"
                 "kan_ej_valja_yrke": res.get("kanEjValjaYrke"),
                 "kan_ej_ta_tidigare_yrke": res.get("kanEjTaTidigareYrke"),
             }
+            onskade_anstallningsvillkor_id = self.env[
+                'arbetssokande.onskade_anstallningsvillkor'].create(
+                onskade_anstallningsvillkor_dict).id
+
+            arbetssokande_dict = {
+                # "meriter_finns": res.get("meriterFinns"), # not implemented
+                # "matchningsbar": res.get("matchningsbar"), # not implemented
+                "onskade_anstallningsvillkor_id": onskade_anstallningsvillkor_id
+
+            }
+            arbetssokande_id = self.env['arbetssokande'].create(arbetssokande_dict)
+
             for yrke in res.get("yrkenAttSoka"):
                 yrke_dict = {
-                    "yrke": yrke.get("yrke"), # search ssyk
+                    "yrke_id": self.env['vf.ssyk'].search([('concept_id', '=', yrke.get("yrke"))]),
                     "utbildning": yrke.get("utbildning"),
-                    "erfarenhet": yrke.get("erfarenhet")
+                    "erfarenhet": yrke.get("erfarenhet"),
+                    "arbetssokande_id": arbetssokande_id
                 }
+                self.env['arbetssokande.yrke'].create(yrke_dict).id
 
+            for sprak in res.get("sprak"):
+                sprak_id = self.env["vf.sprak"].search([('concept_id', '=', sprak.get("konceptId"))])
+                self.env['arbetssokande.sprakkunskap'].create({
+                    'sprak_id': sprak_id,
+                    'arbetssokande_id': arbetssokande_id
+                })
+
+            for kompetensord in res.get("kompetensord"):
+                kompetensord_id = self.env["vf.kompetensord"].search([
+                    (
+                        'concept_id',
+                        '=',
+                        kompetensord.get("konceptId")
+                    )])
+                self.env['arbetssokande.kompetensord'].create({
+                    'kompetensord_id': kompetensord_id,
+                    'arbetssokande_id': arbetssokande_id
+                })
+
+            for sokt_omrade in res.get("soktaOmraden"):
+                lan_id = self.env["vf.region"].search([('concept_id', '=', sokt_omrade)])
+                self.env['arbetssokande.geografiskt_sokomrade'].create({
+                    'lan_id': lan_id,
+                    'arbetssokande_id': arbetssokande_id
+                })
+
+            for korkort in res.get("korkort"):
+                korkort_id = self.env["vf.korkortsbehorighet"].search([('concept_id', '=', korkort)])
+                self.env['arbetssokande.korkortsklass'].create({
+                    "korkort_id": korkort_id,
+                    "tillgang_bil": res.get("tillgangBil"),
+                    "arbetssokande_id": arbetssokande_id
+                })
+
+
+
+            # not implemented
             for sokord in res.get("sokord"):
                 matchningsord_dict = {
                     "benamning": sokord.get("benamning"),
                     "nyckel": sokord.get("nyckel"),
                 }
-
-            for sprak in res.get("sprak"):
-                sprak.get("konceptId") # search sprak
-
-            for kompetensord in res.get("kompetensord"):
-                kompetensord.get("konceptId") # search ?
-
-            for sokt_omrade in res.get("soktaOmraden"):
-                pass
-
-
-            mask_keys = {
-                "korkort": ["VTK8_WRx_GcM","hK8X_cX9_5P4","hK1a_wsQ_4UG"],
-
-                "soktaOmraden": "[\"TpRZ_bFL_jhL\",\"n6r4_fjK_kRr\",\"Bbs5_JUs_Qh5\"]",
-                "kompetensord": [
-                    {
-                        "konceptId": "iFai_q8e_KNo"
-                    }
-                ],
-            }
 
         except Exception:
             em = traceback.format_exc()
@@ -192,8 +235,8 @@ class Partner(models.Model):
                 # the registry has changed, reload self in the new registry
                 self.env.reset()
                 self = self.env()[self._name]
-            self.env["res.partner"].browse(partner_id).unlink()
-            self.env["res.partner"].invalidate_cache()
+            self.env["arbetssokande"].browse(partner_id).unlink()
+            self.env["arbetssokande"].invalidate_cache()
             self.pool.signal_changes()
         except IntegrityError as e:
             self.pool.reset_changes()

@@ -15,7 +15,7 @@ v12.0.0.2.2 AFC-2263: Changed boolean to selection field \n
     'author': 'Vertel AB',
     'website': 'https://vertel.se',
     'license': 'AGPL-3',
-    'depends': ['af_process_log', 'af_ipf', 'partner_view_360', 'partner_education'],
+    'depends': ['af_process_log', 'af_ipf', 'arbetssokande', 'partner_education'],
     'data': [],
     'demo': [],
     'installable': True,

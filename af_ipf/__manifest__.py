@@ -2,7 +2,7 @@
 
 {
     "name": "AF IPF Integration",
-    "version": "12.0.2.1.0",
+    "version": "12.0.2.1.2",
     "author": "Vertel AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
@@ -21,6 +21,7 @@ v12.0.1.0.7 AFC-2543: Updated get_ssl_params method
 v12.0.2.0.0 AFC-2532: Added Mask data file for merit
 v12.0.2.1.0 AFC-2534: Added Mask matching port
 v12.0.2.1.1 AFC-2675: Raise exceptions when errors occur
+v12.0.2.1.2 AFC-3077: Changed Mask URL to v2
 """,
     "depends": ["af_security"],
     "external_dependencies": {"python": ["requests"]},
