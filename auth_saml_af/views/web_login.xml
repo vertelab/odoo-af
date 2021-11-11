@@ -39,11 +39,11 @@
         </xpath>
     </template>
 
-    <template id="hide_signup_text" inherit_id="auth_signup.login">
-        <xpath expr="//div[@class='justify-content-between mt-2 d-flex small']//a[1]" position="attributes">
-            <attribute name="hidden">true</attribute>
-        </xpath>
-    </template>
+<!--    <template id="hide_signup_text" inherit_id="auth_signup.login">-->
+<!--        <xpath expr="//div[@class='justify-content-between mt-2 d-flex small']//a[1]" position="attributes">-->
+<!--            <attribute name="hidden">true</attribute>-->
+<!--        </xpath>-->
+<!--    </template>-->
 
     <template id="change_auth_signup_button_css" inherit_id="auth_saml_ol.providers">
         <xpath expr='//a' position="attributes">
