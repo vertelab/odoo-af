@@ -27,54 +27,12 @@ from odoo.exceptions import UserError
 _logger = logging.getLogger(__name__)
 
 
-class Partner(models.Model):
-    _inherit = 'res.partner'
-
-    genomforande_ids = fields.One2many(comodel_name='res.partner.genomforande',
-                                       string='Genomforande',
-                                       inverse_name="partner_id",
-                                       compute='compute_genomforande_ids')
-
-    @api.multi
-    def compute_genomforande_ids(self):
-        for record in self:
-            if record.is_jobseeker:
-                personnummer = record.get_case_pnr()
-                if personnummer:
-                    try:
-                        # ipf = self.env.ref('ipf_case.ipf_endpoint_case').sudo()
-                        # res = ipf.call(personnummer=personnummer)
-                        # record.case_ids = record.env['res.partner.case']
-                        # for arende in res.get('arenden', []):
-                        # record.case_ids |= record.env['res.partner.case'].create_arende(arende, record.id)
-
-                        ipf = self.env.ref('ipf_case.ipf_endpoint_case_genomforanden').sudo()
-                        res = ipf.call(personnummer=personnummer)
-                        for genomforande in res.get('genomforanden', []):
-                            record.genomforande_ids |= record.env['res.partner.genomforande'].create_genomforande(
-                                genomforande,
-                                record.id)
-
-                    except Exception as e:
-                        _logger.warning('Error in IPF Genomforande integration.', exc_info=e)
-                        record.case_ids = None
-
-    @api.multi
-    def get_case_pnr(self):
-        try:
-            if self.social_sec_nr:
-                pnr = self.social_sec_nr.replace('-', '')
-                return pnr
-        except ValueError:
-            raise UserError("Invalid personal identification number: %s" % self.social_sec_nr)
-
-
-class PartnerGenomforande(models.TransientModel):
-    _name = 'res.partner.genomforande'
+class ArbetssokandeGenomforande(models.TransientModel):
+    _name = 'arbetssokande.genomforande'
     _description = 'Genomförande För System'
 
-    partner_id = fields.Many2one(
-        comodel_name="res.partner", string="Job seeker")
+    customer_id = fields.Many2one(
+        comodel_name="arbetssokande", string="Arbetssökande")
     source = fields.Char(string='Source')
     refers_to = fields.Char(string='Refers to')
     status = fields.Char(string='Status')
@@ -85,7 +43,7 @@ class PartnerGenomforande(models.TransientModel):
     organiser = fields.Char(string='Organiser')
 
     @api.model
-    def create_genomforande(self, vals, partner_id):
+    def create_genomforande(self, vals, customer_id):
 
         start_date = vals.get('genomforande_period', {}).get('startdatum')
         stop_date = vals.get('genomforande_period', {}).get('slutdatum')
@@ -113,7 +71,7 @@ class PartnerGenomforande(models.TransientModel):
             status = 'Avslutad'
 
         return self.create({
-            'partner_id': partner_id,
+            'customer_id': customer_id,
             'source': source,
             'refers_to': refers_to,
             'status': status,
