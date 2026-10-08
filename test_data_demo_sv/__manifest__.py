@@ -2,7 +2,7 @@
 
 {
     "name": "Test Data Demo Sv",
-    "version": "12.0.1.0.1",
+    "version": "18.0.1.0.1",
     "description": """
 
 Test Data Demo Sv
@@ -18,7 +18,7 @@ PO translation:\n
 \thttps://www.odoo.com/documentation/12.0/reference/translations.html
 """,
 
-    "author": "Vertel AB",
+    "author": "Vertel Sverige AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",

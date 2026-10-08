@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Odoo, Open Source Enterprise Management Solution, third party addon
-#    Copyright (C) 2020- Vertel AB (<http://vertel.se>).
+#    Copyright (C) 2020- Vertel Sverige AB (<http://vertel.se>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -20,7 +20,7 @@
 ##############################################################################
 {
     'name': 'AF Demodata for base',
-    'version': '12.0.1.0',
+    'version': '18.0.1.0',
     'license': 'AGPL-3',
     'description': """
 CSV File Creator -- dokumentation
@@ -60,7 +60,7 @@ $ sudo chmod 777 -R data
 - Toma flikar. En flik som heter något.bra.namn.csv får inte vara helt tom.
 
 """,
-    'author': ' Vertel AB',
+    'author': ' Vertel Sverige AB',
     'website': 'http://vertel.se',
     'category': 'Extra Tools',
     'depends': ['base'],

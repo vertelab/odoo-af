@@ -1,6 +1,6 @@
 {
     'name': 'AF Base Demodata',
-    'version': '12.0.0.2',						
+    'version': '18.0.0.2',						
     'category': '',
     'description': """
 Module to overright Odoo original demodata.
@@ -8,7 +8,7 @@ Module to overright Odoo original demodata.
 AFC-119
 
 """,
-    'author': 'Vertel AB',
+    'author': 'Vertel Sverige AB',
     'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
     'depends': ['base'],

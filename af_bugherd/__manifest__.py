@@ -4,12 +4,12 @@
 {
     "name": "AF BugHerd V12",
     "summary": "AF BugHerd V12	",
-    "version": "12.0.0.1",
+    "version": "18.0.0.1",
     "category": "Utility",
     "description": """
 		AF Bugherd för Odoo 12.0 community edition.
     """,
-    "author": "Vertel AB",
+    "author": "Vertel Sverige AB",
     "license": "LGPL-3",
     "installable": True,
     "depends": [

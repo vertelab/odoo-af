@@ -2,7 +2,7 @@
 
 {
     "name": "AIS-F Data Loader",
-    "version": "12.0.1.0.1",
+    "version": "18.0.1.0.1",
     "description": """
 
 AIS-F Data Loader
@@ -12,7 +12,7 @@ Database dump files must be located in AIS-F/filename.csv in 'data_dir' director
 There are test dump files located in data/test_dumps
 """,
 
-    "author": "Vertel AB",
+    "author": "Vertel Sverige AB",
     "license": "AGPL-3",
     "website": "https://vertel.se/",
     "category": "Tools",
