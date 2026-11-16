@@ -38,7 +38,7 @@ class ResUsers(models.Model):
     def create_user(self, rows):
         for row in rows:
             user_login = self.env['res.users'].search([('login', '=', row['login'])])
-            partner_id = self.env.ref("af_data_ais-f_loader.%s" % row['partner_id']).id
+            partner_id = self.env.ref("af_data_ais_f_loader.%s" % row['partner_id']).id
             row.update({'partner_id' :  partner_id}) 
             _logger.info("%s" % row['partner_id'])
             _logger.info("creating row %s" % row)

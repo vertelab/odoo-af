@@ -42,25 +42,25 @@ class ResPartner(models.Model):
     @api.model
     def create_contact_persons(self):     
         headers_header = ['kontaktperson.csv', 'Notering',  'Trans', 'Odoo']
-        #path = "usr/share/odoo-af/af_data_ais-f_loader/data/kontaktperson_test.csv" #testing purposes only
+        #path = "usr/share/odoo-af/af_data_ais_f_loader/data/kontaktperson_test.csv" #testing purposes only
         path = os.path.join(config.options.get('data_dir'), 'AIS-F/kontaktperson.csv')
-        header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/kontaktperson_mapping.csv"
+        header_path = "usr/share/odoo-af/af_data_ais_f_loader/data/kontaktperson_mapping.csv"
         self.create_partners(headers_header, path, header_path)
 
     @api.model
     def create_employers(self):     
         headers_header = ['arbetsgivare.csv', 'Notering',  'Trans', 'Odoo']
-        #path = "usr/share/odoo-af/af_data_ais-f_loader/data/arbetsgivare_test.csv" #testing purposes only
+        #path = "usr/share/odoo-af/af_data_ais_f_loader/data/arbetsgivare_test.csv" #testing purposes only
         path = os.path.join(config.options.get('data_dir'), 'AIS-F/arbetsgivare.csv')
-        header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/arbetsgivare_mapping.csv"
+        header_path = "usr/share/odoo-af/af_data_ais_f_loader/data/arbetsgivare_mapping.csv"
         self.create_partners(headers_header, path, header_path)
 
     @api.model
     def create_organisations(self):     
         headers_header = ['organisationer.csv', 'Notering', 'Trans', 'Odoo']
-        #path = "usr/share/odoo-af/af_data_ais-f_loader/data/organisationer_test.csv" #testing purposes only 
+        #path = "usr/share/odoo-af/af_data_ais_f_loader/data/organisationer_test.csv" #testing purposes only 
         path = os.path.join(config.options.get('data_dir'), 'AIS-F/organisationer.csv')
-        header_path = "usr/share/odoo-af/af_data_ais-f_loader/data/organisationer_mapping.csv"
+        header_path = "usr/share/odoo-af/af_data_ais_f_loader/data/organisationer_mapping.csv"
         self.create_partners(headers_header, path, header_path)
 
     @api.model
